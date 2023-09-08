@@ -60,9 +60,9 @@ class AppStartScreen extends StatelessWidget {
                 width: 296,
                 height: 48,
                 decoration: BoxDecoration(
-                    border: Border.all(color: PRIMARY_COLOR_LIGHT),
+                    border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
                     borderRadius: BorderRadius.circular(20.0),
-                    color: PRIMARY_COLOR_LIGHT),
+                    color: PRIMARY_COLOR_ORANGE_02),
                 child: const Center(
                   child: Text(
                     "회원가입",
@@ -92,7 +92,7 @@ class AppStartScreen extends StatelessWidget {
                     "로그인",
                     style: TextStyle(
                         decoration: TextDecoration.underline,
-                        color: PRIMARY_COLOR_DARK,
+                        color: PRIMARY_COLOR_ORANGE_01,
                         fontSize: 14.0,
                         fontWeight: FontWeight.w400),
                   ),

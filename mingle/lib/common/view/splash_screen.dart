@@ -12,7 +12,7 @@ class SplashScreen extends StatelessWidget {
       onTap: () => Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (_) => AppStartScreen())),
       child: Scaffold(
-        backgroundColor: PRIMARY_COLOR_DARK,
+        backgroundColor: PRIMARY_COLOR_ORANGE_01,
         body: SizedBox(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
