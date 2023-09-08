@@ -35,6 +35,8 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_svg: ^2.0.7
+  flutter_svg_provider: ^1.0.6
+  dropdown_button2: ^2.3.9
 
 dev_dependencies:
   flutter_test:
@@ -58,11 +60,13 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/img/login_screen/ios_illust_gradationApply.svg
     - assets/img/login_screen/ios_illust_gradationApply.jpg
     - assets/img/splash_screen/logo_final.svg
     - assets/img/signup_screen/cross_icon.png
     - assets/img/signup_screen/first_indicator.svg
     - assets/img/signup_screen/globe_icon.svg
+    - assets/img/signup_screen/dropdown_button_icon.svg
 
   fonts:
     - family: Pretendard

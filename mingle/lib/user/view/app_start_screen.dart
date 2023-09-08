@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/user/view/signup_screen/first_signup_screen.dart';
 
@@ -14,11 +16,17 @@ class AppStartScreen extends StatelessWidget {
           padding: const EdgeInsets.only(top: 105, bottom: 65.67, left: 5),
           child: Container(
             decoration: const BoxDecoration(
-                image: DecorationImage(
-              image: AssetImage(
-                  "assets/img/login_screen/ios_illust_gradationApply.jpg"),
-              fit: BoxFit.cover,
-            )),
+              image: DecorationImage(
+                // image: Svg(
+                //     "assets/img/login_screen/ios_illust_gradationApply.svg",
+                //     color: Colors.transparent),
+                // fit: BoxFit.cover),
+
+                image: AssetImage(
+                    "assets/img/login_screen/ios_illust_gradationApply.jpg"),
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
         ),
         Column(
