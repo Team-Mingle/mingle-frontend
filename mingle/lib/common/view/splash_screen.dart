@@ -22,7 +22,7 @@ class SplashScreen extends StatelessWidget {
               height: 324,
             ),
             SvgPicture.asset(
-              "asset/img/splash_screen/logo_final.svg",
+              "assets/img/splash_screen/logo_final.svg",
               semanticsLabel: 'Mingle Logo',
             )
           ]),

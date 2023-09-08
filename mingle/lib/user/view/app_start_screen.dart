@@ -16,7 +16,7 @@ class AppStartScreen extends StatelessWidget {
             decoration: const BoxDecoration(
                 image: DecorationImage(
               image: AssetImage(
-                  "asset/img/login_screen/ios_illust_gradationApply.jpg"),
+                  "assets/img/login_screen/ios_illust_gradationApply.jpg"),
               fit: BoxFit.cover,
             )),
           ),
@@ -42,7 +42,10 @@ class AppStartScreen extends StatelessWidget {
                       Text(
                         "mingle",
                         style: TextStyle(
-                            fontSize: 24.0, fontWeight: FontWeight.w400),
+                          fontFamily: "Aggro",
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       SizedBox(
                         height: 486,
