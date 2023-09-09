@@ -1,23 +1,21 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mingle/common/component/dropdown_list.dart';
+import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/const/data.dart';
+import 'package:mingle/user/view/signup_screen/provider/country_selected_provider.dart';
+import 'package:mingle/user/view/signup_screen/select_school_screen.dart';
 
-class FirstSignupScreen extends StatefulWidget {
-  const FirstSignupScreen({super.key});
+class SelectCountryScreen extends StatefulWidget {
+  const SelectCountryScreen({super.key});
 
   @override
-  State<FirstSignupScreen> createState() => _FirstSignupScreenState();
+  State<SelectCountryScreen> createState() => _SelectCountryScreenState();
 }
 
-class _FirstSignupScreenState extends State<FirstSignupScreen> {
-  final List<String> countryList = [
-    '홍콩',
-    '싱가포프',
-    '영국',
-  ];
-  String? selectedCountry;
-
+class _SelectCountryScreenState extends State<SelectCountryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +45,7 @@ class _FirstSignupScreenState extends State<FirstSignupScreen> {
             padding: const EdgeInsets.only(top: 16.0, left: 32.0),
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -72,52 +70,25 @@ class _FirstSignupScreenState extends State<FirstSignupScreen> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 40,
           ),
           SvgPicture.asset("assets/img/signup_screen/globe_icon.svg"),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
-          DropdownButtonHideUnderline(
-            child: DropdownButton2(
-              items: countryList
-                  .map((String country) => DropdownMenuItem<String>(
-                        value: country,
-                        child: Text(
-                          country,
-                          style: TextStyle(
-                              fontSize: 14.0, fontWeight: FontWeight.w400),
-                        ),
-                      ))
-                  .toList(),
-              value: selectedCountry,
-              onChanged: (String? country) {
-                setState(() {
-                  selectedCountry = country;
-                });
-              },
-              buttonStyleData: ButtonStyleData(
-                height: 44,
-                width: 170,
-                padding: const EdgeInsets.only(bottom: 2),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(
-                      color: GRAYSCALE_GRAY_03,
-                    ),
-                    color: Colors.white),
-                // elevation: 2,
-              ),
-              iconStyleData: IconStyleData(
-                icon: SvgPicture.asset(
-                    "assets/img/signup_screen/dropdown_button_icon.svg"),
-                openMenuIcon: null,
-                iconSize: 14,
-                iconEnabledColor: Colors.yellow,
-                iconDisabledColor: Colors.grey,
-              ),
-            ),
+          DropdownList(
+            itemList: COUNTRY_LIST,
+            hintText: "국가 선택",
+            isSelectedProvider: selectedCountryProvider,
+          ),
+          const SizedBox(
+            height: 309,
+          ),
+          NextButton(
+            nextScreen: SelectSchoolScreen(),
+            buttonName: "다음으로",
+            isSelectedProvider: selectedCountryProvider,
           )
         ]),
       ),

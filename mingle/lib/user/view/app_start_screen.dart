@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_svg_provider/flutter_svg_provider.dart';
+import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
-import 'package:mingle/user/view/signup_screen/first_signup_screen.dart';
+import 'package:mingle/user/view/signup_screen/select_country_screen.dart';
 
 class AppStartScreen extends StatelessWidget {
   const AppStartScreen({super.key});
@@ -61,28 +61,11 @@ class AppStartScreen extends StatelessWidget {
                     ]),
               ),
             ),
-            InkWell(
-              onTap: () => Navigator.of(context).push(
-                  (MaterialPageRoute(builder: (_) => FirstSignupScreen()))),
-              child: Container(
-                width: 296,
-                height: 48,
-                decoration: BoxDecoration(
-                    border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
-                    borderRadius: BorderRadius.circular(20.0),
-                    color: PRIMARY_COLOR_ORANGE_02),
-                child: const Center(
-                  child: Text(
-                    "회원가입",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w400),
-                  ),
-                ),
-              ),
+            const NextButton(
+              nextScreen: SelectCountryScreen(),
+              buttonName: "회원가입",
             ),
-            SizedBox(
+            const SizedBox(
               height: 16.0,
             ),
             SizedBox(
@@ -90,13 +73,13 @@ class AppStartScreen extends StatelessWidget {
               width: 167.0,
               child:
                   Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                Text("이미 계정이 있나요?"),
-                SizedBox(
+                const Text("이미 계정이 있나요?"),
+                const SizedBox(
                   width: 13.0,
                 ),
                 InkWell(
                   onTap: () {},
-                  child: Text(
+                  child: const Text(
                     "로그인",
                     style: TextStyle(
                         decoration: TextDecoration.underline,

@@ -37,6 +37,7 @@ dependencies:
   flutter_svg: ^2.0.7
   flutter_svg_provider: ^1.0.6
   dropdown_button2: ^2.3.9
+  flutter_riverpod: ^2.4.0
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +68,8 @@ flutter:
     - assets/img/signup_screen/first_indicator.svg
     - assets/img/signup_screen/globe_icon.svg
     - assets/img/signup_screen/dropdown_button_icon.svg
+    - assets/img/signup_screen/previous_screen_icon.png
+    - assets/img/signup_screen/school_icon.svg
 
   fonts:
     - family: Pretendard

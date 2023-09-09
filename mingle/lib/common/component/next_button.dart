@@ -1,0 +1,61 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mingle/common/const/colors.dart';
+
+class NextButton extends ConsumerWidget {
+  final Widget nextScreen;
+  final String buttonName;
+  final Widget? buttonIcon;
+  final StateProvider<String>? isSelectedProvider;
+  const NextButton({
+    super.key,
+    required this.nextScreen,
+    required this.buttonName,
+    this.isSelectedProvider,
+    this.buttonIcon,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    String isSelected = isSelectedProvider == null
+        ? "selected"
+        : ref.watch(isSelectedProvider!);
+
+    return InkWell(
+      onTap: () => isSelected != ""
+          ? Navigator.of(context)
+              .push((MaterialPageRoute(builder: (_) => nextScreen)))
+          : {},
+      child: Container(
+        width: 296,
+        height: 48,
+        decoration: BoxDecoration(
+            border: Border.all(
+                color: isSelected != ""
+                    ? PRIMARY_COLOR_ORANGE_02
+                    : GRAYSCALE_GRAY_02),
+            borderRadius: BorderRadius.circular(20.0),
+            color:
+                isSelected != "" ? PRIMARY_COLOR_ORANGE_02 : GRAYSCALE_GRAY_02),
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: buttonIcon != null
+                    ? const EdgeInsets.only(right: 6.0)
+                    : const EdgeInsets.all(0.0),
+                child: buttonIcon != null ? buttonIcon! : Container(),
+              ),
+              Text(
+                buttonName,
+                style: const TextStyle(
+                    fontSize: 14.0, fontWeight: FontWeight.w400),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
