@@ -70,6 +70,17 @@ flutter:
     - assets/img/signup_screen/dropdown_button_icon.svg
     - assets/img/signup_screen/previous_screen_icon.png
     - assets/img/signup_screen/school_icon.svg
+    - assets/img/home_screen/ic_home_myPage.svg
+    - assets/img/home_screen/ic_home_search.svg
+    - assets/img/home_screen/ic_home_notification.svg
+    - assets/img/root_screen/ic_home_selected.svg
+    - assets/img/root_screen/ic_home_unselected.svg
+    - assets/img/root_screen/ic_square_selected.svg
+    - assets/img/root_screen/ic_square_unselected.svg
+    - assets/img/root_screen/ic_lawn_selected.svg
+    - assets/img/root_screen/ic_lawn_unselected.svg
+    - assets/img/root_screen/ic_market_selected.svg
+    - assets/img/root_screen/ic_market_unselected.svg
 
   fonts:
     - family: Pretendard
