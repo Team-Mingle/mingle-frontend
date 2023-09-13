@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mingle/common/view/splash_screen.dart';
+import 'package:mingle/user/view/home_screen/home_root_tab.dart';
 
 void main() {
-  runApp(_App());
+  runApp(const _App());
 }
 
 class _App extends StatelessWidget {
-  const _App({super.key});
+  const _App();
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class _App extends StatelessWidget {
       child: MaterialApp(
           theme: ThemeData(fontFamily: 'Pretendard'),
           debugShowCheckedModeBanner: false,
-          home: const SplashScreen()),
+          home: const HomeRootTab()),
     );
   }
 }
