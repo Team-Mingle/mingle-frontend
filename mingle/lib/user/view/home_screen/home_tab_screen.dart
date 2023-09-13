@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:mingle/common/component/post_card.dart';
 import 'package:mingle/common/const/colors.dart';
 
 class HomeTabScreen extends StatefulWidget {
@@ -124,17 +125,12 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                   )
                 ],
               ),
-              ListView.builder(
-                shrinkWrap: true, // 리스트뷰 크기를 내용에 맞게 조정
-                physics: const NeverScrollableScrollPhysics(), // 스크롤 비활성화
-                padding: const EdgeInsets.all(8.0), // 여백 추가
-                itemCount: 50,
-                itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    title: Text('Item $index'),
-                  );
-                },
-              ),
+              const SizedBox(height: 32.0),
+               PostCard(title: '지금 광장에서는'),
+              const SizedBox(height: 40.0),
+               PostCard(title: '지금 잔디밭에서는'),
+              const SizedBox(height: 40.0),
+               PostCard(title: '불타오르는 게시글'),
               const SizedBox(height: 169),
             ],
           ),
@@ -239,7 +235,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
             Padding(
               padding: const EdgeInsets.only(right: 4.0),
               child: SvgPicture.asset(
-                'assets/img/root_screen/ic_right_direction.svg',
+                'assets/img/home_screen/ic_home_right_direction.svg',
                 width: 24,
                 height: 24,
               ),

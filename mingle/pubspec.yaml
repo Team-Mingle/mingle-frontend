@@ -82,7 +82,10 @@ flutter:
     - assets/img/root_screen/ic_lawn_unselected.svg
     - assets/img/root_screen/ic_market_selected.svg
     - assets/img/root_screen/ic_market_unselected.svg
-    - assets/img/root_screen/ic_right_direction.svg
+    - assets/img/home_screen/ic_home_right_direction.svg
+    - assets/img/home_screen/ic_home_right_direction_bold.svg
+    - assets/img/common/ic_like.svg
+    - assets/img/common/ic_comment.svg
 
   fonts:
     - family: Pretendard
