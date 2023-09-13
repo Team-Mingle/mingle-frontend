@@ -8,10 +8,12 @@ class DropdownList extends ConsumerStatefulWidget {
   final List<String> itemList;
   final String hintText;
   final StateProvider<String>? isSelectedProvider;
+  final double width;
   const DropdownList(
       {super.key,
       required this.itemList,
       required this.hintText,
+      this.width = 170,
       this.isSelectedProvider});
 
   @override
@@ -25,6 +27,7 @@ class _DropdownListState extends ConsumerState<DropdownList> {
   Widget build(BuildContext context) {
     return DropdownButtonHideUnderline(
       child: DropdownButton2(
+        // isExpanded: true,
         items: widget.itemList
             .map((String country) => DropdownMenuItem<String>(
                   value: country,
@@ -54,7 +57,7 @@ class _DropdownListState extends ConsumerState<DropdownList> {
         ),
         buttonStyleData: ButtonStyleData(
           height: 44,
-          width: 170,
+          width: widget.width,
           padding: const EdgeInsets.only(left: 12.09),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),

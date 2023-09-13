@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/user/view/login_screen.dart';
 import 'package:mingle/user/view/signup_screen/select_country_screen.dart';
 
 class AppStartScreen extends StatelessWidget {
@@ -61,9 +62,12 @@ class AppStartScreen extends StatelessWidget {
                     ]),
               ),
             ),
-            const NextButton(
-              nextScreen: SelectCountryScreen(),
-              buttonName: "회원가입",
+            Padding(
+              padding: const EdgeInsets.only(left: 39, right: 40),
+              child: NextButton(
+                nextScreen: const SelectCountryScreen(),
+                buttonName: "회원가입",
+              ),
             ),
             const SizedBox(
               height: 16.0,
@@ -78,7 +82,8 @@ class AppStartScreen extends StatelessWidget {
                   width: 13.0,
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () => Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (_) => LoginScreen())),
                   child: const Text(
                     "로그인",
                     style: TextStyle(

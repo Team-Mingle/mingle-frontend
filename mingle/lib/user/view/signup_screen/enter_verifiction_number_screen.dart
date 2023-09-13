@@ -2,29 +2,30 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mingle/common/component/countdown_timer.dart';
 import 'package:mingle/common/component/dropdown_list.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:mingle/user/view/signup_screen/enter_email_screen.dart';
-import 'package:mingle/user/view/signup_screen/enter_verifiction_number_screen.dart';
+import 'package:mingle/user/view/signup_screen/enter_password_screen.dart';
 import 'package:mingle/user/view/signup_screen/provider/country_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/provider/email_extension_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/provider/school_selected_provider.dart';
 
-class EnterEmailScreen extends ConsumerStatefulWidget {
-  const EnterEmailScreen({super.key});
+class EnterVerificationNumberScreen extends ConsumerStatefulWidget {
+  const EnterVerificationNumberScreen({super.key});
 
   @override
-  ConsumerState<EnterEmailScreen> createState() => _EnterEmailScreenState();
+  ConsumerState<EnterVerificationNumberScreen> createState() =>
+      _EnterVerificationNumberScreenState();
 }
 
-class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
+class _EnterVerificationNumberScreenState
+    extends ConsumerState<EnterVerificationNumberScreen> {
   @override
   Widget build(BuildContext context) {
-    final String currentCountry = ref.read(selectedCountryProvider);
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -58,7 +59,7 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "학교 이메일을",
+                      "인증번호를",
                       style: TextStyle(
                           fontSize: 24.0, fontWeight: FontWeight.w400),
                     ),
@@ -70,7 +71,7 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
                     SizedBox(
                       height: 16.0,
                     ),
-                    Text("인증번호가 발송돼요.",
+                    Text("메일함을 확인하세요.",
                         style: TextStyle(
                             color: GRAYSCALE_GRAY_03,
                             fontSize: 14.0,
@@ -82,53 +83,69 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
             const SizedBox(
               height: 40,
             ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    width: 136,
-                    height: 44,
-                    child: TextField(
-                      maxLines: null,
-                      expands: true,
-                      decoration: InputDecoration(
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: PRIMARY_COLOR_ORANGE_01)),
-                          border: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: GRAYSCALE_GRAY_03))),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text("@"),
-                  ),
-                  DropdownList(
-                    itemList: currentCountry == "홍콩"
-                        ? HONG_KONG_EMAIL_LIST
-                        : currentCountry == "싱가포르"
-                            ? SINGAPORE_EMAIL_LIST
-                            : ENGLAND_EMAIL_LIST,
-                    hintText: "선택",
-                    isSelectedProvider: selectedEmailExtensionProvider,
-                    width: 144,
-                  ),
-                ],
+            const SizedBox(
+              // width: 144,
+              height: 44,
+              child: TextField(
+                decoration: InputDecoration(
+                    hintText: "인증번호 작성",
+                    hintStyle: TextStyle(color: GRAYSCALE_GRAY_02),
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: PRIMARY_COLOR_ORANGE_01)),
+                    border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: GRAYSCALE_GRAY_03))),
               ),
             ),
             const SizedBox(
-              height: 437,
+              height: 8,
+            ),
+            const SizedBox(
+              height: 44,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          "잔여시간",
+                          style: TextStyle(
+                              color: GRAYSCALE_GRAY_03,
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w400),
+                        ),
+                        SizedBox(
+                          width: 4.0,
+                        ),
+                        CountdownTimer()
+                      ],
+                    ),
+                    InkWell(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "인증문자 재발송",
+                            style: TextStyle(
+                                color: GRAYSCALE_GRAY_05,
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w400),
+                          ),
+                          ImageIcon(
+                            AssetImage(
+                                "assets/img/signup_screen/next_screen_icon.png"),
+                            color: GRAYSCALE_GRAY_03,
+                          ),
+                        ],
+                      ),
+                    )
+                  ]),
+            ),
+            const SizedBox(
+              height: 385,
             ),
             NextButton(
-              nextScreen: const EnterVerificationNumberScreen(),
-              buttonName: "인증번호 받기",
-              buttonIcon: const ImageIcon(
-                AssetImage("assets/img/signup_screen/email_icon.png"),
-                color: GRAYSCALE_GRAY_04,
-              ),
+              nextScreen: const EnterPasswordScreen(),
+              buttonName: "다음으로",
               isSelectedProvider: selectedEmailExtensionProvider,
             )
           ]),
