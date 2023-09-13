@@ -68,8 +68,7 @@ class _HomeRootTabState extends State<HomeRootTab> {
           (index) {
             return BottomNavigationBarItem(
               icon: Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 8.0), // 아이콘을 수직 방향으로 조절
+                padding: const EdgeInsets.symmetric(vertical: 8.0), 
                 child: SvgPicture.asset(
                   _selectedIndex == index
                       ? _selectedSvgImagePaths[index] // 선택된 아이콘 이미지

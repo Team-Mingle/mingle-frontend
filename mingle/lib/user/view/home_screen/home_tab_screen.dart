@@ -67,7 +67,7 @@ class HomeTabScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            // 여기에 상단 앱바 아래에 표시할 내용을 추가합니다.
+            const SizedBox(height: 16.0), // 여백 추가
 
             // 예시: 아래에 100개의 아이템을 나열
             ListView.builder(
