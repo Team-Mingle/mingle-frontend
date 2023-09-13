@@ -1,22 +1,28 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mingle/common/component/countdown_timer.dart';
 import 'package:mingle/common/component/dropdown_list.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
+import 'package:mingle/user/view/signup_screen/enter_email_screen.dart';
 import 'package:mingle/user/view/signup_screen/provider/country_selected_provider.dart';
-import 'package:mingle/user/view/signup_screen/select_school_screen.dart';
+import 'package:mingle/user/view/signup_screen/provider/email_extension_selected_provider.dart';
+import 'package:mingle/user/view/signup_screen/provider/school_selected_provider.dart';
+import 'package:mingle/user/view/signup_screen/service_agreement_screen.dart';
 
-class SelectCountryScreen extends StatefulWidget {
-  const SelectCountryScreen({super.key});
+class EnterPasswordScreen extends ConsumerStatefulWidget {
+  const EnterPasswordScreen({super.key});
 
   @override
-  State<SelectCountryScreen> createState() => _SelectCountryScreenState();
+  ConsumerState<EnterPasswordScreen> createState() =>
+      _EnterPasswordScreenState();
 }
 
-class _SelectCountryScreenState extends State<SelectCountryScreen> {
+class _EnterPasswordScreenState extends ConsumerState<EnterPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +34,7 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
             padding: const EdgeInsets.only(left: 17.0),
             child: IconButton(
               icon: const ImageIcon(
-                AssetImage("assets/img/signup_screen/cross_icon.png"),
+                AssetImage("assets/img/signup_screen/previous_screen_icon.png"),
                 color: GRAYSCALE_BLACK,
               ),
               onPressed: () {
@@ -37,7 +43,7 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
             ),
           ),
           title: SvgPicture.asset(
-            "assets/img/signup_screen/first_indicator.svg",
+            "assets/img/signup_screen/second_indicator.svg",
           )),
       body: DefaultPadding(
         child: SizedBox(
@@ -52,23 +58,15 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "재학 중인 학교가",
+                      "비밀번호를",
                       style: TextStyle(
                           fontSize: 24.0, fontWeight: FontWeight.w400),
                     ),
                     Text(
-                      "어디에 위치해 있나요?",
+                      "입력해 주세요.",
                       style: TextStyle(
                           fontSize: 24.0, fontWeight: FontWeight.w400),
                     ),
-                    SizedBox(
-                      height: 16.0,
-                    ),
-                    Text("원활한 앱 이용을 위해 재학 정보가 필요해요",
-                        style: TextStyle(
-                            color: GRAYSCALE_GRAY_03,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w400))
                   ],
                 ),
               ),
@@ -76,25 +74,42 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
             const SizedBox(
               height: 40,
             ),
-            SvgPicture.asset("assets/img/signup_screen/globe_icon.svg"),
             const SizedBox(
-              height: 8,
-            ),
-            SizedBox(
-              width: 170,
-              child: DropdownList(
-                itemList: COUNTRY_LIST,
-                hintText: "국가 선택",
-                isSelectedProvider: selectedCountryProvider,
+              height: 44,
+              child: TextField(
+                obscureText: true,
+                decoration: InputDecoration(
+                    hintText: "영문, 숫자 포함 6자리 이상*",
+                    hintStyle: TextStyle(color: GRAYSCALE_GRAY_02),
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: PRIMARY_COLOR_ORANGE_01)),
+                    border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: GRAYSCALE_GRAY_03))),
               ),
             ),
             const SizedBox(
-              height: 309,
+              height: 33,
+            ),
+            const SizedBox(
+              height: 44,
+              child: TextField(
+                obscureText: true,
+                decoration: InputDecoration(
+                    hintText: "비밀번호 재입력",
+                    hintStyle: TextStyle(color: GRAYSCALE_GRAY_02),
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: PRIMARY_COLOR_ORANGE_01)),
+                    border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: GRAYSCALE_GRAY_03))),
+              ),
+            ),
+            const SizedBox(
+              height: 393,
             ),
             NextButton(
-              nextScreen: SelectSchoolScreen(),
+              nextScreen: const ServiceAgreementScreen(),
               buttonName: "다음으로",
-              isSelectedProvider: selectedCountryProvider,
+              isSelectedProvider: selectedEmailExtensionProvider,
             )
           ]),
         ),

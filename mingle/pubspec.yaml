@@ -38,6 +38,8 @@ dependencies:
   flutter_svg_provider: ^1.0.6
   dropdown_button2: ^2.3.9
   flutter_riverpod: ^2.4.0
+  quiver: ^3.2.1
+  getwidget: ^4.0.0
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +72,12 @@ flutter:
     - assets/img/signup_screen/dropdown_button_icon.svg
     - assets/img/signup_screen/previous_screen_icon.png
     - assets/img/signup_screen/school_icon.svg
+    - assets/img/signup_screen/email_icon.png
+    - assets/img/signup_screen/next_screen_icon.png
+    - assets/img/signup_screen/second_indicator.svg
+    - assets/img/signup_screen/third_indicator.svg
+    - assets/img/signup_screen/check_filled.svg
+    - assets/img/signup_screen/check_blank.svg
 
   fonts:
     - family: Pretendard

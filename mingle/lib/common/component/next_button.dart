@@ -7,10 +7,12 @@ class NextButton extends ConsumerWidget {
   final String buttonName;
   final Widget? buttonIcon;
   final StateProvider<String>? isSelectedProvider;
-  const NextButton({
+  bool isReplacement;
+  NextButton({
     super.key,
     required this.nextScreen,
     required this.buttonName,
+    this.isReplacement = false,
     this.isSelectedProvider,
     this.buttonIcon,
   });
@@ -23,11 +25,14 @@ class NextButton extends ConsumerWidget {
 
     return InkWell(
       onTap: () => isSelected != ""
-          ? Navigator.of(context)
-              .push((MaterialPageRoute(builder: (_) => nextScreen)))
+          ? isReplacement
+              ? Navigator.of(context).pushReplacement(
+                  (MaterialPageRoute(builder: (_) => nextScreen)))
+              : Navigator.of(context)
+                  .push((MaterialPageRoute(builder: (_) => nextScreen)))
           : {},
       child: Container(
-        width: 296,
+        // width: 296,
         height: 48,
         decoration: BoxDecoration(
             border: Border.all(
