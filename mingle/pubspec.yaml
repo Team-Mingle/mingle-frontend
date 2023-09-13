@@ -2,7 +2,7 @@ name: mingle
 description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.1.0 <4.0.0'
+  sdk: ">=3.1.0 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -31,10 +31,15 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  flutter_svg: ^2.0.7
+  flutter_svg_provider: ^1.0.6
+  dropdown_button2: ^2.3.9
+  flutter_riverpod: ^2.4.0
+  quiver: ^3.2.1
+  getwidget: ^4.0.0
 
 dev_dependencies:
   flutter_test:
@@ -52,11 +57,57 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/img/login_screen/ios_illust_gradationApply.svg
+    - assets/img/login_screen/ios_illust_gradationApply.jpg
+    - assets/img/splash_screen/logo_final.svg
+    - assets/img/signup_screen/cross_icon.png
+    - assets/img/signup_screen/first_indicator.svg
+    - assets/img/signup_screen/globe_icon.svg
+    - assets/img/signup_screen/dropdown_button_icon.svg
+    - assets/img/signup_screen/previous_screen_icon.png
+    - assets/img/signup_screen/school_icon.svg
+    - assets/img/signup_screen/email_icon.png
+    - assets/img/signup_screen/next_screen_icon.png
+    - assets/img/signup_screen/second_indicator.svg
+    - assets/img/signup_screen/third_indicator.svg
+    - assets/img/signup_screen/check_filled.svg
+    - assets/img/signup_screen/check_blank.svg
+
+  fonts:
+    - family: Pretendard
+      fonts:
+        - asset: assets/fonts/Pretendard-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Pretendard-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/Pretendard-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Pretendard-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Pretendard-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Pretendard-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Pretendard-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Pretendard-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Pretendard-Black.ttf
+          weight: 900
+
+    - family: Aggro
+      fonts:
+        - asset: assets/fonts/SB-Aggro-M.otf
+        - asset: assets/fonts/SB-Aggro-L.otf
+          weight: 300
+        - asset: assets/fonts/SB-Aggro-B.otf
+          weight: 700
 
   # To add assets to your application, add an assets section, like this:
   # assets:
