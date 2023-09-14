@@ -8,8 +8,10 @@ class PostCard extends StatelessWidget {
 
   final dummyPostList = [
     {
-      'title': 'Post 1',
-      'content': 'This is the content of Post 1.',
+      'title':
+          'Post 1Post 1Post 1Post 1Post 1Post 1Post 1Post 1Post 1Post 1Post 1Post 1Post 1Post 1Post 1Post 1Post 1',
+      'content':
+          'This is the content of Post 1. This is the content of Post 1.This is the content of Post 1. This is the content of Post 1. This is the content of Post 1.                                                  dsfsdf.',
       'nickname': 'User1',
       'timestamp': '2 hours ago',
       'likeCounts': '10',
@@ -75,7 +77,10 @@ class PostCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12.0),
-          PostPreviewCard(postList: dummyPostList),
+          PostPreviewCard(
+            postList: dummyPostList,
+            cardType: CardType.home,
+          ),
         ],
       ),
     );

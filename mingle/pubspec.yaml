@@ -89,6 +89,7 @@ flutter:
     - assets/img/home_screen/ic_home_right_direction_bold.svg
     - assets/img/common/ic_like.svg
     - assets/img/common/ic_comment.svg
+    - assets/img/common/ic_dot.svg
     - assets/img/signup_screen/email_icon.png
     - assets/img/signup_screen/next_screen_icon.png
     - assets/img/signup_screen/second_indicator.svg
