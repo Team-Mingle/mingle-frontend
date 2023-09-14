@@ -2,35 +2,52 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
 
+enum CardType { home, square, lawn }
+
 class PostPreviewCard extends StatelessWidget {
   final List<Map<String, String>> postList;
+  final CardType cardType;
 
   const PostPreviewCard({
     required this.postList,
+    required this.cardType,
     Key? key,
   }) : super(key: key);
+
+  // 카드 유형에 따라 텍스트 줄 수를 조절
+  int getMaxLines() {
+    switch (cardType) {
+      case CardType.home:
+        return 1;
+      case CardType.square:
+        return 3;
+      case CardType.lawn:
+        return 3;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.only(bottom: 20.0),
-      child: ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: postList.length,
-        itemBuilder: (context, index) {
-          final post = postList[index];
-
-          return InkWell(
-            onTap: () {
-              print('Post ${post['title']} tapped');
-            },
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 32, 0),
-                  child: Row(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: postList.length,
+          itemBuilder: (context, index) {
+            final post = postList[index];
+            return InkWell(
+              onTap: () {
+                print('Post ${post['title']} tapped');
+              },
+              child: Column(
+                children: [
+                  Row(
                     children: [
                       Expanded(
                         child: Align(
@@ -44,15 +61,14 @@ class PostPreviewCard extends StatelessWidget {
                               color: GRAYSCALE_BLACK_GRAY,
                             ),
                             textAlign: TextAlign.left,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ),
                     ],
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 12, 0),
-                  child: Align(
+                  Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
                       post['content'] ?? '',
@@ -63,12 +79,11 @@ class PostPreviewCard extends StatelessWidget {
                         color: GRAYSCALE_GRAY_05,
                       ),
                       textAlign: TextAlign.left,
+                      maxLines: getMaxLines(),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
-                  child: Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
@@ -83,6 +98,13 @@ class PostPreviewCard extends StatelessWidget {
                             ),
                             textAlign: TextAlign.left,
                           ),
+                          const SizedBox(width: 4.0),
+                          SvgPicture.asset(
+                            'assets/img/common/ic_dot.svg',
+                            width: 2,
+                            height: 2,
+                          ),
+                          const SizedBox(width: 4.0),
                           Text(
                             post['timestamp'] ?? '',
                             style: const TextStyle(
@@ -127,21 +149,21 @@ class PostPreviewCard extends StatelessWidget {
                             ),
                             textAlign: TextAlign.left,
                           ),
-                          const SizedBox(width: 16.0),
                         ],
                       ),
                     ],
                   ),
-                ),
-                if (index != postList.length - 1)
-                  const Divider(
-                    color: Colors.grey,
-                    thickness: 1.0,
-                  ),
-              ],
-            ),
-          );
-        },
+                  const SizedBox(height: 10.0),
+                  if (index != postList.length - 1)
+                    const Divider(
+                      color: GRAYSCALE_GRAY_01,
+                      thickness: 0.0,
+                    ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
