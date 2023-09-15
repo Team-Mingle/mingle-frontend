@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:mingle/user/view/home_screen/tab_bar_screen.dart';
 
 class SquareTabScreen extends StatelessWidget {
-  const SquareTabScreen({super.key});
+  const SquareTabScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('광장'),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("SquareTabScreen"),
+      ),
+      body: const Column(
+        children: [
+          TabBarScreen(),
+        ],
+      ),
     );
   }
 }
