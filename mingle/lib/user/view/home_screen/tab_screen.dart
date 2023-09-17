@@ -124,7 +124,13 @@ class TabScreen extends StatelessWidget {
           ),
         ),
         body: TabBarView(
-          children: tabContents,
+          physics: const AlwaysScrollableScrollPhysics(), // 스크롤 활성화
+          children: tabContents.map((tabContent) {
+            // PostPreviewCard를 SingleChildScrollView로 감싸기
+            return SingleChildScrollView(
+              child: tabContent,
+            );
+          }).toList(),
         ),
       ),
     );

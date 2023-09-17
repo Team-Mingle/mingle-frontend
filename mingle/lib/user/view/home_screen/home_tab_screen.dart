@@ -86,7 +86,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
               Column(
                 children: [
                   sliderWidget(),
-                  const SizedBox(height: 8.0), 
+                  const SizedBox(height: 8.0),
                   sliderIndicator(),
                 ],
               ),

@@ -8,7 +8,7 @@ class SquareTabScreen extends StatelessWidget {
       'title':
           'Post 1Post 1Post 1Post 1Post 1Post 1Post 1Post 1Post 1Post 1Post 1Post 1Post 1Post 1Post 1Post 1Post 1',
       'content':
-          'This is the content of Post 1. This is the content of Post 1.This is the content of Post 1. This is the content of Post 1. This is the content of Post 1.                                                  dsfsdf.',
+          'This is the content of Post 1. This is the content of Post 1.This is the content of Post 1. This is the content of Post 1. This is the content of Post 1. content of Post 1. This is the content of Post 1. content of Post 1. This is the content of Post 1. content of Post 1. This is the content of Post 1..',
       'nickname': 'User1',
       'timestamp': '2 hours ago',
       'likeCounts': '10',
@@ -167,48 +167,24 @@ class SquareTabScreen extends StatelessWidget {
       tab4: '밍글소식',
       tabContents: [
         // 첫 번째 탭 내용
-        ListView.builder(
-          itemCount: dummyPostList.length,
-          itemBuilder: (BuildContext context, int index) {
-            final post = dummyPostList[index];
-            return PostPreviewCard(
-              postList: [post], // 각 항목은 별도의 리스트로 표시
-              cardType: CardType.square,
-            );
-          },
+        PostPreviewCard(
+          postList: dummyPostList,
+          cardType: CardType.square,
         ),
         // 두 번째 탭 내용
-        ListView.builder(
-          itemCount: dummyPostList.length,
-          itemBuilder: (BuildContext context, int index) {
-            final post = dummyPostList[index];
-            return PostPreviewCard(
-              postList: [post], // 각 항목은 별도의 리스트로 표시
-              cardType: CardType.square,
-            );
-          },
+        PostPreviewCard(
+          postList: dummyPostList,
+          cardType: CardType.square,
         ),
         // 세 번째 탭 내용
-        ListView.builder(
-          itemCount: dummyPostList.length,
-          itemBuilder: (BuildContext context, int index) {
-            final post = dummyPostList[index];
-            return PostPreviewCard(
-              postList: [post], // 각 항목은 별도의 리스트로 표시
-              cardType: CardType.square,
-            );
-          },
+        PostPreviewCard(
+          postList: dummyPostList,
+          cardType: CardType.square,
         ),
         // 네 번째 탭 내용
-        ListView.builder(
-          itemCount: dummyPostList.length,
-          itemBuilder: (BuildContext context, int index) {
-            final post = dummyPostList[index];
-            return PostPreviewCard(
-              postList: [post], // 각 항목은 별도의 리스트로 표시
-              cardType: CardType.square,
-            );
-          },
+        PostPreviewCard(
+          postList: dummyPostList,
+          cardType: CardType.square,
         ),
       ],
     );
