@@ -63,6 +63,7 @@ class _HomeRootTabState extends State<HomeRootTab> {
         iconSize: 48.0,
         selectedFontSize: 0.0,
         unselectedFontSize: 0.0,
+        backgroundColor: Colors.white,
         items: List.generate(
           _normalSvgImagePaths.length,
           (index) {

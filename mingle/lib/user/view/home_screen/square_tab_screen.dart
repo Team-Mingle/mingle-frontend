@@ -28,22 +28,18 @@ class SquareTabScreen extends StatelessWidget {
       tab3: '질문',
       tab4: '밍글소식',
       tabContents: [
-        // 첫 번째 탭 내용
         PostPreviewCard(
           postList: dummyPostList,
           cardType: CardType.square,
         ),
-        // 두 번째 탭 내용
         PostPreviewCard(
           postList: dummyPostList,
           cardType: CardType.square,
         ),
-        // 세 번째 탭 내용
         PostPreviewCard(
           postList: dummyPostList,
           cardType: CardType.square,
         ),
-        // 네 번째 탭 내용
         PostPreviewCard(
           postList: dummyPostList,
           cardType: CardType.square,
