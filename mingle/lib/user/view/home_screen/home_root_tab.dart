@@ -44,7 +44,7 @@ class _HomeRootTabState extends State<HomeRootTab> {
       case 1:
         return SquareTabScreen();
       case 2:
-        return const LawnTabScreen();
+        return LawnTabScreen();
       case 3:
         return const MarketTabScreen();
       default:
