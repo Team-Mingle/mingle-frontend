@@ -3,9 +3,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
 
 class MyPageTile extends StatelessWidget {
-  final List<String> list;
-  final Widget screen;
-  const MyPageTile({super.key, required this.screen, required this.list});
+  final List<String> titles;
+  final List<Widget> screens;
+  const MyPageTile({super.key, required this.screens, required this.titles});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class MyPageTile extends StatelessWidget {
           left: 20.0, right: 18.0, top: 15.0, bottom: 15.0),
       child: Column(
         children: List.generate(
-          list.length,
+          titles.length,
           (index) => Column(
             children: [
               InkWell(
@@ -24,7 +24,7 @@ class MyPageTile extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        list[index],
+                        titles[index],
                         style: const TextStyle(
                             fontSize: 14.0, fontWeight: FontWeight.w400),
                       ),
@@ -33,9 +33,10 @@ class MyPageTile extends StatelessWidget {
                     ],
                   ),
                 ),
-                onTap: () {},
+                onTap: () => Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => screens[index])),
               ),
-              index == list.length - 1
+              index == titles.length - 1
                   ? Container()
                   : const Divider(
                       height: 8.0,

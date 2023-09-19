@@ -3,14 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mingle/common/const/colors.dart';
 
 class NextButton extends ConsumerWidget {
-  final Widget nextScreen;
+  final Widget? nextScreen;
   final String buttonName;
   final Widget? buttonIcon;
   final StateProvider<String>? isSelectedProvider;
   bool isReplacement;
   NextButton({
     super.key,
-    required this.nextScreen,
+    this.nextScreen,
     required this.buttonName,
     this.isReplacement = false,
     this.isSelectedProvider,
@@ -25,11 +25,13 @@ class NextButton extends ConsumerWidget {
 
     return InkWell(
       onTap: () => isSelected != ""
-          ? isReplacement
-              ? Navigator.of(context).pushReplacement(
-                  (MaterialPageRoute(builder: (_) => nextScreen)))
-              : Navigator.of(context)
-                  .push((MaterialPageRoute(builder: (_) => nextScreen)))
+          ? nextScreen == null
+              ? Navigator.of(context).pop()
+              : isReplacement
+                  ? Navigator.of(context).pushReplacement(
+                      (MaterialPageRoute(builder: (_) => nextScreen!)))
+                  : Navigator.of(context)
+                      .push((MaterialPageRoute(builder: (_) => nextScreen!)))
           : {},
       child: Container(
         // width: 296,

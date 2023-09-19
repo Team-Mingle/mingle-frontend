@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/user/components/my_page_tile.dart';
+import 'package:mingle/user/view/my_page_screen/change_nickname_screen.dart';
+import 'package:mingle/user/view/my_page_screen/change_password_screen.dart';
+import 'package:mingle/user/view/my_page_screen/quit_agreement_screen.dart';
 
 class ManageAccountScreen extends StatelessWidget {
   const ManageAccountScreen({super.key});
@@ -9,6 +12,11 @@ class ManageAccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<String> manageAccountTitle = ["닉네임 변경", "비밀번호 변경", "탈퇴하기"];
+    List<Widget> manageAccountScreen = [
+      const ChangeNicknameScreen(),
+      const ChangePasswordScreen(),
+      const QuitAgreementScreen()
+    ];
 
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR_GRAY,
@@ -33,8 +41,8 @@ class ManageAccountScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.only(left: 12.0, right: 14.0),
         child: MyPageTile(
-          list: manageAccountTitle,
-          screen: Container(),
+          titles: manageAccountTitle,
+          screens: manageAccountScreen,
         ),
       ),
     );

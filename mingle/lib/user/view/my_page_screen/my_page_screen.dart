@@ -11,18 +11,27 @@ class MyPageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> activityTitle = [
+    List<String> activityTitles = [
       "스크랩한 글",
       "좋아요 누른 글",
       "내가 작성한 글",
       "내가 작성한 댓글"
     ];
 
-    List<String> secondHandMarketTitle = ["판매 내역", "찜한 내역"];
+    List<String> secondHandMarketTitles = ["판매 내역", "찜한 내역"];
 
-    List<String> userUtilTitle = ["이용약관", "개인정보 처리방침", "밍글에 문의하기"];
+    List<String> userUtilTitles = ["이용약관", "개인정보 처리방침", "밍글에 문의하기"];
 
-    List<Widget> activityScreen = [];
+    List<Widget> activityScreens = [
+      Container(),
+      Container(),
+      Container(),
+      Container()
+    ];
+
+    List<Widget> secondHandMarketScreens = [Container(), Container()];
+
+    List<Widget> userUtilScreens = [Container(), Container(), Container()];
 
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR_GRAY,
@@ -131,8 +140,8 @@ class MyPageScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: MyPageTile(
-                      list: activityTitle,
-                      screen: Container(),
+                      titles: activityTitles,
+                      screens: activityScreens,
                     ),
                   ),
                   const SizedBox(
@@ -160,8 +169,8 @@ class MyPageScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: MyPageTile(
-                      list: secondHandMarketTitle,
-                      screen: Container(),
+                      titles: secondHandMarketTitles,
+                      screens: secondHandMarketScreens,
                     ),
                   ),
                   const SizedBox(
@@ -178,8 +187,8 @@ class MyPageScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: MyPageTile(
-                      list: userUtilTitle,
-                      screen: Container(),
+                      titles: userUtilTitles,
+                      screens: userUtilScreens,
                     ),
                   ),
                   const SizedBox(
