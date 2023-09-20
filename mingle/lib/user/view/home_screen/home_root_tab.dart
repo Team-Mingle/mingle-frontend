@@ -42,9 +42,9 @@ class _HomeRootTabState extends State<HomeRootTab> {
       case 0:
         return const HomeTabScreen();
       case 1:
-        return const SquareTabScreen();
+        return SquareTabScreen();
       case 2:
-        return const LawnTabScreen();
+        return LawnTabScreen();
       case 3:
         return const MarketTabScreen();
       default:
@@ -61,14 +61,15 @@ class _HomeRootTabState extends State<HomeRootTab> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         iconSize: 48.0,
-        selectedFontSize: 0.0, 
-        unselectedFontSize: 0.0, 
+        selectedFontSize: 0.0,
+        unselectedFontSize: 0.0,
+        backgroundColor: Colors.white,
         items: List.generate(
           _normalSvgImagePaths.length,
           (index) {
             return BottomNavigationBarItem(
               icon: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0), 
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: SvgPicture.asset(
                   _selectedIndex == index
                       ? _selectedSvgImagePaths[index] // 선택된 아이콘 이미지

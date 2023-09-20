@@ -88,7 +88,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
               Column(
                 children: [
                   sliderWidget(),
-                  const SizedBox(height: 8.0), // 슬라이더와 인디케이터 사이의 간격을 8만큼 추가합니다.
+                  const SizedBox(height: 8.0),
                   sliderIndicator(),
                 ],
               ),
