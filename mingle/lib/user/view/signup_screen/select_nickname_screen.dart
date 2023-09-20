@@ -92,10 +92,10 @@ class _SelectNicknameScreenState extends State<SelectNicknameScreen> {
                 decoration: InputDecoration(
                     hintText: "닉네임 작성",
                     suffix: Text("${currentNickname.length}/10"),
-                    hintStyle: TextStyle(color: GRAYSCALE_GRAY_02),
-                    focusedBorder: UnderlineInputBorder(
+                    hintStyle: const TextStyle(color: GRAYSCALE_GRAY_02),
+                    focusedBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: PRIMARY_COLOR_ORANGE_01)),
-                    border: UnderlineInputBorder(
+                    border: const UnderlineInputBorder(
                         borderSide: BorderSide(color: GRAYSCALE_GRAY_03))),
               ),
             ),

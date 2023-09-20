@@ -42,7 +42,6 @@ dependencies:
   quiver: ^3.2.1
   getwidget: ^4.0.0
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -96,7 +95,8 @@ flutter:
     - assets/img/signup_screen/third_indicator.svg
     - assets/img/signup_screen/check_filled.svg
     - assets/img/signup_screen/check_blank.svg
-
+    - assets/img/signup_screen/
+    - assets/img/my_page_screen/
 
   fonts:
     - family: Pretendard
