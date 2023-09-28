@@ -97,6 +97,7 @@ flutter:
     - assets/img/signup_screen/check_blank.svg
     - assets/img/signup_screen/
     - assets/img/my_page_screen/
+    - assets/img/post_screen/
 
   fonts:
     - family: Pretendard

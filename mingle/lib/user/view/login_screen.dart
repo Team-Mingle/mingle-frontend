@@ -20,17 +20,17 @@ class _LoginScreenState extends State<LoginScreen> {
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          SizedBox(
+          const SizedBox(
             height: 112,
           ),
-          Text(
+          const Text(
             "로그인",
             style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w400),
           ),
-          SizedBox(
+          const SizedBox(
             height: 32.0,
           ),
-          TextField(
+          const TextField(
             obscureText: true,
             decoration: InputDecoration(
                 hintText: "학교 이메일 주소",
@@ -40,10 +40,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 border: UnderlineInputBorder(
                     borderSide: BorderSide(color: GRAYSCALE_GRAY_03))),
           ),
-          SizedBox(
+          const SizedBox(
             height: 25.0,
           ),
-          TextField(
+          const TextField(
             obscureText: true,
             decoration: InputDecoration(
                 hintText: "비밀번호",
@@ -53,16 +53,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 border: UnderlineInputBorder(
                     borderSide: BorderSide(color: GRAYSCALE_GRAY_03))),
           ),
-          SizedBox(
+          const SizedBox(
             height: 88.0,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               InkWell(
-                onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => SelectCountryScreen())),
-                child: Text(
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => const SelectCountryScreen())),
+                child: const Text(
                   "회원가입",
                   style: TextStyle(
                       color: GRAYSCALE_GRAY_04,
@@ -70,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       fontWeight: FontWeight.w400),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16.0,
                 width: 48,
                 child: VerticalDivider(
@@ -80,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               InkWell(
                 onTap: () {},
-                child: Text(
+                child: const Text(
                   "비밀번호 재설정",
                   style: TextStyle(
                       color: GRAYSCALE_GRAY_04,
@@ -90,10 +90,10 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ],
           ),
-          SizedBox(
-            height: 333.0,
+          Expanded(
+            child: Container(),
           ),
-          NextButton(nextScreen: SplashScreen(), buttonName: "로그인")
+          NextButton(nextScreen: const SplashScreen(), buttonName: "로그인")
         ]),
       ),
     ));

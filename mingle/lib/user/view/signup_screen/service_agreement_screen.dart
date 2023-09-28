@@ -299,9 +299,7 @@ class _ServiceAgreementScreenState extends State<ServiceAgreementScreen> {
                 ),
               ],
             ),
-            const SizedBox(
-              height: 302.0,
-            ),
+            Expanded(child: Container()),
             NextButton(
               nextScreen: const SelectNicknameScreen(),
               buttonName: "다음으로",

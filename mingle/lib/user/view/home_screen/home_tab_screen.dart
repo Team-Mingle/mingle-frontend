@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mingle/common/component/post_card.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
 
 class HomeTabScreen extends StatefulWidget {
@@ -46,7 +47,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                 ),
               ),
               onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const MyPageScreen())),
+                  MaterialPageRoute(builder: (_) => const PostDetailScreen())),
             ),
           ),
           actions: <Widget>[

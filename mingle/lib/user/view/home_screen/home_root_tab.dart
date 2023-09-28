@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/user/view/home_screen/home_tab_screen.dart';
 import 'package:mingle/user/view/home_screen/lawn_tab_screen.dart';
 import 'package:mingle/user/view/home_screen/market_tab_screen.dart';
@@ -61,14 +62,14 @@ class _HomeRootTabState extends State<HomeRootTab> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         iconSize: 48.0,
-        selectedFontSize: 0.0, 
-        unselectedFontSize: 0.0, 
+        selectedFontSize: 0.0,
+        unselectedFontSize: 0.0,
         items: List.generate(
           _normalSvgImagePaths.length,
           (index) {
             return BottomNavigationBarItem(
               icon: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0), 
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: SvgPicture.asset(
                   _selectedIndex == index
                       ? _selectedSvgImagePaths[index] // 선택된 아이콘 이미지

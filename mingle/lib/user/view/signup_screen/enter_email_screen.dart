@@ -14,7 +14,8 @@ import 'package:mingle/user/view/signup_screen/provider/email_extension_selected
 import 'package:mingle/user/view/signup_screen/provider/school_selected_provider.dart';
 
 class EnterEmailScreen extends ConsumerStatefulWidget {
-  const EnterEmailScreen({super.key});
+  final bool isPasswordReset;
+  const EnterEmailScreen({super.key, this.isPasswordReset = false});
 
   @override
   ConsumerState<EnterEmailScreen> createState() => _EnterEmailScreenState();
@@ -43,7 +44,9 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
             ),
           ),
           title: SvgPicture.asset(
-            "assets/img/signup_screen/first_indicator.svg",
+            widget.isPasswordReset
+                ? "assets/img/signup_screen/second_indicator.svg"
+                : "assets/img/signup_screen/first_indicator.svg",
           )),
       body: DefaultPadding(
         child: SizedBox(
@@ -54,24 +57,27 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
               padding: const EdgeInsets.only(top: 16.0),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "학교 이메일을",
-                      style: TextStyle(
+                      widget.isPasswordReset ? "인증번호를 보낼" : "학교 이메일을",
+                      style: const TextStyle(
                           fontSize: 24.0, fontWeight: FontWeight.w400),
                     ),
                     Text(
-                      "입력해 주세요.",
-                      style: TextStyle(
+                      widget.isPasswordReset ? "학교 이메일을 입력해 주세요." : "입력해 주세요.",
+                      style: const TextStyle(
                           fontSize: 24.0, fontWeight: FontWeight.w400),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 16.0,
                     ),
-                    Text("인증번호가 발송돼요.",
-                        style: TextStyle(
+                    Text(
+                        widget.isPasswordReset
+                            ? "비밀번호 재설정을 위해 본인인증이 필요해요."
+                            : "인증번호가 발송돼요.",
+                        style: const TextStyle(
                             color: GRAYSCALE_GRAY_03,
                             fontSize: 14.0,
                             fontWeight: FontWeight.w400))
@@ -119,11 +125,11 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
                 ],
               ),
             ),
-            const SizedBox(
-              height: 437,
-            ),
+            Expanded(child: Container()),
             NextButton(
-              nextScreen: const EnterVerificationNumberScreen(),
+              nextScreen: EnterVerificationNumberScreen(
+                isPasswordReset: widget.isPasswordReset,
+              ),
               buttonName: "인증번호 받기",
               buttonIcon: const ImageIcon(
                 AssetImage("assets/img/signup_screen/email_icon.png"),
