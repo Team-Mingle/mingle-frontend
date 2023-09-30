@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mingle/common/component/anonymous_textfield.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/post/components/comment_card.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
@@ -9,6 +10,14 @@ class PostDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List imageList = [
+      "https://cdn.pixabay.com/photo/2014/04/14/20/11/pink-324175_1280.jpg",
+      "https://cdn.pixabay.com/photo/2014/02/27/16/10/flowers-276014_1280.jpg",
+      "https://cdn.pixabay.com/photo/2012/03/01/00/55/flowers-19830_1280.jpg",
+      "https://cdn.pixabay.com/photo/2015/06/19/20/13/sunset-815270_1280.jpg",
+      "https://cdn.pixabay.com/photo/2016/01/08/05/24/sunflower-1127174_1280.jpg",
+    ];
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -42,29 +51,64 @@ class PostDetailScreen extends StatelessWidget {
       body: CustomScrollView(slivers: [
         SliverList(
             delegate: SliverChildListDelegate([
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Text(
+                const Text(
                   "제목제목제목",
                   style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w400),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 24.0,
                 ),
-                Text(
+                const Text(
                   "본문본문본문본문본문본문본문본문본문본문본문본문본문본문본문본문본문본문본문\n본문\n본문\n본문\n본문\n본문\n본문\n본문\n",
                   style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400),
                 ),
-                SizedBox(
+                Column(
+                  children: [
+                    const SizedBox(
+                      height: 16.0,
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: List.generate(
+                          3,
+                          (index) => Row(
+                            children: [
+                              SizedBox(
+                                height: 130.0,
+                                width: 130.0,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: Image(
+                                    fit: BoxFit.fill,
+                                    image: NetworkImage(
+                                      imageList[index],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: index < imageList.length - 1 ? 4.0 : 0.0,
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(
                   height: 12.0,
                 ),
-                Row(
+                const Row(
                   children: [
                     Text(
                       "익명",
@@ -113,7 +157,7 @@ class PostDetailScreen extends StatelessWidget {
                     )
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 12.0,
                 ),
               ],
@@ -244,6 +288,7 @@ class PostDetailScreen extends StatelessWidget {
           )
         ]))
       ]),
+      bottomSheet: const Row(children: [AnonymousTextfield()]),
     );
   }
 }
