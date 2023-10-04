@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mingle/common/component/post_card.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/post/view/add_post_screen.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
@@ -262,8 +263,8 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                   height: 24,
                 ),
               ),
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => const SecondHandPostDetailScreen())),
+              onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const AddPostScreen())),
             ),
           ),
           actions: <Widget>[
