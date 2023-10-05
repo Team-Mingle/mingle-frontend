@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/user/view/home_screen/search_screen.dart';
 
 class TabScreen extends StatelessWidget {
   final List<Widget> tabContents;
@@ -73,7 +74,13 @@ class TabScreen extends StatelessWidget {
                     height: 24,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SearchScreen()),
+                  );
+                },
               ),
             ],
           ),
