@@ -50,14 +50,13 @@ class PostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        // 각 PostPreviewCard를 눌렀을 때 실행할 작업을 추가
-        print('Post $title tapped');
-      },
-      child: Column(
-        children: [
-          Row(
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () {
+            print('First item tapped');
+          },
+          child: Row(
             children: [
               Text(
                 title,
@@ -76,13 +75,13 @@ class PostCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12.0),
-          PostPreviewCard(
-            postList: dummyPostList,
-            cardType: CardType.home,
-          ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 12.0),
+        PostPreviewCard(
+          postList: dummyPostList,
+          cardType: CardType.home,
+        ),
+      ],
     );
   }
 }
