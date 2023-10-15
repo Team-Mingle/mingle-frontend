@@ -41,6 +41,8 @@ dependencies:
   carousel_slider: ^4.2.1
   quiver: ^3.2.1
   getwidget: ^4.0.0
+  url_launcher: ^6.1.14
+  image_picker: ^1.0.4
 
 dev_dependencies:
   flutter_test:
@@ -71,6 +73,8 @@ flutter:
     - assets/img/root_screen/
     - assets/img/common/
     - assets/img/my_page_screen/
+    - assets/img/post_screen/
+    - assets/img/second_hand_market_screen/
 
   fonts:
     - family: Pretendard

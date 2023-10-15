@@ -88,11 +88,9 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                 isSelectedProvider: selectedCountryProvider,
               ),
             ),
-            const SizedBox(
-              height: 309,
-            ),
+            Expanded(child: Container()),
             NextButton(
-              nextScreen: SelectSchoolScreen(),
+              nextScreen: const SelectSchoolScreen(),
               buttonName: "다음으로",
               isSelectedProvider: selectedCountryProvider,
             )

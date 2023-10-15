@@ -24,15 +24,21 @@ class NextButton extends ConsumerWidget {
         : ref.watch(isSelectedProvider!);
 
     return InkWell(
-      onTap: () => isSelected != ""
-          ? nextScreen == null
-              ? Navigator.of(context).pop()
-              : isReplacement
-                  ? Navigator.of(context).pushReplacement(
-                      (MaterialPageRoute(builder: (_) => nextScreen!)))
-                  : Navigator.of(context)
-                      .push((MaterialPageRoute(builder: (_) => nextScreen!)))
-          : {},
+      onTap: () {
+        isSelected != ""
+            ? nextScreen == null
+                ? Navigator.of(context).pop()
+                : isReplacement
+                    ? {
+                        Navigator.of(context)
+                            .popUntil((route) => route.isFirst),
+                        Navigator.of(context).pushReplacement(
+                            (MaterialPageRoute(builder: (_) => nextScreen!)))
+                      }
+                    : Navigator.of(context)
+                        .push((MaterialPageRoute(builder: (_) => nextScreen!)))
+            : {};
+      },
       child: Container(
         // width: 296,
         height: 48,

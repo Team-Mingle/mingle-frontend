@@ -12,92 +12,98 @@ class AppStartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Stack(children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 105, bottom: 65.67, left: 5),
-          child: Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                // image: Svg(
-                //     "assets/img/login_screen/ios_illust_gradationApply.svg",
-                //     color: Colors.transparent),
-                // fit: BoxFit.cover),
+      body: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: Stack(children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 105, bottom: 65.67, left: 5),
+            child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  // image: Svg(
+                  //     "assets/img/login_screen/ios_illust_gradationApply.svg",
+                  //     color: Colors.transparent),
+                  // fit: BoxFit.cover),
 
-                image: AssetImage(
-                    "assets/img/login_screen/ios_illust_gradationApply.jpg"),
-                fit: BoxFit.cover,
+                  image: AssetImage(
+                      "assets/img/login_screen/ios_illust_gradationApply.jpg"),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 100, left: 39),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "내 유학생활의 종착지,",
-                        style: TextStyle(
-                            fontSize: 14.0, fontWeight: FontWeight.w400),
-                      ),
-                      SizedBox(
-                        height: 12,
-                      ),
-                      Text(
-                        "mingle",
-                        style: TextStyle(
-                          fontFamily: "Aggro",
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.bold,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 100, left: 39),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "내 유학생활의 종착지,",
+                          style: TextStyle(
+                              fontSize: 14.0, fontWeight: FontWeight.w400),
                         ),
+                        SizedBox(
+                          height: 12,
+                        ),
+                        Text(
+                          "mingle",
+                          style: TextStyle(
+                            fontFamily: "Aggro",
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ]),
+                ),
+              ),
+              Expanded(child: Container()),
+              Padding(
+                padding: const EdgeInsets.only(left: 39, right: 40),
+                child: NextButton(
+                  nextScreen: const SelectCountryScreen(),
+                  buttonName: "회원가입",
+                ),
+              ),
+              const SizedBox(
+                height: 16.0,
+              ),
+              SizedBox(
+                height: 32.0,
+                width: 167.0,
+                child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text("이미 계정이 있나요?"),
+                      const SizedBox(
+                        width: 13.0,
                       ),
-                      SizedBox(
-                        height: 486,
-                      ),
+                      InkWell(
+                        onTap: () => Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                                builder: (_) => const LoginScreen())),
+                        child: const Text(
+                          "로그인",
+                          style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              color: PRIMARY_COLOR_ORANGE_01,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      )
                     ]),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 39, right: 40),
-              child: NextButton(
-                nextScreen: const SelectCountryScreen(),
-                buttonName: "회원가입",
-              ),
-            ),
-            const SizedBox(
-              height: 16.0,
-            ),
-            SizedBox(
-              height: 32.0,
-              width: 167.0,
-              child:
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                const Text("이미 계정이 있나요?"),
-                const SizedBox(
-                  width: 13.0,
-                ),
-                InkWell(
-                  onTap: () => Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (_) => LoginScreen())),
-                  child: const Text(
-                    "로그인",
-                    style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        color: PRIMARY_COLOR_ORANGE_01,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w400),
-                  ),
-                )
-              ]),
-            )
-          ],
-        ),
-      ]),
+              const SizedBox(
+                height: 72.0,
+              )
+            ],
+          ),
+        ]),
+      ),
     );
   }
 }

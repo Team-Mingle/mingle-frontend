@@ -7,6 +7,7 @@ import 'package:mingle/common/component/dropdown_list.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
+import 'package:mingle/user/view/my_page_screen/password_change_success_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:mingle/user/view/signup_screen/enter_email_screen.dart';
 import 'package:mingle/user/view/signup_screen/provider/country_selected_provider.dart';
@@ -15,7 +16,8 @@ import 'package:mingle/user/view/signup_screen/provider/school_selected_provider
 import 'package:mingle/user/view/signup_screen/service_agreement_screen.dart';
 
 class EnterPasswordScreen extends ConsumerStatefulWidget {
-  const EnterPasswordScreen({super.key});
+  final bool isPasswordReset;
+  const EnterPasswordScreen({super.key, this.isPasswordReset = false});
 
   @override
   ConsumerState<EnterPasswordScreen> createState() =>
@@ -43,7 +45,9 @@ class _EnterPasswordScreenState extends ConsumerState<EnterPasswordScreen> {
             ),
           ),
           title: SvgPicture.asset(
-            "assets/img/signup_screen/second_indicator.svg",
+            widget.isPasswordReset
+                ? "assets/img/signup_screen/fourth_indicator.svg"
+                : "assets/img/signup_screen/second_indicator.svg",
           )),
       body: DefaultPadding(
         child: SizedBox(
@@ -54,15 +58,15 @@ class _EnterPasswordScreenState extends ConsumerState<EnterPasswordScreen> {
               padding: const EdgeInsets.only(top: 16.0),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "비밀번호를",
-                      style: TextStyle(
+                      widget.isPasswordReset ? "새로운 비밀번호를" : "비밀번호를",
+                      style: const TextStyle(
                           fontSize: 24.0, fontWeight: FontWeight.w400),
                     ),
-                    Text(
+                    const Text(
                       "입력해 주세요.",
                       style: TextStyle(
                           fontSize: 24.0, fontWeight: FontWeight.w400),
@@ -103,13 +107,14 @@ class _EnterPasswordScreenState extends ConsumerState<EnterPasswordScreen> {
                         borderSide: BorderSide(color: GRAYSCALE_GRAY_03))),
               ),
             ),
-            const SizedBox(
-              height: 393,
-            ),
+            Expanded(child: Container()),
             NextButton(
-              nextScreen: const ServiceAgreementScreen(),
+              nextScreen: widget.isPasswordReset
+                  ? const PasswordChangeSuccessScreen()
+                  : const ServiceAgreementScreen(),
               buttonName: "다음으로",
               isSelectedProvider: selectedEmailExtensionProvider,
+              isReplacement: widget.isPasswordReset,
             )
           ]),
         ),

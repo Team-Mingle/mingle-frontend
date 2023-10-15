@@ -5,6 +5,7 @@ import 'package:mingle/user/components/my_page_tile.dart';
 import 'package:mingle/user/view/my_page_screen/change_nickname_screen.dart';
 import 'package:mingle/user/view/my_page_screen/change_password_screen.dart';
 import 'package:mingle/user/view/my_page_screen/quit_agreement_screen.dart';
+import 'package:mingle/user/view/signup_screen/select_school_screen.dart';
 
 class ManageAccountScreen extends StatelessWidget {
   const ManageAccountScreen({super.key});
@@ -14,7 +15,9 @@ class ManageAccountScreen extends StatelessWidget {
     List<String> manageAccountTitle = ["닉네임 변경", "비밀번호 변경", "탈퇴하기"];
     List<Widget> manageAccountScreen = [
       const ChangeNicknameScreen(),
-      const ChangePasswordScreen(),
+      const SelectSchoolScreen(
+        isPassswordReset: true,
+      ),
       const QuitAgreementScreen()
     ];
 
