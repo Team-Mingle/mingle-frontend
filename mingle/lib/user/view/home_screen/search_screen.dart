@@ -57,25 +57,26 @@ class _SearchScreenState extends State<SearchScreen>
           title: Padding(
             padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
             child: Container(
-              height: 36.0,
               decoration: BoxDecoration(
                 color: GRAYSCALE_GRAY_01_5,
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              child: TextField(
-                controller: _searchController,
-                decoration: const InputDecoration(
-                  hintText: '검색어를 입력하세요 왤케 아래에 있지...',
-                  hintStyle: TextStyle(
-                    color: GRAYSCALE_GRAY_03,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500,
+              child: Center(
+                child: TextField(
+                  controller: _searchController,
+                  decoration: const InputDecoration(
+                    hintText: '검색어를 입력하세요 왤케 아래에 있지...',
+                    hintStyle: TextStyle(
+                      color: GRAYSCALE_GRAY_03,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
                   ),
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
-                ),
-                style: const TextStyle(
-                  fontSize: 14,
+                  style: const TextStyle(
+                    fontSize: 14,
+                  ),
                 ),
               ),
             ),
@@ -102,7 +103,7 @@ class _SearchScreenState extends State<SearchScreen>
         ),
       ),
       body: Container(
-        color: GRAYSCALE_GRAY_01, // 배경색을 흰색으로 설정
+        color: GRAYSCALE_GRAY_01,
         child: Column(
           children: [
             const SizedBox(
@@ -129,10 +130,10 @@ class _SearchScreenState extends State<SearchScreen>
             ),
             Expanded(
               child: TabBarView(
-                controller: _tabController, // TabController 설정
+                controller: _tabController,
                 children: const [
-                  Center(child: Text('탭 1 콘텐츠')), // 탭 1에 대한 콘텐츠
-                  Center(child: Text('탭 2 콘텐츠')), // 탭 2에 대한 콘텐츠
+                  Center(child: Text('탭 1 콘텐츠')),
+                  Center(child: Text('탭 2 콘텐츠')),
                 ],
               ),
             ),

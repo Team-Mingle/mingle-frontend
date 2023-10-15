@@ -5,6 +5,7 @@ import 'package:mingle/user/view/home_screen/home_tab_screen.dart';
 import 'package:mingle/user/view/home_screen/lawn_tab_screen.dart';
 import 'package:mingle/user/view/home_screen/market_tab_screen.dart';
 import 'package:mingle/user/view/home_screen/square_tab_screen.dart';
+import 'package:mingle/user/view/home_screen/view/home_tab_screen.dart';
 
 class HomeRootTab extends StatefulWidget {
   const HomeRootTab({
@@ -47,7 +48,7 @@ class _HomeRootTabState extends State<HomeRootTab> {
       case 2:
         return LawnTabScreen();
       case 3:
-        return const MarketTabScreen();
+        return MarketTabScreen();
       default:
         return const HomeTabScreen();
     }

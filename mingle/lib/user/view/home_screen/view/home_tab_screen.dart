@@ -10,20 +10,20 @@ import 'package:mingle/second_hand_market/add_second_hand_post_screen.dart';
 import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
 
-class HomeTabScreen extends StatefulWidget {
-  const HomeTabScreen({
+class HomeTabModalScreen extends StatefulWidget {
+  const HomeTabModalScreen({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<HomeTabScreen> createState() => _HomeTabScreenState();
+  State<HomeTabModalScreen> createState() => _HomeTabModalScreenState();
 }
 
-class _HomeTabScreenState extends State<HomeTabScreen> {
+class _HomeTabModalScreenState extends State<HomeTabModalScreen> {
   int _current = 0;
   final CarouselController _controller = CarouselController();
   List imageList = [
-    "https://cdn.pixabay.com/photo/2014/04/14/20/11/pink-324175_1280.jpg", 
+    "https://cdn.pixabay.com/photo/2014/04/14/20/11/pink-324175_1280.jpg",
     "https://cdn.pixabay.com/photo/2014/02/27/16/10/flowers-276014_1280.jpg",
     "https://cdn.pixabay.com/photo/2012/03/01/00/55/flowers-19830_1280.jpg",
     "https://cdn.pixabay.com/photo/2015/06/19/20/13/sunset-815270_1280.jpg",
