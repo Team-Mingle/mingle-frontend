@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/component/post_preview_card.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/second_hand_market/add_second_hand_post_screen.dart';
 import 'package:mingle/user/view/home_screen/home_tab_screen.dart';
 import 'package:mingle/user/view/home_screen/search_screen.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
@@ -86,14 +87,29 @@ class MarketTabScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView(
+      body: Stack(
         children: [
-          PostPreviewCard(
-            postList: dummyPostList,
-            cardType: CardType.market,
+          ListView(
+            children: [
+              PostPreviewCard(
+                postList: dummyPostList,
+                cardType: CardType.market,
+              ),
+              const SizedBox(height: 48.0),
+            ],
           ),
-          const SizedBox(
-            height: 48.0,
+          Positioned(
+            right: 16.0,
+            bottom: 16.0,
+            child: FloatingActionButton(
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => const AddSecondHandPostScreen())),
+              backgroundColor: PRIMARY_COLOR_ORANGE_02, 
+              child: const Icon(
+                Icons.add,
+                size: 36,
+              ),
+            ),
           )
         ],
       ),

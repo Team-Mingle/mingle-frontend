@@ -59,6 +59,7 @@ class _ChangeNicknameScreenState extends State<ChangeNicknameScreen> {
                   hintStyle: TextStyle(color: GRAYSCALE_GRAY_02),
                   focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: PRIMARY_COLOR_ORANGE_01)),
+                      
                   border: UnderlineInputBorder(
                     borderSide: BorderSide(color: GRAYSCALE_GRAY_03),
                   ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/post/view/post_detail_screen.dart';
+import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.dart';
 
 enum CardType { home, square, lawn, market }
 
@@ -78,6 +80,19 @@ class PostPreviewCard extends StatelessWidget {
               InkWell(
                 onTap: () {
                   print('Item $index tapped');
+                  if (cardType == CardType.market) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const SecondHandPostDetailScreen(),
+                      ),
+                    );
+                  } else {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const PostDetailScreen(),
+                      ),
+                    );
+                  }
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
