@@ -7,6 +7,7 @@ import 'package:mingle/common/component/dropdown_list.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
+import 'package:mingle/user/view/my_page_screen/password_change_success_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:mingle/user/view/signup_screen/enter_email_screen.dart';
 import 'package:mingle/user/view/signup_screen/enter_password_screen.dart';
@@ -15,7 +16,9 @@ import 'package:mingle/user/view/signup_screen/provider/email_extension_selected
 import 'package:mingle/user/view/signup_screen/provider/school_selected_provider.dart';
 
 class EnterVerificationNumberScreen extends ConsumerStatefulWidget {
-  const EnterVerificationNumberScreen({super.key});
+  final bool isPasswordReset;
+  const EnterVerificationNumberScreen(
+      {super.key, this.isPasswordReset = false});
 
   @override
   ConsumerState<EnterVerificationNumberScreen> createState() =>
@@ -44,7 +47,9 @@ class _EnterVerificationNumberScreenState
             ),
           ),
           title: SvgPicture.asset(
-            "assets/img/signup_screen/first_indicator.svg",
+            widget.isPasswordReset
+                ? "assets/img/signup_screen/third_indicator.svg"
+                : "assets/img/signup_screen/first_indicator.svg",
           )),
       body: DefaultPadding(
         child: SizedBox(
@@ -140,11 +145,13 @@ class _EnterVerificationNumberScreenState
                     )
                   ]),
             ),
-            const SizedBox(
-              height: 385,
+            Expanded(
+              child: Container(),
             ),
             NextButton(
-              nextScreen: const EnterPasswordScreen(),
+              nextScreen: EnterPasswordScreen(
+                isPasswordReset: widget.isPasswordReset,
+              ),
               buttonName: "다음으로",
               isSelectedProvider: selectedEmailExtensionProvider,
             )

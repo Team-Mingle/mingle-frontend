@@ -41,7 +41,7 @@ class _SelectNicknameScreenState extends State<SelectNicknameScreen> {
             ),
           ),
           title: SvgPicture.asset(
-            "assets/img/signup_screen/first_indicator.svg",
+            "assets/img/signup_screen/fourth_indicator.svg",
           )),
       body: DefaultPadding(
         child: SizedBox(
@@ -99,11 +99,8 @@ class _SelectNicknameScreenState extends State<SelectNicknameScreen> {
                         borderSide: BorderSide(color: GRAYSCALE_GRAY_03))),
               ),
             ),
-            const SizedBox(
-              height: 8,
-            ),
-            const SizedBox(
-              height: 437,
+            Expanded(
+              child: Container(),
             ),
             NextButton(
               nextScreen: const LoginScreen(),

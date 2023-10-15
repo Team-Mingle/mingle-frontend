@@ -27,7 +27,10 @@ class QuitSuccessStart extends StatelessWidget {
               ),
               Expanded(child: Container()),
               NextButton(
-                  nextScreen: const AppStartScreen(), buttonName: "알겠습니다")
+                nextScreen: const AppStartScreen(),
+                buttonName: "알겠습니다",
+                isReplacement: true,
+              )
             ],
           ),
         ),

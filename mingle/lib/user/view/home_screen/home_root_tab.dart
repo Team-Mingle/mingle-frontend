@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/user/view/home_screen/home_tab_screen.dart';
 import 'package:mingle/user/view/home_screen/lawn_tab_screen.dart';
 import 'package:mingle/user/view/home_screen/market_tab_screen.dart';

@@ -54,6 +54,7 @@ class _ChangeNicknameScreenState extends State<ChangeNicknameScreen> {
               decoration: const BoxDecoration(color: GRAYSCALE_GRAY_01),
               child: TextFormField(
                 decoration: const InputDecoration(
+                  enabled: false,
                   hintText: "학교 이메일 주소",
                   hintStyle: TextStyle(color: GRAYSCALE_GRAY_02),
                   focusedBorder: UnderlineInputBorder(

@@ -33,8 +33,8 @@ class _DropdownListState extends ConsumerState<DropdownList> {
                   value: country,
                   child: Text(
                     country,
-                    style:
-                        TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400),
+                    style: const TextStyle(
+                        fontSize: 14.0, fontWeight: FontWeight.w400),
                   ),
                 ))
             .toList(),
@@ -53,7 +53,7 @@ class _DropdownListState extends ConsumerState<DropdownList> {
         },
         hint: Text(
           widget.hintText,
-          style: TextStyle(fontSize: 14.0),
+          style: const TextStyle(fontSize: 14.0),
         ),
         buttonStyleData: ButtonStyleData(
           height: 44,
