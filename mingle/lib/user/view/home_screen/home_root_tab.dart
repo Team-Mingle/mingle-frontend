@@ -43,9 +43,9 @@ class _HomeRootTabState extends State<HomeRootTab> {
       case 0:
         return const HomeTabScreen();
       case 1:
-        return const SquareTabScreen();
+        return SquareTabScreen();
       case 2:
-        return const LawnTabScreen();
+        return LawnTabScreen();
       case 3:
         return const MarketTabScreen();
       default:
@@ -64,6 +64,7 @@ class _HomeRootTabState extends State<HomeRootTab> {
         iconSize: 48.0,
         selectedFontSize: 0.0,
         unselectedFontSize: 0.0,
+        backgroundColor: Colors.white,
         items: List.generate(
           _normalSvgImagePaths.length,
           (index) {
