@@ -265,7 +265,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                 ),
               ),
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => const AddSecondHandPostScreen())),
+                  builder: (_) => const SecondHandPostDetailScreen())),
             ),
           ),
           actions: <Widget>[
