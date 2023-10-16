@@ -4,7 +4,7 @@ import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.dart';
 
-enum CardType { home, square, lawn, market }
+enum CardType { home, square, lawn, market, selling }
 
 class PostPreviewCard extends StatelessWidget {
   final List<Map<String, String>> postList;
@@ -25,32 +25,23 @@ class PostPreviewCard extends StatelessWidget {
       case CardType.lawn:
         return 3;
       case CardType.market:
-        return 4;
+        return 1;
+      case CardType.selling:
+        return 1;
     }
   }
 
-  double getMaxPadding() {
-    switch (cardType) {
-      case CardType.home:
-        return 10.0;
-      case CardType.square:
-        return 8.0;
-      case CardType.lawn:
-        return 8.0;
-      case CardType.market:
-        return 8.0;
-    }
-  }
-
-  Widget buildDivider() {
+  Widget buildDivider(double height) {
     final verticalMargin = cardType == CardType.home ? 10.0 : 8.0;
-    final horizontalPadding = cardType == CardType.home ? 12.0 : 8.0;
+    final horizontalPadding = cardType == CardType.selling
+        ? 0.0
+        : (cardType == CardType.home ? 12.0 : 8.0);
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
       child: Container(
         margin: EdgeInsets.symmetric(vertical: verticalMargin),
-        height: 1.0,
+        height: height,
         color: GRAYSCALE_GRAY_01,
       ),
     );
@@ -74,13 +65,22 @@ class PostPreviewCard extends StatelessWidget {
               // 첫번째 줄에만 padding
               if (index == 0)
                 SizedBox(
-                  height: cardType == CardType.home ? 20.0 : 16.0,
+                  height: (() {
+                    switch (cardType) {
+                      case CardType.home:
+                        return 20.0;
+                      case CardType.selling:
+                        return 24.0;
+                      default:
+                        return 16.0;
+                    }
+                  })(),
                 ),
-
               InkWell(
                 onTap: () {
                   print('Item $index tapped');
-                  if (cardType == CardType.market) {
+                  if (cardType == CardType.market ||
+                      cardType == CardType.selling) {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => const SecondHandPostDetailScreen(),
@@ -99,7 +99,8 @@ class PostPreviewCard extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start, // 사진 위쪽 정렬
                     children: [
-                      if (cardType == CardType.market)
+                      if (cardType == CardType.market ||
+                          cardType == CardType.selling)
                         Container(
                           width: 96, // 이미지의 가로 크기 조절
                           height: 96, // 이미지의 세로 크기 조절
@@ -114,7 +115,8 @@ class PostPreviewCard extends StatelessWidget {
                             ),
                           ),
                         ),
-                      if (cardType == CardType.market)
+                      if (cardType == CardType.market ||
+                          cardType == CardType.selling)
                         const SizedBox(
                           width: 16.0,
                         ),
@@ -139,9 +141,14 @@ class PostPreviewCard extends StatelessWidget {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
-                                if (cardType == CardType.market)
+                                if (cardType == CardType.market ||
+                                    cardType == CardType.selling)
                                   SvgPicture.asset(
-                                    'assets/img/second_hand_market_screen/heart_icon.svg',
+                                    cardType == CardType.market
+                                        ? 'assets/img/second_hand_market_screen/heart_icon.svg'
+                                        : cardType == CardType.selling
+                                            ? 'assets/img/post_screen/triple_dot_icon.svg'
+                                            : '', // 다른 경우에 대한 처리 (비어있는 문자열로 설정)
                                     width: 20,
                                     height: 20,
                                   ),
@@ -150,9 +157,9 @@ class PostPreviewCard extends StatelessWidget {
                                 )
                               ],
                             ),
-                            SizedBox(
-                              height: cardType == CardType.market ? 4.0 : 6.0,
-                            ),
+                            if (cardType == CardType.market ||
+                                cardType == CardType.selling)
+                              const SizedBox(height: 6.0),
                             Text(
                               cardType == CardType.market
                                   ? '${post['askingPrice'] ?? ''} ${post['currencies'] ?? ''}'
@@ -168,7 +175,10 @@ class PostPreviewCard extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                             ),
                             SizedBox(
-                              height: cardType == CardType.market ? 43.0 : 6.0,
+                              height: (cardType == CardType.market ||
+                                      cardType == CardType.selling)
+                                  ? 43.0
+                                  : 6.0,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -253,7 +263,24 @@ class PostPreviewCard extends StatelessWidget {
                 ),
               ),
 
-              if (index != postList.length - 1) buildDivider(),
+              if (index != postList.length - 1) buildDivider(1.0),
+              if (cardType == CardType.selling)
+                const SizedBox(
+                  height: 40.0,
+                  child: Center(
+                    child: Text(
+                      '판매상태 변경',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontFamily: 'Pretendard Variable',
+                        fontWeight: FontWeight.w500,
+                        height: 0,
+                      ),
+                    ),
+                  ),
+                ),
+              if (index != postList.length - 1) buildDivider(2.0),
               if (index == postList.length - 1)
                 const SizedBox(
                   height: 20.0,
