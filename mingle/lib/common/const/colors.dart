@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 const PRIMARY_COLOR_ORANGE_01 = Color(0xFFFF5530);
-const PRIMARY_COLOR_ORANGE_02 = Color(0xFFFF7663);
+const PRIMARY_COLOR_ORANGE_02 = Color(0xFFF77665);
 
 const SECONDARY_COLOR_ORANGE_03 = Color(0xFFFCD4CE);
 const SECONDARY_COLOR_ORANGE_04 = Color(0xFFEE8273);

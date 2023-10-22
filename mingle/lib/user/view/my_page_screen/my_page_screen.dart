@@ -4,6 +4,8 @@ import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/user/components/my_page_tile.dart';
 import 'package:mingle/user/view/my_page_screen/manage_account_screen.dart';
+import 'package:mingle/user/view/my_page_screen/market_liked_screen.dart';
+import 'package:mingle/user/view/my_page_screen/market_selling_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
 class MyPageScreen extends StatelessWidget {
@@ -29,7 +31,10 @@ class MyPageScreen extends StatelessWidget {
       Container()
     ];
 
-    List<Widget> secondHandMarketScreens = [Container(), Container()];
+    List<Widget> secondHandMarketScreens = [
+      MarketSellingScreen(),
+      MarketLikedScreen(),
+    ];
 
     List<Widget> userUtilScreens = [Container(), Container(), Container()];
 
