@@ -265,22 +265,113 @@ class PostPreviewCard extends StatelessWidget {
 
               if (index != postList.length - 1) buildDivider(1.0),
               if (cardType == CardType.selling)
-                const SizedBox(
-                  height: 40.0,
-                  child: Center(
-                    child: Text(
-                      '판매상태 변경',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontFamily: 'Pretendard Variable',
-                        fontWeight: FontWeight.w500,
-                        height: 0,
+                GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        String selectedOption = '판매중'; // 기본 선택 항목
+
+                        return Container(
+                          height: 248,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 32.0,
+                                ),
+                                ListTile(
+                                  title: Center(
+                                    child: Text(
+                                      '판매중',
+                                      style: TextStyle(
+                                        fontWeight: selectedOption == '판매중'
+                                            ? FontWeight.bold
+                                            : FontWeight.normal,
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    selectedOption = '판매중'; // 선택한 항목 설정
+                                    print("판매중");
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
+                                ListTile(
+                                  title: Center(
+                                    child: Text(
+                                      '예약중',
+                                      style: TextStyle(
+                                        fontWeight: selectedOption == '예약중'
+                                            ? FontWeight.bold
+                                            : FontWeight.normal,
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    selectedOption = '예약중'; // 선택한 항목 설정
+                                    print("예약중");
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
+                                ListTile(
+                                  title: Center(
+                                    child: Text(
+                                      '판매완료',
+                                      style: TextStyle(
+                                        fontWeight: selectedOption == '판매완료'
+                                            ? FontWeight.bold
+                                            : FontWeight.normal,
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    selectedOption = '판매완료'; // 선택한 항목 설정
+                                    print("판매완료");
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      backgroundColor: Colors.transparent,
+                    );
+                  },
+                  child: const SizedBox(
+                    height: 40.0,
+                    child: Center(
+                      child: Text(
+                        '판매상태 변경',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontFamily: 'Pretendard Variable',
+                          fontWeight: FontWeight.w500,
+                          height: 0,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              if (index != postList.length - 1) buildDivider(2.0),
+
+              if (cardType == CardType.selling) buildDivider(2.0),
               if (index == postList.length - 1)
                 const SizedBox(
                   height: 20.0,
