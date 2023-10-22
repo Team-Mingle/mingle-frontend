@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/component/anonymous_textfield.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/view/image_detail_screen.dart';
 import 'package:mingle/post/components/comment_card.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -26,7 +27,7 @@ class _SecondHandPostDetailScreenState
     "https://cdn.pixabay.com/photo/2016/01/08/05/24/sunflower-1127174_1280.jpg",
   ];
   int _current = 0;
-  bool _isReserved = false;
+  final bool _isReserved = false;
   bool _isLiked = false;
   final CarouselController _controller = CarouselController();
   final EdgeInsets _contentPadding =
@@ -497,11 +498,27 @@ class _SecondHandPostDetailScreenState
                   ),
                 ),
                 InkWell(
-                  onTap: () {
-                    setState(() {
-                      _isReserved = !_isReserved;
-                    });
-                  },
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) {
+                        return ImageDetailScreen(
+                          image: Image(
+                            fit: BoxFit.fill,
+                            image: NetworkImage(
+                              imgLink,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+
+                  // () {
+                  //   setState(() {
+                  //     _isReserved = !_isReserved;
+                  //   });
+                  // },
                   child: ClipRRect(
                     borderRadius:
                         BorderRadius.circular(8.0), // 여기서 borderRadius를 설정합니다.
