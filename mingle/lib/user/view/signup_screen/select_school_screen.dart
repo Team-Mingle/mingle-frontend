@@ -37,6 +37,7 @@ class _SelectSchoolScreenState extends ConsumerState<SelectSchoolScreen> {
                 color: GRAYSCALE_BLACK,
               ),
               onPressed: () {
+                ref.read(selectedSchoolProvider.notifier).update((state) => "");
                 Navigator.pop(context);
               },
             ),
@@ -108,7 +109,7 @@ class _SelectSchoolScreenState extends ConsumerState<SelectSchoolScreen> {
                 isPasswordReset: widget.isPassswordReset,
               ),
               buttonName: "다음으로",
-              isSelectedProvider: selectedSchoolProvider,
+              isSelectedProvider: [selectedSchoolProvider],
             )
           ]),
         ),

@@ -153,7 +153,7 @@ class _EnterVerificationNumberScreenState
                 isPasswordReset: widget.isPasswordReset,
               ),
               buttonName: "다음으로",
-              isSelectedProvider: selectedEmailExtensionProvider,
+              isSelectedProvider: [selectedEmailExtensionProvider],
             )
           ]),
         ),

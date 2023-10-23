@@ -11,6 +11,7 @@ import 'package:mingle/user/view/signup_screen/enter_email_screen.dart';
 import 'package:mingle/user/view/signup_screen/enter_verifiction_number_screen.dart';
 import 'package:mingle/user/view/signup_screen/provider/country_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/provider/email_extension_selected_provider.dart';
+import 'package:mingle/user/view/signup_screen/provider/email_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/provider/school_selected_provider.dart';
 
 class EnterEmailScreen extends ConsumerStatefulWidget {
@@ -135,7 +136,10 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
                 AssetImage("assets/img/signup_screen/email_icon.png"),
                 color: GRAYSCALE_GRAY_04,
               ),
-              isSelectedProvider: selectedEmailExtensionProvider,
+              isSelectedProvider: [
+                selectedEmailExtensionProvider,
+                selectedEmailProvider
+              ],
             )
           ]),
         ),

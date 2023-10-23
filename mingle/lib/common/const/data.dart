@@ -2,10 +2,15 @@ import 'dart:io';
 
 const ACCESS_TOKEN_KEY = 'ACCESS_TOKEN';
 const REFRESH_TOKEN_KEY = 'REFRESH_TOKEN';
-const emulatorIp = '10.0.2.2:3000';
-const simulatorIp = '127.0.0.1:3000';
+// const emulatorIp = '10.0.2.2:3000';
+// const simulatorIp = '127.0.0.1:3000';
 
-final ip = Platform.isIOS ? simulatorIp : emulatorIp;
+// final ip = Platform.isIOS ? simulatorIp : emulatorIp;
+
+// const ip = "https://86f3-180-229-116-251.ngrok-free.app/";
+
+const baseUrl =
+    "alb-mingle-api-prod-588023566.ap-northeast-2.elb.amazonaws.com:9000";
 
 final List<String> COUNTRY_LIST = [
   '홍콩',

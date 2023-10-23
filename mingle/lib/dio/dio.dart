@@ -31,6 +31,7 @@ class CustomInterceptor extends Interceptor {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     // TODO: implement onResponse
+    print(response);
     return super.onResponse(response, handler);
   }
 
@@ -38,7 +39,7 @@ class CustomInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     super.onError(err, handler);
     //401 에러가 났을때 토큰을 재발급 받는 시도를 하고 토큰이 재발급되면 다시 새로운 토큰으로 요청한다.
-
+    print(err);
     final refreshToken = await storage.read(key: REFRESH_TOKEN_KEY);
 
     //refresh token이 없으면 에러 던짐
@@ -52,7 +53,7 @@ class CustomInterceptor extends Interceptor {
     if (isStatus401 && !isPathRefresh) {
       final dio = Dio();
       try {
-        final resp = await dio.post('http://$ip/auth/token',
+        final resp = await dio.post('http://$baseUrl/auth/token',
             options:
                 Options(headers: {'authorization': 'Bearer $refreshToken'}));
         final accessToken = resp.data['accessToken'];

@@ -18,7 +18,7 @@ class _App extends StatelessWidget {
           theme: ThemeData(
               fontFamily: 'Pretendard', disabledColor: GRAYSCALE_GRAY_02),
           debugShowCheckedModeBanner: false,
-          home: const HomeRootTab()),
+          home: const SplashScreen()),
     );
   }
 }

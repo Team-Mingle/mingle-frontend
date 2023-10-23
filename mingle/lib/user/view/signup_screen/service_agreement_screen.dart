@@ -303,7 +303,7 @@ class _ServiceAgreementScreenState extends State<ServiceAgreementScreen> {
             NextButton(
               nextScreen: const SelectNicknameScreen(),
               buttonName: "다음으로",
-              isSelectedProvider: selectedEmailExtensionProvider,
+              isSelectedProvider: [selectedEmailExtensionProvider],
             )
           ]),
         ),
