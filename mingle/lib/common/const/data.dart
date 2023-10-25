@@ -11,7 +11,7 @@ const REFRESH_TOKEN_KEY = 'REFRESH_TOKEN';
 
 const baseUrl =
     "alb-mingle-api-prod-588023566.ap-northeast-2.elb.amazonaws.com:9000";
-
+const generalErrorMsg = "다시 시도해 주세요.";
 final List<String> COUNTRY_LIST = [
   '홍콩',
   '싱가포르',
@@ -26,6 +26,6 @@ final List<String> ENGLAND_SCHOOL_LIST = ['영국명문대1', '영국명문대2'
 
 final List<String> HONG_KONG_EMAIL_LIST = ['홍콩이메일1', '홍콩이메일2', '홍콩이메일3'];
 
-final List<String> SINGAPORE_EMAIL_LIST = ['싱가포르이메일1', '싱가포르이메일2', '싱가포르이메일3'];
+final List<String> SINGAPORE_EMAIL_LIST = ['싱가포르이메일1', 'gmail.com', '싱가포르이메일3'];
 
 final List<String> ENGLAND_EMAIL_LIST = ['영국이메일1', '영국이메일2', '영국이메일3'];

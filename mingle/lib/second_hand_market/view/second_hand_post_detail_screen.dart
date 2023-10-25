@@ -71,7 +71,101 @@ class _SecondHandPostDetailScreenState
               ),
               centerTitle: false,
               actions: [
-                SvgPicture.asset("assets/img/post_screen/triple_dot_icon.svg"),
+                GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        String selectedOption = '판매중'; // 기본 선택 항목
+
+                        return Container(
+                          height: 248,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 32.0,
+                                ),
+                                ListTile(
+                                  title: Center(
+                                    child: Text(
+                                      '판매중',
+                                      style: TextStyle(
+                                        fontWeight: selectedOption == '판매중'
+                                            ? FontWeight.bold
+                                            : FontWeight.normal,
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    selectedOption = '판매중'; // 선택한 항목 설정
+                                    print("판매중");
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
+                                ListTile(
+                                  title: Center(
+                                    child: Text(
+                                      '예약중',
+                                      style: TextStyle(
+                                        fontWeight: selectedOption == '예약중'
+                                            ? FontWeight.bold
+                                            : FontWeight.normal,
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    selectedOption = '예약중'; // 선택한 항목 설정
+                                    print("예약중");
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
+                                ListTile(
+                                  title: Center(
+                                    child: Text(
+                                      '판매완료',
+                                      style: TextStyle(
+                                        fontWeight: selectedOption == '판매완료'
+                                            ? FontWeight.bold
+                                            : FontWeight.normal,
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    selectedOption = '판매완료'; // 선택한 항목 설정
+                                    print("판매완료");
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      backgroundColor: Colors.transparent,
+                    );
+                  },
+                  child: SvgPicture.asset(
+                      "assets/img/post_screen/triple_dot_icon.svg"),
+                ),
+                const SizedBox(
+                  width: 18.0,
+                ),
                 const SizedBox(
                   width: 18.0,
                 )

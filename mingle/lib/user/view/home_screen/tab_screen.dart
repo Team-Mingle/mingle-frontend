@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/post/view/add_post_screen.dart';
+import 'package:mingle/user/view/home_screen/search_screen.dart';
 
 class TabScreen extends StatelessWidget {
   final List<Widget> tabContents;
@@ -73,7 +75,13 @@ class TabScreen extends StatelessWidget {
                     height: 24,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SearchScreen()),
+                  );
+                },
               ),
             ],
           ),
@@ -123,14 +131,30 @@ class TabScreen extends StatelessWidget {
             ],
           ),
         ),
-        body: TabBarView(
-          physics: const AlwaysScrollableScrollPhysics(), // 스크롤 활성화
-          children: tabContents.map((tabContent) {
-            // PostPreviewCard를 SingleChildScrollView로 감싸기
-            return SingleChildScrollView(
-              child: tabContent,
-            );
-          }).toList(),
+        body: Stack(
+          children: [
+            TabBarView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              children: tabContents.map((tabContent) {
+                return SingleChildScrollView(
+                  child: tabContent,
+                );
+              }).toList(),
+            ),
+            Positioned(
+              right: 16.0,
+              bottom: 16.0,
+              child: FloatingActionButton(
+                onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const AddPostScreen())),
+                backgroundColor: PRIMARY_COLOR_ORANGE_02,
+                child: const Icon(
+                  Icons.add,
+                  size: 36,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

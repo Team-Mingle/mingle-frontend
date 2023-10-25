@@ -41,27 +41,44 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         "pwd": passwordController.text,
         "fcmToken": "string"
       };
-      print(jsonEncode(credentials));
-      print("http://$baseUrl/auth/login");
-      final resp = await dio.post(
-        'http://$baseUrl/auth/login',
-        options: Options(headers: {
-          HttpHeaders.contentTypeHeader: "application/json",
-        }),
-        data: jsonEncode(credentials),
-      );
-      if (resp.data['isSuccess']) {
-        print(resp.data);
-        final refreshToken = resp.data['refreshToken'];
-        final accessToken = resp.data['accessToken'];
-        final storage = ref.read(secureStorageProvider);
-        await storage.write(key: REFRESH_TOKEN_KEY, value: refreshToken);
-        await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
-        await Navigator.of(context)
-            .push(MaterialPageRoute(builder: (_) => const HomeTabScreen()));
-      } else {
+      try {
+        final resp = await dio.post(
+          'http://$baseUrl/auth/login',
+          options: Options(headers: {
+            HttpHeaders.contentTypeHeader: "application/json",
+          }),
+          data: jsonEncode(credentials),
+        );
+        if (resp.data['isSuccess']) {
+          print(resp.data);
+          final refreshToken = resp.data['refreshToken'];
+          final accessToken = resp.data['accessToken'];
+          final storage = ref.read(secureStorageProvider);
+          await storage.write(key: REFRESH_TOKEN_KEY, value: refreshToken);
+          await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
+          await Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => const HomeTabScreen()));
+        } else {
+          String? error;
+          switch (resp.data['code']) {
+            case 2010:
+              error = "이메일을 입력해주세요.";
+            case 2014:
+              error = "비밀번호를 입력해주세요.";
+            case 3011:
+              error = "존재하지 않는 이메일이거나 비밀번호가 틀렸습니다.";
+            case 3017:
+              error = "탈퇴한 사용자입니다.";
+            case 3018:
+              error = "신고된 사용자입니다.";
+          }
+          setState(() {
+            errorMsg = error;
+          });
+        }
+      } catch (e) {
         setState(() {
-          errorMsg = "에러에러";
+          errorMsg = generalErrorMsg;
         });
       }
     }

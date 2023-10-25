@@ -27,7 +27,7 @@ class NextButton extends ConsumerWidget {
 
     return InkWell(
       onTap: () {
-        isSelected != ""
+        isSelected
             ? {
                 validators != null
                     ? {
@@ -55,12 +55,10 @@ class NextButton extends ConsumerWidget {
         height: 48,
         decoration: BoxDecoration(
             border: Border.all(
-                color: isSelected != ""
-                    ? PRIMARY_COLOR_ORANGE_02
-                    : GRAYSCALE_GRAY_02),
+                color:
+                    isSelected ? PRIMARY_COLOR_ORANGE_02 : GRAYSCALE_GRAY_02),
             borderRadius: BorderRadius.circular(20.0),
-            color:
-                isSelected != "" ? PRIMARY_COLOR_ORANGE_02 : GRAYSCALE_GRAY_02),
+            color: isSelected ? PRIMARY_COLOR_ORANGE_02 : GRAYSCALE_GRAY_02),
         child: Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
