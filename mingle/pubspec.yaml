@@ -77,6 +77,7 @@ flutter:
     - assets/img/my_page_screen/
     - assets/img/post_screen/
     - assets/img/second_hand_market_screen/
+    - assets/img/module_review_screen/
 
   fonts:
     - family: Pretendard
