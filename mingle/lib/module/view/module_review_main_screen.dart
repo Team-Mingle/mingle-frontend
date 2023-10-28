@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/module/components/viewing_pass_card.dart';
+import 'package:mingle/module/view/module_search_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
 class ModuleReviewMainScreen extends StatelessWidget {
@@ -15,7 +16,7 @@ class ModuleReviewMainScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: Padding(
-          padding: const EdgeInsets.only(left: 17.0),
+          padding: const EdgeInsets.only(left: 16.0),
           child: IconButton(
             icon: const ImageIcon(
               AssetImage("assets/img/signup_screen/cross_icon.png"),
@@ -42,24 +43,28 @@ class ModuleReviewMainScreen extends StatelessWidget {
           const SizedBox(
             height: 24.0,
           ),
-          Container(
-            height: 48.0,
-            decoration: BoxDecoration(
-                color: GRAYSCALE_GRAY_01,
-                border: Border.all(color: GRAYSCALE_GRAY_01),
-                borderRadius: BorderRadius.circular(8.0)),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: TextFormField(
-                textAlignVertical: TextAlignVertical.center,
-                obscureText: false,
-                decoration: InputDecoration(
-                    hintText: "학교 이메일 주소",
-                    hintStyle: const TextStyle(
-                        color: GRAYSCALE_GRAY_03, fontSize: 16.0),
-                    border: InputBorder.none,
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+          GestureDetector(
+            onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const ModuleSearchScreen())),
+            child: Container(
+              height: 48.0,
+              decoration: BoxDecoration(
+                  color: GRAYSCALE_GRAY_01,
+                  border: Border.all(color: GRAYSCALE_GRAY_01),
+                  borderRadius: BorderRadius.circular(8.0)),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: Row(children: [
+                  const Text(
+                    "강의명을 입력하세요.",
+                    style: TextStyle(color: GRAYSCALE_GRAY_03, fontSize: 16.0),
+                  ),
+                  const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12.0, horizontal: 8.0),
+                    child: Hero(
+                      tag: "search",
                       child: SvgPicture.asset(
                         "assets/img/module_review_screen/search_icon.svg",
                         height: 24.0,
@@ -67,7 +72,31 @@ class ModuleReviewMainScreen extends StatelessWidget {
                         colorFilter: const ColorFilter.mode(
                             Colors.black, BlendMode.srcIn),
                       ),
-                    )),
+                    ),
+                  ),
+                ]),
+                // child: TextFormField(
+                //   textAlignVertical: TextAlignVertical.center,
+                //   obscureText: false,
+                //   decoration: InputDecoration(
+                //       hintText: "강의명을 입력하세요.",
+                // hintStyle: const TextStyle(
+                //     color: GRAYSCALE_GRAY_03, fontSize: 16.0),
+                //       border: InputBorder.none,
+                // suffixIcon: Padding(
+                //   padding: const EdgeInsets.symmetric(vertical: 12.0),
+                //   child: Hero(
+                //     tag: "search",
+                //     child: SvgPicture.asset(
+                //       "assets/img/module_review_screen/search_icon.svg",
+                //       height: 24.0,
+                //       width: 24.0,
+                //       colorFilter: const ColorFilter.mode(
+                //           Colors.black, BlendMode.srcIn),
+                //     ),
+                //   ),
+                // )),
+                // ),
               ),
             ),
           ),
