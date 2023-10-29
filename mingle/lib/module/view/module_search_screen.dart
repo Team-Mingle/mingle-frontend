@@ -20,7 +20,10 @@ class _ModuleSearchScreenState extends State<ModuleSearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        shape: const Border(
+            bottom: BorderSide(color: GRAYSCALE_GRAY_01, width: 1)),
         backgroundColor: Colors.white,
         titleSpacing: 0.0,
         elevation: 0,
