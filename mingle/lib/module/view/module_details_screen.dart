@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mingle/common/component/expanded_section.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/module/components/module_review_card.dart';
 import 'package:mingle/module/util/module_satisfaction_enum.dart';
@@ -151,7 +152,10 @@ class _ModuleDetailsScreenState extends State<ModuleDetailsScreen> {
                       Text("화2/수2")
                     ],
                   ),
-                  isExpanded ? expandedModuleInformation() : Container(),
+                  ExpandedSection(
+                    expand: isExpanded,
+                    child: expandedModuleInformation(),
+                  ),
                   const SizedBox(
                     height: 31.5,
                   ),

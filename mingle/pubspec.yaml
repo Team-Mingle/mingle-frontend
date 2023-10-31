@@ -78,6 +78,7 @@ flutter:
     - assets/img/post_screen/
     - assets/img/second_hand_market_screen/
     - assets/img/module_review_screen/
+    - assets/img/module_review_screen/right_tick_icon.svg
 
   fonts:
     - family: Pretendard
