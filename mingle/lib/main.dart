@@ -6,6 +6,7 @@ import 'package:mingle/module/view/add_module_review_screen.dart';
 import 'package:mingle/module/view/first_onboarding_screen.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/module/view/module_review_main_screen.dart';
+import 'package:mingle/module/view/point_shop_screen.dart';
 import 'package:mingle/user/view/home_screen/home_root_tab.dart';
 import 'package:mingle/user/view/login_screen.dart';
 
@@ -23,7 +24,7 @@ class _App extends StatelessWidget {
           theme: ThemeData(
               fontFamily: 'Pretendard', disabledColor: GRAYSCALE_GRAY_02),
           debugShowCheckedModeBanner: false,
-          home: const FirstOnboardingScreen()),
+          home: const PointShopScreen()),
 // =======
 //           home: const LoginScreen()),
     );

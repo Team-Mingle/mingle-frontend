@@ -46,6 +46,7 @@ dependencies:
   flutter_secure_storage: ^9.0.0
   dio: ^5.3.3
   show_up_animation: ^2.0.0
+  fluttertoast: ^8.2.2
 
 dev_dependencies:
   flutter_test:
