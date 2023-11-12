@@ -3,9 +3,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/user/view/home_screen/search_screen.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
-import 'package:mingle/user/view/timetable_screen/add_timetable.dart';
+import 'package:mingle/user/view/timetable_screen/add_timetable_screen.dart';
 import 'package:mingle/user/view/timetable_screen/components/shared_timetable_dropdown.dart';
 import 'package:mingle/user/view/timetable_screen/components/timetable_grid.dart';
+import 'package:mingle/user/view/timetable_screen/timetable_list_screen.dart';
 
 class TimeTableHomeScreen extends StatefulWidget {
   final int flag = 1;
@@ -41,7 +42,8 @@ class _TimeTableHomeScreenState extends State<TimeTableHomeScreen> {
           child: InkWell(
             onTap: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const MyPageScreen()),
+                MaterialPageRoute(
+                    builder: (_) => const MyTimeTableListScreen()),
               );
             },
             child: Align(
@@ -184,7 +186,10 @@ class _TimeTableHomeScreenState extends State<TimeTableHomeScreen> {
                   ),
                 if (widget.flag == 0) const SizedBox(height: 284),
                 if (widget.flag == 1) // flag 값이 1인 경우
-                  Hero(child: const TimeTableGrid(), tag: "timetable",),
+                  const Hero(
+                    tag: "timetable",
+                    child: TimeTableGrid(),
+                  ),
                 MyExpansionPanelList(
                   friendList: _datas,
                   expansionStates: _expansionStates,

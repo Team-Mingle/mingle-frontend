@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
-import 'package:mingle/user/view/timetable_screen/add_timetable_directly.dart';
+import 'package:mingle/user/view/timetable_screen/self_add_timetable_screen.dart';
 import 'package:mingle/user/view/timetable_screen/components/timetable_grid.dart';
 
 class AddTimeTableScreen extends StatefulWidget {

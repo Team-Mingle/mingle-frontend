@@ -3,10 +3,26 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/user/view/timetable_screen/components/add_course_time_dropdowns.dart';
 
-class AddDirectTimeTableScreen extends StatelessWidget {
+class AddDirectTimeTableScreen extends StatefulWidget {
   const AddDirectTimeTableScreen({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<AddDirectTimeTableScreen> createState() =>
+      _AddDirectTimeTableScreenState();
+}
+
+class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
+  List<Widget> timeDropdownWidgets = [];
+  void addTimeDropdownWidget() {
+    if (timeDropdownWidgets.length < 5) {
+      // 최대 5번까지 추가
+      setState(() {
+        timeDropdownWidgets.add(const AddTimeDropdownsWidget());
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +173,7 @@ class AddDirectTimeTableScreen extends StatelessWidget {
               ),
               OutlinedButton(
                 onPressed: () {
-                  // 버튼 클릭 시 실행할 작업 추가
+                  addTimeDropdownWidget();
                 },
                 style: OutlinedButton.styleFrom(
                   backgroundColor: Colors.white,
