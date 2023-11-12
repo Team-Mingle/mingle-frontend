@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/component/dropdown_list.dart';
 import 'package:mingle/common/component/next_button.dart';
@@ -9,14 +10,15 @@ import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:mingle/user/view/signup_screen/provider/country_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/select_school_screen.dart';
 
-class SelectCountryScreen extends StatefulWidget {
+class SelectCountryScreen extends ConsumerStatefulWidget {
   const SelectCountryScreen({super.key});
 
   @override
-  State<SelectCountryScreen> createState() => _SelectCountryScreenState();
+  ConsumerState<SelectCountryScreen> createState() =>
+      _SelectCountryScreenState();
 }
 
-class _SelectCountryScreenState extends State<SelectCountryScreen> {
+class _SelectCountryScreenState extends ConsumerState<SelectCountryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +34,9 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
                 color: GRAYSCALE_BLACK,
               ),
               onPressed: () {
+                ref
+                    .read(selectedCountryProvider.notifier)
+                    .update((state) => "");
                 Navigator.pop(context);
               },
             ),
@@ -92,7 +97,7 @@ class _SelectCountryScreenState extends State<SelectCountryScreen> {
             NextButton(
               nextScreen: const SelectSchoolScreen(),
               buttonName: "다음으로",
-              isSelectedProvider: selectedCountryProvider,
+              isSelectedProvider: [selectedCountryProvider],
             )
           ]),
         ),

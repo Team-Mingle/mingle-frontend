@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/view/splash_screen.dart';
+import 'package:mingle/module/view/add_module_review_screen.dart';
+import 'package:mingle/module/view/first_onboarding_screen.dart';
+import 'package:mingle/module/view/module_details_screen.dart';
+import 'package:mingle/module/view/module_review_main_screen.dart';
+import 'package:mingle/module/view/point_shop_screen.dart';
 import 'package:mingle/user/view/home_screen/home_root_tab.dart';
 import 'package:mingle/user/view/login_screen.dart';
 

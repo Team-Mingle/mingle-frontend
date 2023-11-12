@@ -8,7 +8,7 @@ class DefaultPadding extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding:
-          const EdgeInsets.symmetric(horizontal: 32.0).copyWith(bottom: 40.0),
+          const EdgeInsets.symmetric(horizontal: 20.0).copyWith(bottom: 0.0),
       child: child,
     );
   }

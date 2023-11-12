@@ -12,7 +12,9 @@ class CountdownTimer extends StatefulWidget {
 }
 
 class _CountdownTimerState extends State<CountdownTimer> {
-  int counter = 0;
+  int counter = 180;
+  int minutes = 3;
+  int seconds = 0;
   late Timer timer;
 
   @override
@@ -22,8 +24,8 @@ class _CountdownTimerState extends State<CountdownTimer> {
   }
 
   void startTimer() {
-    counter = 10;
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    // int counter = 180;
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (counter == 1) {
         setState(() {
           timer.cancel();
@@ -32,6 +34,8 @@ class _CountdownTimerState extends State<CountdownTimer> {
       if (mounted) {
         setState(() {
           counter--;
+          minutes = (counter / 60).floor();
+          seconds = (counter % 60);
         });
       }
     });
@@ -40,8 +44,8 @@ class _CountdownTimerState extends State<CountdownTimer> {
   @override
   Widget build(BuildContext context) {
     return Text(
-      counter.toString(),
-      style: TextStyle(
+      "$minutes:${seconds == 0 ? "00" : seconds < 10 ? "0$seconds" : seconds}",
+      style: const TextStyle(
           color: GRAYSCALE_GRAY_04,
           fontSize: 14.0,
           fontWeight: FontWeight.w400),

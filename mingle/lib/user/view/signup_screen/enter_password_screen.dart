@@ -113,7 +113,7 @@ class _EnterPasswordScreenState extends ConsumerState<EnterPasswordScreen> {
                   ? const PasswordChangeSuccessScreen()
                   : const ServiceAgreementScreen(),
               buttonName: "다음으로",
-              isSelectedProvider: selectedEmailExtensionProvider,
+              isSelectedProvider: [selectedEmailExtensionProvider],
               isReplacement: widget.isPasswordReset,
             )
           ]),
