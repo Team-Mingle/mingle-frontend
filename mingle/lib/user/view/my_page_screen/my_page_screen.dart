@@ -6,6 +6,8 @@ import 'package:mingle/user/components/my_page_tile.dart';
 import 'package:mingle/user/view/my_page_screen/manage_account_screen.dart';
 import 'package:mingle/user/view/my_page_screen/market_liked_screen.dart';
 import 'package:mingle/user/view/my_page_screen/market_selling_screen.dart';
+import 'package:mingle/user/view/my_page_screen/my_module_pass_and_point_screen.dart';
+import 'package:mingle/user/view/my_page_screen/my_module_reviews_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
 class MyPageScreen extends StatelessWidget {
@@ -22,6 +24,8 @@ class MyPageScreen extends StatelessWidget {
 
     List<String> secondHandMarketTitles = ["판매 내역", "찜한 내역"];
 
+    List<String> moduleReviewTitles = ["이용권 및 포인트", "내가 작성한 강의평"];
+
     List<String> userUtilTitles = ["이용약관", "개인정보 처리방침", "밍글에 문의하기"];
 
     List<Widget> activityScreens = [
@@ -34,6 +38,11 @@ class MyPageScreen extends StatelessWidget {
     List<Widget> secondHandMarketScreens = [
       MarketSellingScreen(),
       MarketLikedScreen(),
+    ];
+
+    List<Widget> moduleReviewScreens = [
+      const MyModulePassAndPointScreen(),
+      const MyModuleReviewsScreen()
     ];
 
     List<Widget> userUtilScreens = [Container(), Container(), Container()];
@@ -150,7 +159,7 @@ class MyPageScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    height: 24.0,
+                    height: 21.0,
                   ),
                   const Align(
                     alignment: Alignment.centerLeft,
@@ -179,7 +188,36 @@ class MyPageScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    height: 32.0,
+                    height: 21.0,
+                  ),
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "강의평가",
+                      style: TextStyle(
+                          fontSize: 18.0, fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 16.0,
+                  ),
+                  Container(
+                    height: 120.0,
+                    // width: 335.0,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        color: Colors.white,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: MyPageTile(
+                      titles: moduleReviewTitles,
+                      screens: moduleReviewScreens,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 21.0,
                   ),
                   Container(
                     height: 168.0,

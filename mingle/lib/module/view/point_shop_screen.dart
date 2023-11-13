@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/module/components/my_points_card.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
@@ -337,44 +338,7 @@ class PointShopScreen extends StatelessWidget {
             height: 64.0,
             color: GRAYSCALE_GRAY_01,
           ),
-          DefaultPadding(
-            child: Container(
-              decoration: BoxDecoration(
-                  color: GRAYSCALE_GRAY_01,
-                  border: Border.all(color: GRAYSCALE_GRAY_01),
-                  borderRadius: BorderRadius.circular(8.0)),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-              child: const Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("보유 포인트"),
-                      SizedBox(
-                        height: 8.0,
-                      ),
-                      Text(
-                        "0p",
-                        style: TextStyle(
-                            fontSize: 16.0, fontWeight: FontWeight.w500),
-                      )
-                    ],
-                  ),
-                  Spacer(),
-                  SizedBox(
-                    width: 8.0,
-                  ),
-                  Text(
-                    "강의평가 작성하기",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: PRIMARY_COLOR_ORANGE_01),
-                  )
-                ],
-              ),
-            ),
-          )
+          const DefaultPadding(child: MyPointsCard())
         ],
       ),
     );
