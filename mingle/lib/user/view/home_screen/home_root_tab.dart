@@ -4,7 +4,7 @@ import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/user/view/home_screen/home_tab_screen.dart';
 import 'package:mingle/post/view/lawn_tab_screen.dart';
-import 'package:mingle/user/view/home_screen/market_tab_screen.dart';
+import 'package:mingle/second_hand_market/view/market_tab_screen.dart';
 import 'package:mingle/post/view/square_tab_screen.dart';
 import 'package:mingle/timetable/view/timetable_tab_screen.dart';
 

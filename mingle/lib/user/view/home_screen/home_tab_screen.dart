@@ -6,7 +6,7 @@ import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/user/view/home_screen/search_screen.dart';
 import 'package:mingle/post/view/add_post_screen.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
-import 'package:mingle/second_hand_market/add_second_hand_post_screen.dart';
+import 'package:mingle/second_hand_market/view/add_second_hand_post_screen.dart';
 import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
 

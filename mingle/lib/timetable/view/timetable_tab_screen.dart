@@ -3,8 +3,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
 import 'package:mingle/module/view/first_onboarding_screen.dart';
+import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/module/view/module_review_main_screen.dart';
 import 'package:mingle/module/view/module_search_screen.dart';
+import 'package:mingle/timetable/components/timetable_list_more_modal.dart';
 import 'package:mingle/user/view/home_screen/search_screen.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
 import 'package:mingle/timetable/view/add_timetable_screen.dart';
@@ -26,6 +28,21 @@ class TimeTableHomeScreen extends StatefulWidget {
 class _TimeTableHomeScreenState extends State<TimeTableHomeScreen> {
   bool _isFriendListExpanded = false;
 
+  void MoreButtonModal() {
+    Future.delayed(const Duration(milliseconds: 40)).then((_) {
+      showModalBottomSheet<void>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        isScrollControlled: false,
+        context: context,
+        builder: (BuildContext context) {
+          return const TimetableMoreModalwidget();
+        },
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +50,7 @@ class _TimeTableHomeScreenState extends State<TimeTableHomeScreen> {
       appBar: AppBar(
         toolbarHeight: 56.0,
         backgroundColor: BACKGROUND_COLOR_GRAY,
-        elevation: 0, // Remove shadow
+        elevation: 0,
         leading: Ink(
           width: 44.0,
           height: 48.0,
@@ -128,7 +145,9 @@ class _TimeTableHomeScreenState extends State<TimeTableHomeScreen> {
                 height: 24,
               ),
             ),
-            onPressed: () {},
+            onPressed: () {
+              MoreButtonModal();
+            },
           ),
         ],
       ),
@@ -266,7 +285,7 @@ class _TimeTableHomeScreenState extends State<TimeTableHomeScreen> {
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                            builder: (_) => const ModuleReviewMainScreen()),
+                            builder: (_) => const ModuleDetailsScreen()),
                       );
                     },
                     child: Container(

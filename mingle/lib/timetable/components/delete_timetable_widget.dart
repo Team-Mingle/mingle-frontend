@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:mingle/common/component/anonymous_textfield.dart';
-import 'package:mingle/common/component/character_count_textfield.dart';
 import 'package:mingle/common/const/colors.dart';
 
-class ModifyTimetableNameWidget extends StatefulWidget {
-  const ModifyTimetableNameWidget({super.key});
+class DeleteTimetableWidget extends StatefulWidget {
+  const DeleteTimetableWidget({super.key});
 
   @override
-  State<ModifyTimetableNameWidget> createState() =>
-      _ModifyTimetableNameWidgetState();
+  State<DeleteTimetableWidget> createState() => _DeleteTimetableWidgetState();
 }
 
-class _ModifyTimetableNameWidgetState extends State<ModifyTimetableNameWidget> {
+class _DeleteTimetableWidgetState extends State<DeleteTimetableWidget> {
   String? selectedItem1;
 
   @override
@@ -25,7 +21,7 @@ class _ModifyTimetableNameWidgetState extends State<ModifyTimetableNameWidget> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text(
-              '시간표 이름 변경하기',
+              '시간표를 삭제하시겠습니까?',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.black,
@@ -35,23 +31,15 @@ class _ModifyTimetableNameWidgetState extends State<ModifyTimetableNameWidget> {
               ),
             ),
             const SizedBox(
-              height: 16.0,
+              height: 8.0,
             ),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: GRAYSCALE_GRAY_03),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: CharacterCountTextField(
-                          maxCharacterCount: 10, hint: '시간표 1'),
-                    ),
-                  ],
-                ),
+            const Text(
+              '이 작업은 되돌릴 수 없습니다.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: GRAYSCALE_GRAY_04,
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
               ),
             ),
             const SizedBox(
@@ -76,7 +64,7 @@ class _ModifyTimetableNameWidgetState extends State<ModifyTimetableNameWidget> {
                             MaterialStateProperty.all(GRAYSCALE_GRAY_04),
                         elevation: MaterialStateProperty.all(0),
                       ),
-                      child: const Text('취소하기'),
+                      child: const Text('유지하기'),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -94,7 +82,7 @@ class _ModifyTimetableNameWidgetState extends State<ModifyTimetableNameWidget> {
                             MaterialStateProperty.all(Colors.white),
                         elevation: MaterialStateProperty.all(0),
                       ),
-                      child: const Text('변경하기'),
+                      child: const Text('삭제하기'),
                     ),
                   ),
                 ],

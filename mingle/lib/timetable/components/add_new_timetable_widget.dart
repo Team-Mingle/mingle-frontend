@@ -119,7 +119,9 @@ class _AddNewTimetableWidgetState extends State<AddNewTimetableWidget> {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
                       style: ButtonStyle(
                         minimumSize:
                             MaterialStateProperty.all(const Size(0, 40)),

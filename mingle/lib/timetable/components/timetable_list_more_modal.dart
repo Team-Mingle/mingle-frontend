@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mingle/timetable/components/delete_timetable_widget.dart';
 import 'package:mingle/timetable/components/modify_timetable_name_widget.dart';
 
 class TimetableMoreModalwidget extends StatelessWidget {
@@ -17,8 +18,14 @@ class TimetableMoreModalwidget extends StatelessWidget {
             height: 32.0,
           ),
           InkWell(
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => const ModifyTimetableNameWidget())),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return const ModifyTimetableNameWidget();
+                },
+              );
+            },
             child: const Padding(
               padding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 20.0),
               child: Text(
@@ -32,15 +39,25 @@ class TimetableMoreModalwidget extends StatelessWidget {
               ),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 20.0),
-            child: Text(
-              '시간표 삭제하기',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
+          InkWell(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return const DeleteTimetableWidget();
+                },
+              );
+            },
+            child: const Padding(
+              padding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 20.0),
+              child: Text(
+                '시간표 삭제하기',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
           ),
