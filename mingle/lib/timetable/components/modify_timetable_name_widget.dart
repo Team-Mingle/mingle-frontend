@@ -4,23 +4,15 @@ import 'package:mingle/common/component/anonymous_textfield.dart';
 import 'package:mingle/common/component/character_count_textfield.dart';
 import 'package:mingle/common/const/colors.dart';
 
-class AddNewTimetableWidget extends StatefulWidget {
-  const AddNewTimetableWidget({super.key});
+class ModifyTimetableNameWidget extends StatefulWidget {
+  const ModifyTimetableNameWidget({super.key});
 
   @override
-  State<AddNewTimetableWidget> createState() => _AddNewTimetableWidgetState();
+  State<ModifyTimetableNameWidget> createState() =>
+      _ModifyTimetableNameWidgetState();
 }
 
-class _AddNewTimetableWidgetState extends State<AddNewTimetableWidget> {
-  final List<String> items1 = [
-    '2023년 2학기',
-    '2023년 1학기',
-    '2022년 2학기',
-    '2022년 1학기',
-    '2020년 2학기',
-    '2020년 1학기',
-  ];
-
+class _ModifyTimetableNameWidgetState extends State<ModifyTimetableNameWidget> {
   String? selectedItem1;
 
   @override
@@ -33,7 +25,7 @@ class _AddNewTimetableWidgetState extends State<AddNewTimetableWidget> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text(
-              '새 시간표 추가하기',
+              '시간표 이름 변경하기',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.black,
@@ -50,60 +42,13 @@ class _AddNewTimetableWidgetState extends State<AddNewTimetableWidget> {
                 border: Border.all(color: GRAYSCALE_GRAY_03),
                 borderRadius: BorderRadius.circular(8),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: DropdownButton<String>(
-                      isExpanded: true,
-                      underline: const SizedBox.shrink(),
-                      hint: const Text('학기'),
-                      value: selectedItem1 ?? items1[0],
-                      items: items1.map((String item) {
-                        return DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(
-                            item,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedItem1 = value;
-                        });
-                      },
-                      icon: Align(
-                        alignment: Alignment.center,
-                        child: SvgPicture.asset(
-                          'assets/img/common/ic_dropdown.svg',
-                          width: 24,
-                          height: 24,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 8.0,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: GRAYSCALE_GRAY_03),
-                borderRadius: BorderRadius.circular(8),
-              ),
               child: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12),
                 child: Row(
                   children: [
                     Expanded(
                       child: CharacterCountTextField(
-                          maxCharacterCount: 10, hint: '새 시간표 이름을 작성하세요.'),
+                          maxCharacterCount: 10, hint: '시간표 1'),
                     ),
                   ],
                 ),
@@ -135,7 +80,9 @@ class _AddNewTimetableWidgetState extends State<AddNewTimetableWidget> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
                       style: ButtonStyle(
                         minimumSize:
                             MaterialStateProperty.all(const Size(0, 40)),
@@ -145,7 +92,7 @@ class _AddNewTimetableWidgetState extends State<AddNewTimetableWidget> {
                             MaterialStateProperty.all(Colors.white),
                         elevation: MaterialStateProperty.all(0),
                       ),
-                      child: const Text('추가하기'),
+                      child: const Text('변경하기'),
                     ),
                   ),
                 ],

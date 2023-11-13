@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
-import 'package:mingle/user/view/timetable_screen/components/add_new_timetable_widget.dart';
-import 'package:mingle/user/view/timetable_screen/self_add_timetable_screen.dart';
+import 'package:mingle/timetable/components/add_new_timetable_widget.dart';
+import 'package:mingle/timetable/components/timetable_list.dart';
+import 'package:mingle/timetable/view/self_add_timetable_screen.dart';
 
 class MyTimeTableListScreen extends StatelessWidget {
   const MyTimeTableListScreen({
@@ -71,21 +72,24 @@ class MyTimeTableListScreen extends StatelessWidget {
             backgroundColor: Colors.white,
             elevation: 0,
           ),
-          body: const Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '아직 내가 만든 시간표가 없어요.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: GRAYSCALE_GRAY_03,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
+          body: const SingleChildScrollView(
+            child: Center(
+              child: Column(
+                children: [
+                  TimetableList(),
+                  SizedBox(
+                    height: 56.0,
                   ),
-                ),
-              ],
+                  TimetableList(),
+                  SizedBox(
+                    height: 56.0,
+                  ),
+                  TimetableList(),
+                  SizedBox(
+                    height: 56.0,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

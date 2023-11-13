@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/timetable/components/search_course_modal.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
-import 'package:mingle/user/view/timetable_screen/self_add_timetable_screen.dart';
-import 'package:mingle/user/view/timetable_screen/components/timetable_grid.dart';
+import 'package:mingle/timetable/view/self_add_timetable_screen.dart';
+import 'package:mingle/timetable/components/timetable_grid.dart';
 
 class AddTimeTableScreen extends StatefulWidget {
   const AddTimeTableScreen({super.key});
@@ -23,73 +24,7 @@ class _AddTimeTableScreenState extends State<AddTimeTableScreen> {
         isScrollControlled: false,
         context: context,
         builder: (BuildContext context) {
-          return SizedBox(
-            height: 414.0,
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  height: 16.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: GRAYSCALE_GRAY_01,
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                      child: Row(
-                        children: [
-                          const Expanded(
-                            child: TextField(
-                              decoration: InputDecoration(
-                                hintText: "강의명을 입력하세요",
-                                border: InputBorder.none,
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            icon: Align(
-                              alignment: Alignment.center,
-                              child: SvgPicture.asset(
-                                'assets/img/common/ic_search.svg',
-                                width: 24,
-                                height: 24,
-                              ),
-                            ),
-                            onPressed: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (_) => const MyPageScreen())),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 16.0,
-                ),
-                const Divider(
-                  height: 1,
-                  color: GRAYSCALE_GRAY_01,
-                ),
-                const SizedBox(
-                  height: 16.0,
-                ),
-                const Text(
-                  '최근 검색어 내역이 없습니다.',
-                  style: TextStyle(
-                    color: GRAYSCALE_GRAY_04,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ],
-            ),
-          );
+          return const SearchCourseModalWidget();
         },
       );
     });

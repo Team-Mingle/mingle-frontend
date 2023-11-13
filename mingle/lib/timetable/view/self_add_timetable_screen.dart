@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
-import 'package:mingle/user/view/timetable_screen/components/add_course_time_dropdowns.dart';
+import 'package:mingle/timetable/components/add_course_time_dropdowns.dart';
 
 class AddDirectTimeTableScreen extends StatefulWidget {
   const AddDirectTimeTableScreen({

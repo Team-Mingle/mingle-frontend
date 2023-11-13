@@ -64,7 +64,7 @@ class _AddModuleReviewScreenState extends State<AddModuleReviewScreen> {
                   style: TextStyle(
                       fontWeight: FontWeight.w500,
                       color: PRIMARY_COLOR_ORANGE_01),
-                ),
+                ), 
               ),
             ),
           )

@@ -3,10 +3,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/user/view/home_screen/home_tab_screen.dart';
-import 'package:mingle/user/view/post_screen/lawn_tab_screen.dart';
+import 'package:mingle/post/view/lawn_tab_screen.dart';
 import 'package:mingle/user/view/home_screen/market_tab_screen.dart';
-import 'package:mingle/user/view/post_screen/square_tab_screen.dart';
-import 'package:mingle/user/view/timetable_screen/timetable_tab_screen.dart';
+import 'package:mingle/post/view/square_tab_screen.dart';
+import 'package:mingle/timetable/view/timetable_tab_screen.dart';
 
 class HomeRootTab extends StatefulWidget {
   const HomeRootTab({
