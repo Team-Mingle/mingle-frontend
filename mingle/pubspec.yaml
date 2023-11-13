@@ -45,6 +45,8 @@ dependencies:
   image_picker: ^1.0.4
   flutter_secure_storage: ^9.0.0
   dio: ^5.3.3
+  show_up_animation: ^2.0.0
+  fluttertoast: ^8.2.2
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +79,8 @@ flutter:
     - assets/img/my_page_screen/
     - assets/img/post_screen/
     - assets/img/second_hand_market_screen/
+    - assets/img/module_review_screen/
+    - assets/img/module_review_screen/right_tick_icon.svg
 
   fonts:
     - family: Pretendard

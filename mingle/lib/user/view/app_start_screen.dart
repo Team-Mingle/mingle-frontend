@@ -67,6 +67,10 @@ class AppStartScreen extends StatelessWidget {
                 child: NextButton(
                   nextScreen: const SelectCountryScreen(),
                   buttonName: "회원가입",
+                  validators: [
+                    () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => const SelectCountryScreen()))
+                  ],
                 ),
               ),
               const SizedBox(

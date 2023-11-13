@@ -1,19 +1,21 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/component/countdown_timer.dart';
-import 'package:mingle/common/component/dropdown_list.dart';
 import 'package:mingle/common/component/next_button.dart';
+import 'package:mingle/common/component/showup_animation.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
-import 'package:mingle/user/view/my_page_screen/password_change_success_screen.dart';
+import 'package:mingle/dio/dio.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
-import 'package:mingle/user/view/signup_screen/enter_email_screen.dart';
 import 'package:mingle/user/view/signup_screen/enter_password_screen.dart';
-import 'package:mingle/user/view/signup_screen/provider/country_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/provider/email_extension_selected_provider.dart';
-import 'package:mingle/user/view/signup_screen/provider/school_selected_provider.dart';
+import 'package:mingle/user/view/signup_screen/provider/email_selected_provider.dart';
+import 'package:mingle/user/view/signup_screen/provider/verification_number_entered_provider.dart';
 
 class EnterVerificationNumberScreen extends ConsumerStatefulWidget {
   final bool isPasswordReset;
@@ -27,8 +29,49 @@ class EnterVerificationNumberScreen extends ConsumerStatefulWidget {
 
 class _EnterVerificationNumberScreenState
     extends ConsumerState<EnterVerificationNumberScreen> {
+  String? errorMsg;
+
   @override
   Widget build(BuildContext context) {
+    final dio = ref.watch(dioProvider);
+    void validateForm() async {
+      final email = {
+        "email":
+            "${ref.read(selectedEmailProvider)}@${ref.read(selectedEmailExtensionProvider)}",
+        "code": ref.read(enteredVerificationNumberProvider)
+      };
+      print(email);
+      try {
+        final resp = await dio.post(
+          'http://$baseUrl/auth/checkcode',
+          options: Options(headers: {
+            HttpHeaders.contentTypeHeader: "application/json",
+          }),
+          data: jsonEncode(email),
+        );
+        if (resp.data['isSuccess']) {
+          print(resp.data);
+          await Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => EnterPasswordScreen(
+                    isPasswordReset: widget.isPasswordReset,
+                  )));
+        } else {
+          String? error;
+          switch (resp.data['code']) {
+            case 2013:
+              error = "인증번호가 일치하지 않습니다.";
+          }
+          setState(() {
+            errorMsg = error;
+          });
+        }
+      } catch (e) {
+        setState(() {
+          errorMsg = generalErrorMsg;
+        });
+      }
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -88,11 +131,16 @@ class _EnterVerificationNumberScreenState
             const SizedBox(
               height: 40,
             ),
-            const SizedBox(
+            SizedBox(
               // width: 144,
               height: 44,
               child: TextField(
-                decoration: InputDecoration(
+                onChanged: (verificationNumber) {
+                  ref
+                      .read(enteredVerificationNumberProvider.notifier)
+                      .update((state) => verificationNumber);
+                },
+                decoration: const InputDecoration(
                     hintText: "인증번호 작성",
                     hintStyle: TextStyle(color: GRAYSCALE_GRAY_02),
                     focusedBorder: UnderlineInputBorder(
@@ -145,6 +193,19 @@ class _EnterVerificationNumberScreenState
                     )
                   ]),
             ),
+            const SizedBox(
+              height: 7.0,
+            ),
+            ShowUp(
+              delay: 0,
+              child: Text(
+                errorMsg != null ? errorMsg! : "",
+                style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.red,
+                    fontWeight: FontWeight.w400),
+              ),
+            ),
             Expanded(
               child: Container(),
             ),
@@ -153,7 +214,8 @@ class _EnterVerificationNumberScreenState
                 isPasswordReset: widget.isPasswordReset,
               ),
               buttonName: "다음으로",
-              isSelectedProvider: selectedEmailExtensionProvider,
+              isSelectedProvider: [enteredVerificationNumberProvider],
+              validators: [validateForm],
             )
           ]),
         ),
