@@ -9,8 +9,8 @@ const REFRESH_TOKEN_KEY = 'REFRESH_TOKEN';
 
 // const ip = "https://86f3-180-229-116-251.ngrok-free.app/";
 
-const baseUrl =
-    "alb-mingle-api-prod-588023566.ap-northeast-2.elb.amazonaws.com:9000";
+const baseUrl = "4a51-218-144-75-253.ngrok-free.app";
+//  "dev.api.mingle.community";
 const generalErrorMsg = "다시 시도해 주세요.";
 final List<String> COUNTRY_LIST = [
   '홍콩',

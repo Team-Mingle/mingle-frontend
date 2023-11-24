@@ -27,6 +27,7 @@ class EnterEmailScreen extends ConsumerStatefulWidget {
 
 class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
   String? errorMsg;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -44,25 +45,32 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
       };
       print(email);
       try {
+        setState(() {
+          isLoading = true;
+        });
         final resp = await dio.post(
-          'http://$baseUrl/auth/checkemail',
+          'https://$baseUrl/auth/verifyemail',
           options: Options(headers: {
             HttpHeaders.contentTypeHeader: "application/json",
           }),
           data: jsonEncode(email),
         );
-        if (resp.data['isSuccess']) {
+        print(resp.data['verified'] as bool == true);
+        if (resp.data['verified'] as bool) {
           print(resp.data);
-          await Navigator.of(context).push(MaterialPageRoute(
-              builder: (_) => const EnterVerificationNumberScreen()));
-          final sendCodeResp = dio.post(
-            'http://$baseUrl/auth/sendcode',
+          final sendCodeResp = await dio.post(
+            'https://$baseUrl/auth/sendcode',
             options: Options(headers: {
               HttpHeaders.contentTypeHeader: "application/json",
             }),
             data: jsonEncode(email),
           );
           print(sendCodeResp);
+          setState(() {
+            isLoading = false;
+          });
+          await Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => const EnterVerificationNumberScreen()));
         } else {
           String? error;
           switch (resp.data['code']) {
@@ -76,11 +84,13 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
               error = "탈퇴한 사용자입니다.";
           }
           setState(() {
+            isLoading = false;
             errorMsg = error;
           });
         }
       } catch (e) {
         setState(() {
+          isLoading = false;
           errorMsg = generalErrorMsg;
         });
       }
@@ -218,6 +228,7 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
                 selectedEmailProvider
               ],
               validators: [validateForm],
+              isLoading: isLoading,
             )
           ]),
         ),

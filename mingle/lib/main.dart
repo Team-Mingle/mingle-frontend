@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/view/splash_screen.dart';
 import 'package:mingle/module/view/module_review_main_screen.dart';
+import 'package:mingle/user/view/app_start_screen.dart';
 import 'package:mingle/user/view/home_screen/home_root_tab.dart';
 import 'package:mingle/user/view/login_screen.dart';
 
@@ -20,7 +21,7 @@ class _App extends StatelessWidget {
           theme: ThemeData(
               fontFamily: 'Pretendard', disabledColor: GRAYSCALE_GRAY_02),
           debugShowCheckedModeBanner: false,
-          home: const ModuleReviewMainScreen()),
+          home: const AppStartScreen()),
 // =======
 //           home: const LoginScreen()),
     );
