@@ -6,6 +6,7 @@ import 'package:mingle/module/view/first_onboarding_screen.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/module/view/module_review_main_screen.dart';
 import 'package:mingle/module/view/module_search_screen.dart';
+import 'package:mingle/timetable/components/share_timetable_dialog.dart';
 import 'package:mingle/timetable/components/timetable_list_more_modal.dart';
 import 'package:mingle/user/view/home_screen/search_screen.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
@@ -134,7 +135,14 @@ class _TimeTableHomeScreenState extends State<TimeTableHomeScreen> {
                 height: 24,
               ),
             ),
-            onPressed: () {},
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return const ShareTimetableDialog();
+                },
+              );
+            },
           ),
           IconButton(
             icon: Align(
