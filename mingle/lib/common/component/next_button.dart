@@ -8,6 +8,7 @@ class NextButton extends ConsumerWidget {
   final Widget? buttonIcon;
   final List<StateProvider<String>>? isSelectedProvider;
   final List<Function>? validators;
+  bool? checkSelected;
   bool isLoading;
   bool isReplacement;
   NextButton(
@@ -18,12 +19,14 @@ class NextButton extends ConsumerWidget {
       this.isReplacement = false,
       this.isSelectedProvider,
       this.buttonIcon,
+      this.checkSelected,
       this.isLoading = false});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    print(isSelectedProvider == null);
     bool isSelected = isSelectedProvider == null
-        ? true
+        ? (checkSelected == null ? true : checkSelected!)
         : isSelectedProvider!.every((provider) => ref.watch(provider) != "");
 
     return isLoading

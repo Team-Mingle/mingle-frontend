@@ -25,10 +25,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final formGlobalKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
   String? errorMsg;
 
   @override
   void initState() {
+    emailController.addListener(() {
+      print("email");
+      setState(() {});
+    });
+    passwordController.addListener(() {
+      print("pw");
+      setState(() {});
+    });
     super.initState();
   }
 
@@ -38,18 +47,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     void validateForm() async {
       final credentials = {
         "email": emailController.text,
-        "pwd": passwordController.text,
+        "password": passwordController.text,
         "fcmToken": "string"
       };
+      print(credentials);
       try {
         final resp = await dio.post(
-          'http://$baseUrl/auth/login',
+          'https://$baseUrl/auth/login',
           options: Options(headers: {
             HttpHeaders.contentTypeHeader: "application/json",
           }),
           data: jsonEncode(credentials),
         );
-        if (resp.data['isSuccess']) {
+        print(resp.data);
+        if (resp.statusCode == 200) {
           print(resp.data);
           final refreshToken = resp.data['refreshToken'];
           final accessToken = resp.data['accessToken'];
@@ -60,23 +71,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               .push(MaterialPageRoute(builder: (_) => const HomeTabScreen()));
         } else {
           String? error;
+          print(resp.data['code']);
           switch (resp.data['code']) {
-            case 2010:
-              error = "이메일을 입력해주세요.";
-            case 2014:
-              error = "비밀번호를 입력해주세요.";
-            case 3011:
-              error = "존재하지 않는 이메일이거나 비밀번호가 틀렸습니다.";
-            case 3017:
-              error = "탈퇴한 사용자입니다.";
-            case 3018:
-              error = "신고된 사용자입니다.";
+            case "FAILED_TO_LOGIN":
+              error = resp.data['message'];
+            case "MEMBER_DELETED_ERROR":
+              error = resp.data['message'];
+            case "MEMBER_REPORTED_ERROR":
+              error = resp.data['message'];
+            default:
+              error = "뭔가 잘못됨";
           }
           setState(() {
             errorMsg = error;
           });
         }
       } catch (e) {
+        if (e is DioException) {
+          print("diodio");
+        }
+        print(e);
         setState(() {
           errorMsg = generalErrorMsg;
         });
@@ -174,6 +188,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 NextButton(
                   nextScreen: const SplashScreen(),
                   buttonName: "로그인",
+                  checkSelected: emailController.text.isNotEmpty &&
+                      passwordController.text.isNotEmpty,
                   validators: [validateForm],
                 )
               ]),

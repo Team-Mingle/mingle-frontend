@@ -67,6 +67,7 @@ class CustomInterceptor extends Interceptor {
       }
     }
 
-    return handler.reject(err);
+    return handler.next(err);
+    // return null;
   }
 }

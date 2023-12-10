@@ -72,8 +72,8 @@ class _EnterVerificationNumberScreenState
         } else {
           String? error;
           switch (resp.data['code']) {
-            case 2013:
-              error = "인증번호가 일치하지 않습니다.";
+            case "CODE_MATCH_FAILED":
+              error = resp.data['message'];
           }
           setState(() {
             isLoading = false;
@@ -231,7 +231,7 @@ class _EnterVerificationNumberScreenState
               ),
               buttonName: "다음으로",
               isSelectedProvider: [enteredVerificationNumberProvider],
-              validators: [validateForm],
+              // validators: [validateForm],
               isLoading: isLoading,
             )
           ]),
