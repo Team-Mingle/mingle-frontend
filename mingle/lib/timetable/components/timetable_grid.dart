@@ -62,13 +62,23 @@ class _TimeTableGridState extends State<TimeTableGrid> {
         7,
         (index) => Container(
               color: Colors.white,
-              child: Text(days[index]),
+              child: Center(
+                  child: Text(
+                days[index],
+                style:
+                    const TextStyle(fontSize: 12.0, color: GRAYSCALE_GRAY_04),
+              )),
             ));
     List<Widget> t = List.generate(
         10,
         (index) => Container(
               color: Colors.white,
-              child: Text(timeSlots[index]),
+              child: Center(
+                  child: Text(
+                timeSlots[index],
+                style:
+                    const TextStyle(fontSize: 12.0, color: GRAYSCALE_GRAY_04),
+              )),
             ));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -99,6 +109,7 @@ class _TimeTableGridState extends State<TimeTableGrid> {
               height: 20.0,
               width: 337.0,
               decoration: const BoxDecoration(
+                color: GRAYSCALE_GRAY_01,
                 borderRadius: BorderRadius.only(topRight: Radius.circular(8.0)),
                 border: Border(
                   right: BorderSide(color: GRAYSCALE_GRAY_02),
@@ -132,6 +143,7 @@ class _TimeTableGridState extends State<TimeTableGrid> {
               decoration: const BoxDecoration(
                 borderRadius:
                     BorderRadius.only(bottomLeft: Radius.circular(8.0)),
+                color: GRAYSCALE_GRAY_01,
                 border: Border(
                     bottom: BorderSide(color: GRAYSCALE_GRAY_02),
                     top: BorderSide(color: GRAYSCALE_GRAY_02),
@@ -162,6 +174,7 @@ class _TimeTableGridState extends State<TimeTableGrid> {
                 // borderRadius: BorderRadius.circular(8.0),
                 borderRadius:
                     const BorderRadius.only(bottomRight: Radius.circular(8.0)),
+                color: GRAYSCALE_GRAY_01,
                 border: Border.all(
                   color: GRAYSCALE_GRAY_02,
                   width: 1,
@@ -174,7 +187,6 @@ class _TimeTableGridState extends State<TimeTableGrid> {
                 child: GridView(
                   controller: _tableScroller,
                   physics: const ClampingScrollPhysics(),
-
                   // physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 7,
