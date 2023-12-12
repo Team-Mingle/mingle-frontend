@@ -3,7 +3,17 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
 
 class AddTimeDropdownsWidget extends StatefulWidget {
-  const AddTimeDropdownsWidget({Key? key}) : super(key: key);
+  final Function onDayChange;
+  final Function onStartTimeChange;
+  final Function onEndTimeChange;
+  final int index;
+  const AddTimeDropdownsWidget(
+      {Key? key,
+      required this.onDayChange,
+      required this.onStartTimeChange,
+      required this.onEndTimeChange,
+      required this.index})
+      : super(key: key);
 
   @override
   State<AddTimeDropdownsWidget> createState() => _AddTimeDropdownsWidgetState();
@@ -177,6 +187,7 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                         );
                       }).toList(),
                       onChanged: (value) {
+                        widget.onDayChange(value, widget.index);
                         setState(() {
                           selectedItem1 = value;
                         });
@@ -232,6 +243,7 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                         );
                       }).toList(),
                       onChanged: (value) {
+                        widget.onStartTimeChange(value, widget.index);
                         setState(() {
                           selectedItem2 = value;
                         });
@@ -283,6 +295,7 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                         );
                       }).toList(),
                       onChanged: (value) {
+                        widget.onEndTimeChange(value, widget.index);
                         setState(() {
                           selectedItem3 = value;
                         });

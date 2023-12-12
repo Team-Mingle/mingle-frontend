@@ -15,13 +15,66 @@ class AddDirectTimeTableScreen extends StatefulWidget {
 
 class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
   List<Widget> timeDropdownWidgets = [];
+  String moduleName = "";
+  List<String> days = [];
+  List<String> startTimes = [];
+  List<String> endTimes = [];
+  String moduleCode = "";
+  String location = "";
+  String profName = "";
+
+  @override
+  void initState() {
+    timeDropdownWidgets.add(
+      AddTimeDropdownsWidget(
+        index: 0,
+        onDayChange: onDayChange,
+        onStartTimeChange: onStartTimeChange,
+        onEndTimeChange: onEndTimeChange,
+      ),
+    );
+    days.add("");
+    startTimes.add("");
+    endTimes.add("");
+    super.initState();
+  }
+
   void addTimeDropdownWidget() {
     if (timeDropdownWidgets.length < 5) {
       // 최대 5번까지 추가
       setState(() {
-        timeDropdownWidgets.add(const AddTimeDropdownsWidget());
+        timeDropdownWidgets.add(AddTimeDropdownsWidget(
+          index: timeDropdownWidgets.length,
+          onDayChange: onDayChange,
+          onStartTimeChange: onStartTimeChange,
+          onEndTimeChange: onEndTimeChange,
+        ));
+        days.add("");
+        startTimes.add("");
+        endTimes.add("");
       });
     }
+  }
+
+  void onDayChange(value, index) {
+    setState(() {
+      days[index] = value;
+    });
+  }
+
+  void onStartTimeChange(value, index) {
+    setState(() {
+      startTimes[index] = value;
+    });
+  }
+
+  void onEndTimeChange(value, index) {
+    setState(() {
+      endTimes[index] = value;
+    });
+    print(days);
+    print(startTimes);
+    print(endTimes);
   }
 
   @override
@@ -83,278 +136,294 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            children: [
-              const Row(
-                children: [
-                  Text(
-                    '강의명*',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 8.0,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: "강의명을 입력하세요",
-                    hintStyle: const TextStyle(
-                      color: GRAYSCALE_GRAY_03,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    labelStyle: const TextStyle(
-                      color: Colors.black,
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 12.0,
-                      vertical: 14.0,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: GRAYSCALE_GRAY_02),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: GRAYSCALE_GRAY_02),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 24.0,
-              ),
-              const Row(
-                children: [
-                  Text(
-                    '강의 시간*',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 4.0,
-              ),
-              const Row(
-                children: [
-                  Text(
-                    '요일에 따라 강의 시간대가 다를 경우 시간대를 추가하세요.',
-                    style: TextStyle(
-                      color: GRAYSCALE_GRAY_03,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 8.0,
-              ),
-              const AddTimeDropdownsWidget(),
-              const SizedBox(
-                height: 12.0,
-              ),
-              OutlinedButton(
-                onPressed: () {
-                  addTimeDropdownWidget();
-                },
-                style: OutlinedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  minimumSize: const Size(double.infinity, 48),
-                  side: const BorderSide(
-                    width: 1,
-                    color: PRIMARY_COLOR_ORANGE_02,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              children: [
+                const Row(
                   children: [
-                    const Text(
-                      '추가하기',
+                    Text(
+                      '강의명*',
                       style: TextStyle(
-                        color: PRIMARY_COLOR_ORANGE_02,
+                        color: Colors.black,
                         fontSize: 14,
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.w500,
                       ),
-                    ),
-                    SvgPicture.asset(
-                      'assets/img/common/ic_plus_orange.svg',
-                      width: 24,
-                      height: 24,
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(
-                height: 24.0,
-              ),
-              const Row(
-                children: [
-                  Text(
-                    '과목 코드',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 8.0,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8.0),
+                const SizedBox(
+                  height: 8.0,
                 ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: "과목 코드를 입력하세요",
-                    hintStyle: const TextStyle(
-                      color: GRAYSCALE_GRAY_03,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    labelStyle: const TextStyle(
-                      color: Colors.black,
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 12.0,
-                      vertical: 14.0,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: GRAYSCALE_GRAY_02),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: GRAYSCALE_GRAY_02),
-                      borderRadius: BorderRadius.circular(8.0),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: TextField(
+                    onChanged: (value) {
+                      setState(() {
+                        moduleName = value;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      hintText: "강의명을 입력하세요",
+                      hintStyle: const TextStyle(
+                        color: GRAYSCALE_GRAY_03,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      labelStyle: const TextStyle(
+                        color: Colors.black,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                        vertical: 14.0,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: GRAYSCALE_GRAY_02),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: GRAYSCALE_GRAY_02),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 24.0,
-              ),
-              const Row(
-                children: [
-                  Text(
-                    '강의 장소',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
+                const SizedBox(
+                  height: 24.0,
+                ),
+                const Row(
+                  children: [
+                    Text(
+                      '강의 시간*',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 4.0,
+                ),
+                const Row(
+                  children: [
+                    Text(
+                      '요일에 따라 강의 시간대가 다를 경우 시간대를 추가하세요.',
+                      style: TextStyle(
+                        color: GRAYSCALE_GRAY_03,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 8.0,
+                ),
+                ...List.generate(2 * timeDropdownWidgets.length - 1, (index) {
+                  if (index % 2 == 0) {
+                    return timeDropdownWidgets[index ~/ 2];
+                  } else {
+                    return const SizedBox(
+                      height: 20.0,
+                    );
+                  }
+                }),
+                // ...timeDropdownWidgets,
+                const SizedBox(
+                  height: 12.0,
+                ),
+                OutlinedButton(
+                  onPressed: () {
+                    addTimeDropdownWidget();
+                  },
+                  style: OutlinedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    minimumSize: const Size(double.infinity, 48),
+                    side: const BorderSide(
+                      width: 1,
+                      color: PRIMARY_COLOR_ORANGE_02,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(
-                height: 8.0,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text(
+                        '추가하기',
+                        style: TextStyle(
+                          color: PRIMARY_COLOR_ORANGE_02,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SvgPicture.asset(
+                        'assets/img/common/ic_plus_orange.svg',
+                        width: 24,
+                        height: 24,
+                      ),
+                    ],
+                  ),
                 ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: "강의 장소를 입력하세요",
-                    hintStyle: const TextStyle(
-                      color: GRAYSCALE_GRAY_03,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
+                const SizedBox(
+                  height: 24.0,
+                ),
+                const Row(
+                  children: [
+                    Text(
+                      '과목 코드',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                    labelStyle: const TextStyle(
-                      color: Colors.black,
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 12.0,
-                      vertical: 14.0,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: GRAYSCALE_GRAY_02),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: GRAYSCALE_GRAY_02),
-                      borderRadius: BorderRadius.circular(8.0),
+                  ],
+                ),
+                const SizedBox(
+                  height: 8.0,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: "과목 코드를 입력하세요",
+                      hintStyle: const TextStyle(
+                        color: GRAYSCALE_GRAY_03,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      labelStyle: const TextStyle(
+                        color: Colors.black,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                        vertical: 14.0,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: GRAYSCALE_GRAY_02),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: GRAYSCALE_GRAY_02),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 24.0,
-              ),
-              const Row(
-                children: [
-                  Text(
-                    '교수명',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
+                const SizedBox(
+                  height: 24.0,
+                ),
+                const Row(
+                  children: [
+                    Text(
+                      '강의 장소',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 8.0,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: "강의 장소를 입력하세요",
+                      hintStyle: const TextStyle(
+                        color: GRAYSCALE_GRAY_03,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      labelStyle: const TextStyle(
+                        color: Colors.black,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                        vertical: 14.0,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: GRAYSCALE_GRAY_02),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: GRAYSCALE_GRAY_02),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(
-                height: 8.0,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: "교수명을 입력하세요",
-                    hintStyle: const TextStyle(
-                      color: GRAYSCALE_GRAY_03,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
+                const SizedBox(
+                  height: 24.0,
+                ),
+                const Row(
+                  children: [
+                    Text(
+                      '교수명',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                    labelStyle: const TextStyle(
-                      color: Colors.black,
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 12.0,
-                      vertical: 14.0,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: GRAYSCALE_GRAY_02),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: GRAYSCALE_GRAY_02),
-                      borderRadius: BorderRadius.circular(8.0),
+                  ],
+                ),
+                const SizedBox(
+                  height: 8.0,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: "교수명을 입력하세요",
+                      hintStyle: const TextStyle(
+                        color: GRAYSCALE_GRAY_03,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      labelStyle: const TextStyle(
+                        color: Colors.black,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                        vertical: 14.0,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: GRAYSCALE_GRAY_02),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: GRAYSCALE_GRAY_02),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
