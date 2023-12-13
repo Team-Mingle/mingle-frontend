@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
-import 'package:mingle/module/view/add_module_review_screen.dart';
-import 'package:mingle/module/view/first_onboarding_screen.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
-import 'package:mingle/module/view/module_review_main_screen.dart';
-import 'package:mingle/module/view/module_search_screen.dart';
 import 'package:mingle/timetable/components/add_friend_dialog.dart';
-import 'package:mingle/timetable/components/share_timetable_dialog.dart';
 import 'package:mingle/timetable/components/timetable_list_more_modal.dart';
-import 'package:mingle/user/view/home_screen/search_screen.dart';
-import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
+import 'package:mingle/timetable/model/class_model.dart';
 import 'package:mingle/timetable/view/add_timetable_screen.dart';
-import 'package:mingle/timetable/components/shared_timetable_dropdown.dart';
 import 'package:mingle/timetable/components/timetable_grid.dart';
 import 'package:mingle/timetable/view/timetable_list_screen.dart';
 
@@ -29,6 +22,35 @@ class TimeTableHomeScreen extends StatefulWidget {
 
 class _TimeTableHomeScreenState extends State<TimeTableHomeScreen> {
   bool _isFriendListExpanded = false;
+  List<Color> availableCoursePalette = [
+    const Color(0xFFFBE9EF),
+    const Color(0xFFDCF5DA),
+    const Color(0xFFFFEBCD),
+    const Color(0xFFE1F6F6),
+    const Color(0xFFEFDDEF),
+    const Color(0xFFD4E2F3),
+    const Color(0xFFEBD6CB),
+    const Color(0xFFBDD4C7),
+    const Color(0xFFCECEE9),
+    const Color(0xFFE7EFCE),
+  ];
+
+  List<Color> usedCoursePalette = [];
+  List<ClassModel> addedClasses = [];
+  // int daysLength = 7;
+  List<Widget> timetable = List.generate(91, (index) {
+    int row = index ~/ 7;
+    int col = index % 7;
+    double height = row == 0 ? 20.0 : 60.0;
+    double width = col == 0 ? 21.0 : 47.0;
+
+    return Container(
+      height: height,
+      width: width,
+      color: Colors.white,
+      child: Text("$row $col"),
+    );
+  });
 
   void MoreButtonModal() {
     Future.delayed(const Duration(milliseconds: 40)).then((_) {
@@ -45,8 +67,176 @@ class _TimeTableHomeScreenState extends State<TimeTableHomeScreen> {
     });
   }
 
+  void addClass(ClassModel classModel) {
+    print(classModel.days);
+    print(classModel.startTimes);
+    print(classModel.endTimes);
+    print(classModel.moduleName);
+    print(classModel.moduleCode);
+    print(classModel.location);
+    print(classModel.profName);
+    List<List<int>> startTimesIndex = [];
+    List<List<int>> endTimesIndex = [];
+    List<int> colIndex = [];
+    addedClasses.add(classModel);
+    Color currentColor = availableCoursePalette[0];
+    usedCoursePalette.add(currentColor);
+    availableCoursePalette.removeAt(0);
+    for (String startTime in classModel.startTimes) {
+      startTimesIndex.add(classModel.convertTimeToIndex(startTime));
+    }
+    for (String endTime in classModel.endTimes) {
+      endTimesIndex.add(classModel.convertTimeToIndex(endTime));
+    }
+    for (String day in classModel.days) {
+      colIndex.add(classModel.convertDayToInt(day));
+    }
+    //Case 1: start hour and end hour equal
+    //Case 2: end hour > start hour
+
+    for (int i = 0; i < colIndex.length; i++) {
+      List<int> startTimeIndex = startTimesIndex[i];
+      List<int> endTimeIndex = endTimesIndex[i];
+      int col = colIndex[i];
+      int startHour = startTimeIndex[0];
+      double startMinutes = startTimeIndex[1].toDouble();
+      int endHour = endTimeIndex[0];
+      double endMinutes = endTimeIndex[1].toDouble();
+      if (startHour == endHour) {
+        int index = (startHour * 7) + col;
+        List<Widget> newTimetable = timetable;
+        newTimetable[index] = SizedBox(
+          width: double.infinity,
+          height: 60.0,
+          child: Column(children: [
+            Container(
+              height: startMinutes,
+              color: Colors.white,
+            ),
+            Container(
+              height: endMinutes - startMinutes,
+              width: double.infinity,
+              color: currentColor,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      classModel.moduleCode,
+                      style: const TextStyle(
+                          fontSize: 12.0, fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      classModel.location,
+                      style: const TextStyle(fontSize: 12.0),
+                    )
+                  ]),
+            ),
+            Container(
+              height: 60 - endMinutes,
+              color: Colors.white,
+            )
+          ]),
+        );
+        setState(() {
+          timetable = newTimetable;
+        });
+      } else {
+        for (int j = startHour;
+            j <= (endMinutes > 0 ? endHour : endHour - 1);
+            j++) {
+          int index = (j * 7) + col;
+          if (j == startHour) {
+            setState(() {
+              timetable[index] = SizedBox(
+                width: double.infinity,
+                height: 60.0,
+                child: Column(children: [
+                  Container(
+                    height: startMinutes,
+                    color: Colors.white,
+                  ),
+                  Container(
+                    height: 60 - startMinutes,
+                    color: currentColor,
+                    child: startMinutes > 30
+                        ? Align(
+                            alignment: Alignment.bottomLeft,
+                            child: Text(
+                              classModel.moduleCode,
+                              style: const TextStyle(
+                                  fontSize: 12.0, fontWeight: FontWeight.w600),
+                            ))
+                        : Align(
+                            alignment: Alignment.topLeft,
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    classModel.moduleCode,
+                                    style: const TextStyle(
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  Text(
+                                    classModel.location,
+                                    style: const TextStyle(fontSize: 12.0),
+                                  )
+                                ]),
+                          ),
+                  ),
+                ]),
+              );
+            });
+          } else if (j == endHour) {
+            setState(() {
+              timetable[index] = SizedBox(
+                width: double.infinity,
+                height: 60.0,
+                child: Column(children: [
+                  Container(
+                    height: endMinutes,
+                    color: currentColor,
+                    child: endHour == startHour + 1 && startMinutes > 30
+                        ? Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              classModel.location,
+                              style: const TextStyle(fontSize: 12.0),
+                            ))
+                        : Container(),
+                  ),
+                  Container(
+                    height: 60 - endMinutes,
+                    color: Colors.white,
+                  )
+                ]),
+              );
+            });
+          } else {
+            setState(() {
+              timetable[index] = Container(
+                width: double.infinity,
+                height: 60.0,
+                color: currentColor,
+                child: j == startHour + 1 && startMinutes > 30
+                    ? Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          classModel.location,
+                          style: const TextStyle(fontSize: 12.0),
+                        ))
+                    : Container(),
+              );
+            });
+          }
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<Widget> t = timetable;
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR_GRAY,
       appBar: AppBar(
@@ -122,7 +312,10 @@ class _TimeTableHomeScreenState extends State<TimeTableHomeScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const AddTimeTableScreen(),
+                  builder: (context) => AddTimeTableScreen(
+                    timetable: t,
+                    addClass: addClass,
+                  ),
                 ),
               );
             },
@@ -214,9 +407,11 @@ class _TimeTableHomeScreenState extends State<TimeTableHomeScreen> {
                     ),
                   if (widget.flag == 0) const SizedBox(height: 284),
                   if (widget.flag == 1) // flag 값이 1인 경우
-                    const Hero(
+                    Hero(
                       tag: "timetable",
-                      child: TimeTableGrid(),
+                      child: TimeTableGrid(
+                        timetable: t,
+                      ),
                     ),
                   const SizedBox(
                     height: 24.0,

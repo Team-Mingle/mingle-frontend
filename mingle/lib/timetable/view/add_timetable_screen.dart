@@ -7,13 +7,17 @@ import 'package:mingle/timetable/view/self_add_timetable_screen.dart';
 import 'package:mingle/timetable/components/timetable_grid.dart';
 
 class AddTimeTableScreen extends StatefulWidget {
-  const AddTimeTableScreen({super.key});
+  final Function addClass;
+  final List<Widget> timetable;
+  const AddTimeTableScreen(
+      {super.key, required this.addClass, required this.timetable});
 
   @override
   State<AddTimeTableScreen> createState() => _AddTimeTableScreenState();
 }
 
 class _AddTimeTableScreenState extends State<AddTimeTableScreen> {
+  List<Widget> t = [];
   @override
   void initState() {
     Future.delayed(const Duration(milliseconds: 650)).then((_) {
@@ -28,11 +32,21 @@ class _AddTimeTableScreenState extends State<AddTimeTableScreen> {
         },
       );
     });
+    t = widget.timetable;
     super.initState();
+  }
+
+  void refresh() {
+    print("refresh called");
+    setState(() {
+      t = widget.timetable;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> tt = t;
+    // print(t);
     return Scaffold(
       body: SafeArea(
         child: Scaffold(
@@ -74,7 +88,10 @@ class _AddTimeTableScreenState extends State<AddTimeTableScreen> {
                     ),
                   ),
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => const AddDirectTimeTableScreen())),
+                      builder: (_) => AddDirectTimeTableScreen(
+                            refresh: refresh,
+                            addClass: widget.addClass,
+                          ))),
                 ),
               ],
             ),
@@ -82,16 +99,18 @@ class _AddTimeTableScreenState extends State<AddTimeTableScreen> {
             backgroundColor: Colors.white,
             elevation: 0,
           ),
-          body: const Center(
+          body: Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 11.0,
                 ),
                 Hero(
                   tag: "timetable",
-                  child: TimeTableGrid(),
+                  child: TimeTableGrid(
+                    timetable: tt,
+                  ),
                 ),
               ],
             ),

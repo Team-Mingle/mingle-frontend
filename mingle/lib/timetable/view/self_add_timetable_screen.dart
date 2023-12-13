@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/timetable/components/add_course_time_dropdowns.dart';
+import 'package:mingle/timetable/model/class_model.dart';
 
 class AddDirectTimeTableScreen extends StatefulWidget {
+  final Function addClass;
+  final Function refresh;
   const AddDirectTimeTableScreen({
     Key? key,
+    required this.addClass,
+    required this.refresh,
   }) : super(key: key);
 
   @override
@@ -127,6 +132,16 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
                 ),
               ),
               onTap: () {
+                ClassModel classModel = ClassModel(
+                    days: days,
+                    startTimes: startTimes,
+                    endTimes: endTimes,
+                    moduleCode: moduleCode,
+                    moduleName: moduleName,
+                    location: location,
+                    profName: profName);
+                widget.addClass(classModel);
+                widget.refresh();
                 Navigator.pop(context);
               },
             ),
@@ -299,6 +314,11 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: TextField(
+                    onChanged: (value) {
+                      setState(() {
+                        moduleCode = value;
+                      });
+                    },
                     decoration: InputDecoration(
                       hintText: "과목 코드를 입력하세요",
                       hintStyle: const TextStyle(
@@ -348,6 +368,11 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: TextField(
+                    onChanged: (value) {
+                      setState(() {
+                        location = value;
+                      });
+                    },
                     decoration: InputDecoration(
                       hintText: "강의 장소를 입력하세요",
                       hintStyle: const TextStyle(
@@ -397,6 +422,11 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: TextField(
+                    onChanged: (value) {
+                      setState(() {
+                        profName = value;
+                      });
+                    },
                     decoration: InputDecoration(
                       hintText: "교수명을 입력하세요",
                       hintStyle: const TextStyle(

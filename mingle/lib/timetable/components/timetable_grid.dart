@@ -3,7 +3,11 @@ import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:mingle/common/const/colors.dart';
 
 class TimeTableGrid extends StatefulWidget {
-  const TimeTableGrid({super.key});
+  final List<Widget> timetable;
+  const TimeTableGrid({
+    super.key,
+    required this.timetable,
+  });
 
   @override
   State<TimeTableGrid> createState() => _TimeTableGridState();
@@ -13,6 +17,22 @@ class _TimeTableGridState extends State<TimeTableGrid> {
   late LinkedScrollControllerGroup _controllers;
   late ScrollController _timeScroller;
   late ScrollController _tableScroller;
+  List<String> days = ['월', '화', '수', '목', '금', '토', '일'];
+  List<String> timeSlots = [
+    '8',
+    '9',
+    '10',
+    '11',
+    '12',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8'
+  ];
 
   @override
   void initState() {
@@ -31,32 +51,32 @@ class _TimeTableGridState extends State<TimeTableGrid> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> days = ['월', '화', '수', '목', '금', '토', '일'];
-    List<String> timeSlots = [
-      '9',
-      '10',
-      '11',
-      '12',
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6'
-    ];
-    List<Widget> timetable = List.generate(70, (index) {
-      int row = index ~/ (timeSlots.length);
-      int col = index % (days.length);
-      double height = row == 0 ? 20.0 : 60.0;
-      double width = col == 0 ? 21.0 : 47.0;
+    // List<String> days = ['월', '화', '수', '목', '금', '토', '일'];
+    // List<String> timeSlots = [
+    //   '9',
+    //   '10',
+    //   '11',
+    //   '12',
+    //   '1',
+    //   '2',
+    //   '3',
+    //   '4',
+    //   '5',
+    //   '6'
+    // ];
+    // List<Widget> timetable = List.generate(70, (index) {
+    //   int row = index ~/ (timeSlots.length);
+    //   int col = index % (days.length);
+    //   double height = row == 0 ? 20.0 : 60.0;
+    //   double width = col == 0 ? 21.0 : 47.0;
 
-      return Container(
-        height: height,
-        width: width,
-        color: Colors.white,
-        child: Text("$row $col"),
-      );
-    });
+    //   return Container(
+    //     height: height,
+    //     width: width,
+    //     color: Colors.white,
+    //     child: Text("$row $col"),
+    //   );
+    // });
 
     List<Widget> d = List.generate(
         7,
@@ -70,7 +90,7 @@ class _TimeTableGridState extends State<TimeTableGrid> {
               )),
             ));
     List<Widget> t = List.generate(
-        10,
+        13,
         (index) => Container(
               color: Colors.white,
               child: Center(
@@ -194,7 +214,7 @@ class _TimeTableGridState extends State<TimeTableGrid> {
                     mainAxisSpacing: 1,
                     childAspectRatio: 47 / 60,
                   ),
-                  children: timetable,
+                  children: widget.timetable,
                 ),
               ),
             ),

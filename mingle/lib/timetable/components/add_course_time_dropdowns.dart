@@ -31,6 +31,12 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
   ];
 
   final List<String> items2 = [
+    '08:00',
+    '08:10',
+    '08:20',
+    '08:30',
+    '08:40',
+    '08:50',
     '09:00',
     '09:10',
     '09:20',
@@ -85,10 +91,28 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
     '17:30',
     '17:40',
     '17:50',
-    '18:00'
+    '18:00',
+    '18:10',
+    '18:20',
+    '18:30',
+    '18:40',
+    '18:50',
+    '19:00',
+    '19:10',
+    '19:20',
+    '19:30',
+    '19:40',
+    '19:50',
+    '20:00'
   ];
 
   final List<String> items3 = [
+    '08:00',
+    '08:10',
+    '08:20',
+    '08:30',
+    '08:40',
+    '08:50',
     '09:00',
     '09:10',
     '09:20',
@@ -143,7 +167,19 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
     '17:30',
     '17:40',
     '17:50',
-    '18:00'
+    '18:00',
+    '18:10',
+    '18:20',
+    '18:30',
+    '18:40',
+    '18:50',
+    '19:00',
+    '19:10',
+    '19:20',
+    '19:30',
+    '19:40',
+    '19:50',
+    '20:00'
   ];
 
   String? selectedItem1, selectedItem2, selectedItem3;
