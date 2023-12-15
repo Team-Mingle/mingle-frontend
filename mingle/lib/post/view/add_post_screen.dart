@@ -1,9 +1,16 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/const/data.dart';
+import 'package:mingle/dio/dio.dart';
+import 'package:mingle/post/models/add_post_model.dart';
+import 'package:mingle/post/repository/post_repository.dart';
 
 class AddPostScreen extends StatefulWidget {
   const AddPostScreen({super.key});
@@ -14,16 +21,54 @@ class AddPostScreen extends StatefulWidget {
 
 class _AddPostScreenState extends State<AddPostScreen> {
   final ImagePicker imagePicker = ImagePicker();
-  List<XFile> imageFileList = [];
+  List<MultipartFile> imageFileList = [];
+  List<XFile> imagePreviewFileList = [];
   bool isAnonymous = true;
+  String title = "";
+  String content = "";
+  String boardType = "TOTAL";
+  String categoryType = "";
+  String categoryName = "";
 
   @override
   void initState() {
     super.initState();
   }
 
+  void handleSubmit() async {
+    AddPostModel addPostModel = AddPostModel(
+        title: title,
+        content: content,
+        categoryType: categoryType,
+        isAnonymous: isAnonymous);
+    print(title);
+    print(content);
+    print(boardType);
+    print(categoryType);
+    print(isAnonymous);
+    print(imageFileList);
+    final dio = Dio();
+    dio.interceptors.add(CustomInterceptor(storage: storage));
+    final response =
+        await PostRepository(dio, baseUrl: "https://$baseUrl/post").addPost(
+      boardType: boardType,
+      // addPostModel: FormData.fromMap(
+      //     {...addPostModel.toJson(), "multipartFile": imageFileList})
+      //  addPostModel.toJson(),
+      // multipartFile: imageFileList,
+
+      title: addPostModel.title,
+      content: addPostModel.content,
+      categoryType: addPostModel.categoryType,
+      isAnonymous: addPostModel.isAnonymous,
+    );
+    // print(response);
+  }
+
   @override
   Widget build(BuildContext context) {
+    bool canSubmit =
+        title.isNotEmpty && content.isNotEmpty && categoryType.isNotEmpty;
     return Scaffold(
       body: SafeArea(
         child: Scaffold(
@@ -57,12 +102,17 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         fontWeight: FontWeight.w400),
                   ),
                   const Spacer(),
-                  const Text(
-                    "게시",
-                    style: TextStyle(
-                        color: GRAYSCALE_GRAY_03,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w400),
+                  GestureDetector(
+                    onTap: canSubmit ? handleSubmit : () {},
+                    child: Text(
+                      "게시",
+                      style: TextStyle(
+                          color: canSubmit
+                              ? PRIMARY_COLOR_ORANGE_01
+                              : GRAYSCALE_GRAY_03,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w400),
+                    ),
                   ),
                 ],
               ),
@@ -78,10 +128,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     child: Column(
                       children: [
                         const SizedBox(height: 12.0),
-                        InkWell(
+                        GestureDetector(
                           child: Row(
                             children: [
-                              const Text("게시판 이름"),
+                              Text(categoryName.isEmpty
+                                  ? "게시판 이름"
+                                  : categoryName),
                               const SizedBox(
                                 width: 10.0,
                               ),
@@ -89,12 +141,130 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                   "assets/img/post_screen/down_tick.svg")
                             ],
                           ),
-                          onTap: () {},
+                          onTap: () => showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Container(
+                                height: 324,
+                                width: MediaQuery.of(context).size.width,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(20),
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20.0),
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 32.0,
+                                      ),
+                                      ListTile(
+                                        title: Center(
+                                          child: Text(
+                                            '자유',
+                                            style: TextStyle(
+                                              fontWeight: categoryType == 'FREE'
+                                                  ? FontWeight.bold
+                                                  : FontWeight.normal,
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          setState(() {
+                                            categoryType = 'FREE';
+                                            categoryName = '자유'; // 선택한 항목 설정
+                                          });
+                                        },
+                                      ),
+                                      const SizedBox(
+                                        height: 20.0,
+                                      ),
+                                      ListTile(
+                                        title: Center(
+                                          child: Text(
+                                            '질문',
+                                            style: TextStyle(
+                                              fontWeight: categoryType == 'QNA'
+                                                  ? FontWeight.bold
+                                                  : FontWeight.normal,
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          setState(() {
+                                            categoryType = 'QNA';
+                                            categoryName = '질문'; // 선택한 항목 설정
+                                          });
+                                        },
+                                      ),
+                                      const SizedBox(
+                                        height: 20.0,
+                                      ),
+                                      ListTile(
+                                        title: Center(
+                                          child: Text(
+                                            '밍글소식',
+                                            style: TextStyle(
+                                              fontWeight:
+                                                  categoryType == 'MINGLE'
+                                                      ? FontWeight.bold
+                                                      : FontWeight.normal,
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          setState(() {
+                                            categoryType =
+                                                'MINGLE'; // 선택한 항목 설정
+                                            categoryName = '밍글소식';
+                                          });
+                                        },
+                                      ),
+                                      const SizedBox(
+                                        height: 20.0,
+                                      ),
+                                      ListTile(
+                                        title: Center(
+                                          child: Text(
+                                            '학생회',
+                                            style: TextStyle(
+                                              fontWeight: categoryType == 'KSA'
+                                                  ? FontWeight.bold
+                                                  : FontWeight.normal,
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          setState(() {
+                                            categoryType = 'KSA'; // 선택한 항목 설정
+                                            categoryName = '학생회';
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            backgroundColor: Colors.transparent,
+                          ),
                         ),
                         const SizedBox(
                           height: 32.0,
                         ),
                         TextFormField(
+                          onChanged: (value) {
+                            setState(() {
+                              title = value;
+                            });
+                          },
                           decoration: const InputDecoration.collapsed(
                             hintText: "제목을 입력하세요",
                             hintStyle: TextStyle(
@@ -118,6 +288,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: TextFormField(
+                      onChanged: (value) {
+                        setState(() {
+                          content = value;
+                        });
+                      },
                       maxLines: null,
                       decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -224,17 +399,25 @@ class _AddPostScreenState extends State<AddPostScreen> {
   }
 
   void selectImages() async {
-    final List<XFile> selectedImages = await imagePicker.pickMultiImage();
-    if (selectedImages.isNotEmpty) {
+    final List<XFile> files = await imagePicker.pickMultiImage();
+    // FilePickerResult? result =
+    //     await FilePicker.platform.pickFiles(allowMultiple: true);
+    if (files.isNotEmpty) {
+      // 파일 경로를 통해 formData 생성
+      List<MultipartFile> selectedImages = List.generate(files.length,
+          (index) => MultipartFile.fromFileSync(files[index].path));
+
       setState(() {
         imageFileList = selectedImages;
+        imagePreviewFileList = files;
       });
     }
   }
 
   Widget selectedImageCard(int index) {
     Image currentImage = Image.file(
-      File(imageFileList[index].path),
+      File(imagePreviewFileList[index].path),
+      // File(imageFileList[index]),
       fit: BoxFit.cover,
     );
     return ClipRRect(

@@ -10,6 +10,7 @@ import 'package:mingle/common/const/data.dart';
 import 'package:mingle/common/view/splash_screen.dart';
 import 'package:mingle/dio/dio.dart';
 import 'package:mingle/secure_storage/secure_storage.dart';
+import 'package:mingle/user/view/home_screen/home_root_tab.dart';
 import 'package:mingle/user/view/home_screen/home_tab_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:mingle/user/view/signup_screen/select_country_screen.dart';
@@ -64,11 +65,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           print(resp.data);
           final refreshToken = resp.data['refreshToken'];
           final accessToken = resp.data['accessToken'];
-          final storage = ref.read(secureStorageProvider);
+          // final storage = ref.read(secureStorageProvider);
           await storage.write(key: REFRESH_TOKEN_KEY, value: refreshToken);
           await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
           await Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => const HomeTabScreen()));
+              .push(MaterialPageRoute(builder: (_) => const HomeRootTab()));
         } else {
           String? error;
           print(resp.data['code']);

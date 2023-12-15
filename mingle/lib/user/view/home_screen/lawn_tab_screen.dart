@@ -1,5 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:mingle/common/component/post_preview_card.dart';
+import 'package:mingle/common/component/general_post_preview_card.dart';
+// import 'package:mingle/common/component/post_preview_card.dart';
+import 'package:mingle/common/const/data.dart';
+import 'package:mingle/dio/dio.dart';
+import 'package:mingle/post/models/post_model.dart';
+import 'package:mingle/post/repository/post_repository.dart';
 import 'package:mingle/user/view/home_screen/tab_screen.dart';
 
 class LawnTabScreen extends StatelessWidget {
@@ -18,6 +24,18 @@ class LawnTabScreen extends StatelessWidget {
     };
   });
 
+  Future<List<PostModel>> paginatePost(String categoryType) async {
+    final dio = Dio();
+
+    dio.interceptors.add(CustomInterceptor(storage: storage));
+
+    final repository =
+        await PostRepository(dio, baseUrl: "https://$baseUrl/post")
+            .paginate(boardType: "TOTAL", categoryType: categoryType);
+
+    return repository.data;
+  }
+
   @override
   Widget build(BuildContext context) {
     return TabScreen(
@@ -28,20 +46,24 @@ class LawnTabScreen extends StatelessWidget {
       tab3: '질문',
       tab4: '학생회',
       tabContents: [
-        PostPreviewCard(
-          postList: dummyPostList,
+        GeneralPostPreviewCard(
+          // postList: dummyPostList,
+          postFuture: paginatePost("MINGLE"),
           cardType: CardType.square,
         ),
-        PostPreviewCard(
-          postList: dummyPostList,
+        GeneralPostPreviewCard(
+          // postList: dummyPostList,
+          postFuture: paginatePost("FREE"),
           cardType: CardType.square,
         ),
-        PostPreviewCard(
-          postList: dummyPostList,
+        GeneralPostPreviewCard(
+          // postList: dummyPostList,
+          postFuture: paginatePost("QNA"),
           cardType: CardType.square,
         ),
-        PostPreviewCard(
-          postList: dummyPostList,
+        GeneralPostPreviewCard(
+          // postList: dummyPostList,
+          postFuture: paginatePost("KSA"),
           cardType: CardType.square,
         ),
       ],

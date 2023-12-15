@@ -6,7 +6,7 @@ import 'package:mingle/secure_storage/secure_storage.dart';
 
 final dioProvider = Provider((ref) {
   final dio = Dio();
-  final storage = ref.watch(secureStorageProvider);
+  // final storage = ref.watch(secureStorageProvider);
   dio.interceptors.add(CustomInterceptor(storage: storage));
   return dio;
 });
@@ -23,7 +23,8 @@ class CustomInterceptor extends Interceptor {
       options.headers.remove('accessToken');
       final token = await storage.read(key: ACCESS_TOKEN_KEY);
       print(token);
-      options.headers.addAll({'authorization': 'Bearer $token'});
+      // options.headers.addAll({'authorization': 'Bearer $token'});
+      options.headers.addAll({'authorization': 'Bearer mingle-user'});
     }
     super.onRequest(options, handler);
   }

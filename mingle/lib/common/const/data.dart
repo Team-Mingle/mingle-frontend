@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 const ACCESS_TOKEN_KEY = 'ACCESS_TOKEN';
 const REFRESH_TOKEN_KEY = 'REFRESH_TOKEN';
 // const emulatorIp = '10.0.2.2:3000';
@@ -29,3 +31,5 @@ final List<String> HONG_KONG_EMAIL_LIST = ['홍콩이메일1', '홍콩이메일2
 final List<String> SINGAPORE_EMAIL_LIST = ['싱가포르이메일1', 'gmail.com', '싱가포르이메일3'];
 
 final List<String> ENGLAND_EMAIL_LIST = ['영국이메일1', '영국이메일2', '영국이메일3'];
+
+const storage = FlutterSecureStorage();
