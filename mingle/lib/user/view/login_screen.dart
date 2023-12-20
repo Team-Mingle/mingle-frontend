@@ -65,7 +65,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           print(resp.data);
           final refreshToken = resp.data['refreshToken'];
           final accessToken = resp.data['accessToken'];
-          // final storage = ref.read(secureStorageProvider);
+          final storage = ref.read(secureStorageProvider);
           await storage.write(key: REFRESH_TOKEN_KEY, value: refreshToken);
           await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
           await Navigator.of(context)

@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mingle/common/component/general_post_preview_card.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/model/cursor_pagination_model.dart';
+import 'package:mingle/post/models/post_model.dart';
+import 'package:mingle/post/repository/post_repository.dart';
 
-class SearchScreen extends StatefulWidget {
+class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({
     Key? key,
   }) : super(key: key);
 
   @override
-  _SearchScreenState createState() => _SearchScreenState();
+  ConsumerState<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen>
+class _SearchScreenState extends ConsumerState<SearchScreen>
     with SingleTickerProviderStateMixin {
   final TextEditingController _searchController = TextEditingController();
   late TabController _tabController;
+  Future<CursorPagination<PostModel>>? searchFuture;
 
   @override
   void initState() {
@@ -63,6 +69,13 @@ class _SearchScreenState extends State<SearchScreen>
               ),
               child: Center(
                 child: TextField(
+                  onEditingComplete: () {
+                    setState(() {
+                      searchFuture = ref
+                          .watch(postRepositoryProvider)
+                          .search(keyword: _searchController.text);
+                    });
+                  },
                   controller: _searchController,
                   decoration: const InputDecoration(
                     hintText: '검색어를 입력하세요 왤케 아래에 있지...',
@@ -131,9 +144,28 @@ class _SearchScreenState extends State<SearchScreen>
             Expanded(
               child: TabBarView(
                 controller: _tabController,
-                children: const [
-                  Center(child: Text('탭 1 콘텐츠')),
-                  Center(child: Text('탭 2 콘텐츠')),
+                children: [
+                  searchFuture == null
+                      ? const Center(child: Text('탭 1 콘텐츠'))
+                      : FutureBuilder(
+                          future: searchFuture,
+                          builder: (context,
+                              AsyncSnapshot<CursorPagination<PostModel>>
+                                  snapshot) {
+                            if (!snapshot.hasData) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                            List<PostModel> postList = snapshot.data!.data;
+                            return GeneralPostPreviewCard(
+                              // postList: dummyPostList,
+                              postList: postList,
+                              // postFuture: paginatePost("MINGLE", ref),
+
+                              cardType: CardType.square,
+                            );
+                          }),
+                  const Center(child: Text('탭 2 콘텐츠')),
                 ],
               ),
             ),

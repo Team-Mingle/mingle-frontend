@@ -454,8 +454,8 @@ class _SecondHandPostDetailScreenState
                                           thickness: 0.0,
                                         )
                                       : Container(),
-                                  const CommentCard(
-                                      comment: "comment\ncomment\ncomment")
+                                  // const CommentCard(
+                                  //     comment: "comment\ncomment\ncomment")
                                 ],
                               ),
                             ),
@@ -469,7 +469,9 @@ class _SecondHandPostDetailScreenState
             ),
             bottomNavigationBar: Container(height: 56.0),
           ),
-          bottomSheet: const AnonymousTextfield(),
+          bottomSheet: AnonymousTextfield(
+            handleSubmit: () {},
+          ),
         ),
       ),
     );

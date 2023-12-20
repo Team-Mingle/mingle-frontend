@@ -6,6 +6,7 @@ import 'package:mingle/user/view/home_screen/search_screen.dart';
 
 class TabScreen extends StatelessWidget {
   final List<Widget> tabContents;
+  final String boardType;
   final String title;
   final String subtitle;
   final String tab1;
@@ -22,6 +23,7 @@ class TabScreen extends StatelessWidget {
     required this.tab3,
     required this.tab4,
     Key? key,
+    required this.boardType,
   }) : super(key: key);
 
   @override
@@ -145,8 +147,10 @@ class TabScreen extends StatelessWidget {
               right: 16.0,
               bottom: 16.0,
               child: FloatingActionButton(
-                onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const AddPostScreen())),
+                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => AddPostScreen(
+                          boardType: boardType,
+                        ))),
                 backgroundColor: PRIMARY_COLOR_ORANGE_02,
                 child: const Icon(
                   Icons.add,

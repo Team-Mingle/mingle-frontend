@@ -31,5 +31,3 @@ final List<String> HONG_KONG_EMAIL_LIST = ['홍콩이메일1', '홍콩이메일2
 final List<String> SINGAPORE_EMAIL_LIST = ['싱가포르이메일1', 'gmail.com', '싱가포르이메일3'];
 
 final List<String> ENGLAND_EMAIL_LIST = ['영국이메일1', '영국이메일2', '영국이메일3'];
-
-const storage = FlutterSecureStorage();

@@ -21,6 +21,7 @@ class SquareTabScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TabScreen(
+      boardType: 'TOTAL',
       title: '광장',
       subtitle: '모든 학교의 학생들이 모인',
       tab1: '전체글',

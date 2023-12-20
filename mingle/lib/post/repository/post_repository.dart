@@ -1,11 +1,21 @@
 import 'package:dio/dio.dart' hide Headers;
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mingle/common/const/data.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
-import 'package:mingle/post/models/add_post_model.dart';
+import 'package:mingle/dio/dio.dart';
+import 'package:mingle/post/models/category_model.dart';
+import 'package:mingle/post/models/comment_model.dart';
+import 'package:mingle/post/models/post_detail_model.dart';
 import 'package:mingle/post/models/post_model.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'post_repository.g.dart';
+
+final postRepositoryProvider = Provider((ref) {
+  final dio = ref.watch(dioProvider);
+  final postRepository = PostRepository(dio, baseUrl: "https://$baseUrl/post");
+  return postRepository;
+});
 
 @RestApi()
 abstract class PostRepository {
@@ -27,8 +37,60 @@ abstract class PostRepository {
     @Part(name: "content") required String content,
     @Part(name: "categoryType") required String categoryType,
     @Part(name: "isAnonymous") required bool isAnonymous,
-    // @Part(name: "multipartFile") List<MultipartFile>? multipartFile,
+    @Part(name: "multipartFile") List<MultipartFile>? multipartFile,
   });
+
+  @GET('/{postId}')
+  @Headers({'accessToken': 'true'})
+  Future<PostDetailModel> getPostDetails({@Path() required int postId});
+
+  @GET('/{postId}/comment')
+  @Headers({'accessToken': 'true'})
+  Future<List<CommentModel>> getPostcomments({@Path() required int postId});
+
+  @POST('/like/{postId}')
+  @Headers({'accessToken': 'true'})
+  Future<dynamic> likePost({@Path() required int postId});
+
+  // @POST('/like/delete/{postId}')
+  // @Headers({'accessToken': 'true'})
+  // Future<dynamic> unlikePost({@Path() required int postId});
+
+  @GET('/category')
+  @Headers({'accessToken': 'true'})
+  Future<List<CategoryModel>> fetchCategories();
+
+  @GET('/search')
+  @Headers({'accessToken': 'true'})
+  Future<CursorPagination<PostModel>> search(
+      {@Query("keyword") required String keyword});
+
+  @DELETE('/delete/{postId}')
+  @Headers({'accessToken': 'true'})
+  Future<dynamic> deletePost({@Path() required int postId});
+
+  @PATCH('/{postId}')
+  @Headers({'accessToken': 'true'})
+  @MultiPart()
+  Future<dynamic> editPost({
+    @Path() required int postId,
+    // @Body() required FormData addPostModel,
+    @Part(name: "title") required String title,
+    @Part(name: "content") required String content,
+    @Part(name: "categoryType") required String categoryType,
+    @Part(name: "anonymous") required bool isAnonymous,
+    @Part(name: "multipartFile") List<MultipartFile>? multipartFile,
+  });
+
+  @GET('/{boardType}/recent')
+  @Headers({'accessToken': 'true'})
+  Future<CursorPagination<PostModel>> paginateRecent({
+    @Path() required String boardType,
+  });
+
+  @GET('/best')
+  @Headers({'accessToken': 'true'})
+  Future<CursorPagination<PostModel>> paginateBest();
 
   // factory RestaurantRepository(Dio dio, {String baseUrl}) =
   //     _RestaurantRepository;

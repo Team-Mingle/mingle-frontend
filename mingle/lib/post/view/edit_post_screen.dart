@@ -6,30 +6,41 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mingle/common/const/colors.dart';
-import 'package:mingle/dio/dio.dart';
-import 'package:mingle/post/models/add_post_model.dart';
 import 'package:mingle/post/models/category_model.dart';
 import 'package:mingle/post/provider/post_provider.dart';
 import 'package:mingle/post/repository/post_repository.dart';
 
-class AddPostScreen extends ConsumerStatefulWidget {
+class EditPostScreen extends ConsumerStatefulWidget {
   final String boardType;
-  const AddPostScreen({super.key, required this.boardType});
+  final int postId;
+  String title;
+  String content;
+  String categoryType;
+  String categoryName;
+  bool isAnonymous;
+  List<String> postImgUrl;
+  final Function refreshPost;
+  EditPostScreen({
+    super.key,
+    required this.postId,
+    required this.boardType,
+    required this.title,
+    required this.content,
+    required this.categoryType,
+    required this.categoryName,
+    required this.isAnonymous,
+    required this.postImgUrl,
+    required this.refreshPost,
+  });
 
   @override
-  ConsumerState<AddPostScreen> createState() => _AddPostScreenState();
+  ConsumerState<EditPostScreen> createState() => _EditPostScreenState();
 }
 
-class _AddPostScreenState extends ConsumerState<AddPostScreen> {
+class _EditPostScreenState extends ConsumerState<EditPostScreen> {
   final ImagePicker imagePicker = ImagePicker();
   List<MultipartFile> imageFileList = [];
   List<XFile> imagePreviewFileList = [];
-  bool isAnonymous = true;
-  String title = "";
-  String content = "";
-  // String boardType = widget.boardType;
-  String categoryType = "";
-  String categoryName = "";
 
   @override
   void initState() {
@@ -37,11 +48,6 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
   }
 
   void handleSubmit(WidgetRef ref) async {
-    AddPostModel addPostModel = AddPostModel(
-        title: title,
-        content: content,
-        categoryType: categoryType,
-        isAnonymous: isAnonymous);
     // print(title);
     // print(content);
     // print(boardType);
@@ -49,20 +55,20 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
     // print(isAnonymous);
     // print(imageFileList);
 
-    final response = await ref.watch(postRepositoryProvider).addPost(
-          boardType: widget.boardType,
+    final response = await ref.watch(postRepositoryProvider).editPost(
+          postId: widget.postId,
           // addPostModel: FormData.fromMap(
           //     {...addPostModel.toJson(), "multipartFile": imageFileList})
           //  addPostModel.toJson(),
           // multipartFile: imageFileList,
 
-          title: addPostModel.title,
-          content: addPostModel.content,
-          categoryType: addPostModel.categoryType,
-          isAnonymous: addPostModel.isAnonymous,
+          title: widget.title,
+          content: widget.content,
+          categoryType: widget.categoryType,
+          isAnonymous: widget.isAnonymous,
           multipartFile: imageFileList,
         );
-    switch (categoryType) {
+    switch (widget.categoryType) {
       case 'FREE':
         widget.boardType == 'TOTAL'
             ? ref.watch(totalFreePostProvider.notifier).paginate()
@@ -79,15 +85,16 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
     widget.boardType == 'TOTAL'
         ? ref.watch(totalAllPostProvider.notifier).paginate()
         : ref.watch(univAllPostProvider.notifier).paginate();
-
+    await widget.refreshPost();
     Navigator.of(context).pop();
     // print(response);
   }
 
   @override
   Widget build(BuildContext context) {
-    bool canSubmit =
-        title.isNotEmpty && content.isNotEmpty && categoryType.isNotEmpty;
+    bool canSubmit = widget.title.isNotEmpty &&
+        widget.content.isNotEmpty &&
+        widget.categoryType.isNotEmpty;
 
     List<CategoryModel> categories = ref.watch(postCategoryProvider);
     return Scaffold(
@@ -152,9 +159,9 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
                         GestureDetector(
                           child: Row(
                             children: [
-                              Text(categoryName.isEmpty
+                              Text(widget.categoryName.isEmpty
                                   ? "게시판 이름"
-                                  : categoryName),
+                                  : widget.categoryName),
                               const SizedBox(
                                 width: 10.0,
                               ),
@@ -198,7 +205,8 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
                                                 currentName,
                                                 style: TextStyle(
                                                   fontWeight:
-                                                      categoryType == 'FREE'
+                                                      widget.categoryType ==
+                                                              'FREE'
                                                           ? FontWeight.bold
                                                           : FontWeight.normal,
                                                 ),
@@ -207,9 +215,9 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
                                             onTap: () {
                                               Navigator.pop(context);
                                               setState(() {
-                                                categoryType =
+                                                widget.categoryType =
                                                     currentModel.categoryName;
-                                                categoryName =
+                                                widget.categoryName =
                                                     currentName; // 선택한 항목 설정
                                               });
                                             },
@@ -319,9 +327,10 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
                           height: 32.0,
                         ),
                         TextFormField(
+                          initialValue: widget.title,
                           onChanged: (value) {
                             setState(() {
-                              title = value;
+                              widget.title = value;
                             });
                           },
                           decoration: const InputDecoration.collapsed(
@@ -349,9 +358,10 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
                     child: TextFormField(
                       onChanged: (value) {
                         setState(() {
-                          content = value;
+                          widget.content = value;
                         });
                       },
+                      initialValue: widget.content,
                       maxLines: null,
                       decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -419,7 +429,7 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
                   InkWell(
                     onTap: () {
                       setState(() {
-                        isAnonymous = !isAnonymous;
+                        widget.isAnonymous = !widget.isAnonymous;
                       });
                     },
                     child: Row(children: [
@@ -428,7 +438,7 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
                         style: TextStyle(
                             fontSize: 12.0,
                             fontWeight: FontWeight.w600,
-                            color: isAnonymous
+                            color: widget.isAnonymous
                                 ? PRIMARY_COLOR_ORANGE_02
                                 : Colors.black),
                       ),
@@ -439,7 +449,7 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
                           height: 8.0,
                           width: 6.0,
                           colorFilter: ColorFilter.mode(
-                              isAnonymous
+                              widget.isAnonymous
                                   ? PRIMARY_COLOR_ORANGE_02
                                   : Colors.black,
                               BlendMode.srcIn)),

@@ -90,11 +90,11 @@ class PostPreviewCard extends StatelessWidget {
                         ),
                       );
                     } else {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const PostDetailScreen(),
-                        ),
-                      );
+                      // Navigator.of(context).push(
+                      //   MaterialPageRoute(
+                      //     builder: (_) => const PostDetailScreen(),
+                      //   ),
+                      // );
                     }
                   },
                   child: Padding(
