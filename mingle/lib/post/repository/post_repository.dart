@@ -2,6 +2,7 @@ import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
+import 'package:mingle/common/model/pagination_params.dart';
 import 'package:mingle/dio/dio.dart';
 import 'package:mingle/post/models/category_model.dart';
 import 'package:mingle/post/models/comment_model.dart';
@@ -23,9 +24,11 @@ abstract class PostRepository {
 
   @GET('/{boardType}/{categoryType}')
   @Headers({'accessToken': 'true'})
-  Future<CursorPagination<PostModel>> paginate(
-      {@Path() required String boardType,
-      @Path() required String categoryType});
+  Future<CursorPagination<PostModel>> paginate({
+    @Path() required String boardType,
+    @Path() required String categoryType,
+    @Queries() PaginationParams? paginationParams = const PaginationParams(),
+  });
 
   @POST('/{boardType}')
   @Headers({'accessToken': 'true'})

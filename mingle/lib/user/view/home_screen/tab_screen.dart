@@ -137,10 +137,9 @@ class TabScreen extends StatelessWidget {
           children: [
             TabBarView(
               physics: const AlwaysScrollableScrollPhysics(),
+              // physics: ,
               children: tabContents.map((tabContent) {
-                return SingleChildScrollView(
-                  child: tabContent,
-                );
+                return tabContent;
               }).toList(),
             ),
             Positioned(

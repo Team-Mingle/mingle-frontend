@@ -10,12 +10,12 @@ import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.da
 
 enum CardType { home, square, lawn }
 
-class GeneralPostPreviewCard extends StatelessWidget {
+class GeneralPostPreviewCard extends ConsumerStatefulWidget {
   // final List<Map<String, String>> postList;
 
   // final Future<List<PostModel>> postFuture;
 
-  final List<PostModel> postList;
+  final CursorPaginationBase data;
   final CardType cardType;
   final PostStateNotifier? notifierProvider;
   final PostStateNotifier? allNotifierProvider;
@@ -24,14 +24,38 @@ class GeneralPostPreviewCard extends StatelessWidget {
     // required this.postList,
     required this.cardType,
     Key? key,
-    required this.postList,
+    required this.data,
     this.notifierProvider,
     this.allNotifierProvider,
     // required this.postFuture,
   }) : super(key: key);
 
+  @override
+  ConsumerState<GeneralPostPreviewCard> createState() =>
+      _GeneralPostPreviewCardState();
+}
+
+class _GeneralPostPreviewCardState
+    extends ConsumerState<GeneralPostPreviewCard> {
+  final ScrollController scrollController = ScrollController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    scrollController.addListener(scrollListener);
+  }
+
+  void scrollListener() {
+    // 현재 위치가 현재 길이보다 조금 덜되는 위치까지 왔다면 새로운 데이터를 추가요청
+    if (scrollController.offset >
+        scrollController.position.maxScrollExtent - 300) {
+      widget.notifierProvider!.paginate(fetchMore: true);
+    }
+  }
+
   int getMaxLines() {
-    switch (cardType) {
+    switch (widget.cardType) {
       case CardType.home:
         return 1;
       case CardType.square:
@@ -42,13 +66,13 @@ class GeneralPostPreviewCard extends StatelessWidget {
   }
 
   void refreshList() {
-    notifierProvider!.paginate();
-    allNotifierProvider!.paginate();
+    widget.notifierProvider!.paginate();
+    widget.allNotifierProvider!.paginate();
   }
 
   Widget buildDivider(double height) {
-    final verticalMargin = cardType == CardType.home ? 10.0 : 8.0;
-    final horizontalPadding = (cardType == CardType.home ? 12.0 : 8.0);
+    final verticalMargin = widget.cardType == CardType.home ? 10.0 : 8.0;
+    final horizontalPadding = (widget.cardType == CardType.home ? 12.0 : 8.0);
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
@@ -62,17 +86,33 @@ class GeneralPostPreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.data is CursorPaginationLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    if (widget.data is CursorPaginationError) {
+      CursorPaginationError error = widget.data as CursorPaginationError;
+      return Center(
+        child: Text(error.message),
+      );
+    }
+
+    final postList = widget.data as CursorPagination;
+    print(postList.data.length);
     return Container(
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
         ),
         child: ListView.builder(
+          controller: scrollController,
           shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: postList.length,
+          // physics: const NeverScrollableScrollPhysics(),
+          itemCount: postList.data.length,
           itemBuilder: (context, index) {
-            final post = postList[index];
+            final post = postList.data[index];
 
             return Column(
               children: [
@@ -80,7 +120,7 @@ class GeneralPostPreviewCard extends StatelessWidget {
                 if (index == 0)
                   SizedBox(
                     height: (() {
-                      switch (cardType) {
+                      switch (widget.cardType) {
                         case CardType.home:
                           return 20.0;
 
@@ -229,8 +269,8 @@ class GeneralPostPreviewCard extends StatelessWidget {
                   ),
                 ),
 
-                if (index != postList.length - 1) buildDivider(1.0),
-                if (index == postList.length - 1)
+                if (index != postList.data.length - 1) buildDivider(1.0),
+                if (index == postList.data.length - 1)
                   const SizedBox(
                     height: 20.0,
                   ),

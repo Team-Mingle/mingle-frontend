@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mingle/common/component/general_post_preview_card.dart';
 // import 'package:mingle/common/component/post_preview_card.dart';
 import 'package:mingle/common/const/data.dart';
+import 'package:mingle/common/model/cursor_pagination_model.dart';
 import 'package:mingle/dio/dio.dart';
 import 'package:mingle/post/models/post_model.dart';
 import 'package:mingle/post/provider/post_provider.dart';
@@ -50,28 +51,28 @@ class LawnTabScreen extends ConsumerWidget {
       tabContents: [
         GeneralPostPreviewCard(
           // postList: dummyPostList,
-          postList: ref.watch(univAllPostProvider),
+          data: ref.watch(univAllPostProvider),
           notifierProvider: ref.watch(univFreePostProvider.notifier),
           allNotifierProvider: ref.watch(univAllPostProvider.notifier),
           // postFuture: paginatePost("MINGLE", ref),
           cardType: CardType.square,
         ),
         GeneralPostPreviewCard(
-          postList: ref.watch(univFreePostProvider),
+          data: ref.watch(univFreePostProvider),
           // postFuture: paginatePost("FREE", ref),
           notifierProvider: ref.watch(univFreePostProvider.notifier),
           allNotifierProvider: ref.watch(univAllPostProvider.notifier),
           cardType: CardType.square,
         ),
         GeneralPostPreviewCard(
-          postList: ref.watch(univQnAPostProvider),
+          data: ref.watch(univQnAPostProvider),
           // postFuture: paginatePost("QNA", ref),
           notifierProvider: ref.watch(univQnAPostProvider.notifier),
           allNotifierProvider: ref.watch(univAllPostProvider.notifier),
           cardType: CardType.square,
         ),
         GeneralPostPreviewCard(
-          postList: ref.watch(univKsaPostProvider),
+          data: ref.watch(univKsaPostProvider),
           // postFuture: paginatePost("KSA", ref),
           notifierProvider: ref.watch(univKsaPostProvider.notifier),
           allNotifierProvider: ref.watch(univAllPostProvider.notifier),

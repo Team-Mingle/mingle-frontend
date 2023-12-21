@@ -156,10 +156,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen>
                               return const Center(
                                   child: CircularProgressIndicator());
                             }
-                            List<PostModel> postList = snapshot.data!.data;
+                            CursorPagination<PostModel> postList =
+                                snapshot.data!;
                             return GeneralPostPreviewCard(
                               // postList: dummyPostList,
-                              postList: postList,
+                              data: postList,
                               // postFuture: paginatePost("MINGLE", ref),
 
                               cardType: CardType.square,

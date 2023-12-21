@@ -5,6 +5,7 @@ import 'package:mingle/common/view/splash_screen.dart';
 import 'package:mingle/module/view/module_review_main_screen.dart';
 import 'package:mingle/user/view/app_start_screen.dart';
 import 'package:mingle/user/view/home_screen/home_root_tab.dart';
+import 'package:mingle/user/view/home_screen/home_tab_screen.dart';
 import 'package:mingle/user/view/login_screen.dart';
 import 'package:mingle/user/view/signup_screen/service_agreement_screen.dart';
 
