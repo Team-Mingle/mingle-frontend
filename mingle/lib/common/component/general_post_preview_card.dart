@@ -19,6 +19,7 @@ class GeneralPostPreviewCard extends ConsumerStatefulWidget {
   final CardType cardType;
   final PostStateNotifier? notifierProvider;
   final PostStateNotifier? allNotifierProvider;
+  final ProviderFamily<PostModel?, int>? postDetailProvider;
 
   const GeneralPostPreviewCard({
     // required this.postList,
@@ -27,6 +28,7 @@ class GeneralPostPreviewCard extends ConsumerStatefulWidget {
     required this.data,
     this.notifierProvider,
     this.allNotifierProvider,
+    this.postDetailProvider,
     // required this.postFuture,
   }) : super(key: key);
 
@@ -110,8 +112,18 @@ class _GeneralPostPreviewCardState
           controller: scrollController,
           shrinkWrap: true,
           // physics: const NeverScrollableScrollPhysics(),
-          itemCount: postList.data.length,
+          itemCount: postList.data.length + 1,
           itemBuilder: (context, index) {
+            if (index == postList.data.length) {
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: Center(
+                    child: postList is CursorPaginationFetchingMore
+                        ? const CircularProgressIndicator()
+                        : const Text('마지막 데이터입니다 ㅠㅠ')),
+              );
+            }
             final post = postList.data[index];
 
             return Column(
@@ -136,7 +148,11 @@ class _GeneralPostPreviewCardState
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => PostDetailScreen(
-                            postId: post.postId, refreshList: refreshList),
+                          postId: post.postId,
+                          refreshList: refreshList,
+                          postDetailProvider: widget.postDetailProvider,
+                          notifierProvider: widget.notifierProvider,
+                        ),
                       ),
                     );
                   },

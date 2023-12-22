@@ -1,46 +1,34 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mingle/post/models/post_model.dart';
 
 part 'post_detail_model.g.dart';
 
 @JsonSerializable()
-class PostDetailModel {
-  final int postId;
-  final String title;
-  final String content;
-  final String nickname;
-  final String createdAt;
-  final String memberRole;
-  final String status;
-  final String boardType;
-  final String categoryType;
-  int likeCount;
-  int commentCount;
-  int viewCount;
+class PostDetailModel extends PostModel {
   int scrapCount;
   final List<String> postImgUrl;
-  final bool fileAttached;
-  final bool blinded;
+  final String status;
   final bool myPost;
   bool liked;
   bool scraped;
 
   PostDetailModel(
-      {required this.postId,
-      required this.title,
-      required this.content,
-      required this.nickname,
-      required this.createdAt,
-      required this.memberRole,
+      {required super.postId,
+      required super.title,
+      required super.content,
+      required super.nickname,
+      required super.createdAt,
+      required super.memberRole,
       required this.status,
-      required this.boardType,
-      required this.categoryType,
-      required this.likeCount,
-      required this.commentCount,
-      required this.viewCount,
+      required super.boardType,
+      required super.categoryType,
+      required super.likeCount,
+      required super.commentCount,
+      required super.viewCount,
       required this.scrapCount,
       required this.postImgUrl,
-      required this.fileAttached,
-      required this.blinded,
+      required super.fileAttached,
+      required super.blinded,
       required this.myPost,
       required this.liked,
       required this.scraped});

@@ -26,7 +26,7 @@ abstract class CommentRepository {
   @Headers({'accessToken': 'true'})
   Future<dynamic> likeComment({@Path() required int commentId});
 
-  @PATCH('/like/delete/{commentId}')
+  @DELETE('/like/delete/{commentId}')
   @Headers({'accessToken': 'true'})
   Future<dynamic> unlikeComment({@Path() required int commentId});
 

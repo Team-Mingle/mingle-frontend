@@ -5,15 +5,15 @@ part 'post_model.g.dart';
 @JsonSerializable()
 class PostModel {
   final int postId;
-  final String title;
-  final String content;
+  String title;
+  String content;
   final String nickname;
   final String createdAt;
   final String boardType;
-  final String categoryType;
+  String categoryType;
   final String memberRole;
-  final int likeCount;
-  final int commentCount;
+  int likeCount;
+  int commentCount;
   final int viewCount;
   final bool fileAttached;
   final bool blinded;

@@ -81,7 +81,7 @@ class _CommentRepository implements CommentRepository {
     _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
-      method: 'PATCH',
+      method: 'DELETE',
       headers: _headers,
       extra: _extra,
     )

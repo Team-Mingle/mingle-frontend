@@ -54,6 +54,7 @@ class LawnTabScreen extends ConsumerWidget {
           data: ref.watch(univAllPostProvider),
           notifierProvider: ref.watch(univFreePostProvider.notifier),
           allNotifierProvider: ref.watch(univAllPostProvider.notifier),
+          postDetailProvider: univFreePostDetailProvider,
           // postFuture: paginatePost("MINGLE", ref),
           cardType: CardType.square,
         ),
@@ -62,6 +63,7 @@ class LawnTabScreen extends ConsumerWidget {
           // postFuture: paginatePost("FREE", ref),
           notifierProvider: ref.watch(univFreePostProvider.notifier),
           allNotifierProvider: ref.watch(univAllPostProvider.notifier),
+          postDetailProvider: univFreePostDetailProvider,
           cardType: CardType.square,
         ),
         GeneralPostPreviewCard(
@@ -69,6 +71,7 @@ class LawnTabScreen extends ConsumerWidget {
           // postFuture: paginatePost("QNA", ref),
           notifierProvider: ref.watch(univQnAPostProvider.notifier),
           allNotifierProvider: ref.watch(univAllPostProvider.notifier),
+          postDetailProvider: univQnAPostDetailProvider,
           cardType: CardType.square,
         ),
         GeneralPostPreviewCard(
@@ -76,6 +79,7 @@ class LawnTabScreen extends ConsumerWidget {
           // postFuture: paginatePost("KSA", ref),
           notifierProvider: ref.watch(univKsaPostProvider.notifier),
           allNotifierProvider: ref.watch(univAllPostProvider.notifier),
+          postDetailProvider: univKsaPostDetailProvider,
           cardType: CardType.square,
         ),
       ],

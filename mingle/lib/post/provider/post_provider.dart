@@ -105,6 +105,109 @@ final univRecentPostProvider =
   return notifier;
 });
 
+final totalAllPostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
+  final state = ref.watch(totalAllPostProvider);
+
+  if (state is! CursorPagination) {
+    return null;
+  }
+
+  return state.data.firstWhere((e) => e.postId == id);
+});
+
+final totalFreePostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
+  final state = ref.watch(totalFreePostProvider);
+
+  if (state is! CursorPagination) {
+    return null;
+  }
+
+  return state.data.firstWhere((e) => e.postId == id);
+});
+
+final totalQnAPostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
+  final state = ref.watch(totalQnAPostProvider);
+
+  if (state is! CursorPagination) {
+    return null;
+  }
+
+  return state.data.firstWhere((e) => e.postId == id);
+});
+
+final totalMinglePostDetailProvider =
+    Provider.family<PostModel?, int>((ref, id) {
+  final state = ref.watch(totalMinglePostProvider);
+
+  if (state is! CursorPagination) {
+    return null;
+  }
+
+  return state.data.firstWhere((e) => e.postId == id);
+});
+
+final univAllPostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
+  final state = ref.watch(univAllPostProvider);
+
+  if (state is! CursorPagination) {
+    return null;
+  }
+
+  return state.data.firstWhere((e) => e.postId == id);
+});
+
+final univFreePostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
+  final state = ref.watch(univFreePostProvider);
+
+  if (state is! CursorPagination) {
+    return null;
+  }
+
+  return state.data.firstWhere((e) => e.postId == id);
+});
+
+final univQnAPostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
+  final state = ref.watch(univQnAPostProvider);
+
+  if (state is! CursorPagination) {
+    return null;
+  }
+
+  return state.data.firstWhere((e) => e.postId == id);
+});
+
+final univKsaPostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
+  final state = ref.watch(univKsaPostProvider);
+
+  if (state is! CursorPagination) {
+    return null;
+  }
+
+  return state.data.firstWhere((e) => e.postId == id);
+});
+
+final totalRecentPostDetailProvider =
+    Provider.family<PostModel?, int>((ref, id) {
+  final state = ref.watch(totalRecentPostProvider);
+
+  if (state is! CursorPagination) {
+    return null;
+  }
+
+  return state.data.firstWhere((e) => e.postId == id);
+});
+
+final univRecentPostDetailProvider =
+    Provider.family<PostModel?, int>((ref, id) {
+  final state = ref.watch(univRecentPostProvider);
+
+  if (state is! CursorPagination) {
+    return null;
+  }
+
+  return state.data.firstWhere((e) => e.postId == id);
+});
+
 class PostStateNotifier extends StateNotifier<CursorPaginationBase> {
   final PostRepository postRepository;
   final String boardType;
@@ -122,7 +225,7 @@ class PostStateNotifier extends StateNotifier<CursorPaginationBase> {
 
   //   state = resp.data;
   // }
-  paginate(
+  Future<void> paginate(
       {int fetchCount = 20,
       // true면 추가로 데이터 더 가져옴
       // false면 새로고침(현재 상태 덮어씌움)
@@ -210,6 +313,23 @@ class PostStateNotifier extends StateNotifier<CursorPaginationBase> {
       print(e);
       state = CursorPaginationError(message: '데이터를 가져오지 못했습니다');
     }
+  }
+
+  void getDetail({required int postId}) async {
+    if (state is! CursorPagination) {
+      await paginate();
+    }
+
+    if (state is! CursorPagination) {
+      return;
+    }
+
+    final pState = state as CursorPagination;
+    final resp = await postRepository.getPostDetails(postId: postId);
+    state = pState.copyWith(
+        data: pState.data
+            .map<PostModel>((e) => e.postId == postId ? resp : e)
+            .toList());
   }
 }
 
