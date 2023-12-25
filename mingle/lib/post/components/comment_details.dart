@@ -1,31 +1,42 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/component/like_animation.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/post/models/comment_model.dart';
+import 'package:mingle/post/repository/comment_repository.dart';
 
-class CommentDetails extends StatefulWidget {
+class CommentDetails extends ConsumerStatefulWidget {
   final CommentModel comment;
   final Function setParentAndMentionId;
   final int? parentCommentId;
   final Function likeOrUnlikeComment;
+  final Function refreshComments;
   const CommentDetails(
       {super.key,
       required this.comment,
       this.parentCommentId,
       required this.setParentAndMentionId,
-      required this.likeOrUnlikeComment});
+      required this.likeOrUnlikeComment,
+      required this.refreshComments});
 
   @override
-  State<CommentDetails> createState() => _CommentDetailsState();
+  ConsumerState<CommentDetails> createState() => _CommentDetailsState();
 }
 
-class _CommentDetailsState extends State<CommentDetails> {
+class _CommentDetailsState extends ConsumerState<CommentDetails> {
   @override
   Widget build(BuildContext context) {
     String createdDate = widget.comment.createdAt.split(" ")[0];
-    String createdTime = widget.comment.createdAt.splitMapJoin(" ")[1];
+    String createdTime = widget.comment.createdAt.split(" ")[1];
+
+    void deleteComment() async {
+      final resp = await ref
+          .watch(commentRepositoryProvider)
+          .deleteComment(commentId: widget.comment.commentId);
+      widget.refreshComments();
+    }
 
     return Column(mainAxisSize: MainAxisSize.min, children: [
       Row(
@@ -54,6 +65,7 @@ class _CommentDetailsState extends State<CommentDetails> {
                         widget.comment.myComment
                             ? CupertinoActionSheetAction(
                                 onPressed: () {
+                                  deleteComment();
                                   Navigator.pop(context);
                                 },
                                 isDestructiveAction: true,

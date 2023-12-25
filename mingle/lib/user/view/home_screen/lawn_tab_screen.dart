@@ -1,14 +1,8 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mingle/common/component/general_post_preview_card.dart';
 // import 'package:mingle/common/component/post_preview_card.dart';
-import 'package:mingle/common/const/data.dart';
-import 'package:mingle/common/model/cursor_pagination_model.dart';
-import 'package:mingle/dio/dio.dart';
-import 'package:mingle/post/models/post_model.dart';
 import 'package:mingle/post/provider/post_provider.dart';
-import 'package:mingle/post/repository/post_repository.dart';
 import 'package:mingle/user/view/home_screen/tab_screen.dart';
 
 class LawnTabScreen extends ConsumerWidget {
@@ -26,17 +20,6 @@ class LawnTabScreen extends ConsumerWidget {
       'commentCounts': '${5 + index}',
     };
   });
-
-  Future<List<PostModel>> paginatePost(
-      String categoryType, WidgetRef ref) async {
-    final dio = ref.watch(dioProvider);
-
-    final repository =
-        await PostRepository(dio, baseUrl: "https://$baseUrl/post")
-            .paginate(boardType: "TOTAL", categoryType: categoryType);
-
-    return repository.data;
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

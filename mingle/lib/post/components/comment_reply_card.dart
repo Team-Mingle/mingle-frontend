@@ -10,12 +10,14 @@ class CommentReplyCard extends StatelessWidget {
   final int parentCommentId;
   final Function setParentAndMentionId;
   final Function likeOrUnlikeComment;
+  final Function refreshComments;
   const CommentReplyCard(
       {super.key,
       required this.comment,
       required this.parentCommentId,
       required this.setParentAndMentionId,
-      required this.likeOrUnlikeComment});
+      required this.likeOrUnlikeComment,
+      required this.refreshComments});
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +45,7 @@ class CommentReplyCard extends StatelessWidget {
                 padding: const EdgeInsets.only(
                     top: 12.0, bottom: 12.0, left: 14.0, right: 8.0),
                 child: CommentDetails(
+                  refreshComments: refreshComments,
                   parentCommentId: parentCommentId,
                   setParentAndMentionId: setParentAndMentionId,
                   comment: comment,

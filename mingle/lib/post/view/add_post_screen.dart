@@ -61,24 +61,25 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
           categoryType: addPostModel.categoryType,
           isAnonymous: addPostModel.isAnonymous,
           multipartFile: imageFileList,
-        );
+        ) as Map<String, dynamic>;
+    final int postId = response['postId'];
     switch (categoryType) {
       case 'FREE':
         widget.boardType == 'TOTAL'
-            ? ref.watch(totalFreePostProvider.notifier).paginate()
-            : ref.watch(univFreePostProvider.notifier).paginate();
+            ? ref.watch(totalFreePostProvider.notifier).addPost(postId: postId)
+            : ref.watch(univFreePostProvider.notifier).addPost(postId: postId);
       case 'QNA':
         widget.boardType == 'TOTAL'
-            ? ref.watch(totalQnAPostProvider.notifier).paginate()
-            : ref.watch(univQnAPostProvider.notifier).paginate();
+            ? ref.watch(totalQnAPostProvider.notifier).addPost(postId: postId)
+            : ref.watch(univQnAPostProvider.notifier).addPost(postId: postId);
       case 'KSA':
-        ref.watch(univKsaPostProvider.notifier).paginate();
+        ref.watch(univKsaPostProvider.notifier).addPost(postId: postId);
       case 'MINGLE':
-        ref.watch(totalMinglePostProvider.notifier).paginate();
+        ref.watch(totalMinglePostProvider.notifier).addPost(postId: postId);
     }
     widget.boardType == 'TOTAL'
-        ? ref.watch(totalAllPostProvider.notifier).paginate()
-        : ref.watch(univAllPostProvider.notifier).paginate();
+        ? ref.watch(totalAllPostProvider.notifier).addPost(postId: postId)
+        : ref.watch(univAllPostProvider.notifier).addPost(postId: postId);
 
     Navigator.of(context).pop();
     // print(response);

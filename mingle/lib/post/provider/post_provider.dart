@@ -4,6 +4,8 @@ import 'package:mingle/common/model/pagination_params.dart';
 import 'package:mingle/post/models/category_model.dart';
 import 'package:mingle/post/models/post_model.dart';
 import 'package:mingle/post/repository/post_repository.dart';
+import 'package:retrofit/retrofit.dart';
+import 'package:collection/collection.dart';
 
 final totalAllPostProvider =
     StateNotifierProvider<PostStateNotifier, CursorPaginationBase>((ref) {
@@ -112,7 +114,7 @@ final totalAllPostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
     return null;
   }
 
-  return state.data.firstWhere((e) => e.postId == id);
+  return state.data.firstWhereOrNull((e) => e.postId == id);
 });
 
 final totalFreePostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
@@ -122,7 +124,7 @@ final totalFreePostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
     return null;
   }
 
-  return state.data.firstWhere((e) => e.postId == id);
+  return state.data.firstWhereOrNull((e) => e.postId == id);
 });
 
 final totalQnAPostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
@@ -132,7 +134,7 @@ final totalQnAPostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
     return null;
   }
 
-  return state.data.firstWhere((e) => e.postId == id);
+  return state.data.firstWhereOrNull((e) => e.postId == id);
 });
 
 final totalMinglePostDetailProvider =
@@ -143,7 +145,7 @@ final totalMinglePostDetailProvider =
     return null;
   }
 
-  return state.data.firstWhere((e) => e.postId == id);
+  return state.data.firstWhereOrNull((e) => e.postId == id);
 });
 
 final univAllPostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
@@ -153,7 +155,7 @@ final univAllPostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
     return null;
   }
 
-  return state.data.firstWhere((e) => e.postId == id);
+  return state.data.firstWhereOrNull((e) => e.postId == id);
 });
 
 final univFreePostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
@@ -163,7 +165,8 @@ final univFreePostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
     return null;
   }
 
-  return state.data.firstWhere((e) => e.postId == id);
+  return state.data.firstWhereOrNull((e) => e.postId == id);
+  // return state.data.firstOrNull((e) => e.postId == id);
 });
 
 final univQnAPostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
@@ -173,7 +176,7 @@ final univQnAPostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
     return null;
   }
 
-  return state.data.firstWhere((e) => e.postId == id);
+  return state.data.firstWhereOrNull((e) => e.postId == id);
 });
 
 final univKsaPostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
@@ -183,7 +186,7 @@ final univKsaPostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
     return null;
   }
 
-  return state.data.firstWhere((e) => e.postId == id);
+  return state.data.firstWhereOrNull((e) => e.postId == id);
 });
 
 final totalRecentPostDetailProvider =
@@ -194,7 +197,7 @@ final totalRecentPostDetailProvider =
     return null;
   }
 
-  return state.data.firstWhere((e) => e.postId == id);
+  return state.data.firstWhereOrNull((e) => e.postId == id);
 });
 
 final univRecentPostDetailProvider =
@@ -205,7 +208,7 @@ final univRecentPostDetailProvider =
     return null;
   }
 
-  return state.data.firstWhere((e) => e.postId == id);
+  return state.data.firstWhereOrNull((e) => e.postId == id);
 });
 
 class PostStateNotifier extends StateNotifier<CursorPaginationBase> {
@@ -285,6 +288,7 @@ class PostStateNotifier extends StateNotifier<CursorPaginationBase> {
           state =
               CursorPaginationRefetching(meta: pState.meta, data: pState.data);
         } else {
+          print("force refetching");
           state = CursorPaginationLoading();
         }
       }
@@ -326,10 +330,37 @@ class PostStateNotifier extends StateNotifier<CursorPaginationBase> {
 
     final pState = state as CursorPagination;
     final resp = await postRepository.getPostDetails(postId: postId);
+    print("likeCount: ${resp.likeCount}");
     state = pState.copyWith(
         data: pState.data
             .map<PostModel>((e) => e.postId == postId ? resp : e)
             .toList());
+  }
+
+  void addPost({required int postId}) async {
+    if (state is! CursorPagination) {
+      await paginate();
+    }
+
+    if (state is! CursorPagination) {
+      return;
+    }
+    final resp = await postRepository.getPostDetails(postId: postId);
+    final pState = state as CursorPagination;
+    state = pState.copyWith(data: <PostModel>[resp, ...pState.data]);
+  }
+
+  void deletePost({required int postId}) async {
+    if (state is! CursorPagination) {
+      await paginate();
+    }
+
+    if (state is! CursorPagination) {
+      return;
+    }
+    final pState = state as CursorPagination;
+    pState.data.removeWhere((e) => e.postId == postId);
+    state = pState.copyWith(data: pState.data);
   }
 }
 

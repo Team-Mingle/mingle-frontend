@@ -9,11 +9,13 @@ class CommentCard extends StatelessWidget {
   final CommentModel comment;
   final Function setParentAndMentionId;
   final Function likeOrUnlikeComment;
+  final Function refreshComments;
   const CommentCard(
       {super.key,
       required this.comment,
       required this.setParentAndMentionId,
-      required this.likeOrUnlikeComment});
+      required this.likeOrUnlikeComment,
+      required this.refreshComments});
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,7 @@ class CommentCard extends StatelessWidget {
             parentCommentId: comment.commentId,
             setParentAndMentionId: setParentAndMentionId,
             likeOrUnlikeComment: likeOrUnlikeComment,
+            refreshComments: refreshComments,
           ),
         ),
         Column(
@@ -38,6 +41,7 @@ class CommentCard extends StatelessWidget {
                   height: 12.0,
                 ),
                 CommentReplyCard(
+                  refreshComments: refreshComments,
                   likeOrUnlikeComment: likeOrUnlikeComment,
                   setParentAndMentionId: setParentAndMentionId,
                   parentCommentId: comment.commentId,

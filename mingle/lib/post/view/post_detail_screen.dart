@@ -19,6 +19,7 @@ import 'package:mingle/post/repository/comment_repository.dart';
 import 'package:mingle/post/repository/post_repository.dart';
 import 'package:mingle/post/view/edit_post_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class PostDetailScreen extends ConsumerStatefulWidget {
   final int postId;
@@ -39,8 +40,47 @@ class PostDetailScreen extends ConsumerStatefulWidget {
 class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
   int? parentCommentId;
   int? mentionId;
-  late Future<List<CommentModel>> commentFuture;
+  final PostDetailModel fakePost = PostDetailModel(
+      postId: 0,
+      title: "",
+      content: "",
+      nickname: "",
+      createdAt: "",
+      memberRole: "",
+      status: "",
+      boardType: "",
+      categoryType: "",
+      likeCount: 0,
+      commentCount: 0,
+      viewCount: 0,
+      scrapCount: 0,
+      postImgUrl: [],
+      fileAttached: false,
+      blinded: false,
+      myPost: false,
+      liked: false,
+      scraped: false);
+
+  final List<CommentModel> fakeComments = List.generate(
+      5,
+      (index) => CommentModel(
+          commentId: 0,
+          nickname: "",
+          content: "",
+          likeCount: 0,
+          createdAt: "a b",
+          coCommentsList: [],
+          liked: false,
+          myComment: false,
+          commentFromAuthor: false,
+          commentDeleted: false,
+          commentReported: false,
+          admin: false));
+  late Future<List<CommentModel>> commentFuture =
+      ref.watch(postRepositoryProvider).getPostcomments(postId: widget.postId);
   late Future<PostDetailModel> postFuture;
+
+  List<CommentModel>? comments;
 
   @override
   void initState() {
@@ -48,6 +88,17 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
     if (widget.notifierProvider != null) {
       widget.notifierProvider!.getDetail(postId: widget.postId);
     }
+    getComments().then((data) {
+      setState(() {
+        comments = data;
+      });
+    });
+  }
+
+  getComments() async {
+    return ref
+        .read(postRepositoryProvider)
+        .getPostcomments(postId: widget.postId);
   }
 
   void setParentCommentIdAndMentionId(int? parentId, int? mentId) {
@@ -72,21 +123,38 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
 
     final commentRepository = ref.watch(commentRepositoryProvider);
     await commentRepository.postComment(addCommentModel);
-    setState(() {
-      commentFuture = ref
-          .watch(postRepositoryProvider)
-          .getPostcomments(postId: widget.postId);
+    // setState(() {
+    //   commentFuture = ref
+    //       .watch(postRepositoryProvider)
+    //       .getPostcomments(postId: widget.postId);
+    // });
+    // widget.refreshList();
+    refreshComments();
+  }
+
+  void refreshComments() {
+    getComments().then((data) {
+      setState(() {
+        comments = data;
+      });
     });
-    widget.refreshList();
+    if (widget.notifierProvider != null) {
+      widget.notifierProvider!.getDetail(postId: widget.postId);
+    }
   }
 
   void refreshPost() async {
-    setState(() {
-      postFuture = ref
-          .watch(postRepositoryProvider)
-          .getPostDetails(postId: widget.postId);
-    });
-    widget.refreshList();
+    if (widget.notifierProvider != null) {
+      widget.notifierProvider!.getDetail(postId: widget.postId);
+    } else {
+      setState(() {
+        postFuture = ref
+            .watch(postRepositoryProvider)
+            .getPostDetails(postId: widget.postId);
+      });
+    }
+
+    // widget.refreshList();
   }
 
   void likeOrUnlikePost(bool isPostLiked) async {
@@ -99,12 +167,9 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
           .watch(postRepositoryProvider)
           .likePost(postId: widget.postId);
     }
-    // setState(() {
-    //   postFuture = ref
-    //       .watch(postRepositoryProvider)
-    //       .getPostDetails(postId: widget.postId);
-    // });
-    // widget.refreshList();
+    if (widget.notifierProvider != null) {
+      widget.notifierProvider!.getDetail(postId: widget.postId);
+    }
   }
 
   void likeOrUnlikeComment(int commentId, bool isCommentLiked) async {
@@ -143,19 +208,19 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
   // }
 
   void deletePost() async {
-    final resp = await ref
-        .watch(postRepositoryProvider)
-        .deletePost(postId: widget.postId);
-    widget.refreshList();
     Navigator.of(context).pop();
+    if (widget.notifierProvider != null) {
+      widget.notifierProvider!.deletePost(postId: widget.postId);
+    }
+
+    final resp =
+        ref.watch(postRepositoryProvider).deletePost(postId: widget.postId);
+
+    // widget.refreshList();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("id is $parentCommentId");
-    commentFuture = ref
-        .watch(postRepositoryProvider)
-        .getPostcomments(postId: widget.postId);
     // postFuture =
     //     ref.watch(postRepositoryProvider).getPostDetails(postId: widget.postId);
 
@@ -288,6 +353,12 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
           ],
         ),
         body: CustomScrollView(slivers: [
+          CupertinoSliverRefreshControl(
+            onRefresh: () async {
+              refreshPost();
+              refreshComments();
+            },
+          ),
           SliverList(
               delegate: SliverChildListDelegate([
             Padding(
@@ -387,9 +458,14 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                   height: 0.0,
                   color: GRAYSCALE_GRAY_01,
                 ),
-                if (post is PostDetailModel)
-                  LikeAndCommentNumbersCard(
-                      post: post, likeOrUnlikePost: likeOrUnlikePost),
+                post is PostDetailModel
+                    ? LikeAndCommentNumbersCard(
+                        post: post, likeOrUnlikePost: likeOrUnlikePost)
+                    : Skeletonizer(
+                        child: LikeAndCommentNumbersCard(
+                        post: fakePost,
+                        likeOrUnlikePost: () {},
+                      )),
                 const Divider(
                   height: 0.0,
                   thickness: 2.0,
@@ -440,17 +516,21 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                 const SizedBox(
                   height: 20.0,
                 ),
-                FutureBuilder(
-                    future: commentFuture,
-                    builder:
-                        (context, AsyncSnapshot<List<CommentModel>> snapshot) {
-                      if (!snapshot.hasData) {
-                        return const CircularProgressIndicator();
-                      }
-                      List<CommentModel> comments = snapshot.data!;
-                      return Column(
+                comments == null
+                    ? Skeletonizer(
+                        ignoreContainers: false,
+                        child: Column(
+                          children: List.generate(
+                              fakeComments.length,
+                              (index) => CommentCard(
+                                  refreshComments: refreshComments,
+                                  comment: fakeComments[index],
+                                  setParentAndMentionId: () {},
+                                  likeOrUnlikeComment: () {})),
+                        ))
+                    : Column(
                         children: List.generate(
-                          comments.length,
+                          comments!.length,
                           (index) => Column(
                             children: [
                               index > 0
@@ -460,15 +540,53 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                                     )
                                   : Container(),
                               CommentCard(
+                                  refreshComments: refreshComments,
                                   likeOrUnlikeComment: likeOrUnlikeComment,
-                                  comment: comments[index],
+                                  comment: comments![index],
                                   setParentAndMentionId:
                                       setParentCommentIdAndMentionId)
                             ],
                           ),
                         ),
-                      );
-                    })
+                      )
+                // FutureBuilder(
+                //     future: commentFuture,
+                //     builder:
+                //         (context, AsyncSnapshot<List<CommentModel>> snapshot) {
+                //       if (!snapshot.hasData) {
+                //   return Skeletonizer(
+                //       ignoreContainers: false,
+                //       child: Column(
+                //         children: List.generate(
+                //             fakeComments.length,
+                //             (index) => CommentCard(
+                //                 comment: fakeComments[index],
+                //                 setParentAndMentionId: () {},
+                //                 likeOrUnlikeComment: () {})),
+                //       ));
+                // }
+                //       List<CommentModel> comments = snapshot.data!;
+                //       return Column(
+                //         children: List.generate(
+                //           comments.length,
+                //           (index) => Column(
+                //             children: [
+                //               index > 0
+                //                   ? const Divider(
+                //                       height: 24.0,
+                //                       thickness: 0.0,
+                //                     )
+                //                   : Container(),
+                //               CommentCard(
+                //                   likeOrUnlikeComment: likeOrUnlikeComment,
+                //                   comment: comments[index],
+                //                   setParentAndMentionId:
+                //                       setParentCommentIdAndMentionId)
+                //             ],
+                //           ),
+                //         ),
+                //       );
+                //     })
               ],
             )
           ]))
