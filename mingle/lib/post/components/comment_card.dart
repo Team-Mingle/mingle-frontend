@@ -3,10 +3,19 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/post/components/comment_details.dart';
 import 'package:mingle/post/components/comment_reply_card.dart';
+import 'package:mingle/post/models/comment_model.dart';
 
 class CommentCard extends StatelessWidget {
-  final String comment;
-  const CommentCard({super.key, required this.comment});
+  final CommentModel comment;
+  final Function setParentAndMentionId;
+  final Function likeOrUnlikeComment;
+  final Function refreshComments;
+  const CommentCard(
+      {super.key,
+      required this.comment,
+      required this.setParentAndMentionId,
+      required this.likeOrUnlikeComment,
+      required this.refreshComments});
 
   @override
   Widget build(BuildContext context) {
@@ -15,17 +24,29 @@ class CommentCard extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: CommentDetails(comment: comment),
+          child: CommentDetails(
+            comment: comment,
+            parentCommentId: comment.commentId,
+            setParentAndMentionId: setParentAndMentionId,
+            likeOrUnlikeComment: likeOrUnlikeComment,
+            refreshComments: refreshComments,
+          ),
         ),
         Column(
           children: List.generate(
-            4,
-            (index) => const Column(
+            comment.coCommentsList!.length,
+            (index) => Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 12.0,
                 ),
-                CommentReplyCard(),
+                CommentReplyCard(
+                  refreshComments: refreshComments,
+                  likeOrUnlikeComment: likeOrUnlikeComment,
+                  setParentAndMentionId: setParentAndMentionId,
+                  parentCommentId: comment.commentId,
+                  comment: comment.coCommentsList![index],
+                ),
               ],
             ),
           ),

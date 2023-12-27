@@ -1,18 +1,13 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:mingle/common/component/countdown_timer.dart';
-import 'package:mingle/common/component/dropdown_list.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
-import 'package:mingle/common/const/data.dart';
 import 'package:mingle/user/view/my_page_screen/password_change_success_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
-import 'package:mingle/user/view/signup_screen/enter_email_screen.dart';
-import 'package:mingle/user/view/signup_screen/provider/country_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/provider/email_extension_selected_provider.dart';
-import 'package:mingle/user/view/signup_screen/provider/school_selected_provider.dart';
+import 'package:mingle/user/view/signup_screen/provider/password_selected_provider.dart';
+import 'package:mingle/user/view/signup_screen/provider/retype_password_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/service_agreement_screen.dart';
 
 class EnterPasswordScreen extends ConsumerStatefulWidget {
@@ -40,6 +35,12 @@ class _EnterPasswordScreenState extends ConsumerState<EnterPasswordScreen> {
                 color: GRAYSCALE_BLACK,
               ),
               onPressed: () {
+                ref
+                    .read(selectedPasswordProvider.notifier)
+                    .update((state) => "");
+                ref
+                    .read(selectedRetypePasswordProvider.notifier)
+                    .update((state) => "");
                 Navigator.pop(context);
               },
             ),
@@ -78,11 +79,16 @@ class _EnterPasswordScreenState extends ConsumerState<EnterPasswordScreen> {
             const SizedBox(
               height: 40,
             ),
-            const SizedBox(
+            SizedBox(
               height: 44,
               child: TextField(
                 obscureText: true,
-                decoration: InputDecoration(
+                onChanged: (password) {
+                  ref
+                      .read(selectedPasswordProvider.notifier)
+                      .update((state) => password);
+                },
+                decoration: const InputDecoration(
                     hintText: "영문, 숫자 포함 6자리 이상*",
                     hintStyle: TextStyle(color: GRAYSCALE_GRAY_02),
                     focusedBorder: UnderlineInputBorder(
@@ -94,11 +100,16 @@ class _EnterPasswordScreenState extends ConsumerState<EnterPasswordScreen> {
             const SizedBox(
               height: 33,
             ),
-            const SizedBox(
+            SizedBox(
               height: 44,
               child: TextField(
                 obscureText: true,
-                decoration: InputDecoration(
+                onChanged: (password) {
+                  ref
+                      .read(selectedRetypePasswordProvider.notifier)
+                      .update((state) => password);
+                },
+                decoration: const InputDecoration(
                     hintText: "비밀번호 재입력",
                     hintStyle: TextStyle(color: GRAYSCALE_GRAY_02),
                     focusedBorder: UnderlineInputBorder(
@@ -113,7 +124,10 @@ class _EnterPasswordScreenState extends ConsumerState<EnterPasswordScreen> {
                   ? const PasswordChangeSuccessScreen()
                   : const ServiceAgreementScreen(),
               buttonName: "다음으로",
-              isSelectedProvider: [selectedEmailExtensionProvider],
+              isSelectedProvider: [
+                selectedPasswordProvider,
+                selectedRetypePasswordProvider
+              ],
               isReplacement: widget.isPasswordReset,
             )
           ]),

@@ -3,7 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mingle/common/const/colors.dart';
 
 class AnonymousTextfield extends StatefulWidget {
-  const AnonymousTextfield({super.key});
+  final Function handleSubmit;
+  const AnonymousTextfield({super.key, required this.handleSubmit});
 
   @override
   State<AnonymousTextfield> createState() => _AnonymousTextfieldState();
@@ -67,21 +68,28 @@ class _AnonymousTextfieldState extends State<AnonymousTextfield> {
                   },
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: GRAYSCALE_GRAY_01_5,
-                    hintText: "닉네임 작성",
+
+                    fillColor: const Color(0xFFE9E7E7),
+                    // hintText: "닉네임 작성",
                     hintStyle: const TextStyle(
-                        color: GRAYSCALE_GRAY_03, fontSize: 11.0),
+                        color: Color(0xFFE9E7E7), fontSize: 11.0),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
-                      borderSide: const BorderSide(color: GRAYSCALE_GRAY_01_5),
+                      borderSide: const BorderSide(
+                        color: Color(0xFFE9E7E7),
+                      ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
-                      borderSide: const BorderSide(color: GRAYSCALE_GRAY_01_5),
+                      borderSide: const BorderSide(
+                        color: Color(0xFFE9E7E7),
+                      ),
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
-                      borderSide: const BorderSide(color: GRAYSCALE_GRAY_01_5),
+                      borderSide: const BorderSide(
+                        color: Color(0xFFE9E7E7),
+                      ),
                     ),
                   )),
             ),
@@ -92,7 +100,7 @@ class _AnonymousTextfieldState extends State<AnonymousTextfield> {
           InkWell(
             child:
                 SvgPicture.asset("assets/img/post_screen/paper_plane_icon.svg"),
-            onTap: () {},
+            onTap: () => widget.handleSubmit(text, isAnonymous),
           )
         ]),
       ),
