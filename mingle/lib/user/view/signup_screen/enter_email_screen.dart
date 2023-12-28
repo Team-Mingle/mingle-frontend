@@ -27,6 +27,7 @@ class EnterEmailScreen extends ConsumerStatefulWidget {
 
 class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
   String? errorMsg;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -44,43 +45,47 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
       };
       print(email);
       try {
+        setState(() {
+          isLoading = true;
+        });
         final resp = await dio.post(
-          'http://$baseUrl/auth/checkemail',
+          'https://$baseUrl/auth/verifyemail',
           options: Options(headers: {
             HttpHeaders.contentTypeHeader: "application/json",
           }),
           data: jsonEncode(email),
         );
-        if (resp.data['isSuccess']) {
+        print(resp.data['verified'] as bool == true);
+        if (resp.data['verified'] as bool) {
           print(resp.data);
-          await Navigator.of(context).push(MaterialPageRoute(
-              builder: (_) => const EnterVerificationNumberScreen()));
-          final sendCodeResp = dio.post(
-            'http://$baseUrl/auth/sendcode',
+          // final sendCodeResp =
+          await dio.post(
+            'https://$baseUrl/auth/sendcode',
             options: Options(headers: {
               HttpHeaders.contentTypeHeader: "application/json",
             }),
             data: jsonEncode(email),
           );
-          print(sendCodeResp);
+          // print(sendCodeResp);
+          setState(() {
+            isLoading = false;
+          });
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => const EnterVerificationNumberScreen()));
         } else {
           String? error;
           switch (resp.data['code']) {
-            case 2010:
-              error = "이메일을 입력해주세요.";
-            case 2011:
-              error = "이메일 형식을 확인해주세요.";
-            case 2012:
-              error = "이미 존재하는 이메일 주소입니다.";
-            case 3017:
-              error = "탈퇴한 사용자입니다.";
+            case "EMAIL_DUPLICATED":
+              error = resp.data['message'];
           }
           setState(() {
+            isLoading = false;
             errorMsg = error;
           });
         }
       } catch (e) {
         setState(() {
+          isLoading = false;
           errorMsg = generalErrorMsg;
         });
       }
@@ -217,7 +222,8 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
                 selectedEmailExtensionProvider,
                 selectedEmailProvider
               ],
-              validators: [validateForm],
+              // validators: [validateForm],
+              isLoading: isLoading,
             )
           ]),
         ),

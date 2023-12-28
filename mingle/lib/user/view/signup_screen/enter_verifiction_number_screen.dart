@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,12 @@ class EnterVerificationNumberScreen extends ConsumerStatefulWidget {
 class _EnterVerificationNumberScreenState
     extends ConsumerState<EnterVerificationNumberScreen> {
   String? errorMsg;
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,15 +49,22 @@ class _EnterVerificationNumberScreenState
       };
       print(email);
       try {
+        setState(() {
+          isLoading = true;
+        });
         final resp = await dio.post(
-          'http://$baseUrl/auth/checkcode',
+          'https://$baseUrl/auth/verifycode',
           options: Options(headers: {
             HttpHeaders.contentTypeHeader: "application/json",
           }),
           data: jsonEncode(email),
         );
-        if (resp.data['isSuccess']) {
+        print(resp.data);
+        if (resp.data['verified'] as bool) {
           print(resp.data);
+          setState(() {
+            isLoading = false;
+          });
           await Navigator.of(context).push(MaterialPageRoute(
               builder: (_) => EnterPasswordScreen(
                     isPasswordReset: widget.isPasswordReset,
@@ -58,15 +72,17 @@ class _EnterVerificationNumberScreenState
         } else {
           String? error;
           switch (resp.data['code']) {
-            case 2013:
-              error = "인증번호가 일치하지 않습니다.";
+            case "CODE_MATCH_FAILED":
+              error = resp.data['message'];
           }
           setState(() {
+            isLoading = false;
             errorMsg = error;
           });
         }
-      } catch (e) {
+      } on DioException {
         setState(() {
+          isLoading = false;
           errorMsg = generalErrorMsg;
         });
       }
@@ -215,7 +231,8 @@ class _EnterVerificationNumberScreenState
               ),
               buttonName: "다음으로",
               isSelectedProvider: [enteredVerificationNumberProvider],
-              validators: [validateForm],
+              // validators: [validateForm],
+              isLoading: isLoading,
             )
           ]),
         ),
