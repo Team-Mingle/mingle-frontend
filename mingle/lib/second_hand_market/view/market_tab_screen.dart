@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/component/post_preview_card.dart';
 import 'package:mingle/common/const/colors.dart';
-import 'package:mingle/second_hand_market/add_second_hand_post_screen.dart';
+import 'package:mingle/second_hand_market/view/add_second_hand_post_screen.dart';
 import 'package:mingle/user/view/home_screen/home_tab_screen.dart';
 import 'package:mingle/user/view/home_screen/search_screen.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';

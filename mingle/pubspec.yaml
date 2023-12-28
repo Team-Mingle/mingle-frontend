@@ -50,6 +50,9 @@ dependencies:
   logger: any
   file_picker: ^6.1.1
   skeletonizer: ^0.8.0
+  show_up_animation: ^2.0.0
+  fluttertoast: ^8.2.2
+  linked_scroll_controller: ^0.2.0
 
 dev_dependencies:
   flutter_test:
@@ -80,11 +83,16 @@ flutter:
     - assets/img/signup_screen/
     - assets/img/home_screen/
     - assets/img/root_screen/
+    - assets/img/root_screen/ic_timetable_unselected.svg
+    # - assets/img/root_screen/
+    # - assets/img/root_screen/
     - assets/img/common/
     - assets/img/my_page_screen/
     - assets/img/post_screen/
     - assets/img/second_hand_market_screen/
     - assets/img/module_review_screen/
+    - assets/img/module_review_screen/right_tick_icon.svg
+    - assets/img/timetable_screen/
 
   fonts:
     - family: Pretendard

@@ -169,6 +169,7 @@ class _SelectNicknameScreenState extends ConsumerState<SelectNicknameScreen> {
                         borderSide: BorderSide(color: PRIMARY_COLOR_ORANGE_01)),
                     border: const UnderlineInputBorder(
                         borderSide: BorderSide(color: GRAYSCALE_GRAY_03))),
+                maxLength: 10,
               ),
             ),
             Expanded(
