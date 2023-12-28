@@ -1,24 +1,95 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/component/countdown_timer.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/const/data.dart';
+import 'package:mingle/dio/dio.dart';
 import 'package:mingle/user/view/login_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:mingle/user/view/signup_screen/enter_password_screen.dart';
+import 'package:mingle/user/view/signup_screen/provider/email_extension_selected_provider.dart';
+import 'package:mingle/user/view/signup_screen/provider/email_selected_provider.dart';
+import 'package:mingle/user/view/signup_screen/provider/nickname_selected_provider.dart';
+import 'package:mingle/user/view/signup_screen/provider/password_selected_provider.dart';
 
-class SelectNicknameScreen extends StatefulWidget {
+class SelectNicknameScreen extends ConsumerStatefulWidget {
   const SelectNicknameScreen({super.key});
 
   @override
-  State<SelectNicknameScreen> createState() => _SelectNicknameScreenState();
+  ConsumerState<SelectNicknameScreen> createState() =>
+      _SelectNicknameScreenState();
 }
 
-class _SelectNicknameScreenState extends State<SelectNicknameScreen> {
-  String currentNickname = "";
+class _SelectNicknameScreenState extends ConsumerState<SelectNicknameScreen> {
+  bool isLoading = false;
+  String? errorMsg;
   @override
   void initState() {
     super.initState();
+  }
+
+  void validateForm() async {
+    final dio = ref.watch(dioProvider);
+    final userInfo = {
+      "univId": 1,
+      "email":
+          "${ref.read(selectedEmailProvider)}@${ref.read(selectedEmailExtensionProvider)}",
+      "password": ref.read(selectedPasswordProvider),
+      "nickname": ref.read(selectedNicknameProvider)
+    };
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      final resp = await dio.post(
+        'https://$baseUrl/auth/verifyemail',
+        options: Options(headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+        }),
+        data: jsonEncode(userInfo),
+      );
+      print(resp.data['verified'] as bool == true);
+      if (resp.data['verified'] as bool) {
+        print(resp.data);
+        // final sendCodeResp =
+        await dio.post(
+          'https://$baseUrl/auth/sign-up',
+          options: Options(headers: {
+            HttpHeaders.contentTypeHeader: "application/json",
+          }),
+          data: jsonEncode(userInfo),
+        );
+        // print(sendCodeResp);
+        setState(() {
+          isLoading = false;
+        });
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (_) => const LoginScreen()));
+      } else {
+        String? error;
+        switch (resp.data['code']) {
+          case "CODE_MATCH_FAILED":
+            error = resp.data['message'];
+          case "CODE_VALIDITY_EXPIRED":
+            error = resp.data['message'];
+        }
+        setState(() {
+          isLoading = false;
+          errorMsg = error;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+        errorMsg = generalErrorMsg;
+      });
+    }
   }
 
   @override
@@ -84,14 +155,15 @@ class _SelectNicknameScreenState extends State<SelectNicknameScreen> {
               // width: 144,
               height: 44,
               child: TextFormField(
-                onChanged: (value) {
-                  setState(() {
-                    currentNickname = value;
-                  });
+                onChanged: (nickname) {
+                  ref
+                      .read(selectedNicknameProvider.notifier)
+                      .update((state) => nickname);
                 },
                 decoration: InputDecoration(
                     hintText: "닉네임 작성",
-                    suffix: Text("${currentNickname.length}/10"),
+                    suffix: Text(
+                        "${ref.watch(selectedNicknameProvider).length}/10"),
                     hintStyle: const TextStyle(color: GRAYSCALE_GRAY_02),
                     focusedBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: PRIMARY_COLOR_ORANGE_01)),
@@ -104,9 +176,10 @@ class _SelectNicknameScreenState extends State<SelectNicknameScreen> {
               child: Container(),
             ),
             NextButton(
-              nextScreen: const LoginScreen(),
+              validators: [validateForm],
               buttonName: "다음으로",
               isReplacement: true,
+              isSelectedProvider: [selectedNicknameProvider],
             )
           ]),
         ),

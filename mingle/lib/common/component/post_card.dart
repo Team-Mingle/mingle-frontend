@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mingle/common/component/general_post_preview_card.dart';
 import 'package:mingle/common/component/post_preview_card.dart';
 import 'package:mingle/common/const/colors.dart';
 
@@ -77,10 +78,10 @@ class PostCard extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12.0),
-        PostPreviewCard(
-          postList: dummyPostList,
-          cardType: CardType.home,
-        ),
+        // GeneralPostPreviewCard(
+        //   postList: ,
+        //   cardType: CardType.home,
+        // ),
       ],
     );
   }

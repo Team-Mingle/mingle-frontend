@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 const ACCESS_TOKEN_KEY = 'ACCESS_TOKEN';
 const REFRESH_TOKEN_KEY = 'REFRESH_TOKEN';
 // const emulatorIp = '10.0.2.2:3000';
@@ -9,8 +11,8 @@ const REFRESH_TOKEN_KEY = 'REFRESH_TOKEN';
 
 // const ip = "https://86f3-180-229-116-251.ngrok-free.app/";
 
-const baseUrl =
-    "alb-mingle-api-prod-588023566.ap-northeast-2.elb.amazonaws.com:9000";
+const baseUrl = "dev.api.mingle.community";
+//  "dev.api.mingle.community";
 const generalErrorMsg = "다시 시도해 주세요.";
 final List<String> COUNTRY_LIST = [
   '홍콩',
