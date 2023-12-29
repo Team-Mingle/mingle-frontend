@@ -552,6 +552,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.7.1"
+  linked_scroll_controller:
+    dependency: "direct main"
+    description:
+      name: linked_scroll_controller
+      sha256: e6020062bcf4ffc907ee7fd090fa971e65d8dfaac3c62baf601a3ced0b37986a
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   lints:
     dependency: transitive
     description:
@@ -784,6 +792,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  show_up_animation:
+    dependency: "direct main"
+    description:
+      name: show_up_animation
+      sha256: a9a891d156e817c025dade1ce5f07ee65e71957314d248c8ddffc2108d69dc80
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   skeletonizer:
     dependency: "direct main"
     description:

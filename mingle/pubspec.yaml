@@ -53,6 +53,9 @@ dependencies:
   logger: any
   file_picker: ^6.1.1
   skeletonizer: ^0.8.0
+  show_up_animation: ^2.0.0
+  fluttertoast: ^8.2.2
+  linked_scroll_controller: ^0.2.0
 
 dev_dependencies:
   flutter_test:

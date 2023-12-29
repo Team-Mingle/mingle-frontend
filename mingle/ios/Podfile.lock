@@ -49,6 +49,7 @@ PODS:
     - SDWebImage/Core (= 5.18.7)
   - SDWebImage/Core (5.18.7)
   - SwiftyGif (5.4.4)
+  - Toast (4.0.0)
   - url_launcher_ios (0.0.1):
     - Flutter
 
@@ -68,6 +69,7 @@ SPEC REPOS:
     - DKPhotoGallery
     - SDWebImage
     - SwiftyGif
+    - Toast
 
 EXTERNAL SOURCES:
   file_picker:
@@ -97,8 +99,11 @@ SPEC CHECKSUMS:
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   SDWebImage: f9258c58221ed854cfa0e2b80ee4033710b1c6d3
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
+  SDWebImage: f9258c58221ed854cfa0e2b80ee4033710b1c6d3
+  SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
+  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher_ios: bf5ce03e0e2088bad9cc378ea97fa0ed5b49673b
 
 PODFILE CHECKSUM: 70d9d25280d0dd177a5f637cdb0f0b0b12c6a189
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.0
