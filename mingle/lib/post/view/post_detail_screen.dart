@@ -26,12 +26,14 @@ class PostDetailScreen extends ConsumerStatefulWidget {
   final Function refreshList;
   final ProviderFamily<PostModel?, int>? postDetailProvider;
   final PostStateNotifier? notifierProvider;
+  final PostStateNotifier? allNotifierProvider;
   const PostDetailScreen(
       {super.key,
       required this.postId,
       required this.refreshList,
       this.postDetailProvider,
-      this.notifierProvider});
+      this.notifierProvider,
+      this.allNotifierProvider});
 
   @override
   ConsumerState<PostDetailScreen> createState() => _PostDetailScreenState();
@@ -140,12 +142,14 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
     });
     if (widget.notifierProvider != null) {
       widget.notifierProvider!.getDetail(postId: widget.postId);
+      widget.allNotifierProvider!.getDetail(postId: widget.postId);
     }
   }
 
   void refreshPost() async {
     if (widget.notifierProvider != null) {
       widget.notifierProvider!.getDetail(postId: widget.postId);
+      widget.allNotifierProvider!.getDetail(postId: widget.postId);
     } else {
       setState(() {
         postFuture = ref
@@ -157,32 +161,21 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
     // widget.refreshList();
   }
 
-  void likeOrUnlikePost(bool isPostLiked) async {
-    if (isPostLiked) {
-      final resp = await ref
-          .watch(postRepositoryProvider)
-          .unlikePost(postId: widget.postId);
-    } else {
-      final resp = await ref
-          .watch(postRepositoryProvider)
-          .likePost(postId: widget.postId);
-    }
+  void likeOrUnlikePost() async {
+    final resp = await ref
+        .watch(postRepositoryProvider)
+        .likeOrUnlikePost(postId: widget.postId);
+
     if (widget.notifierProvider != null) {
       widget.notifierProvider!.getDetail(postId: widget.postId);
+      widget.allNotifierProvider!.getDetail(postId: widget.postId);
     }
   }
 
-  void likeOrUnlikeComment(int commentId, bool isCommentLiked) async {
-    print(commentId);
-    if (isCommentLiked) {
-      final resp = await ref
-          .watch(commentRepositoryProvider)
-          .unlikeComment(commentId: commentId);
-    } else {
-      final resp = await ref
-          .watch(commentRepositoryProvider)
-          .likeComment(commentId: commentId);
-    }
+  void likeOrUnlikeComment(int commentId) async {
+    final resp = await ref
+        .watch(commentRepositoryProvider)
+        .likeOrUnlikeComment(commentId: commentId);
     // setState(() {
     //   commentFuture = ref
     //       .watch(postRepositoryProvider)

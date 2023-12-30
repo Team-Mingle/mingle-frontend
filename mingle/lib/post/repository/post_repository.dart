@@ -53,11 +53,7 @@ abstract class PostRepository {
 
   @POST('/like/{postId}')
   @Headers({'accessToken': 'true'})
-  Future<dynamic> likePost({@Path() required int postId});
-
-  @DELETE('/like/delete/{postId}')
-  @Headers({'accessToken': 'true'})
-  Future<dynamic> unlikePost({@Path() required int postId});
+  Future<dynamic> likeOrUnlikePost({@Path() required int postId});
 
   @GET('/category')
   @Headers({'accessToken': 'true'})

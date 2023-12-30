@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'comment_repository.dart';
+part of 'timetable_repository.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'comment_repository.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _CommentRepository implements CommentRepository {
-  _CommentRepository(
+class _TimetableRepository implements TimetableRepository {
+  _TimetableRepository(
     this._dio, {
     this.baseUrl,
   });
@@ -19,13 +19,15 @@ class _CommentRepository implements CommentRepository {
   String? baseUrl;
 
   @override
-  Future<dynamic> postComment(AddCommentModel addCommentModel) async {
+  Future<dynamic> addCourse({
+    required int timetableId,
+    required AddClassDto addClassDto,
+  }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
-    final _data = <String, dynamic>{};
-    _data.addAll(addCommentModel.toJson());
+    final _data = addClassDto;
     final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
       method: 'POST',
       headers: _headers,
@@ -33,7 +35,7 @@ class _CommentRepository implements CommentRepository {
     )
         .compose(
           _dio.options,
-          '',
+          '/${timetableId}/course',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -47,20 +49,20 @@ class _CommentRepository implements CommentRepository {
   }
 
   @override
-  Future<dynamic> likeOrUnlikeComment({required int commentId}) async {
+  Future<void> pinTimetable({required int timetableId}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
-    const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+    final Map<String, dynamic>? _data = null;
+    await _dio.fetch<void>(_setStreamType<void>(Options(
       method: 'PATCH',
       headers: _headers,
       extra: _extra,
     )
         .compose(
           _dio.options,
-          '/like/${commentId}',
+          '/${timetableId}/pin',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -69,34 +71,64 @@ class _CommentRepository implements CommentRepository {
           _dio.options.baseUrl,
           baseUrl,
         ))));
-    final value = _result.data;
-    return value;
   }
 
   @override
-  Future<dynamic> deleteComment({required int commentId}) async {
+  Future<TimetableModel> getTimeTable({required int timetableId}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
-    const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<TimetableModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/${timetableId}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = TimetableModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<TimetableModel> deleteCourse({
+    required int timetableId,
+    required int courseId,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<TimetableModel>(Options(
       method: 'DELETE',
       headers: _headers,
       extra: _extra,
     )
-        .compose(
-          _dio.options,
-          '/delete/${commentId}',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        ))));
-    final value = _result.data;
+            .compose(
+              _dio.options,
+              '${timetableId}/course/${courseId}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = TimetableModel.fromJson(_result.data!);
     return value;
   }
 

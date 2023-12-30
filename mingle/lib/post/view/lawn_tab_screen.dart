@@ -35,9 +35,9 @@ class LawnTabScreen extends ConsumerWidget {
         GeneralPostPreviewCard(
           // postList: dummyPostList,
           data: ref.watch(univAllPostProvider),
-          notifierProvider: ref.watch(univFreePostProvider.notifier),
+          notifierProvider: ref.watch(univAllPostProvider.notifier),
           allNotifierProvider: ref.watch(univAllPostProvider.notifier),
-          postDetailProvider: univFreePostDetailProvider,
+          postDetailProvider: univAllPostDetailProvider,
           // postFuture: paginatePost("MINGLE", ref),
           cardType: CardType.square,
         ),

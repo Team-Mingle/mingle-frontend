@@ -123,8 +123,7 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
           const Spacer(),
           GestureDetector(
             onTap: () {
-              // widget.likeOrUnlikeComment(
-              //     widget.comment.commentId, widget.comment.liked);
+              widget.likeOrUnlikeComment(widget.comment.commentId);
               if (widget.comment.liked) {
                 setState(() {
                   widget.comment.likeCount -= 1;

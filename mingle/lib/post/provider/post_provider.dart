@@ -371,7 +371,7 @@ class TotalAllPostStateNotifier extends PostStateNotifier {
       : super(
             postRepository: postRepository,
             boardType: 'TOTAL',
-            categoryType: 'FREE');
+            categoryType: 'all');
 }
 
 class TotalFreePostStateNotifier extends PostStateNotifier {
@@ -411,7 +411,7 @@ class UnivAllPostStateNotifier extends PostStateNotifier {
       : super(
             postRepository: postRepository,
             boardType: 'UNIV',
-            categoryType: 'FREE');
+            categoryType: 'all');
 }
 
 class UnivFreePostStateNotifier extends PostStateNotifier {

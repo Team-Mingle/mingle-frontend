@@ -58,7 +58,6 @@ class _LikeAndCommentNumbersCardState extends State<LikeAndCommentNumbersCard> {
           Expanded(child: Container()),
           GestureDetector(
             onTap: () async {
-              bool likeStatus = widget.post.liked;
               if (widget.post.liked) {
                 setState(() {
                   widget.post.likeCount--;
@@ -70,7 +69,7 @@ class _LikeAndCommentNumbersCardState extends State<LikeAndCommentNumbersCard> {
                   widget.post.liked = true;
                 });
               }
-              await widget.likeOrUnlikePost(likeStatus);
+              await widget.likeOrUnlikePost();
             },
             child: LikeAnimation(
               isAnimating: widget.post.liked,

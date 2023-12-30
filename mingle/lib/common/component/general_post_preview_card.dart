@@ -123,7 +123,11 @@ class _GeneralPostPreviewCardState
               slivers: [
                 CupertinoSliverRefreshControl(
                   onRefresh: () async {
-                    await widget.notifierProvider!.paginate(forceRefetch: true);
+                    await Future.delayed(
+                        const Duration(milliseconds: 1000),
+                        () => widget.notifierProvider!
+                            .paginate(forceRefetch: true));
+                    // await widget.notifierProvider!.paginate(forceRefetch: true);
                   },
                 ),
                 SliverList(
@@ -172,6 +176,8 @@ class _GeneralPostPreviewCardState
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (_) => PostDetailScreen(
+                                    allNotifierProvider:
+                                        widget.allNotifierProvider,
                                     postId: post.postId,
                                     refreshList: refreshList,
                                     postDetailProvider:
