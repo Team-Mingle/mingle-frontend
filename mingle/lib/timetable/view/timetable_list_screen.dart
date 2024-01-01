@@ -1,15 +1,27 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/timetable/components/add_new_timetable_widget.dart';
 import 'package:mingle/timetable/components/timetable_list.dart';
+import 'package:mingle/timetable/model/timetable_list_preview_model.dart';
+import 'package:mingle/timetable/repository/timetable_repository.dart';
 import 'package:mingle/timetable/view/self_add_timetable_screen.dart';
 
 class MyTimeTableListScreen extends ConsumerWidget {
   const MyTimeTableListScreen({
     Key? key,
   }) : super(key: key);
+
+  Future<TimetableListPreviewModel> getTimetablePreview() async {
+    final dio = Dio();
+
+    final repository =
+        TimetablePreviewRepository(dio, baseUrl: 'https://$ip/timetable');
+
+    return repository;
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -4,22 +4,21 @@ import 'package:mingle/common/const/data.dart';
 import 'package:mingle/dio/dio.dart';
 import 'package:mingle/post/repository/post_repository.dart';
 import 'package:retrofit/http.dart';
+import 'package:retrofit/retrofit.dart';
 
-final timetableRepositoryProvider = Provider((ref) {
-  final dio = ref.watch(dioProvider);
-  final timetableRepository = timetableRepository(dio, baseUrl: "https://$baseUrl");
-  return timetableRepository;
-});
- 
+part 'timetable_repository.g.dart';
 
+// final timetableRepositoryProvider = Provider((ref) {
+//   final dio = ref.watch(dioProvider);
+//   final timetableRepository = timetableRepository(dio, baseUrl: "https://$baseUrl");
+//   return timetableRepository;
+// });
 
-// @RestApi()
-// abstract class PostRepository {
-//   // factory PostRepository(Dio dio, {String baseUrl}) = _timetableRepository;
+@RestApi()
+abstract class TimetablePreviewRepository {
+  factory TimetablePreviewRepository(Dio dio, {String baseUrl}) = _TimetablePreviewRepository;
 
-//   // @GET('')
-//   // @Headers({'accessToken': 'true'})
-  
-// }
-
-
+  // 'https://baseUrl/timetable/'
+  @GET('/')
+  Future<TimetableListPreviewModel> getTimetablePreview();
+}
