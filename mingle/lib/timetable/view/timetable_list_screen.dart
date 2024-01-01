@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/timetable/components/add_new_timetable_widget.dart';
 import 'package:mingle/timetable/components/timetable_list.dart';
 import 'package:mingle/timetable/view/self_add_timetable_screen.dart';
 
-class MyTimeTableListScreen extends StatelessWidget {
+class MyTimeTableListScreen extends ConsumerWidget {
   const MyTimeTableListScreen({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: SafeArea(
         child: Scaffold(
