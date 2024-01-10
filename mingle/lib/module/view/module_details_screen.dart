@@ -3,11 +3,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/component/expanded_section.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/module/components/module_review_card.dart';
+import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/module/util/module_satisfaction_enum.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
 class ModuleDetailsScreen extends StatefulWidget {
-  const ModuleDetailsScreen({super.key});
+  final CourseModel? course;
+  const ModuleDetailsScreen({super.key, this.course});
 
   @override
   State<ModuleDetailsScreen> createState() => _ModuleDetailsScreenState();

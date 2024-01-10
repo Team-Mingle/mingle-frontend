@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/module/components/module_review_card.dart';
+import 'package:mingle/module/view/module_review_main_screen.dart';
 import 'package:mingle/user/view/home_screen/home_root_tab.dart';
 import 'package:mingle/user/view/home_screen/home_root_tab.dart';
+import 'package:mingle/user/view/signup_screen/select_nickname_screen.dart';
 
 void main() {
   runApp(const _App());

@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/component/general_post_preview_card.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/model/cursor_pagination_model.dart';
 import 'package:mingle/post/provider/post_provider.dart';
 
 class PostCard extends ConsumerWidget {
   final String title;
+  final CursorPaginationBase data;
 
   final dummyPostList = [
     {
@@ -46,6 +48,7 @@ class PostCard extends ConsumerWidget {
   ];
 
   PostCard({
+    required this.data,
     required this.title,
     Key? key,
   }) : super(key: key);
@@ -80,7 +83,7 @@ class PostCard extends ConsumerWidget {
         ),
         const SizedBox(height: 12.0),
         GeneralPostPreviewCard(
-          data: ref.watch(univRecentPostProvider),
+          data: data,
           cardType: CardType.home,
         ),
       ],

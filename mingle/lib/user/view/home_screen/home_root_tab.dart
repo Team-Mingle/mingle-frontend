@@ -53,6 +53,9 @@ class _HomeRootTabState extends State<HomeRootTab> {
   Widget _getSelectedScreen(int selectedIndex) {
     switch (selectedIndex) {
       case 0:
+        // Navigator.of(context)
+        //     .push(MaterialPageRoute(builder: (_) => const HomeTabScreen()));
+
         return const HomeTabScreen();
       case 1:
         return SquareTabScreen();

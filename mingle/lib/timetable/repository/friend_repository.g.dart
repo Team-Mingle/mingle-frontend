@@ -1,6 +1,20 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'comment_repository.dart';
+part of 'friend_repository.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+GenerateCodeDto _$GenerateCodeDtoFromJson(Map<String, dynamic> json) =>
+    GenerateCodeDto(
+      myDisplayName: json['myDisplayName'] as String,
+    );
+
+Map<String, dynamic> _$GenerateCodeDtoToJson(GenerateCodeDto instance) =>
+    <String, dynamic>{
+      'myDisplayName': instance.myDisplayName,
+    };
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +22,8 @@ part of 'comment_repository.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _CommentRepository implements CommentRepository {
-  _CommentRepository(
+class _FriendRepository implements FriendRepository {
+  _FriendRepository(
     this._dio, {
     this.baseUrl,
   });
@@ -19,13 +33,12 @@ class _CommentRepository implements CommentRepository {
   String? baseUrl;
 
   @override
-  Future<dynamic> postComment(AddCommentModel addCommentModel) async {
+  Future<dynamic> addFriend(AddFriendDto addFriendDto) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
-    final _data = <String, dynamic>{};
-    _data.addAll(addCommentModel.toJson());
+    final _data = addFriendDto;
     final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
       method: 'POST',
       headers: _headers,
@@ -33,7 +46,7 @@ class _CommentRepository implements CommentRepository {
     )
         .compose(
           _dio.options,
-          '',
+          '/create',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -47,47 +60,48 @@ class _CommentRepository implements CommentRepository {
   }
 
   @override
-  Future<dynamic> likeOrUnlikeComment({required int commentId}) async {
+  Future<CodeModel> generateCode(GenerateCodeDto generateCodeDto) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
-    final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
-      method: 'PATCH',
+    final _data = generateCodeDto;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<CodeModel>(Options(
+      method: 'POST',
       headers: _headers,
       extra: _extra,
     )
-        .compose(
-          _dio.options,
-          '/like/${commentId}',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        ))));
-    final value = _result.data;
+            .compose(
+              _dio.options,
+              '/code',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = CodeModel.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<dynamic> deleteComment({required int commentId}) async {
+  Future<String> getDefaultName() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
-    final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
-      method: 'DELETE',
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
+      method: 'GET',
       headers: _headers,
       extra: _extra,
     )
         .compose(
           _dio.options,
-          '/delete/${commentId}',
+          '/display-name',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -96,7 +110,7 @@ class _CommentRepository implements CommentRepository {
           _dio.options.baseUrl,
           baseUrl,
         ))));
-    final value = _result.data;
+    final value = _result.data!;
     return value;
   }
 

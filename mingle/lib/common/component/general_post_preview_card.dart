@@ -117,7 +117,9 @@ class _GeneralPostPreviewCardState
           child: CustomScrollView(
               controller: scrollController,
               shrinkWrap: true,
-              physics: const AlwaysScrollableScrollPhysics(),
+              physics: widget.cardType == CardType.home
+                  ? const NeverScrollableScrollPhysics()
+                  : const AlwaysScrollableScrollPhysics(),
 
               // physics: const NeverScrollableScrollPhysics(),
               slivers: [
@@ -142,15 +144,16 @@ class _GeneralPostPreviewCardState
                     (context, index) {
                       if (index == postList.data.length) {
                         return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 8.0),
-                          child: Center(
-                              child: postList is CursorPaginationFetchingMore
-                                  ? const CircularProgressIndicator(
-                                      color: PRIMARY_COLOR_ORANGE_02,
-                                    )
-                                  : const Text('마지막 데이터입니다 ㅠㅠ')),
-                        );
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0, vertical: 8.0),
+                            child: Center(
+                                child: postList is CursorPaginationFetchingMore
+                                    ? const CircularProgressIndicator(
+                                        color: PRIMARY_COLOR_ORANGE_02,
+                                      )
+                                    : Container())
+                            // const Text('마지막 데이터입니다 ㅠㅠ')),
+                            );
                       }
                       final post = postList.data[index];
 

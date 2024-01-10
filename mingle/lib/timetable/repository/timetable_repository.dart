@@ -7,7 +7,7 @@ import 'package:retrofit/retrofit.dart';
 
 part 'timetable_repository.g.dart';
 
-final postRepositoryProvider = Provider((ref) {
+final timetableRepositoryProvider = Provider((ref) {
   final dio = ref.watch(dioProvider);
   final timetableRepository =
       TimetableRepository(dio, baseUrl: "https://$baseUrl/timetable");

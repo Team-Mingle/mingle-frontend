@@ -107,6 +107,15 @@ final univRecentPostProvider =
   return notifier;
 });
 
+final bestPostProvider =
+    StateNotifierProvider<PostStateNotifier, CursorPaginationBase>((ref) {
+  final repository = ref.watch(postRepositoryProvider);
+
+  final notifier = BestPostStateNotifier(postRepository: repository);
+
+  return notifier;
+});
+
 final totalAllPostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
   final state = ref.watch(totalAllPostProvider);
 
@@ -211,6 +220,21 @@ final univRecentPostDetailProvider =
   return state.data.firstWhereOrNull((e) => e.postId == id);
 });
 
+// class RecentPostStateNotifier extends StateNotifier<List<PostModel>?> {
+//   final PostRepository postRepository;
+//   final String boardType;
+//   RecentPostStateNotifier({
+//     required this.postRepository,
+//     required this.boardType,
+//   }) : super(null) {
+//     getRecentPosts();
+//   }
+
+//   Future<void> getRecentPosts() {
+
+//   }
+// }
+
 class PostStateNotifier extends StateNotifier<CursorPaginationBase> {
   final PostRepository postRepository;
   final String boardType;
@@ -293,10 +317,12 @@ class PostStateNotifier extends StateNotifier<CursorPaginationBase> {
         }
       }
 
-      final resp = await postRepository.paginate(
-          boardType: boardType,
-          categoryType: categoryType,
-          paginationParams: paginationParams);
+      final resp = boardType == "best"
+          ? await postRepository.paginateBest()
+          : await postRepository.paginate(
+              boardType: boardType,
+              categoryType: categoryType,
+              paginationParams: paginationParams);
 
       if (state is CursorPaginationFetchingMore) {
         final pState = state as CursorPaginationFetchingMore;
@@ -462,6 +488,16 @@ class UnivRecentPostStateNotifier extends PostStateNotifier {
             postRepository: postRepository,
             boardType: 'UNIV',
             categoryType: 'recent');
+}
+
+class BestPostStateNotifier extends PostStateNotifier {
+  @override
+  final PostRepository postRepository;
+  BestPostStateNotifier({required this.postRepository})
+      : super(
+            postRepository: postRepository,
+            boardType: 'best',
+            categoryType: 'best');
 }
 
 class PostCategoryStateNotifier extends StateNotifier<List<CategoryModel>> {

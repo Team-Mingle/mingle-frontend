@@ -83,7 +83,7 @@ abstract class PostRepository {
 
   @GET('/{boardType}/recent')
   @Headers({'accessToken': 'true'})
-  Future<CursorPagination<PostModel>> paginateRecent({
+  Future<List<PostModel>> getRecent({
     @Path() required String boardType,
   });
 

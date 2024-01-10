@@ -1,15 +1,21 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/timetable/components/add_friend_dialog.dart';
 import 'package:mingle/timetable/components/timetable_list_more_modal.dart';
 import 'package:mingle/timetable/model/class_model.dart';
+import 'package:mingle/timetable/repository/friend_repository.dart';
 import 'package:mingle/timetable/view/add_timetable_screen.dart';
 import 'package:mingle/timetable/components/timetable_grid.dart';
 import 'package:mingle/timetable/view/timetable_list_screen.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class TimeTableHomeScreen extends StatefulWidget {
+class TimeTableHomeScreen extends ConsumerStatefulWidget {
   final int flag = 1;
 
   const TimeTableHomeScreen({
@@ -17,10 +23,11 @@ class TimeTableHomeScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<TimeTableHomeScreen> createState() => _TimeTableHomeScreenState();
+  ConsumerState<TimeTableHomeScreen> createState() =>
+      _TimeTableHomeScreenState();
 }
 
-class _TimeTableHomeScreenState extends State<TimeTableHomeScreen> {
+class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   bool _isFriendListExpanded = false;
   List<Color> availableCoursePalette = [
     const Color(0xFFFBE9EF),
@@ -34,6 +41,7 @@ class _TimeTableHomeScreenState extends State<TimeTableHomeScreen> {
     const Color(0xFFCECEE9),
     const Color(0xFFE7EFCE),
   ];
+  String shareCodeName = "";
 
   List<Color> usedCoursePalette = [];
   List<ClassModel> addedClasses = [];
@@ -234,6 +242,556 @@ class _TimeTableHomeScreenState extends State<TimeTableHomeScreen> {
     }
   }
 
+  Future<dynamic> shareOrRegisterModal() => showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(20),
+              ),
+            ),
+            height: 192.0,
+            padding: const EdgeInsets.symmetric(horizontal: 20.0)
+                .copyWith(top: 32.0, bottom: 40.0),
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    firstShareCodeModal();
+                  },
+                  child: const SizedBox(
+                    height: 56.0,
+                    child: Center(
+                        child: Text(
+                      "내 코드 공유하기",
+                      style: TextStyle(fontSize: 16.0),
+                    )),
+                  ),
+                ),
+                const SizedBox(
+                  height: 8.0,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    firstRegisterCodeModal();
+                  },
+                  child: const SizedBox(
+                    height: 56.0,
+                    child: Center(
+                        child: Text(
+                      "다른 사용자 코드 등록하기",
+                      style: TextStyle(fontSize: 16.0),
+                    )),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+
+  Future<dynamic> firstRegisterCodeModal() => showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            height: 408.0,
+            padding: const EdgeInsets.symmetric(horizontal: 20.0)
+                .copyWith(top: 20.0, bottom: 24.0),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(20),
+              ),
+            ),
+            child: Stack(
+              children: [
+                Align(
+                    alignment: Alignment.topRight,
+                    child: GestureDetector(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 4.0),
+                        child: SvgPicture.asset(
+                            "assets/img/timetable_screen/close.svg"),
+                      ),
+                    )),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      height: 4.0,
+                    ),
+                    const Text(
+                      "다른 사용자 코드 등록하기",
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                    const SizedBox(
+                      height: 37.0,
+                    ),
+                    Container(
+                      height: 48.0,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                      ),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: GRAYSCALE_GRAY_02),
+                          borderRadius: BorderRadius.circular(8.0)),
+                      child: Center(
+                        child: TextFormField(
+                          onChanged: (nickname) {},
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "다른 사용자의 코드를 붙여넣으세요.",
+                            hintStyle: TextStyle(
+                                color: GRAYSCALE_GRAY_03, fontSize: 16.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 152.0,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        firstShareCodeModal();
+                      },
+                      child: Container(
+                        height: 48.0,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
+                            borderRadius: BorderRadius.circular(8.0)),
+                        child: const Center(
+                          child: Text(
+                            "내 코드 공유할래요",
+                            style: TextStyle(color: PRIMARY_COLOR_ORANGE_02),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8.0,
+                    ),
+                    GestureDetector(
+                      onTap: () => secondRegisterCodeModal(),
+                      child: Container(
+                        height: 48.0,
+                        decoration: BoxDecoration(
+                            color: PRIMARY_COLOR_ORANGE_02,
+                            border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
+                            borderRadius: BorderRadius.circular(8.0)),
+                        child: const Center(
+                          child: Text(
+                            "다음",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      );
+
+  Future<dynamic> secondRegisterCodeModal() => showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            height: 408.0,
+            padding: const EdgeInsets.symmetric(horizontal: 20.0)
+                .copyWith(top: 20.0, bottom: 24.0),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(20),
+              ),
+            ),
+            child: Stack(
+              children: [
+                Align(
+                    alignment: Alignment.topRight,
+                    child: GestureDetector(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 4.0),
+                        child: SvgPicture.asset(
+                            "assets/img/timetable_screen/close.svg"),
+                      ),
+                    )),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      height: 4.0,
+                    ),
+                    const Text(
+                      "다른 사용자 코드 등록하기",
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                    const SizedBox(
+                      height: 8.0,
+                    ),
+                    const Text(
+                      "친구에게 보여질 이름을 작성하세요.",
+                      style: TextStyle(color: GRAYSCALE_GRAY_04),
+                    ),
+                    const SizedBox(
+                      height: 12.0,
+                    ),
+                    Container(
+                      height: 48.0,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                      ),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: GRAYSCALE_GRAY_02),
+                          borderRadius: BorderRadius.circular(8.0)),
+                      child: Center(
+                        child: TextFormField(
+                          onChanged: (nickname) {},
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "다른 사용자의 코드를 붙여넣으세요.",
+                            hintStyle: TextStyle(
+                                color: GRAYSCALE_GRAY_03, fontSize: 16.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 152.0,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                        firstShareCodeModal();
+                      },
+                      child: Container(
+                        height: 48.0,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
+                            borderRadius: BorderRadius.circular(8.0)),
+                        child: const Center(
+                          child: Text(
+                            "내 코드 공유할래요",
+                            style: TextStyle(color: PRIMARY_COLOR_ORANGE_02),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8.0,
+                    ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        height: 48.0,
+                        decoration: BoxDecoration(
+                            color: PRIMARY_COLOR_ORANGE_02,
+                            border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
+                            borderRadius: BorderRadius.circular(8.0)),
+                        child: const Center(
+                          child: Text(
+                            "친구 추가 마치기",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      );
+
+  Future<String?> firstShareCodeModal() async {
+    String defaultName =
+        await ref.watch(friendRepositoryProvider).getDefaultName();
+    setState(() {
+      shareCodeName = defaultName;
+    });
+    return showModalBottomSheet<String>(
+      backgroundColor: Colors.transparent,
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 408.0,
+          padding: const EdgeInsets.symmetric(horizontal: 20.0)
+              .copyWith(top: 20.0, bottom: 24.0),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(
+              Radius.circular(20),
+            ),
+          ),
+          child: Stack(
+            children: [
+              Align(
+                  alignment: Alignment.topRight,
+                  child: GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 4.0),
+                      child: SvgPicture.asset(
+                          "assets/img/timetable_screen/close.svg"),
+                    ),
+                  )),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 4.0,
+                  ),
+                  const Text(
+                    "내 코드 공유하기",
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                  const Text(
+                    "친구에게 보여질 이름을 작성하세요.",
+                    style: TextStyle(color: GRAYSCALE_GRAY_04),
+                  ),
+                  const SizedBox(
+                    height: 12.0,
+                  ),
+                  Container(
+                    height: 48.0,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12.0,
+                    ),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: GRAYSCALE_GRAY_02),
+                        borderRadius: BorderRadius.circular(8.0)),
+                    child: Center(
+                      child: TextFormField(
+                        maxLength: 10,
+                        onChanged: (name) {
+                          setState(() {
+                            shareCodeName = name;
+                          });
+                        },
+                        initialValue: defaultName,
+                        decoration: InputDecoration(
+                          counterText: "",
+                          border: InputBorder.none,
+                          suffix: Text("${shareCodeName.length}/10"),
+                          hintText: "이름 입력",
+                          hintStyle: const TextStyle(
+                              color: GRAYSCALE_GRAY_03, fontSize: 16.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 152.0,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      firstRegisterCodeModal();
+                    },
+                    child: Container(
+                      height: 48.0,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
+                          borderRadius: BorderRadius.circular(8.0)),
+                      child: const Center(
+                        child: Text(
+                          "다른 사용자 코드 등록할래요",
+                          style: TextStyle(color: PRIMARY_COLOR_ORANGE_02),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                  GestureDetector(
+                    onTap: () => secondShareCodeModal(),
+                    child: Container(
+                      height: 48.0,
+                      decoration: BoxDecoration(
+                          color: PRIMARY_COLOR_ORANGE_02,
+                          border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
+                          borderRadius: BorderRadius.circular(8.0)),
+                      child: const Center(
+                        child: Text(
+                          "다음",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<dynamic> secondShareCodeModal() async {
+    String code = (await ref
+            .watch(friendRepositoryProvider)
+            .generateCode(GenerateCodeDto(myDisplayName: shareCodeName)))
+        .code;
+    return showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 408.0,
+          padding: const EdgeInsets.symmetric(horizontal: 20.0)
+              .copyWith(top: 20.0, bottom: 24.0),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(
+              Radius.circular(20),
+            ),
+          ),
+          child: Stack(
+            children: [
+              Align(
+                  alignment: Alignment.topRight,
+                  child: GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 4.0),
+                      child: SvgPicture.asset(
+                          "assets/img/timetable_screen/close.svg"),
+                    ),
+                  )),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 4.0,
+                  ),
+                  const Text(
+                    "내 코드 공유하기",
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                  const Text(
+                    "코드를 친구에게 공유해 주세요.",
+                    style: TextStyle(color: GRAYSCALE_GRAY_04),
+                  ),
+                  const SizedBox(
+                    height: 12.0,
+                  ),
+                  Container(
+                      height: 48.0,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                      ),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: GRAYSCALE_GRAY_02),
+                          borderRadius: BorderRadius.circular(8.0)),
+                      child: Row(
+                        children: [
+                          Text(code),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () async {
+                              await Clipboard.setData(const ClipboardData(
+                                  text: "your text")); // TODO: 코드로 바꾸기
+                              Fluttertoast.showToast(
+                                  backgroundColor: GRAYSCALE_GRAY_04,
+                                  msg: "링크가 복사되었습니다.",
+                                  toastLength: Toast.LENGTH_LONG,
+                                  gravity: ToastGravity.CENTER,
+                                  timeInSecForIosWeb: 1,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                              // copied successfully
+                            },
+                            child: const Text(
+                              "복사",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  color: PRIMARY_COLOR_ORANGE_01),
+                            ),
+                          )
+                        ],
+                      )),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "해당 코드는 1시간 동안 유효합니다.",
+                      style: TextStyle(color: GRAYSCALE_GRAY_04),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 127.0,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                      firstRegisterCodeModal();
+                    },
+                    child: Container(
+                      height: 48.0,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
+                          borderRadius: BorderRadius.circular(8.0)),
+                      child: const Center(
+                        child: Text(
+                          "다른 사용자 코드 등록할래요",
+                          style: TextStyle(color: PRIMARY_COLOR_ORANGE_02),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      height: 48.0,
+                      decoration: BoxDecoration(
+                          color: PRIMARY_COLOR_ORANGE_02,
+                          border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
+                          borderRadius: BorderRadius.circular(8.0)),
+                      child: const Center(
+                        child: Text(
+                          "완료하기",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Widget> t = timetable;
@@ -321,23 +879,24 @@ class _TimeTableHomeScreenState extends State<TimeTableHomeScreen> {
             },
           ),
           IconButton(
-            icon: Align(
-              alignment: Alignment.center,
-              child: SvgPicture.asset(
-                'assets/img/common/ic_share.svg',
-                width: 24,
-                height: 24,
+              icon: Align(
+                alignment: Alignment.center,
+                child: SvgPicture.asset(
+                  'assets/img/timetable_screen/add_friend.svg',
+                  width: 24,
+                  height: 24,
+                ),
               ),
-            ),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return const AddFriendDialog();
-                },
-              );
-            },
-          ),
+              onPressed: () => shareOrRegisterModal()
+
+              // showDialog(
+              //   context: context,
+              //   builder: (BuildContext context) {
+              //     return const AddFriendDialog();
+              //   },
+              // );
+
+              ),
           IconButton(
             icon: Align(
               alignment: Alignment.center,
