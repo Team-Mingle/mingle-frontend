@@ -5,6 +5,7 @@ import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/module/repository/course_repository.dart';
+import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/post/models/post_model.dart';
 
 class ModuleSearchScreen extends ConsumerStatefulWidget {
@@ -157,34 +158,37 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
                           )
                         ],
                       )
-                    : Column(
-                        children: List.generate(courses.length + 1, (index) {
-                        // if (index == 0) {
-                        //   return Container(
-                        //     padding: const EdgeInsets.symmetric(
-                        //         horizontal: 20.0, vertical: 16.0),
-                        //     child: Text("일치하는 강의가 ${courses.length}개 있습니다"),
-                        //   );
-                        // } else {
-                        //   return coursePreviewCard(courses[index - 1]);
-                        // }
-                        return Column(
-                          children: [
-                            index == 0
-                                ? Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20.0, vertical: 16.0),
-                                    child: Text(
-                                        "일치하는 강의가 ${courses.length}개 있습니다"),
-                                  )
-                                : coursePreviewCard(courses[index - 1]),
-                            const Divider(
-                              height: 1.0,
-                              color: GRAYSCALE_GRAY_01_5,
-                            )
-                          ],
-                        );
-                      }));
+                    : SingleChildScrollView(
+                        child: Column(
+                            children:
+                                List.generate(courses.length + 1, (index) {
+                          // if (index == 0) {
+                          //   return Container(
+                          //     padding: const EdgeInsets.symmetric(
+                          //         horizontal: 20.0, vertical: 16.0),
+                          //     child: Text("일치하는 강의가 ${courses.length}개 있습니다"),
+                          //   );
+                          // } else {
+                          //   return coursePreviewCard(courses[index - 1]);
+                          // }
+                          return Column(
+                            children: [
+                              index == 0
+                                  ? Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20.0, vertical: 16.0),
+                                      child: Text(
+                                          "일치하는 강의가 ${courses.length}개 있습니다"),
+                                    )
+                                  : coursePreviewCard(courses[index - 1]),
+                              const Divider(
+                                height: 1.0,
+                                color: GRAYSCALE_GRAY_01_5,
+                              )
+                            ],
+                          );
+                        })),
+                      );
               }),
     );
   }
@@ -217,37 +221,42 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
   }
 
   Widget coursePreviewCard(CourseModel course) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
-      child: Column(children: [
-        Text(
-          course.name,
-          style: const TextStyle(fontWeight: FontWeight.w500),
-        ),
-        const SizedBox(
-          height: 4.0,
-        ),
-        Text(course.courseCode),
-        const SizedBox(
-          height: 4.0,
-        ),
-        Row(
-          children: [
-            Text(
-              course.professor,
-              style: const TextStyle(fontSize: 12.0, color: GRAYSCALE_GRAY_04),
-            ),
-            const SizedBox(
-              width: 4.0,
-            ),
-            const Text(
-              //TODO: change to actual timing
-              "화2/수2",
-              style: TextStyle(fontSize: 12.0, color: GRAYSCALE_GRAY_04),
-            )
-          ],
-        )
-      ]),
+    return GestureDetector(
+      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => ModuleDetailsScreen(courseId: course.id))),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            course.name,
+            style: const TextStyle(fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(
+            height: 4.0,
+          ),
+          Text(course.courseCode),
+          const SizedBox(
+            height: 4.0,
+          ),
+          Row(
+            children: [
+              Text(
+                course.professor,
+                style:
+                    const TextStyle(fontSize: 12.0, color: GRAYSCALE_GRAY_04),
+              ),
+              const SizedBox(
+                width: 4.0,
+              ),
+              const Text(
+                //TODO: change to actual timing
+                "화2/수2",
+                style: TextStyle(fontSize: 12.0, color: GRAYSCALE_GRAY_04),
+              )
+            ],
+          )
+        ]),
+      ),
     );
   }
 }

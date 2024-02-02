@@ -22,7 +22,7 @@ class AddPostScreen extends ConsumerStatefulWidget {
 
 class _AddPostScreenState extends ConsumerState<AddPostScreen> {
   final ImagePicker imagePicker = ImagePicker();
-  List<MultipartFile> imageFileList = [];
+  List<File> imageFileList = [];
   List<XFile> imagePreviewFileList = [];
   bool isAnonymous = true;
   String title = "";
@@ -47,7 +47,7 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
     // print(boardType);
     // print(categoryType);
     // print(isAnonymous);
-    // print(imageFileList);
+    print(imageFileList);
 
     final response = await ref.watch(postRepositoryProvider).addPost(
           boardType: widget.boardType,
@@ -464,12 +464,16 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
     //     await FilePicker.platform.pickFiles(allowMultiple: true);
     if (files.isNotEmpty) {
       // 파일 경로를 통해 formData 생성
-      List<MultipartFile> selectedImages = List.generate(files.length, (index) {
-        print(files[index].path);
-        return MultipartFile.fromBytes(
-            File(files[index].path).readAsBytesSync());
-      });
+      // List<MultipartFile> selectedImages = List.generate(files.length, (index) {
+      //   print(files[index].path);
+      //   return MultipartFile.fromBytes(
+      //       File(files[index].path).readAsBytesSync());
+      // });
 
+      List<File> selectedImages = List.generate(files.length, (index) {
+        print(files[index].path);
+        return File(files[index].path);
+      });
       setState(() {
         imageFileList = selectedImages;
         imagePreviewFileList = files;

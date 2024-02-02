@@ -65,7 +65,8 @@ class _FriendRepository implements FriendRepository {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
-    final _data = generateCodeDto;
+    final _data = <String, dynamic>{};
+    _data.addAll(generateCodeDto.toJson());
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<CodeModel>(Options(
       method: 'POST',
@@ -93,7 +94,7 @@ class _FriendRepository implements FriendRepository {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
       method: 'GET',
       headers: _headers,

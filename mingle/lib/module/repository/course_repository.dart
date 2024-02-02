@@ -4,6 +4,7 @@ import 'package:mingle/common/const/data.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
 import 'package:mingle/common/model/pagination_params.dart';
 import 'package:mingle/dio/dio.dart';
+import 'package:mingle/module/model/course_detail_model.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/post/models/category_model.dart';
 import 'package:mingle/post/models/comment_model.dart';
@@ -29,6 +30,9 @@ abstract class CourseRepository {
   Future<CursorPagination<CourseModel>> search(
       {@Query("keyword") required String keyword});
 
+  @GET('/{courseId}')
+  @Headers({'accessToken': 'true'})
+  Future<CourseDetailModel> getCourseDetails({@Path() required courseId});
   // factory RestaurantRepository(Dio dio, {String baseUrl}) =
   //     _RestaurantRepository;
 

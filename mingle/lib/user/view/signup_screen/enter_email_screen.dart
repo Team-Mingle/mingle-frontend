@@ -224,6 +224,9 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
               ],
               // validators: [validateForm],
               isLoading: isLoading,
+            ),
+            const SizedBox(
+              height: 40.0,
             )
           ]),
         ),

@@ -62,7 +62,7 @@ class _PostRepository implements PostRepository {
     required String content,
     required String categoryType,
     required bool isAnonymous,
-    List<MultipartFile>? multipartFile,
+    List<File>? multipartFile,
   }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -87,8 +87,12 @@ class _PostRepository implements PostRepository {
       isAnonymous.toString(),
     ));
     if (multipartFile != null) {
-      _data.files
-          .addAll(multipartFile.map((i) => MapEntry('multipartFile', i)));
+      _data.files.addAll(multipartFile.map((i) => MapEntry(
+          'multipartFile',
+          MultipartFile.fromFileSync(
+            i.path,
+            filename: i.path.split(Platform.pathSeparator).last,
+          ))));
     }
     final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
       method: 'POST',
@@ -289,9 +293,9 @@ class _PostRepository implements PostRepository {
     required int postId,
     required String title,
     required String content,
-    required String categoryType,
     required bool isAnonymous,
-    List<MultipartFile>? multipartFile,
+    List<File>? imageUrlsToDelete,
+    List<File>? imagesToAdd,
   }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -308,16 +312,24 @@ class _PostRepository implements PostRepository {
       content,
     ));
     _data.fields.add(MapEntry(
-      'categoryType',
-      categoryType,
-    ));
-    _data.fields.add(MapEntry(
       'anonymous',
       isAnonymous.toString(),
     ));
-    if (multipartFile != null) {
-      _data.files
-          .addAll(multipartFile.map((i) => MapEntry('multipartFile', i)));
+    if (imageUrlsToDelete != null) {
+      _data.files.addAll(imageUrlsToDelete.map((i) => MapEntry(
+          'imageUrlsToDelete',
+          MultipartFile.fromFileSync(
+            i.path,
+            filename: i.path.split(Platform.pathSeparator).last,
+          ))));
+    }
+    if (imagesToAdd != null) {
+      _data.files.addAll(imagesToAdd.map((i) => MapEntry(
+          'imagesToAdd',
+          MultipartFile.fromFileSync(
+            i.path,
+            filename: i.path.split(Platform.pathSeparator).last,
+          ))));
     }
     final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
       method: 'PATCH',

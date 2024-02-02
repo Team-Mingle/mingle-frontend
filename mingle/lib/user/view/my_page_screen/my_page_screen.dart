@@ -3,11 +3,18 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/user/components/my_page_tile.dart';
+import 'package:mingle/user/view/my_page_screen/commented_posts_screen.dart';
+import 'package:mingle/user/view/my_page_screen/liked_posts_screen.dart';
+import 'package:mingle/user/view/my_page_screen/liked_second_hand_posts_screen.dart';
 import 'package:mingle/user/view/my_page_screen/manage_account_screen.dart';
 import 'package:mingle/user/view/my_page_screen/market_liked_screen.dart';
 import 'package:mingle/user/view/my_page_screen/market_selling_screen.dart';
 import 'package:mingle/user/view/my_page_screen/my_module_pass_and_point_screen.dart';
 import 'package:mingle/user/view/my_page_screen/my_module_reviews_screen.dart';
+import 'package:mingle/user/view/my_page_screen/my_posts_screen.dart';
+import 'package:mingle/user/view/my_page_screen/privacy_policy_screen.dart';
+import 'package:mingle/user/view/my_page_screen/scrapped_posts_screen.dart';
+import 'package:mingle/user/view/my_page_screen/terms_and_conditions_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
 class MyPageScreen extends StatelessWidget {
@@ -29,15 +36,15 @@ class MyPageScreen extends StatelessWidget {
     List<String> userUtilTitles = ["이용약관", "개인정보 처리방침", "밍글에 문의하기"];
 
     List<Widget> activityScreens = [
-      Container(),
-      Container(),
-      Container(),
-      Container()
+      const ScrappedPostsScreen(),
+      const LikedPostsScreen(),
+      const MyPostsScreen(),
+      const CommentedPostsScreen()
     ];
 
     List<Widget> secondHandMarketScreens = [
       MarketSellingScreen(),
-      MarketLikedScreen(),
+      const LikedSecondHandPostsScreen(),
     ];
 
     List<Widget> moduleReviewScreens = [
@@ -45,7 +52,11 @@ class MyPageScreen extends StatelessWidget {
       const MyModuleReviewsScreen()
     ];
 
-    List<Widget> userUtilScreens = [Container(), Container(), Container()];
+    List<Widget> userUtilScreens = [
+      const TermsAndConditionsScreen(),
+      const PrivacyPolicyScreen(),
+      Container()
+    ];
 
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR_GRAY,

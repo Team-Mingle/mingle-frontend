@@ -180,6 +180,9 @@ class _SelectNicknameScreenState extends ConsumerState<SelectNicknameScreen> {
               buttonName: "다음으로",
               isReplacement: true,
               isSelectedProvider: [selectedNicknameProvider],
+            ),
+            const SizedBox(
+              height: 40.0,
             )
           ]),
         ),

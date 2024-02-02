@@ -9,12 +9,14 @@ import 'package:mingle/post/repository/comment_repository.dart';
 
 class CommentDetails extends ConsumerStatefulWidget {
   final CommentModel comment;
+  final String? parentNickname;
   final Function setParentAndMentionId;
   final int? parentCommentId;
   final Function likeOrUnlikeComment;
   final Function refreshComments;
   const CommentDetails(
       {super.key,
+      this.parentNickname,
       required this.comment,
       this.parentCommentId,
       required this.setParentAndMentionId,
@@ -42,10 +44,23 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
       Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            widget.comment.content,
-            style: const TextStyle(fontSize: 13.0),
-          ),
+          widget.parentNickname == null
+              ? Text(
+                  widget.comment.content,
+                  style: const TextStyle(fontSize: 13.0),
+                )
+              : RichText(
+                  text: TextSpan(children: [
+                  TextSpan(
+                      text: "@${widget.parentNickname}",
+                      style: const TextStyle(
+                          fontSize: 13.0, color: PRIMARY_COLOR_ORANGE_01)),
+                  const TextSpan(text: " "),
+                  TextSpan(
+                      text: widget.comment.content,
+                      style:
+                          const TextStyle(fontSize: 13.0, color: Colors.black)),
+                ])),
           const SizedBox(
             width: 12.0,
           ),
@@ -93,9 +108,9 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
       ),
       Row(
         children: [
-          const Text(
-            "익명", // TODO: render accordingly
-            style: TextStyle(color: GRAYSCALE_GRAY_04, fontSize: 12.0),
+          Text(
+            widget.comment.nickname,
+            style: const TextStyle(color: GRAYSCALE_GRAY_04, fontSize: 12.0),
           ),
           const SizedBox(
             width: 4.0,

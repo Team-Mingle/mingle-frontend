@@ -46,11 +46,11 @@ class MarketSellingScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: DefaultTabController(
+      body: const DefaultTabController(
         length: 3,
         child: Column(
           children: [
-            const TabBar(
+            TabBar(
               indicatorColor: PRIMARY_COLOR_ORANGE_01,
               labelColor: Colors.black,
               padding: EdgeInsets.symmetric(
@@ -76,39 +76,39 @@ class MarketSellingScreen extends StatelessWidget {
             Expanded(
               child: TabBarView(
                 children: [
-                  Center(
-                    child: ListView(
-                      children: [
-                        PostPreviewCard(
-                          postList: dummyPostList,
-                          cardType: CardType.selling,
-                        ),
-                        const SizedBox(height: 48.0),
-                      ],
-                    ),
-                  ),
-                  Center(
-                    child: ListView(
-                      children: [
-                        PostPreviewCard(
-                          postList: dummyPostList,
-                          cardType: CardType.selling,
-                        ),
-                        const SizedBox(height: 48.0),
-                      ],
-                    ),
-                  ),
-                  Center(
-                    child: ListView(
-                      children: [
-                        PostPreviewCard(
-                          postList: dummyPostList,
-                          cardType: CardType.selling,
-                        ),
-                        const SizedBox(height: 48.0),
-                      ],
-                    ),
-                  ),
+                  // Center(
+                  //   child: ListView(
+                  //     children: [
+                  //       PostPreviewCard(
+                  //         postList: dummyPostList,
+                  //         cardType: CardType.selling,
+                  //       ),
+                  //       const SizedBox(height: 48.0),
+                  //     ],
+                  //   ),
+                  // ),
+                  // Center(
+                  //   child: ListView(
+                  //     children: [
+                  //       PostPreviewCard(
+                  //         postList: dummyPostList,
+                  //         cardType: CardType.selling,
+                  //       ),
+                  //       const SizedBox(height: 48.0),
+                  //     ],
+                  //   ),
+                  // ),
+                  // Center(
+                  //   child: ListView(
+                  //     children: [
+                  //       PostPreviewCard(
+                  //         postList: dummyPostList,
+                  //         cardType: CardType.selling,
+                  //       ),
+                  //       const SizedBox(height: 48.0),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
             ),

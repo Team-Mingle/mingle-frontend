@@ -233,6 +233,9 @@ class _EnterVerificationNumberScreenState
               isSelectedProvider: [enteredVerificationNumberProvider],
               // validators: [validateForm],
               isLoading: isLoading,
+            ),
+            const SizedBox(
+              height: 40.0,
             )
           ]),
         ),

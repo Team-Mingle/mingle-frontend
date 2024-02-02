@@ -65,9 +65,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           print(resp.data);
           final refreshToken = resp.data['refreshToken'];
           final accessToken = resp.data['accessToken'];
+          final encryptedEmail = resp.data['hashedEmail'];
           final storage = ref.read(secureStorageProvider);
           await storage.write(key: REFRESH_TOKEN_KEY, value: refreshToken);
           await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
+          await storage.write(key: ENCRYPTED_EMAIL_KEY, value: encryptedEmail);
+          // final r = await dio.post('https://$baseUrl/auth/refresh-token',
+          //     options: Options(headers: {
+          //       'X-Refresh-Token': refreshToken,
+          //       'Content-Type': "application/json",
+          //       'accept': "*/*"
+          //     }),
+          //     data: jsonEncode({"encryptedEmail": encryptedEmail}));
+          final r = await dio.post('https://$baseUrl/auth/refresh-token',
+              options: Options(headers: {
+                'X-Refresh-Token': refreshToken,
+                'Content-Type': "application/json",
+              }),
+              data: jsonEncode({"encryptedEmail": encryptedEmail}));
+          print(r.data);
           await Navigator.of(context)
               .push(MaterialPageRoute(builder: (_) => const HomeRootTab()));
         } else {
@@ -192,6 +208,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   checkSelected: emailController.text.isNotEmpty &&
                       passwordController.text.isNotEmpty,
                   validators: [validateForm],
+                ),
+                const SizedBox(
+                  height: 40.0,
                 )
               ]),
         ),

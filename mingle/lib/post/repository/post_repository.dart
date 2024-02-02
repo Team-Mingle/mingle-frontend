@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
 import 'package:mingle/common/model/pagination_params.dart';
@@ -40,7 +43,7 @@ abstract class PostRepository {
     @Part(name: "content") required String content,
     @Part(name: "categoryType") required String categoryType,
     @Part(name: "isAnonymous") required bool isAnonymous,
-    @Part(name: "multipartFile") List<MultipartFile>? multipartFile,
+    @Part(name: "multipartFile") List<File>? multipartFile,
   });
 
   @GET('/{postId}')
@@ -76,9 +79,9 @@ abstract class PostRepository {
     // @Body() required FormData addPostModel,
     @Part(name: "title") required String title,
     @Part(name: "content") required String content,
-    @Part(name: "categoryType") required String categoryType,
     @Part(name: "anonymous") required bool isAnonymous,
-    @Part(name: "multipartFile") List<MultipartFile>? multipartFile,
+    @Part(name: "imageUrlsToDelete") List<File>? imageUrlsToDelete,
+    @Part(name: "imagesToAdd") List<File>? imagesToAdd,
   });
 
   @GET('/{boardType}/recent')

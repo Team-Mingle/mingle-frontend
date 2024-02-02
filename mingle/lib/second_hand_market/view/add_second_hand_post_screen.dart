@@ -2,31 +2,72 @@ import 'dart:io';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/second_hand_market/provider/second_hand_market_post_provider.dart';
+import 'package:mingle/second_hand_market/repository/second_hand_market_post_repository.dart';
 
-class AddSecondHandPostScreen extends StatefulWidget {
+class AddSecondHandPostScreen extends ConsumerStatefulWidget {
   const AddSecondHandPostScreen({super.key});
 
   @override
-  State<AddSecondHandPostScreen> createState() => _AddPostScreenState();
+  ConsumerState<AddSecondHandPostScreen> createState() => _AddPostScreenState();
 }
 
-class _AddPostScreenState extends State<AddSecondHandPostScreen> {
+class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
   final ImagePicker imagePicker = ImagePicker();
-  List<XFile> imageFileList = [];
+  List<XFile> imagePreviewFileList = [];
+  List<File> multipartFile = [];
+  String title = "";
   bool isAnonymous = true;
   bool isSelling = true;
-  String selectedCurrency = "hkd";
-  String productDescription = "";
-  String askingPrice = "";
-  String meetingPlace = "";
-  String openChatLink = "";
+  String currencyType = "hkd";
+  String content = "";
+  String price = "";
+  String location = "";
+  String chatUrl = "";
   List<String> currencies = ["hkd", "krw", "sgd"];
   @override
   void initState() {
     super.initState();
+  }
+
+  bool canSubmit() {
+    return title.isNotEmpty && content.isNotEmpty && location.isNotEmpty;
+  }
+
+  void handleSubmit() async {
+    // print(title);
+    // print(content);
+    // print(boardType);
+    // print(categoryType);
+    // print(isAnonymous);
+    print(title);
+    print(price);
+    print(currencyType.toUpperCase());
+    print(content);
+    print(location);
+    print(chatUrl);
+    print(isAnonymous);
+
+    final response = await ref
+        .watch(secondHandPostRepositoryProvider)
+        .addSecondHandMarketPost(
+            title: title,
+            price: int.parse(price),
+            currencyType: currencyType.toUpperCase(),
+            content: content,
+            location: location,
+            chatUrl: chatUrl,
+            isAnonymous: isAnonymous,
+            multipartFile: multipartFile) as Map<String, dynamic>;
+    final int itemId = response['itemId'];
+    ref.watch(secondHandPostProvider.notifier).addPost(itemId: itemId);
+
+    Navigator.of(context).pop();
+    // print(response);
   }
 
   @override
@@ -64,12 +105,17 @@ class _AddPostScreenState extends State<AddSecondHandPostScreen> {
                         fontWeight: FontWeight.w400),
                   ),
                   const Spacer(),
-                  const Text(
-                    "게시",
-                    style: TextStyle(
-                        color: GRAYSCALE_GRAY_03,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w400),
+                  GestureDetector(
+                    onTap: () => canSubmit() ? handleSubmit() : {},
+                    child: Text(
+                      "게시",
+                      style: TextStyle(
+                          color: canSubmit()
+                              ? PRIMARY_COLOR_ORANGE_01
+                              : GRAYSCALE_GRAY_03,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w400),
+                    ),
                   ),
                 ],
               ),
@@ -110,7 +156,7 @@ class _AddPostScreenState extends State<AddSecondHandPostScreen> {
                                           "assets/img/post_screen/image_picker_icon.svg",
                                         ),
                                         Text(
-                                          "${imageFileList.length}/10",
+                                          "${imagePreviewFileList.length}/10",
                                           style: const TextStyle(
                                               fontSize: 13.0,
                                               fontWeight: FontWeight.w500,
@@ -127,12 +173,13 @@ class _AddPostScreenState extends State<AddSecondHandPostScreen> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: List.generate(
-                                  imageFileList.length,
+                                  imagePreviewFileList.length,
                                   (index) => Row(
                                     children: [
                                       selectedImageCard(index),
                                       SizedBox(
-                                        width: index == imageFileList.length - 1
+                                        width: index ==
+                                                imagePreviewFileList.length - 1
                                             ? 0.0
                                             : 8.0,
                                       )
@@ -152,6 +199,11 @@ class _AddPostScreenState extends State<AddSecondHandPostScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: TextFormField(
+                      onChanged: (value) {
+                        setState(() {
+                          title = value;
+                        });
+                      },
                       maxLines: 1,
                       decoration: const InputDecoration(
                           isDense: true,
@@ -265,9 +317,9 @@ class _AddPostScreenState extends State<AddSecondHandPostScreen> {
                               maxLines: 1,
                               onChanged: !isSelling
                                   ? null
-                                  : (String price) {
+                                  : (String value) {
                                       setState(() {
-                                        askingPrice = price;
+                                        price = value;
                                       });
                                     },
                               decoration: InputDecoration(
@@ -299,7 +351,7 @@ class _AddPostScreenState extends State<AddSecondHandPostScreen> {
                           child: TextFormField(
                             onChanged: (String description) {
                               setState(() {
-                                productDescription = description;
+                                content = description;
                               });
                             },
                             decoration: const InputDecoration(
@@ -321,7 +373,7 @@ class _AddPostScreenState extends State<AddSecondHandPostScreen> {
                         Align(
                           alignment: Alignment.centerRight,
                           child: Text(
-                            "${productDescription.length}/1000",
+                            "${content.length}/1000",
                             style: const TextStyle(
                                 color: GRAYSCALE_GRAY_02,
                                 fontWeight: FontWeight.w600),
@@ -342,7 +394,7 @@ class _AddPostScreenState extends State<AddSecondHandPostScreen> {
                           child: TextFormField(
                             onChanged: (String place) {
                               setState(() {
-                                meetingPlace = place;
+                                location = place;
                               });
                             },
                             maxLength: 300,
@@ -364,7 +416,7 @@ class _AddPostScreenState extends State<AddSecondHandPostScreen> {
                         Align(
                           alignment: Alignment.centerRight,
                           child: Text(
-                            "${meetingPlace.length}/300",
+                            "${location.length}/300",
                             style: const TextStyle(
                                 color: GRAYSCALE_GRAY_02,
                                 fontWeight: FontWeight.w600),
@@ -385,7 +437,7 @@ class _AddPostScreenState extends State<AddSecondHandPostScreen> {
                           child: TextFormField(
                             onChanged: (String link) {
                               setState(() {
-                                openChatLink = link;
+                                chatUrl = link;
                               });
                             },
                             decoration: const InputDecoration(
@@ -407,8 +459,10 @@ class _AddPostScreenState extends State<AddSecondHandPostScreen> {
                 ],
               ),
             ),
-            bottomNavigationBar:
-                Container(height: imageFileList.isNotEmpty ? 160.0 : 48.0),
+            bottomNavigationBar: Container(
+                height:
+                    // imagePreviewFileList.isNotEmpty ? 160.0 :
+                    48.0),
           ),
           bottomSheet: SizedBox(
             height: 48.0,
@@ -488,7 +542,7 @@ class _AddPostScreenState extends State<AddSecondHandPostScreen> {
                   ),
                 ))
             .toList(),
-        value: selectedCurrency,
+        value: currencyType,
         iconStyleData: IconStyleData(
             iconDisabledColor: GRAYSCALE_GRAY_02,
             icon: SvgPicture.asset("assets/img/post_screen/down_tick.svg")),
@@ -496,7 +550,7 @@ class _AddPostScreenState extends State<AddSecondHandPostScreen> {
             ? null
             : (String? currency) {
                 setState(() {
-                  selectedCurrency = currency!;
+                  currencyType = currency!;
                 });
               },
         buttonStyleData: ButtonStyleData(
@@ -515,16 +569,19 @@ class _AddPostScreenState extends State<AddSecondHandPostScreen> {
 
   void selectImages() async {
     final List<XFile> selectedImages = await imagePicker.pickMultiImage();
+    final List<File> selectedFiles =
+        selectedImages.map((img) => File(img.path)).toList();
     if (selectedImages.isNotEmpty) {
       setState(() {
-        imageFileList = selectedImages;
+        multipartFile = selectedFiles;
+        imagePreviewFileList = selectedImages;
       });
     }
   }
 
   Widget selectedImageCard(int index) {
     Image currentImage = Image.file(
-      File(imageFileList[index].path),
+      File(imagePreviewFileList[index].path),
       fit: BoxFit.cover,
     );
     return ClipRRect(
@@ -547,7 +604,8 @@ class _AddPostScreenState extends State<AddSecondHandPostScreen> {
                   ),
                   onTap: () {
                     setState(() {
-                      imageFileList.removeAt(index);
+                      imagePreviewFileList.removeAt(index);
+                      multipartFile.removeAt(index);
                     });
                   },
                 ),

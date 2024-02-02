@@ -12,9 +12,9 @@ class MyModuleReviewsScreen extends StatelessWidget {
     List<Widget> author = List.generate(
       4,
       (index) => GestureDetector(
-        onTap: () => Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const ModuleDetailsScreen()),
-        ),
+        // onTap: () => Navigator.of(context).push(
+        //   MaterialPageRoute(builder: (_) => const ModuleDetailsScreen()),
+        // ),
         child: RichText(
             text: const TextSpan(
                 children: [

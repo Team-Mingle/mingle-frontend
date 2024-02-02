@@ -129,6 +129,9 @@ class _EnterPasswordScreenState extends ConsumerState<EnterPasswordScreen> {
                 selectedRetypePasswordProvider
               ],
               isReplacement: widget.isPasswordReset,
+            ),
+            const SizedBox(
+              height: 40.0,
             )
           ]),
         ),

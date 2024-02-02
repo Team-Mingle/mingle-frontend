@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:ffi';
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,6 +23,7 @@ class CustomInterceptor extends Interceptor {
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
+    print(options.headers['X-Refresh-Token']);
     if (options.headers['accessToken'] == 'true') {
       options.headers.remove('accessToken');
       final token = await storage.read(key: ACCESS_TOKEN_KEY);
@@ -33,6 +38,7 @@ class CustomInterceptor extends Interceptor {
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     // TODO: implement onResponse
     print(response);
+    print(response.data);
     return super.onResponse(response, handler);
   }
 
@@ -41,7 +47,10 @@ class CustomInterceptor extends Interceptor {
     super.onError(err, handler);
     //401 에러가 났을때 토큰을 재발급 받는 시도를 하고 토큰이 재발급되면 다시 새로운 토큰으로 요청한다.
     print(err);
+    print("error error");
     final refreshToken = await storage.read(key: REFRESH_TOKEN_KEY);
+    final encryptedEmail = await storage.read(key: ENCRYPTED_EMAIL_KEY);
+    print("encrypted email: $encryptedEmail");
 
     //refresh token이 없으면 에러 던짐
     if (refreshToken == null) {
@@ -49,26 +58,58 @@ class CustomInterceptor extends Interceptor {
     }
 
     final isStatus401 = err.response?.statusCode == 401;
-    final isPathRefresh = err.requestOptions.path == '/auth/token';
+    final isPathRefresh = err.requestOptions.path == '/refresh-token';
+    print(err.requestOptions.path);
+    final dio = Dio();
 
+    // if (isStatus401 && !isPathRefresh) {
+    //   try {
+    //     // print("refreshing token");
+    //     // final resp = await dio.post('https://$baseUrl/auth/refresh-token',
+    //     //     options: Options(headers: {
+    //     //       'X-Refresh-Token': refreshToken,
+    //     //       'Content-Type': "application/json",
+    //     //     }),
+    //     //     data: jsonEncode({"encryptedEmail": encryptedEmail}));
+    //     // print('refresh successful');
+    //     // final accessToken = resp.data['accessToken'];
+    //     // final newRefreshToken = resp.data['refreshToken'];
+
+    //     final options = err.requestOptions;
+    //     options.headers.addAll({'authorization': 'Bearer mingle-user'});
+    //     // await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
+    //     // await storage.write(key: REFRESH_TOKEN_KEY, value: newRefreshToken);
+
+    //     final response = await dio.fetch(options);
+    //     if (response.statusCode == 200) {
+    //       print("${err.requestOptions.path} resolved");
+    //       return handler.resolve(response);
+    //     }
+    //   } on DioException catch (e) {
+    //     print("${err.requestOptions.path} rejected at catch");
+    //     return handler.reject(e);
+    //   }
+    // }
     if (isStatus401 && !isPathRefresh) {
-      final dio = Dio();
       try {
-        final resp = await dio.post('http://$baseUrl/auth/token',
-            options:
-                Options(headers: {'authorization': 'Bearer $refreshToken'}));
-        final accessToken = resp.data['accessToken'];
         final options = err.requestOptions;
-        options.headers.addAll({'authorization': 'Bearer $refreshToken'});
-        await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
+        options.headers.addAll({'authorization': 'Bearer mingle-user'});
+
         final response = await dio.fetch(options);
-        return handler.resolve(response);
+        if (response.statusCode == 200) {
+          print("${err.requestOptions.path} resolved");
+          if (err.type != DioExceptionType.cancel) {
+            return handler.resolve(response);
+          }
+        }
       } on DioException catch (e) {
-        return handler.reject(e);
+        if (e.type != DioExceptionType.cancel) {
+          return handler.reject(e);
+        }
       }
     }
-
-    return handler.next(err);
+    print("${err.requestOptions.path} rejected");
+    return handler.reject(err);
     // return null;
   }
 }

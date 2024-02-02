@@ -7,12 +7,14 @@ import 'package:mingle/post/models/comment_model.dart';
 
 class CommentReplyCard extends StatelessWidget {
   final CommentModel comment;
+  final String parentNickname;
   final int parentCommentId;
   final Function setParentAndMentionId;
   final Function likeOrUnlikeComment;
   final Function refreshComments;
   const CommentReplyCard(
       {super.key,
+      required this.parentNickname,
       required this.comment,
       required this.parentCommentId,
       required this.setParentAndMentionId,
@@ -45,6 +47,7 @@ class CommentReplyCard extends StatelessWidget {
                 padding: const EdgeInsets.only(
                     top: 12.0, bottom: 12.0, left: 14.0, right: 8.0),
                 child: CommentDetails(
+                  parentNickname: parentNickname,
                   refreshComments: refreshComments,
                   parentCommentId: parentCommentId,
                   setParentAndMentionId: setParentAndMentionId,

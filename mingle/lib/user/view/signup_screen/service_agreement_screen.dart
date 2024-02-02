@@ -432,6 +432,9 @@ class _ServiceAgreementScreenState
               nextScreen: const SelectNicknameScreen(),
               buttonName: "다음으로",
               checkSelected: selected[2] && selected[3],
+            ),
+            const SizedBox(
+              height: 40.0,
             )
           ]),
         ),

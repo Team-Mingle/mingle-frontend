@@ -41,6 +41,7 @@ class CommentCard extends StatelessWidget {
                   height: 12.0,
                 ),
                 CommentReplyCard(
+                  parentNickname: comment.nickname,
                   refreshComments: refreshComments,
                   likeOrUnlikeComment: likeOrUnlikeComment,
                   setParentAndMentionId: setParentAndMentionId,

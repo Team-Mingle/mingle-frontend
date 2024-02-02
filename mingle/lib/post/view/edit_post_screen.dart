@@ -39,12 +39,18 @@ class EditPostScreen extends ConsumerStatefulWidget {
 
 class _EditPostScreenState extends ConsumerState<EditPostScreen> {
   final ImagePicker imagePicker = ImagePicker();
-  List<MultipartFile> imageFileList = [];
-  List<XFile> imagePreviewFileList = [];
-
+  List<File> imageFileList = [];
+  // List<XFile> imagePreviewFileList = [];
+  List<File> imageUrlsToDelete = [];
+  List<File> imagesToAdd = [];
+  List<File> initialImages = [];
   @override
   void initState() {
+    print(widget.postImgUrl);
     super.initState();
+    imageFileList.addAll(widget.postImgUrl.map((img) => File(img)).toList());
+    initialImages.addAll(widget.postImgUrl.map((img) => File(img)).toList());
+    // imagePreviewFileList.addAll(widget.postImgUrl.map((img) => XFile(img)).toList());
   }
 
   void handleSubmit(WidgetRef ref) async {
@@ -56,18 +62,17 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
     // print(imageFileList);
 
     final response = await ref.watch(postRepositoryProvider).editPost(
-          postId: widget.postId,
-          // addPostModel: FormData.fromMap(
-          //     {...addPostModel.toJson(), "multipartFile": imageFileList})
-          //  addPostModel.toJson(),
-          // multipartFile: imageFileList,
+        postId: widget.postId,
+        // addPostModel: FormData.fromMap(
+        //     {...addPostModel.toJson(), "multipartFile": imageFileList})
+        //  addPostModel.toJson(),
+        // multipartFile: imageFileList,
 
-          title: widget.title,
-          content: widget.content,
-          categoryType: widget.categoryType,
-          isAnonymous: widget.isAnonymous,
-          multipartFile: imageFileList,
-        );
+        title: widget.title,
+        content: widget.content,
+        isAnonymous: widget.isAnonymous,
+        imageUrlsToDelete: imageUrlsToDelete,
+        imagesToAdd: imagesToAdd);
     switch (widget.categoryType) {
       case 'FREE':
         widget.boardType == 'TOTAL'
@@ -473,15 +478,27 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
     //     await FilePicker.platform.pickFiles(allowMultiple: true);
     if (files.isNotEmpty) {
       // 파일 경로를 통해 formData 생성
-      List<MultipartFile> selectedImages = List.generate(files.length, (index) {
+      List<File> selectedImages = List.generate(files.length, (index) {
         print(files[index].path);
-        return MultipartFile.fromBytes(
-            File(files[index].path).readAsBytesSync());
+        return File(files[index].path);
       });
-
+      List<File> imgUrlToAdd = [];
+      List<XFile> imgPreviewUrlToAdd = [];
+      // case 1 : selected img not in current list of images
+      // - add to list of images and imgUrlToAdd
+      // case 2 : selected img already in current list of images
+      // - dont do anything
+      for (int i = 0; i < selectedImages.length; i++) {
+        File img = selectedImages[i];
+        XFile imgPreview = files[i];
+        if (!imageFileList.contains(img)) {
+          imgUrlToAdd.add(img);
+          imgPreviewUrlToAdd.add(imgPreview);
+        }
+      }
       setState(() {
-        imageFileList = selectedImages;
-        imagePreviewFileList = files;
+        imageFileList.addAll(imgUrlToAdd);
+        imagesToAdd.addAll(imgUrlToAdd);
       });
       print(imageFileList);
     }
@@ -489,7 +506,7 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
 
   Widget selectedImageCard(int index) {
     Image currentImage = Image.file(
-      File(imagePreviewFileList[index].path),
+      File(imageFileList[index].path),
       // File(imageFileList[index]),
       fit: BoxFit.cover,
     );
@@ -514,6 +531,9 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
                   onTap: () {
                     setState(() {
                       imageFileList.removeAt(index);
+                      if (initialImages.contains(imageFileList[index])) {
+                        imageUrlsToDelete.add(imageFileList[index]);
+                      }
                     });
                   },
                 ),

@@ -110,6 +110,9 @@ class _SelectSchoolScreenState extends ConsumerState<SelectSchoolScreen> {
               ),
               buttonName: "다음으로",
               isSelectedProvider: [selectedSchoolProvider],
+            ),
+            const SizedBox(
+              height: 40.0,
             )
           ]),
         ),

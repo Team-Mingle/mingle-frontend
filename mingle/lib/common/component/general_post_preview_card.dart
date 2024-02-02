@@ -18,8 +18,8 @@ class GeneralPostPreviewCard extends ConsumerStatefulWidget {
 
   final CursorPaginationBase data;
   final CardType cardType;
-  final PostStateNotifier? notifierProvider;
-  final PostStateNotifier? allNotifierProvider;
+  final dynamic notifierProvider;
+  final dynamic allNotifierProvider;
   final ProviderFamily<PostModel?, int>? postDetailProvider;
 
   const GeneralPostPreviewCard({

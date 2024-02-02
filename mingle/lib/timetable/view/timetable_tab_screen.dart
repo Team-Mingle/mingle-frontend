@@ -1045,12 +1045,12 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                     height: 16.0,
                   ),
                   GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (_) => const ModuleDetailsScreen()),
-                      );
-                    },
+                    // onTap: () {
+                    //   Navigator.of(context).push(
+                    //     MaterialPageRoute(
+                    //         builder: (_) => const ModuleDetailsScreen()),
+                    //   );
+                    // },
                     child: Container(
                       width: (MediaQuery.of(context).size.width - 40.0),
                       height: 56,

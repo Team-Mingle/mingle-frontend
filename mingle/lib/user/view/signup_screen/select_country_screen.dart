@@ -98,6 +98,9 @@ class _SelectCountryScreenState extends ConsumerState<SelectCountryScreen> {
               nextScreen: const SelectSchoolScreen(),
               buttonName: "다음으로",
               isSelectedProvider: [selectedCountryProvider],
+            ),
+            const SizedBox(
+              height: 40.0,
             )
           ]),
         ),
