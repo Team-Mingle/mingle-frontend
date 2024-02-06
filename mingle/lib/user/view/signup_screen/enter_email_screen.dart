@@ -1,17 +1,21 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/component/dropdown_list.dart';
 import 'package:mingle/common/component/next_button.dart';
+import 'package:mingle/common/component/showup_animation.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
+import 'package:mingle/dio/dio.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
-import 'package:mingle/user/view/signup_screen/enter_email_screen.dart';
 import 'package:mingle/user/view/signup_screen/enter_verifiction_number_screen.dart';
 import 'package:mingle/user/view/signup_screen/provider/country_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/provider/email_extension_selected_provider.dart';
-import 'package:mingle/user/view/signup_screen/provider/school_selected_provider.dart';
+import 'package:mingle/user/view/signup_screen/provider/email_selected_provider.dart';
 
 class EnterEmailScreen extends ConsumerStatefulWidget {
   final bool isPasswordReset;
@@ -22,9 +26,70 @@ class EnterEmailScreen extends ConsumerStatefulWidget {
 }
 
 class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
+  String? errorMsg;
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final String currentCountry = ref.read(selectedCountryProvider);
+    final dio = ref.watch(dioProvider);
+    void validateForm() async {
+      final email = {
+        "email":
+            "${ref.read(selectedEmailProvider)}@${ref.read(selectedEmailExtensionProvider)}",
+      };
+      print(email);
+      try {
+        setState(() {
+          isLoading = true;
+        });
+        final resp = await dio.post(
+          'https://$baseUrl/auth/verifyemail',
+          options: Options(headers: {
+            HttpHeaders.contentTypeHeader: "application/json",
+          }),
+          data: jsonEncode(email),
+        );
+        print(resp.data['verified'] as bool == true);
+        if (resp.data['verified'] as bool) {
+          print(resp.data);
+          // final sendCodeResp =
+          await dio.post(
+            'https://$baseUrl/auth/sendcode',
+            options: Options(headers: {
+              HttpHeaders.contentTypeHeader: "application/json",
+            }),
+            data: jsonEncode(email),
+          );
+          // print(sendCodeResp);
+          setState(() {
+            isLoading = false;
+          });
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => const EnterVerificationNumberScreen()));
+        } else {
+          String? error;
+          switch (resp.data['code']) {
+            case "EMAIL_DUPLICATED":
+              error = resp.data['message'];
+          }
+          setState(() {
+            isLoading = false;
+            errorMsg = error;
+          });
+        }
+      } catch (e) {
+        setState(() {
+          isLoading = false;
+          errorMsg = generalErrorMsg;
+        });
+      }
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -39,6 +104,10 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
                 color: GRAYSCALE_BLACK,
               ),
               onPressed: () {
+                ref.read(selectedEmailProvider.notifier).update((state) => "");
+                ref
+                    .read(selectedEmailExtensionProvider.notifier)
+                    .update((state) => "");
                 Navigator.pop(context);
               },
             ),
@@ -52,7 +121,7 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
           child:
-              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
               child: SizedBox(
@@ -88,41 +157,55 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
             const SizedBox(
               height: 40,
             ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    width: 136,
-                    height: 44,
-                    child: TextField(
-                      maxLines: null,
-                      expands: true,
-                      decoration: InputDecoration(
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: PRIMARY_COLOR_ORANGE_01)),
-                          border: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: GRAYSCALE_GRAY_03))),
-                    ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 136,
+                  height: 44,
+                  child: TextFormField(
+                    textAlignVertical: TextAlignVertical.bottom,
+                    onChanged: (email) {
+                      ref
+                          .read(selectedEmailProvider.notifier)
+                          .update((state) => email);
+                    },
+                    maxLines: null,
+                    decoration: const InputDecoration(
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: PRIMARY_COLOR_ORANGE_01)),
+                        border: UnderlineInputBorder(
+                            borderSide: BorderSide(color: GRAYSCALE_GRAY_03))),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text("@"),
-                  ),
-                  DropdownList(
-                    itemList: currentCountry == "홍콩"
-                        ? HONG_KONG_EMAIL_LIST
-                        : currentCountry == "싱가포르"
-                            ? SINGAPORE_EMAIL_LIST
-                            : ENGLAND_EMAIL_LIST,
-                    hintText: "선택",
-                    isSelectedProvider: selectedEmailExtensionProvider,
-                    width: 144,
-                  ),
-                ],
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text("@"),
+                ),
+                DropdownList(
+                  itemList: currentCountry == "홍콩"
+                      ? HONG_KONG_EMAIL_LIST
+                      : currentCountry == "싱가포르"
+                          ? SINGAPORE_EMAIL_LIST
+                          : ENGLAND_EMAIL_LIST,
+                  hintText: "선택",
+                  isSelectedProvider: selectedEmailExtensionProvider,
+                  width: 144,
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 11.0,
+            ),
+            ShowUp(
+              delay: 0,
+              child: Text(
+                errorMsg != null ? errorMsg! : "",
+                style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.red,
+                    fontWeight: FontWeight.w400),
               ),
             ),
             Expanded(child: Container()),
@@ -135,7 +218,15 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
                 AssetImage("assets/img/signup_screen/email_icon.png"),
                 color: GRAYSCALE_GRAY_04,
               ),
-              isSelectedProvider: selectedEmailExtensionProvider,
+              isSelectedProvider: [
+                selectedEmailExtensionProvider,
+                selectedEmailProvider
+              ],
+              // validators: [validateForm],
+              isLoading: isLoading,
+            ),
+            const SizedBox(
+              height: 40.0,
             )
           ]),
         ),

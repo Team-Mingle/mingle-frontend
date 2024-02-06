@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:mingle/common/component/post_preview_card.dart';
+import 'package:mingle/common/component/general_post_preview_card.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/model/cursor_pagination_model.dart';
+import 'package:mingle/post/provider/post_provider.dart';
 
-class PostCard extends StatelessWidget {
+class PostCard extends ConsumerWidget {
   final String title;
+  final CursorPaginationBase data;
 
   final dummyPostList = [
     {
@@ -44,12 +48,13 @@ class PostCard extends StatelessWidget {
   ];
 
   PostCard({
+    required this.data,
     required this.title,
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
         GestureDetector(
@@ -77,8 +82,8 @@ class PostCard extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12.0),
-        PostPreviewCard(
-          postList: dummyPostList,
+        GeneralPostPreviewCard(
+          data: data,
           cardType: CardType.home,
         ),
       ],

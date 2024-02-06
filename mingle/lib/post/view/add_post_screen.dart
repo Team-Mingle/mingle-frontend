@@ -1,29 +1,96 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/dio/dio.dart';
+import 'package:mingle/post/models/add_post_model.dart';
+import 'package:mingle/post/models/category_model.dart';
+import 'package:mingle/post/provider/post_provider.dart';
+import 'package:mingle/post/repository/post_repository.dart';
 
-class AddPostScreen extends StatefulWidget {
-  const AddPostScreen({super.key});
+class AddPostScreen extends ConsumerStatefulWidget {
+  final String boardType;
+  const AddPostScreen({super.key, required this.boardType});
 
   @override
-  State<AddPostScreen> createState() => _AddPostScreenState();
+  ConsumerState<AddPostScreen> createState() => _AddPostScreenState();
 }
 
-class _AddPostScreenState extends State<AddPostScreen> {
+class _AddPostScreenState extends ConsumerState<AddPostScreen> {
   final ImagePicker imagePicker = ImagePicker();
-  List<XFile> imageFileList = [];
+  List<File> imageFileList = [];
+  List<XFile> imagePreviewFileList = [];
   bool isAnonymous = true;
+  String title = "";
+  String content = "";
+  // String boardType = widget.boardType;
+  String categoryType = "";
+  String categoryName = "";
 
   @override
   void initState() {
     super.initState();
   }
 
+  void handleSubmit(WidgetRef ref) async {
+    AddPostModel addPostModel = AddPostModel(
+        title: title,
+        content: content,
+        categoryType: categoryType,
+        isAnonymous: isAnonymous);
+    // print(title);
+    // print(content);
+    // print(boardType);
+    // print(categoryType);
+    // print(isAnonymous);
+    print(imageFileList);
+
+    final response = await ref.watch(postRepositoryProvider).addPost(
+          boardType: widget.boardType,
+          // addPostModel: FormData.fromMap(
+          //     {...addPostModel.toJson(), "multipartFile": imageFileList})
+          //  addPostModel.toJson(),
+          // multipartFile: imageFileList,
+
+          title: addPostModel.title,
+          content: addPostModel.content,
+          categoryType: addPostModel.categoryType,
+          isAnonymous: addPostModel.isAnonymous,
+          multipartFile: imageFileList,
+        ) as Map<String, dynamic>;
+    final int postId = response['postId'];
+    switch (categoryType) {
+      case 'FREE':
+        widget.boardType == 'TOTAL'
+            ? ref.watch(totalFreePostProvider.notifier).addPost(postId: postId)
+            : ref.watch(univFreePostProvider.notifier).addPost(postId: postId);
+      case 'QNA':
+        widget.boardType == 'TOTAL'
+            ? ref.watch(totalQnAPostProvider.notifier).addPost(postId: postId)
+            : ref.watch(univQnAPostProvider.notifier).addPost(postId: postId);
+      case 'KSA':
+        ref.watch(univKsaPostProvider.notifier).addPost(postId: postId);
+      case 'MINGLE':
+        ref.watch(totalMinglePostProvider.notifier).addPost(postId: postId);
+    }
+    widget.boardType == 'TOTAL'
+        ? ref.watch(totalAllPostProvider.notifier).addPost(postId: postId)
+        : ref.watch(univAllPostProvider.notifier).addPost(postId: postId);
+
+    Navigator.of(context).pop();
+    // print(response);
+  }
+
   @override
   Widget build(BuildContext context) {
+    bool canSubmit =
+        title.isNotEmpty && content.isNotEmpty && categoryType.isNotEmpty;
+
+    List<CategoryModel> categories = ref.watch(postCategoryProvider);
     return Scaffold(
       body: SafeArea(
         child: Scaffold(
@@ -57,12 +124,17 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         fontWeight: FontWeight.w400),
                   ),
                   const Spacer(),
-                  const Text(
-                    "게시",
-                    style: TextStyle(
-                        color: GRAYSCALE_GRAY_03,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w400),
+                  GestureDetector(
+                    onTap: canSubmit ? () => handleSubmit(ref) : () {},
+                    child: Text(
+                      "게시",
+                      style: TextStyle(
+                          color: canSubmit
+                              ? PRIMARY_COLOR_ORANGE_01
+                              : GRAYSCALE_GRAY_03,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w400),
+                    ),
                   ),
                 ],
               ),
@@ -78,10 +150,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     child: Column(
                       children: [
                         const SizedBox(height: 12.0),
-                        InkWell(
+                        GestureDetector(
                           child: Row(
                             children: [
-                              const Text("게시판 이름"),
+                              Text(categoryName.isEmpty
+                                  ? "게시판 이름"
+                                  : categoryName),
                               const SizedBox(
                                 width: 10.0,
                               ),
@@ -89,12 +163,168 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                   "assets/img/post_screen/down_tick.svg")
                             ],
                           ),
-                          onTap: () {},
+                          onTap: () => showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Container(
+                                height: (categories.length * 48) +
+                                    ((categories.length - 1) * 20) +
+                                    64,
+                                width: MediaQuery.of(context).size.width,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(20),
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20.0),
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 32.0,
+                                      ),
+                                      ...List.generate(
+                                          2 * categories.length - 1, (index) {
+                                        if (index % 2 == 0) {
+                                          CategoryModel currentModel =
+                                              categories[index ~/ 2];
+                                          String currentName =
+                                              currentModel.convertName(
+                                                  currentModel.categoryName);
+                                          return ListTile(
+                                            title: Center(
+                                              child: Text(
+                                                currentName,
+                                                style: TextStyle(
+                                                  fontWeight:
+                                                      categoryType == 'FREE'
+                                                          ? FontWeight.bold
+                                                          : FontWeight.normal,
+                                                ),
+                                              ),
+                                            ),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              setState(() {
+                                                categoryType =
+                                                    currentModel.categoryName;
+                                                categoryName =
+                                                    currentName; // 선택한 항목 설정
+                                              });
+                                            },
+                                          );
+                                        } else {
+                                          return const SizedBox(
+                                            height: 20.0,
+                                          );
+                                        }
+                                      }),
+                                      // ListTile(
+                                      //   title: Center(
+                                      //     child: Text(
+                                      //       '자유',
+                                      //       style: TextStyle(
+                                      //         fontWeight: categoryType == 'FREE'
+                                      //             ? FontWeight.bold
+                                      //             : FontWeight.normal,
+                                      //       ),
+                                      //     ),
+                                      //   ),
+                                      //   onTap: () {
+                                      //     Navigator.pop(context);
+                                      //     setState(() {
+                                      //       categoryType = 'FREE';
+                                      //       categoryName = '자유'; // 선택한 항목 설정
+                                      //     });
+                                      //   },
+                                      // ),
+                                      // const SizedBox(
+                                      //   height: 20.0,
+                                      // ),
+                                      // ListTile(
+                                      //   title: Center(
+                                      //     child: Text(
+                                      //       '질문',
+                                      //       style: TextStyle(
+                                      //         fontWeight: categoryType == 'QNA'
+                                      //             ? FontWeight.bold
+                                      //             : FontWeight.normal,
+                                      //       ),
+                                      //     ),
+                                      //   ),
+                                      //   onTap: () {
+                                      //     Navigator.pop(context);
+                                      //     setState(() {
+                                      //       categoryType = 'QNA';
+                                      //       categoryName = '질문'; // 선택한 항목 설정
+                                      //     });
+                                      //   },
+                                      // ),
+                                      // const SizedBox(
+                                      //   height: 20.0,
+                                      // ),
+                                      // ListTile(
+                                      //   title: Center(
+                                      //     child: Text(
+                                      //       '밍글소식',
+                                      //       style: TextStyle(
+                                      //         fontWeight:
+                                      //             categoryType == 'MINGLE'
+                                      //                 ? FontWeight.bold
+                                      //                 : FontWeight.normal,
+                                      //       ),
+                                      //     ),
+                                      //   ),
+                                      //   onTap: () {
+                                      //     Navigator.pop(context);
+                                      //     setState(() {
+                                      //       categoryType =
+                                      //           'MINGLE'; // 선택한 항목 설정
+                                      //       categoryName = '밍글소식';
+                                      //     });
+                                      //   },
+                                      // ),
+                                      // const SizedBox(
+                                      //   height: 20.0,
+                                      // ),
+                                      // ListTile(
+                                      //   title: Center(
+                                      //     child: Text(
+                                      //       '학생회',
+                                      //       style: TextStyle(
+                                      //         fontWeight: categoryType == 'KSA'
+                                      //             ? FontWeight.bold
+                                      //             : FontWeight.normal,
+                                      //       ),
+                                      //     ),
+                                      //   ),
+                                      //   onTap: () {
+                                      //     Navigator.pop(context);
+                                      //     setState(() {
+                                      //       categoryType = 'KSA'; // 선택한 항목 설정
+                                      //       categoryName = '학생회';
+                                      //     });
+                                      //   },
+                                      // ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            backgroundColor: Colors.transparent,
+                          ),
                         ),
                         const SizedBox(
                           height: 32.0,
                         ),
                         TextFormField(
+                          onChanged: (value) {
+                            setState(() {
+                              title = value;
+                            });
+                          },
                           decoration: const InputDecoration.collapsed(
                             hintText: "제목을 입력하세요",
                             hintStyle: TextStyle(
@@ -118,6 +348,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: TextFormField(
+                      onChanged: (value) {
+                        setState(() {
+                          content = value;
+                        });
+                      },
                       maxLines: null,
                       decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -224,17 +459,33 @@ class _AddPostScreenState extends State<AddPostScreen> {
   }
 
   void selectImages() async {
-    final List<XFile> selectedImages = await imagePicker.pickMultiImage();
-    if (selectedImages.isNotEmpty) {
+    final List<XFile> files = await imagePicker.pickMultiImage();
+    // FilePickerResult? result =
+    //     await FilePicker.platform.pickFiles(allowMultiple: true);
+    if (files.isNotEmpty) {
+      // 파일 경로를 통해 formData 생성
+      // List<MultipartFile> selectedImages = List.generate(files.length, (index) {
+      //   print(files[index].path);
+      //   return MultipartFile.fromBytes(
+      //       File(files[index].path).readAsBytesSync());
+      // });
+
+      List<File> selectedImages = List.generate(files.length, (index) {
+        print(files[index].path);
+        return File(files[index].path);
+      });
       setState(() {
         imageFileList = selectedImages;
+        imagePreviewFileList = files;
       });
+      print(imageFileList);
     }
   }
 
   Widget selectedImageCard(int index) {
     Image currentImage = Image.file(
-      File(imageFileList[index].path),
+      File(imagePreviewFileList[index].path),
+      // File(imageFileList[index]),
       fit: BoxFit.cover,
     );
     return ClipRRect(

@@ -1,33 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mingle/common/component/post_card.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/post/provider/post_provider.dart';
 import 'package:mingle/user/view/home_screen/search_screen.dart';
 import 'package:mingle/post/view/add_post_screen.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
-import 'package:mingle/second_hand_market/add_second_hand_post_screen.dart';
+import 'package:mingle/second_hand_market/view/add_second_hand_post_screen.dart';
 import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
 
-class HomeTabScreen extends StatefulWidget {
+class HomeTabScreen extends ConsumerStatefulWidget {
   const HomeTabScreen({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<HomeTabScreen> createState() => _HomeTabScreenState();
+  ConsumerState<HomeTabScreen> createState() => _HomeTabScreenState();
 }
 
-class _HomeTabScreenState extends State<HomeTabScreen> {
+class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
   int _current = 0;
   final CarouselController _controller = CarouselController();
   List imageList = [
-    "https://cdn.pixabay.com/photo/2014/04/14/20/11/pink-324175_1280.jpg",
-    "https://cdn.pixabay.com/photo/2014/02/27/16/10/flowers-276014_1280.jpg",
-    "https://cdn.pixabay.com/photo/2012/03/01/00/55/flowers-19830_1280.jpg",
-    "https://cdn.pixabay.com/photo/2015/06/19/20/13/sunset-815270_1280.jpg",
-    "https://cdn.pixabay.com/photo/2016/01/08/05/24/sunflower-1127174_1280.jpg",
+    //   "https://cdn.pixabay.com/photo/2014/04/14/20/11/pink-324175_1280.jpg",
+    //   "https://cdn.pixabay.com/photo/2014/02/27/16/10/flowers-276014_1280.jpg",
+    //   "https://cdn.pixabay.com/photo/2012/03/01/00/55/flowers-19830_1280.jpg",
+    //   "https://cdn.pixabay.com/photo/2015/06/19/20/13/sunset-815270_1280.jpg",
+    //   "https://cdn.pixabay.com/photo/2016/01/08/05/24/sunflower-1127174_1280.jpg",
   ];
 
   @override
@@ -353,11 +355,20 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                 ],
               ),
               const SizedBox(height: 32.0),
-              PostCard(title: '지금 광장에서는'),
+              PostCard(
+                title: '지금 광장에서는',
+                data: ref.watch(totalRecentPostProvider),
+              ),
               const SizedBox(height: 40.0),
-              PostCard(title: '지금 잔디밭에서는'),
+              PostCard(
+                title: '지금 잔디밭에서는',
+                data: ref.watch(univRecentPostProvider),
+              ),
               const SizedBox(height: 40.0),
-              PostCard(title: '불타오르는 게시글'),
+              PostCard(
+                title: '불타오르는 게시글',
+                data: ref.watch(bestPostProvider),
+              ),
               const SizedBox(height: 169),
             ],
           ),

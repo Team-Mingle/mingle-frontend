@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:mingle/common/component/post_preview_card.dart';
+import 'package:mingle/common/component/item_post_preview_card.dart';
 import 'package:mingle/common/const/colors.dart';
-import 'package:mingle/second_hand_market/add_second_hand_post_screen.dart';
+import 'package:mingle/second_hand_market/provider/second_hand_market_post_provider.dart';
+import 'package:mingle/second_hand_market/view/add_second_hand_post_screen.dart';
+import 'package:mingle/second_hand_market/view/second_hand_market_search_screen.dart';
 import 'package:mingle/user/view/home_screen/home_tab_screen.dart';
 import 'package:mingle/user/view/home_screen/search_screen.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
 
-class MarketTabScreen extends StatelessWidget {
+class MarketTabScreen extends ConsumerWidget {
   MarketTabScreen({
     Key? key,
   }) : super(key: key);
@@ -28,7 +31,7 @@ class MarketTabScreen extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 48,
@@ -67,7 +70,8 @@ class MarketTabScreen extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SearchScreen()),
+                MaterialPageRoute(
+                    builder: (context) => const SecondHandMarketSearchScreen()),
               );
             },
           ),
@@ -89,22 +93,20 @@ class MarketTabScreen extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          ListView(
-            children: [
-              PostPreviewCard(
-                postList: dummyPostList,
-                cardType: CardType.market,
-              ),
-              const SizedBox(height: 48.0),
-            ],
+          ItemPostPreviewCard(
+            data: ref.watch(secondHandPostProvider),
+            notifierProvider: ref.watch(secondHandPostProvider.notifier),
+            postDetailProvider: secondHandPostDetailProvider,
+            cardType: CardType.market,
           ),
+          const SizedBox(height: 48.0),
           Positioned(
             right: 16.0,
             bottom: 16.0,
             child: FloatingActionButton(
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => const AddSecondHandPostScreen())),
-              backgroundColor: PRIMARY_COLOR_ORANGE_02, 
+              backgroundColor: PRIMARY_COLOR_ORANGE_02,
               child: const Icon(
                 Icons.add,
                 size: 36,

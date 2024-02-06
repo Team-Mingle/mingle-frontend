@@ -47,6 +47,14 @@ dependencies:
   dio: ^5.3.3
   change_app_package_name: ^1.1.0
   firebase_core:
+  json_annotation: ^4.8.0
+  retrofit: ">=4.0.0 <5.0.0"
+  logger: any
+  file_picker: ^6.1.1
+  skeletonizer: ^0.8.0
+  show_up_animation: ^2.0.0
+  fluttertoast: ^8.2.2
+  linked_scroll_controller: ^0.2.0
 
 dev_dependencies:
   flutter_test:
@@ -58,7 +66,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-
+  build_runner: ^2.3.3
+  json_serializable: ^6.6.0
+  retrofit_generator: ">=7.0.0 <8.0.0"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -75,10 +85,16 @@ flutter:
     - assets/img/signup_screen/
     - assets/img/home_screen/
     - assets/img/root_screen/
+    - assets/img/root_screen/ic_timetable_unselected.svg
+    # - assets/img/root_screen/
+    # - assets/img/root_screen/
     - assets/img/common/
     - assets/img/my_page_screen/
     - assets/img/post_screen/
     - assets/img/second_hand_market_screen/
+    - assets/img/module_review_screen/
+    - assets/img/module_review_screen/right_tick_icon.svg
+    - assets/img/timetable_screen/
 
   fonts:
     - family: Pretendard

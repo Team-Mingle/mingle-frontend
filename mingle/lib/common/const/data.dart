@@ -1,12 +1,20 @@
 import 'dart:io';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 const ACCESS_TOKEN_KEY = 'ACCESS_TOKEN';
 const REFRESH_TOKEN_KEY = 'REFRESH_TOKEN';
-const emulatorIp = '10.0.2.2:3000';
-const simulatorIp = '127.0.0.1:3000';
+const ENCRYPTED_EMAIL_KEY = 'ENCRYPTED_EMAIL';
+// const emulatorIp = '10.0.2.2:3000';
+// const simulatorIp = '127.0.0.1:3000';
 
-final ip = Platform.isIOS ? simulatorIp : emulatorIp;
+// final ip = Platform.isIOS ? simulatorIp : emulatorIp;
 
+// const ip = "https://86f3-180-229-116-251.ngrok-free.app/";
+
+const baseUrl = "api.develop.mingle.community";
+//  "dev.api.mingle.community";
+const generalErrorMsg = "다시 시도해 주세요.";
 final List<String> COUNTRY_LIST = [
   '홍콩',
   '싱가포르',
@@ -21,6 +29,6 @@ final List<String> ENGLAND_SCHOOL_LIST = ['영국명문대1', '영국명문대2'
 
 final List<String> HONG_KONG_EMAIL_LIST = ['홍콩이메일1', '홍콩이메일2', '홍콩이메일3'];
 
-final List<String> SINGAPORE_EMAIL_LIST = ['싱가포르이메일1', '싱가포르이메일2', '싱가포르이메일3'];
+final List<String> SINGAPORE_EMAIL_LIST = ['싱가포르이메일1', 'gmail.com', '싱가포르이메일3'];
 
 final List<String> ENGLAND_EMAIL_LIST = ['영국이메일1', '영국이메일2', '영국이메일3'];

@@ -48,12 +48,12 @@ class MarketLikedScreen extends StatelessWidget {
         ),
       ),
       body: ListView(
-        children: [
-          PostPreviewCard(
-            postList: dummyPostList,
-            cardType: CardType.market,
-          ),
-          const SizedBox(height: 48.0),
+        children: const [
+          // PostPreviewCard(
+          //   postList: dummyPostList,
+          //   cardType: CardType.market,
+          // ),
+          SizedBox(height: 48.0),
         ],
       ),
     );

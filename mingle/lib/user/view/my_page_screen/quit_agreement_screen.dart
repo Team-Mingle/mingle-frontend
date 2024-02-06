@@ -160,6 +160,7 @@ class _QuitAgreementScreenState extends State<QuitAgreementScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 32.0),
               child: NextButton(
                   nextScreen: const QuitEnterCredentialScreen(),
+                  checkSelected: selected,
                   buttonName: "다음으로"),
             )
           ],
