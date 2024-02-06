@@ -4,13 +4,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mingle/common/component/post_card.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/post/models/banner_model.dart';
+import 'package:mingle/post/provider/banner_provider.dart';
 import 'package:mingle/post/provider/post_provider.dart';
 import 'package:mingle/user/view/home_screen/search_screen.dart';
-import 'package:mingle/post/view/add_post_screen.dart';
-import 'package:mingle/post/view/post_detail_screen.dart';
-import 'package:mingle/second_hand_market/view/add_second_hand_post_screen.dart';
-import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
+import 'dart:convert';
 
 class HomeTabScreen extends ConsumerStatefulWidget {
   const HomeTabScreen({
@@ -24,13 +23,8 @@ class HomeTabScreen extends ConsumerStatefulWidget {
 class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
   int _current = 0;
   final CarouselController _controller = CarouselController();
-  List imageList = [
-    //   "https://cdn.pixabay.com/photo/2014/04/14/20/11/pink-324175_1280.jpg",
-    //   "https://cdn.pixabay.com/photo/2014/02/27/16/10/flowers-276014_1280.jpg",
-    //   "https://cdn.pixabay.com/photo/2012/03/01/00/55/flowers-19830_1280.jpg",
-    //   "https://cdn.pixabay.com/photo/2015/06/19/20/13/sunset-815270_1280.jpg",
-    //   "https://cdn.pixabay.com/photo/2016/01/08/05/24/sunflower-1127174_1280.jpg",
-  ];
+  late final Future<List<BannerModel>> _bannerProvider;
+
 
   @override
   void initState() {
@@ -244,6 +238,7 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
         },
       );
     });
+    _bannerProvider = ref.read(bannerProvider.future);
     super.initState();
   }
 
@@ -314,9 +309,18 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
               const SizedBox(height: 16.0),
               Column(
                 children: [
-                  sliderWidget(),
-                  const SizedBox(height: 8.0),
-                  sliderIndicator(),
+                  FutureBuilder<List<BannerModel>>(
+                    future: _bannerProvider,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        return sliderWidget(snapshot.data!);
+                      }
+                    },
+                  ),
                 ],
               ),
               const SizedBox(height: 32.0),
@@ -378,22 +382,21 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
   }
 
   // 위젯 분리 필요
-  Widget sliderWidget() {
+  Widget sliderWidget(List<BannerModel> bannerList) {
     return CarouselSlider(
       carouselController: _controller,
-      items: imageList.map(
-        (imgLink) {
+      items: bannerList.map(
+        (banner) {
           return Builder(
             builder: (context) {
               return SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: ClipRRect(
-                  borderRadius:
-                      BorderRadius.circular(10.0), // 여기서 borderRadius를 설정합니다.
+                  borderRadius: BorderRadius.circular(10.0),
                   child: Image(
                     fit: BoxFit.fill,
                     image: NetworkImage(
-                      imgLink,
+                      banner.imgUrl,
                     ),
                   ),
                 ),
