@@ -25,7 +25,6 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
   final CarouselController _controller = CarouselController();
   late final Future<List<BannerModel>> _bannerProvider;
 
-
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 0)).then((_) {
@@ -420,12 +419,12 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
   }
 
   // 위젯 분리 필요
-  Widget sliderIndicator() {
+  Widget sliderIndicator(List<BannerModel> bannerList) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: imageList.asMap().entries.map((entry) {
+        children: bannerList.asMap().entries.map((entry) {
           return GestureDetector(
             onTap: () => _controller.animateToPage(entry.key),
             child: Container(
