@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/module/view/module_review_main_screen.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/user/view/home_screen/home_tab_screen.dart';
 import 'package:mingle/post/view/lawn_tab_screen.dart';
@@ -62,7 +63,7 @@ class _HomeRootTabState extends State<HomeRootTab> {
       case 2:
         return LawnTabScreen();
       case 3:
-        return const TimeTableHomeScreen();
+        return const ModuleReviewMainScreen();
       case 4:
         return MarketTabScreen();
       default:

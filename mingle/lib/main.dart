@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/view/splash_screen.dart';
 import 'package:mingle/module/components/module_review_card.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
 import 'package:mingle/module/view/module_review_main_screen.dart';
@@ -24,7 +25,7 @@ class _App extends StatelessWidget {
           theme: ThemeData(
               fontFamily: 'Pretendard', disabledColor: GRAYSCALE_GRAY_02),
           debugShowCheckedModeBanner: false,
-          home: const LoginScreen()),
+          home: const HomeRootTab()),
     );
   }
 }
