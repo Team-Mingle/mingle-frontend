@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mingle/post/models/banner_model.dart';
-import 'package:mingle/post/repository/banner_repository.dart';
+import 'package:mingle/user/model/banner_model.dart';
+import 'package:mingle/user/repository/banner_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final bannerProvider = FutureProvider<List<BannerModel>>((ref) async {

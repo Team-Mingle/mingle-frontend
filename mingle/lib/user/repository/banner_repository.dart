@@ -2,7 +2,7 @@ import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/dio/dio.dart';
-import 'package:mingle/post/models/banner_model.dart';
+import 'package:mingle/user/model/banner_model.dart';
 
 import 'package:retrofit/retrofit.dart';
 
