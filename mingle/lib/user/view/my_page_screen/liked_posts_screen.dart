@@ -20,7 +20,7 @@ class _LikedPostsScreenState extends ConsumerState<LikedPostsScreen>
   void initState() {
     // TODO: implement initState
     super.initState();
-    _tabController = TabController(length: 3, vsync: this); // TabController 초기화
+    _tabController = TabController(length: 2, vsync: this); // TabController 초기화
   }
 
   @override
@@ -53,7 +53,7 @@ class _LikedPostsScreenState extends ConsumerState<LikedPostsScreen>
             child: Align(
               alignment: Alignment.center,
               child: SizedBox(
-                width: 80 * 3.0,
+                width: 80 * 2.0,
                 child: TabBar(
                   indicatorColor: Colors.orange,
                   labelColor: Colors.black,
@@ -62,7 +62,6 @@ class _LikedPostsScreenState extends ConsumerState<LikedPostsScreen>
                   tabs: const [
                     Tab(text: '광장'),
                     Tab(text: '잔디밭'),
-                    Tab(text: "장터")
                   ],
                 ),
               ),
@@ -88,15 +87,6 @@ class _LikedPostsScreenState extends ConsumerState<LikedPostsScreen>
                   allNotifierProvider:
                       ref.watch(univLikedPostProvider.notifier),
                   postDetailProvider: univLikedPostDetailProvider,
-                  cardType: CardType.square,
-                ),
-                GeneralPostPreviewCard(
-                  data: ref.watch(itemLikedPostProvider),
-                  // postFuture: paginatePost("FREE", ref),
-                  notifierProvider: ref.watch(itemLikedPostProvider.notifier),
-                  allNotifierProvider:
-                      ref.watch(itemLikedPostProvider.notifier),
-                  postDetailProvider: itemLikedPostDetailProvider,
                   cardType: CardType.square,
                 ),
               ],

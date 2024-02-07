@@ -183,6 +183,17 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
     // });
   }
 
+  void scrapOrUnscrapPost() async {
+    final resp = await ref
+        .watch(postRepositoryProvider)
+        .scrapOrUnscrapPost(postId: widget.postId);
+
+    if (widget.notifierProvider != null) {
+      widget.notifierProvider!.getDetail(postId: widget.postId);
+      widget.allNotifierProvider!.getDetail(postId: widget.postId);
+    }
+  }
+
   // void unlikePost() async {
   //   final resp = await ref
   //       .watch(postRepositoryProvider)
@@ -453,11 +464,14 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                 ),
                 post is PostDetailModel
                     ? LikeAndCommentNumbersCard(
-                        post: post, likeOrUnlikePost: likeOrUnlikePost)
+                        post: post,
+                        likeOrUnlikePost: likeOrUnlikePost,
+                        scrapOrUnscrapPost: scrapOrUnscrapPost)
                     : Skeletonizer(
                         child: LikeAndCommentNumbersCard(
                         post: fakePost,
                         likeOrUnlikePost: () {},
+                        scrapOrUnscrapPost: () {},
                       )),
                 const Divider(
                   height: 0.0,

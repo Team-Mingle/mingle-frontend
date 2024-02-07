@@ -20,7 +20,7 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen>
   void initState() {
     // TODO: implement initState
     super.initState();
-    _tabController = TabController(length: 3, vsync: this); // TabController 초기화
+    _tabController = TabController(length: 2, vsync: this); // TabController 초기화
   }
 
   @override
@@ -53,7 +53,7 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen>
             child: Align(
               alignment: Alignment.center,
               child: SizedBox(
-                width: 80 * 3.0,
+                width: 80 * 2.0,
                 child: TabBar(
                   indicatorColor: Colors.orange,
                   labelColor: Colors.black,
@@ -62,7 +62,6 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen>
                   tabs: const [
                     Tab(text: '광장'),
                     Tab(text: '잔디밭'),
-                    Tab(text: "장터")
                   ],
                 ),
               ),
@@ -86,14 +85,6 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen>
                   notifierProvider: ref.watch(univMyPostProvider.notifier),
                   allNotifierProvider: ref.watch(univMyPostProvider.notifier),
                   postDetailProvider: univMyPostDetailProvider,
-                  cardType: CardType.square,
-                ),
-                GeneralPostPreviewCard(
-                  data: ref.watch(itemMyPostProvider),
-                  // postFuture: paginatePost("FREE", ref),
-                  notifierProvider: ref.watch(itemMyPostProvider.notifier),
-                  allNotifierProvider: ref.watch(itemMyPostProvider.notifier),
-                  postDetailProvider: itemMyPostDetailProvider,
                   cardType: CardType.square,
                 ),
               ],

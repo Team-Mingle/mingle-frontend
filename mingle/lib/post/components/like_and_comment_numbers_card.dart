@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/component/like_animation.dart';
@@ -9,8 +10,12 @@ import 'package:mingle/post/models/post_model.dart';
 class LikeAndCommentNumbersCard extends StatefulWidget {
   PostDetailModel post;
   final Function likeOrUnlikePost;
+  final Function scrapOrUnscrapPost;
   LikeAndCommentNumbersCard(
-      {super.key, required this.post, required this.likeOrUnlikePost});
+      {super.key,
+      required this.post,
+      required this.likeOrUnlikePost,
+      required this.scrapOrUnscrapPost});
 
   @override
   State<LikeAndCommentNumbersCard> createState() =>
@@ -81,7 +86,28 @@ class _LikeAndCommentNumbersCardState extends State<LikeAndCommentNumbersCard> {
           const SizedBox(
             width: 34.0,
           ),
-          SvgPicture.asset("assets/img/post_screen/scrap_icon.svg"),
+          GestureDetector(
+              onTap: () async {
+                if (widget.post.scraped) {
+                  setState(() {
+                    widget.post.scraped = false;
+                  });
+                } else {
+                  setState(() {
+                    widget.post.scraped = true;
+                  });
+                }
+                await widget.scrapOrUnscrapPost();
+              },
+              child: LikeAnimation(
+                isAnimating: widget.post.scraped,
+                child: SvgPicture.asset("assets/img/post_screen/scrap_icon.svg",
+                    colorFilter: ColorFilter.mode(
+                        widget.post.scraped
+                            ? PRIMARY_COLOR_ORANGE_02
+                            : GRAYSCALE_GRAY_02,
+                        BlendMode.srcIn)),
+              )),
         ]),
       ),
     );

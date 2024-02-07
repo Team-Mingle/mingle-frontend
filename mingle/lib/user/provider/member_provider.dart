@@ -341,26 +341,32 @@ class MemberPostStateNotifier extends PostStateNotifier
         }
       }
 
-      final CursorPagination resp;
+      final CursorPagination<PostModel> resp;
 
       switch (postType) {
         case 'scraps':
-          resp = await memberRepository.getScrappedPosts(boardType: boardType);
+          resp = await memberRepository.getScrappedPosts(
+              boardType: boardType, paginationParams: paginationParams);
         case 'posts':
-          resp = await memberRepository.getMyPosts(boardType: boardType);
+          resp = await memberRepository.getMyPosts(
+              boardType: boardType, paginationParams: paginationParams);
         case 'likes':
-          resp = await memberRepository.getMyLikedPosts(boardType: boardType);
+          resp = await memberRepository.getMyLikedPosts(
+              boardType: boardType, paginationParams: paginationParams);
         case 'comments':
-          resp =
-              await memberRepository.getMyCommentedPosts(boardType: boardType);
+          resp = await memberRepository.getMyCommentedPosts(
+              boardType: boardType, paginationParams: paginationParams);
         default:
-          resp = await memberRepository.getScrappedPosts(boardType: boardType);
+          resp = await memberRepository.getScrappedPosts(
+              boardType: boardType, paginationParams: paginationParams);
       }
 
       if (state is CursorPaginationFetchingMore) {
         final pState = state as CursorPaginationFetchingMore;
         print("pstate: ${pState.data.length}");
         print("resp: ${resp.data.length}");
+        print("page: ${paginationParams.page}");
+        print("size: ${paginationParams.size}");
         //기존 데이터에 새로운 데이터 추가
 
         state = resp.copyWith(
@@ -438,7 +444,7 @@ class TotalScrappedPostStateNotifier extends MemberPostStateNotifier {
             memberRepository: memberRepository,
             postRepository: postRepository,
             boardType: 'TOTAL',
-            postType: 'scrap');
+            postType: 'scraps');
 }
 
 class TotalMyPostStateNotifier extends MemberPostStateNotifier {
@@ -498,7 +504,7 @@ class UnivScrappedPostStateNotifier extends MemberPostStateNotifier {
             memberRepository: memberRepository,
             postRepository: postRepository,
             boardType: 'UNIV',
-            postType: 'scrap');
+            postType: 'scraps');
 }
 
 class UnivMyPostStateNotifier extends MemberPostStateNotifier {
@@ -662,13 +668,14 @@ class MemberSecondHandPostStateNotifier extends SecondHandPostStateNotifier {
         }
       }
 
-      final resp =
-          await memberRepository.getMyLikedSecondHandPosts(boardType: "ITEM");
+      final resp = await memberRepository.getMyLikedSecondHandPosts(
+          boardType: "ITEM", paginationParams: paginationParams);
 
       if (state is CursorPaginationFetchingMore) {
         final pState = state as CursorPaginationFetchingMore;
         print("pstate: ${pState.data.length}");
         print("resp: ${resp.data.length}");
+
         //기존 데이터에 새로운 데이터 추가
 
         state = resp.copyWith(
