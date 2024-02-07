@@ -94,6 +94,10 @@ abstract class PostRepository {
   @Headers({'accessToken': 'true'})
   Future<CursorPagination<PostModel>> paginateBest();
 
+  @POST('/scrap/{postId}')
+  @Headers({'accessToken': 'true'})
+  Future<dynamic> scrapOrUnscrapPost({@Path() required int postId});
+
   // factory RestaurantRepository(Dio dio, {String baseUrl}) =
   //     _RestaurantRepository;
 

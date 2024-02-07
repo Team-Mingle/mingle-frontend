@@ -35,9 +35,9 @@ class SquareTabScreen extends ConsumerWidget {
         GeneralPostPreviewCard(
           // postList: dummyPostList,
           data: ref.watch(totalAllPostProvider),
-          notifierProvider: ref.watch(totalFreePostProvider.notifier),
+          notifierProvider: ref.watch(totalAllPostProvider.notifier),
           allNotifierProvider: ref.watch(totalAllPostProvider.notifier),
-          postDetailProvider: totalFreePostDetailProvider,
+          postDetailProvider: totalAllPostDetailProvider,
           // postFuture: paginatePost("MINGLE", ref),
           cardType: CardType.square,
         ),

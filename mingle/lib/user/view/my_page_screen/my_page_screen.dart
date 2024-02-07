@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/const/data.dart';
+import 'package:mingle/secure_storage/secure_storage.dart';
 import 'package:mingle/user/components/my_page_tile.dart';
+import 'package:mingle/user/view/login_screen.dart';
 import 'package:mingle/user/view/my_page_screen/commented_posts_screen.dart';
 import 'package:mingle/user/view/my_page_screen/liked_posts_screen.dart';
 import 'package:mingle/user/view/my_page_screen/liked_second_hand_posts_screen.dart';
@@ -17,11 +22,11 @@ import 'package:mingle/user/view/my_page_screen/scrapped_posts_screen.dart';
 import 'package:mingle/user/view/my_page_screen/terms_and_conditions_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
-class MyPageScreen extends StatelessWidget {
+class MyPageScreen extends ConsumerWidget {
   const MyPageScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     List<String> activityTitles = [
       "스크랩한 글",
       "좋아요 누른 글",
@@ -253,7 +258,7 @@ class MyPageScreen extends StatelessWidget {
                       const SizedBox(
                         width: 20.0,
                       ),
-                      InkWell(
+                      GestureDetector(
                         child: const Text(
                           "로그아웃",
                           style: TextStyle(
@@ -262,7 +267,15 @@ class MyPageScreen extends StatelessWidget {
                               decoration: TextDecoration.underline,
                               color: GRAYSCALE_GRAY_04),
                         ),
-                        onTap: () {},
+                        onTap: () {
+                          FlutterSecureStorage storage =
+                              ref.watch(secureStorageProvider);
+                          storage.delete(key: ACCESS_TOKEN_KEY);
+                          storage.delete(key: REFRESH_TOKEN_KEY);
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (_) => const LoginScreen()));
+                        },
                       ),
                     ],
                   ),
