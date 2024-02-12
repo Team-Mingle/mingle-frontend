@@ -270,8 +270,9 @@ class MyPageScreen extends ConsumerWidget {
                         onTap: () {
                           FlutterSecureStorage storage =
                               ref.watch(secureStorageProvider);
-                          storage.delete(key: ACCESS_TOKEN_KEY);
-                          storage.delete(key: REFRESH_TOKEN_KEY);
+                          // storage.delete(key: ACCESS_TOKEN_KEY);
+                          // storage.delete(key: REFRESH_TOKEN_KEY);
+                          storage.deleteAll();
                           Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                   builder: (_) => const LoginScreen()));

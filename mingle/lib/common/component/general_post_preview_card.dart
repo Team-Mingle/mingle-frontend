@@ -99,9 +99,33 @@ class _GeneralPostPreviewCardState
 
     if (widget.data is CursorPaginationError) {
       CursorPaginationError error = widget.data as CursorPaginationError;
-      return Center(
-        child: Text(error.message),
+      return const Center(
+        child: Text('데이터를 가져오는데 실패했습니다'),
       );
+      // return CustomScrollView(
+      //     shrinkWrap: true,
+      //     controller: scrollController,
+      //     physics: widget.cardType == CardType.home
+      //         ? const NeverScrollableScrollPhysics()
+      //         : const AlwaysScrollableScrollPhysics(),
+
+      //     // physics: const NeverScrollableScrollPhysics(),
+      //     slivers: [
+      //       CupertinoSliverRefreshControl(
+      //         onRefresh: () async {
+      //           await Future.delayed(
+      //               const Duration(milliseconds: 1000),
+      //               () =>
+      //                   widget.notifierProvider!.paginate(forceRefetch: true));
+      //           // await widget.notifierProvider!.paginate(forceRefetch: true);
+      //         },
+      //       ),
+      //       const SliverFillRemaining(
+      //         child: Center(
+      //           child: Text('데이터를 가져오는데 실패했습니다'),
+      //         ),
+      //       )
+      //     ]);
     }
 
     final postList = widget.data as CursorPagination;
@@ -132,6 +156,13 @@ class _GeneralPostPreviewCardState
                     // await widget.notifierProvider!.paginate(forceRefetch: true);
                   },
                 ),
+                // postList.data.isEmpty
+                //     ? const SliverFillRemaining(
+                //         child: Center(
+                //           child: Text('데이터가 없습니다'),
+                //         ),
+                //       )
+                //     :
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
                     childCount: postList.data.length + 1,

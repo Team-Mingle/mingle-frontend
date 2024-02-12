@@ -52,24 +52,24 @@ class _ModuleReviewCardState extends State<ModuleReviewCard> {
                   fontWeight: FontWeight.w500,
                   color: GRAYSCALE_GRAY_04),
             ),
-            const SizedBox(
-              width: 4.0,
-            ),
-            SvgPicture.asset(
-                "assets/img/module_review_screen/thubsup_icon.svg"),
-            const SizedBox(
-              width: 4.0,
-            ),
-            Text(
-              widget.likes.toString(),
-              style: const TextStyle(
-                  fontSize: 12.0, color: PRIMARY_COLOR_ORANGE_01),
-            ),
+            // const SizedBox(
+            //   width: 4.0,
+            // ),
+            // SvgPicture.asset(
+            //     "assets/img/module_review_screen/thubsup_icon.svg"),
+            // const SizedBox(
+            //   width: 4.0,
+            // ),
+            // Text(
+            //   widget.likes.toString(),
+            //   style: const TextStyle(
+            //       fontSize: 12.0, color: PRIMARY_COLOR_ORANGE_01),
+            // ),
             const Spacer(),
-            const Text(
-              "공감하기",
-              style: TextStyle(fontSize: 12.0, color: GRAYSCALE_GRAY_04),
-            )
+            // const Text(
+            //   "공감하기",
+            //   style: TextStyle(fontSize: 12.0, color: GRAYSCALE_GRAY_04),
+            // )
           ],
         )
       ]),

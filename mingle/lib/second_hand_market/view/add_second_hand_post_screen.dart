@@ -1,11 +1,14 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/second_hand_market/provider/second_hand_market_post_provider.dart';
 import 'package:mingle/second_hand_market/repository/second_hand_market_post_repository.dart';
 
@@ -17,6 +20,7 @@ class AddSecondHandPostScreen extends ConsumerStatefulWidget {
 }
 
 class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
+  late FToast fToast;
   final ImagePicker imagePicker = ImagePicker();
   List<XFile> imagePreviewFileList = [];
   List<File> multipartFile = [];
@@ -32,11 +36,13 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
   @override
   void initState() {
     super.initState();
+    fToast = FToast();
+    fToast.init(context);
   }
 
-  bool canSubmit() {
-    return title.isNotEmpty && content.isNotEmpty && location.isNotEmpty;
-  }
+  // bool canSubmit() {
+  //   return title.isNotEmpty && content.isNotEmpty && location.isNotEmpty;
+  // }
 
   void handleSubmit() async {
     // print(title);
@@ -52,22 +58,62 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
     print(chatUrl);
     print(isAnonymous);
 
-    final response = await ref
-        .watch(secondHandPostRepositoryProvider)
-        .addSecondHandMarketPost(
-            title: title,
-            price: int.parse(price),
-            currencyType: currencyType.toUpperCase(),
-            content: content,
-            location: location,
-            chatUrl: chatUrl,
-            isAnonymous: isAnonymous,
-            multipartFile: multipartFile) as Map<String, dynamic>;
-    final int itemId = response['itemId'];
-    ref.watch(secondHandPostProvider.notifier).addPost(itemId: itemId);
+    // } else {
+    // fToast.showToast(
+    //   child: ToastMessage(message: response['data'].message),
+    //   gravity: ToastGravity.CENTER,
+    //   toastDuration: const Duration(seconds: 2),
+    // );
+    // }
+    if (title.isEmpty ||
+        content.isEmpty ||
+        location.isEmpty ||
+        (isSelling && price.isEmpty)) {
+      fToast.showToast(
+        child: const ToastMessage(message: "필수 작성란을 모두 채웠는지 확인해 주세요."),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
+      return;
+    }
+    if (multipartFile.isEmpty) {
+      fToast.showToast(
+        child: const ToastMessage(message: "최소 한 장 이상의 사진을 첨부해 주세요."),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
+      return;
+    }
 
-    Navigator.of(context).pop();
-    // print(response);
+    try {
+      final response = await ref
+          .watch(secondHandPostRepositoryProvider)
+          .addSecondHandMarketPost(
+              title: title,
+              price: !isSelling ? 0 : int.parse(price),
+              currencyType: currencyType.toUpperCase(),
+              content: content,
+              location: location,
+              chatUrl: chatUrl,
+              isAnonymous: isAnonymous,
+              multipartFile: multipartFile);
+      if (response.statusCode == 200) {
+        final data = response.data;
+        final int itemId = data['itemId'];
+        ref.watch(secondHandPostProvider.notifier).addPost(itemId: itemId);
+
+        Navigator.of(context).pop();
+      }
+    } on DioException catch (e) {
+      // print(e.response?.statusCode);
+      fToast.showToast(
+        child: ToastMessage(message: e.response?.data['message']),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
+    }
+    // print(respons
+    // e);
   }
 
   @override
@@ -106,13 +152,11 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
                   ),
                   const Spacer(),
                   GestureDetector(
-                    onTap: () => canSubmit() ? handleSubmit() : {},
-                    child: Text(
+                    onTap: () => handleSubmit(),
+                    child: const Text(
                       "게시",
                       style: TextStyle(
-                          color: canSubmit()
-                              ? PRIMARY_COLOR_ORANGE_01
-                              : GRAYSCALE_GRAY_03,
+                          color: PRIMARY_COLOR_ORANGE_01,
                           fontSize: 14.0,
                           fontWeight: FontWeight.w400),
                     ),

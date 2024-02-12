@@ -77,15 +77,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           //       'accept': "*/*"
           //     }),
           //     data: jsonEncode({"encryptedEmail": encryptedEmail}));
-          final r = await dio.post('https://$baseUrl/auth/refresh-token',
-              options: Options(headers: {
-                'X-Refresh-Token': refreshToken,
-                'Content-Type': "application/json",
-              }),
-              data: jsonEncode({"encryptedEmail": encryptedEmail}));
-          print(r.data);
-          await Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => const HomeRootTab()));
+          // final r = await dio.post('https://$baseUrl/auth/refresh-token',
+          //     options: Options(headers: {
+          //       'X-Refresh-Token': refreshToken,
+          //       'Content-Type': "application/json",
+          //     }),
+          //     data: jsonEncode({"encryptedEmail": encryptedEmail}));
+          // print(r.data);
+          await Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => const HomeRootTab(isFromLogin: true)));
         } else {
           String? error;
           print(resp.data['code']);
@@ -103,13 +103,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             errorMsg = error;
           });
         }
-      } catch (e) {
-        if (e is DioException) {
-          print("diodio");
+      } on DioException catch (e) {
+        String error = generalErrorMsg;
+        switch (e.response!.data['code']) {
+          case "FAILED_TO_LOGIN":
+            error = e.response!.data['message'];
+          case "MEMBER_DELETED_ERROR":
+            error = e.response!.data['message'];
+          case "MEMBER_REPORTED_ERROR":
+            error = e.response!.data['message'];
+          default:
+            error = generalErrorMsg;
         }
-        print(e);
         setState(() {
-          errorMsg = generalErrorMsg;
+          errorMsg = error;
         });
       }
     }

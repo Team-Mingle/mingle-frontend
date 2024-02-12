@@ -4,7 +4,13 @@ import 'package:mingle/common/const/colors.dart';
 
 class AnonymousTextfield extends StatefulWidget {
   final Function handleSubmit;
-  const AnonymousTextfield({super.key, required this.handleSubmit});
+  final ScrollController scrollController;
+  final FocusNode focusNode;
+  const AnonymousTextfield(
+      {super.key,
+      required this.handleSubmit,
+      required this.scrollController,
+      required this.focusNode});
 
   @override
   State<AnonymousTextfield> createState() => _AnonymousTextfieldState();
@@ -12,10 +18,28 @@ class AnonymousTextfield extends StatefulWidget {
 
 class _AnonymousTextfieldState extends State<AnonymousTextfield> {
   bool isAnonymous = true;
-  String text = "";
+  final TextEditingController _controller = TextEditingController();
+
+// This is what you're looking for!
+  void _scrollDown() {
+    widget.scrollController.animateTo(
+      widget.scrollController.position.maxScrollExtent + 74,
+      duration: const Duration(seconds: 1),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  // String text = "";
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _controller.dispose();
   }
 
   @override
@@ -61,14 +85,14 @@ class _AnonymousTextfieldState extends State<AnonymousTextfield> {
               // width: 144,
               height: 36.0,
               child: TextFormField(
+                  focusNode: widget.focusNode,
                   onChanged: (value) {
-                    setState(() {
-                      text = value;
-                    });
+                    setState(() {});
                   },
+                  controller: _controller,
                   decoration: InputDecoration(
                     filled: true,
-
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 5.0),
                     fillColor: const Color(0xFFE9E7E7),
                     // hintText: "닉네임 작성",
                     hintStyle: const TextStyle(
@@ -97,11 +121,24 @@ class _AnonymousTextfieldState extends State<AnonymousTextfield> {
           const SizedBox(
             width: 8.0,
           ),
-          InkWell(
-            child:
-                SvgPicture.asset("assets/img/post_screen/paper_plane_icon.svg"),
-            onTap: () => widget.handleSubmit(text, isAnonymous),
-          )
+          _controller.text.isEmpty
+              ? GestureDetector(
+                  child: SvgPicture.asset(
+                    "assets/img/post_screen/paper_plane_icon.svg",
+                  ),
+                  onTap: () {},
+                )
+              : GestureDetector(
+                  child: SvgPicture.asset(
+                      "assets/img/post_screen/paper_plane_icon.svg",
+                      colorFilter: const ColorFilter.mode(
+                          PRIMARY_COLOR_ORANGE_02, BlendMode.srcIn)),
+                  onTap: () {
+                    widget.handleSubmit(_controller.text, isAnonymous);
+                    _controller.clear();
+                    _scrollDown();
+                  },
+                )
         ]),
       ),
     );

@@ -23,7 +23,7 @@ class CourseEvaluationModel {
     List<String> splitted = semester.split("_");
     int firstOrSecond = splitted[0] == 'FIRST' ? 1 : 2;
     String year = splitted[2].substring(2);
-    String result = "$year년 ${firstOrSecond.toString()}학기";
+    String result = "$year년 ${firstOrSecond.toString()}학기 수강자";
     return result;
   }
 
@@ -31,6 +31,10 @@ class CourseEvaluationModel {
     switch (rating) {
       case "RECOMMENDED":
         return moduleSatisfaction.satisfied;
+      case "NORMAL":
+        return moduleSatisfaction.meh;
+      case "NOT_RECOMMENDED":
+        return moduleSatisfaction.unsatisfied;
       // case ""
       default:
         return moduleSatisfaction.satisfied;

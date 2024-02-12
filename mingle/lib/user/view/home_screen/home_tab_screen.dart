@@ -11,9 +11,13 @@ import 'package:mingle/user/view/home_screen/search_screen.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
 import 'dart:convert';
 
+import 'package:mingle/user/view/my_page_screen/terms_and_conditions_screen.dart';
+
 class HomeTabScreen extends ConsumerStatefulWidget {
+  final bool isFromLogin;
   const HomeTabScreen({
     Key? key,
+    this.isFromLogin = false,
   }) : super(key: key);
 
   @override
@@ -27,216 +31,219 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
 
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 0)).then((_) {
-      showModalBottomSheet<void>(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        isScrollControlled: true,
-        context: context,
-        builder: (BuildContext context) {
-          return SizedBox(
-            height: 512.0,
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 22.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 40.0,
-                      ),
-                      const Text(
-                        "시작하기 전에",
-                        style: TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.w500),
-                      ),
-                      const SizedBox(
-                        height: 4.0,
-                      ),
-                      Text(
-                        "더 나은 밍글을 위해 약속하기",
-                        style: TextStyle(
-                            fontSize: 22.0,
-                            fontWeight: FontWeight.w700,
-                            backgroundColor:
-                                PRIMARY_COLOR_ORANGE_02.withOpacity(0.4)),
-                      ),
-                      const SizedBox(
-                        height: 42.0,
-                      ),
-                      const Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "1.",
-                            style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w600,
-                                color: GRAYSCALE_GRAY_03),
-                          ),
-                          SizedBox(
-                            width: 8.0,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "서로 존중을 주고 받아요",
-                                style: TextStyle(
+    if (widget.isFromLogin) {
+      Future.delayed(const Duration(seconds: 0)).then((_) {
+        showModalBottomSheet<void>(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          isScrollControlled: true,
+          context: context,
+          builder: (BuildContext context) {
+            return SizedBox(
+              height: 512.0,
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 22.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 40.0,
+                        ),
+                        const Text(
+                          "시작하기 전에",
+                          style: TextStyle(
+                              fontSize: 20.0, fontWeight: FontWeight.w500),
+                        ),
+                        const SizedBox(
+                          height: 4.0,
+                        ),
+                        Text(
+                          "더 나은 밍글을 위해 약속하기",
+                          style: TextStyle(
+                              fontSize: 22.0,
+                              fontWeight: FontWeight.w700,
+                              backgroundColor:
+                                  PRIMARY_COLOR_ORANGE_02.withOpacity(0.4)),
+                        ),
+                        const SizedBox(
+                          height: 42.0,
+                        ),
+                        const Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "1.",
+                              style: TextStyle(
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.w600,
+                                  color: GRAYSCALE_GRAY_03),
+                            ),
+                            SizedBox(
+                              width: 8.0,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "서로 존중을 주고 받아요",
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 8.0,
-                              ),
-                              Text(
-                                "서로 비난하지 않고 함께 존중하는 커뮤니티를 만들어가요. ",
-                                style: TextStyle(
-                                  fontSize: 12.0,
+                                SizedBox(
+                                  height: 8.0,
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 8.0,
-                      ),
-                      const Divider(
-                        height: 32.0,
-                        thickness: 1.0,
-                        color: GRAYSCALE_GRAY_01,
-                      ),
-                      const Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "2.",
-                            style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w600,
-                                color: GRAYSCALE_GRAY_03),
-                          ),
-                          SizedBox(
-                            width: 8.0,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "서로 도움을 주고 받아요",
-                                style: TextStyle(
+                                Text(
+                                  "서로 비난하지 않고 함께 존중하는 커뮤니티를 만들어가요. ",
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 8.0,
+                        ),
+                        const Divider(
+                          height: 32.0,
+                          thickness: 1.0,
+                          color: GRAYSCALE_GRAY_01,
+                        ),
+                        const Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "2.",
+                              style: TextStyle(
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.w600,
+                                  color: GRAYSCALE_GRAY_03),
+                            ),
+                            SizedBox(
+                              width: 8.0,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "서로 도움을 주고 받아요",
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 8.0,
-                              ),
-                              Text(
-                                "궁금한 점들을 질문하고, 내가 줄 수 있는 도움을 나눠봐요.",
-                                style: TextStyle(
-                                  fontSize: 12.0,
+                                SizedBox(
+                                  height: 8.0,
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 8.0,
-                      ),
-                      const Divider(
-                        height: 32.0,
-                        thickness: 1.0,
-                        color: GRAYSCALE_GRAY_01,
-                      ),
-                      const Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "2.",
-                            style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w600,
-                                color: GRAYSCALE_GRAY_03),
-                          ),
-                          SizedBox(
-                            width: 8.0,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "이용규칙을 지켜주세요.",
-                                style: TextStyle(
+                                Text(
+                                  "궁금한 점들을 질문하고, 내가 줄 수 있는 도움을 나눠봐요.",
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 8.0,
+                        ),
+                        const Divider(
+                          height: 32.0,
+                          thickness: 1.0,
+                          color: GRAYSCALE_GRAY_01,
+                        ),
+                        const Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "2.",
+                              style: TextStyle(
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.w600,
+                                  color: GRAYSCALE_GRAY_03),
+                            ),
+                            SizedBox(
+                              width: 8.0,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "이용규칙을 지켜주세요.",
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 8.0,
-                              ),
-                              Text(
-                                "이용규칙을 지키며 더 나은 커뮤니티를 만들어가요.",
-                                style: TextStyle(
-                                  fontSize: 12.0,
+                                SizedBox(
+                                  height: 8.0,
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 4.0,
-                      ),
-                      const Divider(
-                        height: 36.0,
-                        thickness: 1.0,
-                        color: GRAYSCALE_GRAY_01,
-                      ),
-                    ],
-                  ),
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: const Text(
-                    "자세한 운영정책 보러가기",
-                    style: TextStyle(
-                        color: GRAYSCALE_GRAY_04,
-                        fontSize: 11.0,
-                        decoration: TextDecoration.underline),
-                  ),
-                ),
-                const SizedBox(
-                  height: 25.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                  child: InkWell(
-                    onTap: () => Navigator.pop(context),
-                    child: Container(
-                      height: 48.0,
-                      decoration: BoxDecoration(
-                        color: PRIMARY_COLOR_ORANGE_02,
-                        border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: const Center(child: Text("확인했습니다.")),
+                                Text(
+                                  "이용규칙을 지키며 더 나은 커뮤니티를 만들어가요.",
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 4.0,
+                        ),
+                        const Divider(
+                          height: 36.0,
+                          thickness: 1.0,
+                          color: GRAYSCALE_GRAY_01,
+                        ),
+                      ],
                     ),
                   ),
-                )
-              ],
-            ),
-          );
-        },
-      );
-    });
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => const TermsAndConditionsScreen())),
+                    child: const Text(
+                      "자세한 운영정책 보러가기",
+                      style: TextStyle(
+                          color: GRAYSCALE_GRAY_04,
+                          fontSize: 11.0,
+                          decoration: TextDecoration.underline),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 25.0,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                    child: InkWell(
+                      onTap: () => Navigator.pop(context),
+                      child: Container(
+                        height: 48.0,
+                        decoration: BoxDecoration(
+                          color: PRIMARY_COLOR_ORANGE_02,
+                          border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: const Center(child: Text("확인했습니다.")),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+          },
+        );
+      });
+    }
     _bannerProvider = ref.read(bannerProvider.future);
     super.initState();
   }

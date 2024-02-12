@@ -10,8 +10,10 @@ import 'package:mingle/post/view/square_tab_screen.dart';
 import 'package:mingle/timetable/view/timetable_tab_screen.dart';
 
 class HomeRootTab extends StatefulWidget {
+  final bool isFromLogin;
   const HomeRootTab({
     Key? key,
+    this.isFromLogin = false,
   }) : super(key: key);
 
   @override
@@ -57,7 +59,9 @@ class _HomeRootTabState extends State<HomeRootTab> {
         // Navigator.of(context)
         //     .push(MaterialPageRoute(builder: (_) => const HomeTabScreen()));
 
-        return const HomeTabScreen();
+        return HomeTabScreen(
+          isFromLogin: widget.isFromLogin,
+        );
       case 1:
         return SquareTabScreen();
       case 2:

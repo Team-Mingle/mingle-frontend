@@ -20,6 +20,26 @@ Map<String, dynamic> _$CourseEvaluationResponseDtoToJson(
       'courseEvaluationList': instance.courseEvaluationList,
     };
 
+AddCourseEvaluationDto _$AddCourseEvaluationDtoFromJson(
+        Map<String, dynamic> json) =>
+    AddCourseEvaluationDto(
+      courseId: json['courseId'] as int,
+      year: json['year'] as int,
+      semester: json['semester'] as int,
+      comment: json['comment'] as String,
+      rating: json['rating'] as String,
+    );
+
+Map<String, dynamic> _$AddCourseEvaluationDtoToJson(
+        AddCourseEvaluationDto instance) =>
+    <String, dynamic>{
+      'courseId': instance.courseId,
+      'year': instance.year,
+      'semester': instance.semester,
+      'comment': instance.comment,
+      'rating': instance.rating,
+    };
+
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
@@ -63,6 +83,33 @@ class _CourseEvaluationRepository implements CourseEvaluationRepository {
             ))));
     final value = CourseEvaluationResponseDto.fromJson(_result.data!);
     return value;
+  }
+
+  @override
+  Future<void> addCourseEvaluation(
+      {required AddCourseEvaluationDto addCourseEvaluationDto}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(addCourseEvaluationDto.toJson());
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/create',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

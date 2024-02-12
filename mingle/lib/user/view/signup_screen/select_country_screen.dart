@@ -19,6 +19,14 @@ class SelectCountryScreen extends ConsumerStatefulWidget {
 }
 
 class _SelectCountryScreenState extends ConsumerState<SelectCountryScreen> {
+  late List<String> countryList;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,7 +96,7 @@ class _SelectCountryScreenState extends ConsumerState<SelectCountryScreen> {
             SizedBox(
               width: 170,
               child: DropdownList(
-                itemList: COUNTRY_LIST,
+                itemList: countryList,
                 hintText: "국가 선택",
                 isSelectedProvider: selectedCountryProvider,
               ),
