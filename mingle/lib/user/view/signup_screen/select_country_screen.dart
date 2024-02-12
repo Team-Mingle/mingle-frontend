@@ -96,7 +96,7 @@ class _SelectCountryScreenState extends ConsumerState<SelectCountryScreen> {
             SizedBox(
               width: 170,
               child: DropdownList(
-                itemList: countryList,
+                itemList: COUNTRY_LIST,
                 hintText: "국가 선택",
                 isSelectedProvider: selectedCountryProvider,
               ),
