@@ -85,7 +85,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           //     data: jsonEncode({"encryptedEmail": encryptedEmail}));
           // print(r.data);
           await Navigator.of(context).push(MaterialPageRoute(
-              builder: (_) => const HomeRootTab(isFromLogin: true)));
+              builder: (_) => HomeRootTab(isFromLogin: true)));
         } else {
           String? error;
           print(resp.data['code']);

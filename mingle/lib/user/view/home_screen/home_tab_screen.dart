@@ -7,6 +7,7 @@ import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/user/model/banner_model.dart';
 import 'package:mingle/user/provider/banner_provider.dart';
 import 'package:mingle/post/provider/post_provider.dart';
+import 'package:mingle/user/provider/is_fresh_login_provider.dart';
 import 'package:mingle/user/view/home_screen/search_screen.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
 import 'dart:convert';
@@ -14,11 +15,10 @@ import 'dart:convert';
 import 'package:mingle/user/view/my_page_screen/terms_and_conditions_screen.dart';
 
 class HomeTabScreen extends ConsumerStatefulWidget {
-  final bool isFromLogin;
-  const HomeTabScreen({
-    Key? key,
-    this.isFromLogin = false,
-  }) : super(key: key);
+  bool isFromLogin;
+  Function? setIsFromLogin;
+  HomeTabScreen({Key? key, this.isFromLogin = false, this.setIsFromLogin})
+      : super(key: key);
 
   @override
   ConsumerState<HomeTabScreen> createState() => _HomeTabScreenState();
@@ -31,13 +31,16 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
 
   @override
   void initState() {
-    if (widget.isFromLogin) {
+    if (ref.read(isFreshLoginProvider)) {
+      // widget.setIsFromLogin!();
+
       Future.delayed(const Duration(seconds: 0)).then((_) {
         showModalBottomSheet<void>(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
           isScrollControlled: true,
+          isDismissible: false,
           context: context,
           builder: (BuildContext context) {
             return SizedBox(
@@ -225,7 +228,12 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 32.0),
                     child: InkWell(
-                      onTap: () => Navigator.pop(context),
+                      onTap: () {
+                        ref
+                            .read(isFreshLoginProvider.notifier)
+                            .update((_) => false);
+                        Navigator.pop(context);
+                      },
                       child: Container(
                         height: 48.0,
                         decoration: BoxDecoration(

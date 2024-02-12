@@ -30,8 +30,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     // try {
     if (refreshToken != null && accessToken != null) {
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const HomeRootTab()),
-          (route) => false);
+          MaterialPageRoute(builder: (_) => HomeRootTab()), (route) => false);
     } else {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (_) => const AppStartScreen()),

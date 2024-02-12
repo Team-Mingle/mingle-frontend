@@ -7,6 +7,7 @@ import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/secure_storage/secure_storage.dart';
 import 'package:mingle/user/components/my_page_tile.dart';
+import 'package:mingle/user/provider/is_fresh_login_provider.dart';
 import 'package:mingle/user/view/login_screen.dart';
 import 'package:mingle/user/view/my_page_screen/commented_posts_screen.dart';
 import 'package:mingle/user/view/my_page_screen/liked_posts_screen.dart';
@@ -270,6 +271,9 @@ class MyPageScreen extends ConsumerWidget {
                         onTap: () {
                           FlutterSecureStorage storage =
                               ref.watch(secureStorageProvider);
+                          ref
+                              .watch(isFreshLoginProvider.notifier)
+                              .update((_) => true);
                           // storage.delete(key: ACCESS_TOKEN_KEY);
                           // storage.delete(key: REFRESH_TOKEN_KEY);
                           storage.deleteAll();
