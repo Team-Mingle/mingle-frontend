@@ -1,4 +1,6 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/module/view/module_review_main_screen.dart';
@@ -19,6 +21,14 @@ class HomeRootTab extends StatefulWidget {
 }
 
 class _HomeRootTabState extends State<HomeRootTab> {
+  var messageString = "";
+
+  void getMyDeviceToken() async {
+    final token = await FirebaseMessaging.instance.getToken();
+
+    print("내 디바이스 토큰: $token");
+  }
+
   int _selectedIndex = 0;
 
   final List<String> _normalSvgImagePaths = [
@@ -69,6 +79,38 @@ class _HomeRootTabState extends State<HomeRootTab> {
       default:
         return const HomeTabScreen();
     }
+  }
+
+  @override
+  void initState() {
+    getMyDeviceToken();
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      RemoteNotification? notification = message.notification;
+
+      if (notification != null) {
+        FlutterLocalNotificationsPlugin().show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          const NotificationDetails(
+            android: AndroidNotificationDetails(
+              'high_importance_channel',
+              'high_importance_notification',
+              importance: Importance.max,
+            ),
+          ),
+        );
+
+        setState(() {
+          messageString = message.notification!.body!;
+
+          print("Foreground 메시지 수신: $messageString");
+        });
+      }
+    });
+
+    super.initState();
   }
 
   @override
