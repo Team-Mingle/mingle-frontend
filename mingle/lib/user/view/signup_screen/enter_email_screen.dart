@@ -159,44 +159,48 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
               height: 40,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(
-                  width: 136,
-                  height: 44,
-                  child: TextFormField(
-                    textAlignVertical: TextAlignVertical.bottom,
-                    onChanged: (email) {
-                      setState(() {
-                        errorMsg = "";
-                      });
-                      ref
-                          .read(selectedEmailProvider.notifier)
-                          .update((state) => email);
-                    },
-                    maxLines: null,
-                    decoration: const InputDecoration(
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: PRIMARY_COLOR_ORANGE_01)),
-                        border: UnderlineInputBorder(
-                            borderSide: BorderSide(color: GRAYSCALE_GRAY_03))),
+                Expanded(
+                  child: SizedBox(
+                    height: 44,
+                    child: TextFormField(
+                      textAlignVertical: TextAlignVertical.bottom,
+                      onChanged: (email) {
+                        setState(() {
+                          errorMsg = "";
+                        });
+                        ref
+                            .read(selectedEmailProvider.notifier)
+                            .update((state) => email);
+                      },
+                      maxLines: null,
+                      decoration: const InputDecoration(
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: PRIMARY_COLOR_ORANGE_01)),
+                          border: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: GRAYSCALE_GRAY_03))),
+                    ),
                   ),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text("@"),
                 ),
-                DropdownList(
-                  itemList: currentCountry == "홍콩"
-                      ? HONG_KONG_EMAIL_LIST
-                      : SINGAPORE_EMAIL_LIST,
-                  // currentCountry == "싱가포르"
-                  //     ? SINGAPORE_EMAIL_LIST
-                  //     : ENGLAND_EMAIL_LIST,
-                  hintText: "선택",
-                  isSelectedProvider: selectedEmailExtensionProvider,
-                  width: 145,
+                Expanded(
+                  child: DropdownList(
+                    itemList: currentCountry == "홍콩"
+                        ? HONG_KONG_EMAIL_LIST
+                        : SINGAPORE_EMAIL_LIST,
+                    // currentCountry == "싱가포르"
+                    //     ? SINGAPORE_EMAIL_LIST
+                    //     : ENGLAND_EMAIL_LIST,
+                    hintText: "선택",
+                    isSelectedProvider: selectedEmailExtensionProvider,
+                    //width: 145,
+                  ),
                 ),
               ],
             ),

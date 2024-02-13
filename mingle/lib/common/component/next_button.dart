@@ -69,7 +69,7 @@ class NextButton extends ConsumerWidget {
                       color: isSelected
                           ? PRIMARY_COLOR_ORANGE_02
                           : GRAYSCALE_GRAY_02),
-                  borderRadius: BorderRadius.circular(20.0),
+                  borderRadius: BorderRadius.circular(10.0),
                   color:
                       isSelected ? PRIMARY_COLOR_ORANGE_02 : GRAYSCALE_GRAY_02),
               child: Center(
