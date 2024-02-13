@@ -55,7 +55,8 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
           }),
           data: jsonEncode(email),
         );
-        print(resp.data['verified'] as bool == true);
+        print(resp.statusCode);
+        print("verified: ${resp.data['verified'] as bool == true}");
         if (resp.data['verified'] as bool) {
           print(resp.data);
           // final sendCodeResp =
@@ -83,10 +84,10 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
             errorMsg = error;
           });
         }
-      } catch (e) {
+      } on DioException catch (e) {
         setState(() {
           isLoading = false;
-          errorMsg = generalErrorMsg;
+          errorMsg = e.response?.data['message'];
         });
       }
     }
@@ -166,6 +167,9 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
                   child: TextFormField(
                     textAlignVertical: TextAlignVertical.bottom,
                     onChanged: (email) {
+                      setState(() {
+                        errorMsg = "";
+                      });
                       ref
                           .read(selectedEmailProvider.notifier)
                           .update((state) => email);
@@ -186,12 +190,13 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
                 DropdownList(
                   itemList: currentCountry == "홍콩"
                       ? HONG_KONG_EMAIL_LIST
-                      : currentCountry == "싱가포르"
-                          ? SINGAPORE_EMAIL_LIST
-                          : ENGLAND_EMAIL_LIST,
+                      : SINGAPORE_EMAIL_LIST,
+                  // currentCountry == "싱가포르"
+                  //     ? SINGAPORE_EMAIL_LIST
+                  //     : ENGLAND_EMAIL_LIST,
                   hintText: "선택",
                   isSelectedProvider: selectedEmailExtensionProvider,
-                  width: 144,
+                  width: 145,
                 ),
               ],
             ),
@@ -222,7 +227,7 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
                 selectedEmailExtensionProvider,
                 selectedEmailProvider
               ],
-              // validators: [validateForm],
+              validators: [validateForm],
               isLoading: isLoading,
             ),
             const SizedBox(

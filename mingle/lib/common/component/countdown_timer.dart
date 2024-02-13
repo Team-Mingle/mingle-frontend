@@ -5,15 +5,20 @@ import 'package:mingle/common/const/colors.dart';
 import 'package:quiver/iterables.dart';
 
 class CountdownTimer extends StatefulWidget {
-  const CountdownTimer({super.key});
+  final Function setCountdownComplete;
+  const CountdownTimer({super.key, required this.setCountdownComplete});
 
   @override
   State<CountdownTimer> createState() => _CountdownTimerState();
+
+  void resetTimer() {
+    _CountdownTimerState().resetTimer();
+  }
 }
 
 class _CountdownTimerState extends State<CountdownTimer> {
-  int counter = 180;
-  int minutes = 3;
+  int counter = 10;
+  int minutes = 0;
   int seconds = 0;
   late Timer timer;
 
@@ -23,10 +28,20 @@ class _CountdownTimerState extends State<CountdownTimer> {
     super.initState();
   }
 
+  void resetTimer() {
+    setState(() {
+      counter = 10;
+      minutes = 0;
+      seconds = 0;
+    });
+  }
+
   void startTimer() {
     // int counter = 180;
+    print("timer started");
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (counter == 1) {
+        widget.setCountdownComplete(true);
         setState(() {
           timer.cancel();
         });

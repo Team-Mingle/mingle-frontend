@@ -20,6 +20,19 @@ class EnterPasswordScreen extends ConsumerStatefulWidget {
 }
 
 class _EnterPasswordScreenState extends ConsumerState<EnterPasswordScreen> {
+  String? errorMsg;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  void setErrorMsg(String msg) {
+    setState(() {
+      errorMsg = msg;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,31 +115,41 @@ class _EnterPasswordScreenState extends ConsumerState<EnterPasswordScreen> {
             ),
             SizedBox(
               height: 44,
-              child: TextField(
+              child: TextFormField(
                 obscureText: true,
                 onChanged: (password) {
+                  setState(() {
+                    errorMsg = null;
+                  });
                   ref
                       .read(selectedRetypePasswordProvider.notifier)
                       .update((state) => password);
                 },
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
+                    errorText: errorMsg,
                     hintText: "비밀번호 재입력",
-                    hintStyle: TextStyle(color: GRAYSCALE_GRAY_02),
-                    focusedBorder: UnderlineInputBorder(
+                    hintStyle: const TextStyle(color: GRAYSCALE_GRAY_02),
+                    focusedBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: PRIMARY_COLOR_ORANGE_01)),
-                    border: UnderlineInputBorder(
+                    border: const UnderlineInputBorder(
                         borderSide: BorderSide(color: GRAYSCALE_GRAY_03))),
               ),
             ),
             Expanded(child: Container()),
             NextButton(
-              nextScreen: widget.isPasswordReset
-                  ? const PasswordChangeSuccessScreen()
-                  : const ServiceAgreementScreen(),
               buttonName: "다음으로",
               isSelectedProvider: [
                 selectedPasswordProvider,
                 selectedRetypePasswordProvider
+              ],
+              validators: [
+                ref.watch(selectedPasswordProvider) ==
+                        ref.watch(selectedRetypePasswordProvider)
+                    ? () => (Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => widget.isPasswordReset
+                            ? const PasswordChangeSuccessScreen()
+                            : const ServiceAgreementScreen())))
+                    : () => setErrorMsg("비밀번호가 일치하지 않습니다")
               ],
               isReplacement: widget.isPasswordReset,
             ),

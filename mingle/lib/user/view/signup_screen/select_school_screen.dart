@@ -94,9 +94,10 @@ class _SelectSchoolScreenState extends ConsumerState<SelectSchoolScreen> {
               child: DropdownList(
                 itemList: currentCountry == "홍콩"
                     ? HONG_KONG_SCHOOL_LIST
-                    : currentCountry == "싱가포르"
-                        ? SINGAPORE_SCHOOL_LIST
-                        : ENGLAND_SCHOOL_LIST,
+                    : SINGAPORE_SCHOOL_LIST,
+                // currentCountry == "싱가포르"
+                //     ? SINGAPORE_SCHOOL_LIST
+                //     : ENGLAND_SCHOOL_LIST,
                 hintText: "학교 선택",
                 isSelectedProvider: selectedSchoolProvider,
               ),

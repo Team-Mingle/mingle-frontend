@@ -6,12 +6,14 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/component/countdown_timer.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/component/showup_animation.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/dio/dio.dart';
+import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:mingle/user/view/signup_screen/enter_password_screen.dart';
 import 'package:mingle/user/view/signup_screen/provider/email_extension_selected_provider.dart';
@@ -32,14 +34,56 @@ class _EnterVerificationNumberScreenState
     extends ConsumerState<EnterVerificationNumberScreen> {
   String? errorMsg;
   bool isLoading = false;
+  bool countdownComplete = false;
+  late CountdownTimer countdownTimer;
+
+  late FToast fToast;
 
   @override
   void initState() {
+    fToast = FToast();
+    fToast.init(context);
+    countdownTimer = CountdownTimer(setCountdownComplete: setCountdownComplete);
     super.initState();
+  }
+
+  void setCountdownComplete(bool val) {
+    setState(() {
+      countdownComplete = val;
+    });
+  }
+
+  void sendCode() async {
+    final Dio dio = Dio();
+    final email = {
+      "email":
+          "${ref.read(selectedEmailProvider)}@${ref.read(selectedEmailExtensionProvider)}",
+    };
+    try {
+      fToast.showToast(
+        child: const ToastMessage(message: "인증번호가 전송되었습니다."),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
+      await dio.post(
+        'https://$baseUrl/auth/sendcode',
+        options: Options(headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+        }),
+        data: jsonEncode(email),
+      );
+      // print(sendCodeResp);
+    } on DioException catch (e) {
+      setState(() {
+        errorMsg = e.response?.data['message'];
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    // CountdownTimer countdownTimer =
+    //     CountdownTimer(setCountdownComplete: setCountdownComplete);
     final dio = ref.watch(dioProvider);
     void validateForm() async {
       final email = {
@@ -80,10 +124,10 @@ class _EnterVerificationNumberScreenState
             errorMsg = error;
           });
         }
-      } on DioException {
+      } on DioException catch (e) {
         setState(() {
           isLoading = false;
-          errorMsg = generalErrorMsg;
+          errorMsg = e.response?.data['message'];
         });
       }
     }
@@ -150,8 +194,11 @@ class _EnterVerificationNumberScreenState
             SizedBox(
               // width: 144,
               height: 44,
-              child: TextField(
+              child: TextFormField(
                 onChanged: (verificationNumber) {
+                  setState(() {
+                    errorMsg = "";
+                  });
                   ref
                       .read(enteredVerificationNumberProvider.notifier)
                       .update((state) => verificationNumber);
@@ -168,38 +215,55 @@ class _EnterVerificationNumberScreenState
             const SizedBox(
               height: 8,
             ),
-            const SizedBox(
+            SizedBox(
               height: 44,
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
                       children: [
-                        Text(
+                        const Text(
                           "잔여시간",
                           style: TextStyle(
                               color: GRAYSCALE_GRAY_03,
                               fontSize: 12.0,
                               fontWeight: FontWeight.w400),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 4.0,
                         ),
-                        CountdownTimer()
+                        countdownTimer
                       ],
                     ),
-                    InkWell(
+                    GestureDetector(
+                      onTap: () => countdownComplete
+                          ? () {
+                              setState(() {
+                                countdownTimer = CountdownTimer(
+                                    setCountdownComplete: setCountdownComplete);
+                              });
+                              print('resetting');
+                              sendCode();
+                              setCountdownComplete(false);
+                            }()
+                          : {},
+
+                      //  () => countdownComplete
+                      //     ? sendCode()
+                      //     : {countdownTimer.resetTimer()},
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             "인증문자 재발송",
                             style: TextStyle(
-                                color: GRAYSCALE_GRAY_05,
+                                color: countdownComplete
+                                    ? GRAYSCALE_GRAY_05
+                                    : GRAYSCALE_GRAY_02,
                                 fontSize: 12.0,
                                 fontWeight: FontWeight.w400),
                           ),
-                          ImageIcon(
+                          const ImageIcon(
                             AssetImage(
                                 "assets/img/signup_screen/next_screen_icon.png"),
                             color: GRAYSCALE_GRAY_03,
@@ -231,7 +295,7 @@ class _EnterVerificationNumberScreenState
               ),
               buttonName: "다음으로",
               isSelectedProvider: [enteredVerificationNumberProvider],
-              // validators: [validateForm],
+              validators: [validateForm],
               isLoading: isLoading,
             ),
             const SizedBox(
