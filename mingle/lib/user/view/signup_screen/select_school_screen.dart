@@ -12,8 +12,11 @@ import 'package:mingle/user/view/signup_screen/provider/country_selected_provide
 import 'package:mingle/user/view/signup_screen/provider/school_selected_provider.dart';
 
 class SelectSchoolScreen extends ConsumerStatefulWidget {
-  final bool isPassswordReset;
-  const SelectSchoolScreen({super.key, this.isPassswordReset = false});
+  final bool isPasswordReset;
+  const SelectSchoolScreen({
+    super.key,
+    this.isPasswordReset = false,
+  });
 
   @override
   ConsumerState<SelectSchoolScreen> createState() => _SelectSchoolScreenState();
@@ -23,7 +26,6 @@ class _SelectSchoolScreenState extends ConsumerState<SelectSchoolScreen> {
   @override
   Widget build(BuildContext context) {
     final String currentCountry = ref.read(selectedCountryProvider);
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -63,7 +65,7 @@ class _SelectSchoolScreenState extends ConsumerState<SelectSchoolScreen> {
                           fontSize: 24.0, fontWeight: FontWeight.w400),
                     ),
                     Text(
-                      widget.isPassswordReset ? "어디신가요?" : "어디에 위치해 있나요?",
+                      widget.isPasswordReset ? "어디신가요?" : "어디에 위치해 있나요?",
                       style: const TextStyle(
                           fontSize: 24.0, fontWeight: FontWeight.w400),
                     ),
@@ -71,7 +73,7 @@ class _SelectSchoolScreenState extends ConsumerState<SelectSchoolScreen> {
                       height: 16.0,
                     ),
                     Text(
-                        widget.isPassswordReset
+                        widget.isPasswordReset
                             ? "비밀번호 재설정을 위해 본인인증이 필요해요."
                             : "원활한 앱 이용을 위해 재학 정보가 필요해요",
                         style: const TextStyle(
@@ -107,7 +109,7 @@ class _SelectSchoolScreenState extends ConsumerState<SelectSchoolScreen> {
             ),
             NextButton(
               nextScreen: EnterEmailScreen(
-                isPasswordReset: widget.isPassswordReset,
+                isPasswordReset: widget.isPasswordReset,
               ),
               buttonName: "다음으로",
               isSelectedProvider: [selectedSchoolProvider],

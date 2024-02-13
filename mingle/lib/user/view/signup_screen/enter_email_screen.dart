@@ -48,41 +48,64 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
         setState(() {
           isLoading = true;
         });
-        final resp = await dio.post(
-          'https://$baseUrl/auth/verifyemail',
-          options: Options(headers: {
-            HttpHeaders.contentTypeHeader: "application/json",
-          }),
-          data: jsonEncode(email),
-        );
-        print(resp.statusCode);
-        print("verified: ${resp.data['verified'] as bool == true}");
-        if (resp.data['verified'] as bool) {
-          print(resp.data);
-          // final sendCodeResp =
-          await dio.post(
-            'https://$baseUrl/auth/sendcode',
+        String stat = widget.isPasswordReset.toString();
+        print('상태 $stat');
+        if (widget.isPasswordReset) {
+          print("email sent");
+          final sendCodeResp = await dio.post(
+            'https://$baseUrl/auth/sendcode/pwd',
             options: Options(headers: {
               HttpHeaders.contentTypeHeader: "application/json",
             }),
             data: jsonEncode(email),
           );
-          // print(sendCodeResp);
-          setState(() {
-            isLoading = false;
-          });
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (_) => const EnterVerificationNumberScreen()));
-        } else {
-          String? error;
-          switch (resp.data['code']) {
-            case "EMAIL_DUPLICATED":
-              error = resp.data['message'];
+          if (sendCodeResp.statusCode == 200) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => const EnterVerificationNumberScreen(
+                      isPasswordReset: true,
+                    )));
+          } else {
+            throw Exception(
+                "Failed to send verification code for password reset");
           }
-          setState(() {
-            isLoading = false;
-            errorMsg = error;
-          });
+        } else {
+          final resp = await dio.post(
+            'https://$baseUrl/auth/verifyemail',
+            options: Options(headers: {
+              HttpHeaders.contentTypeHeader: "application/json",
+            }),
+            data: jsonEncode(email),
+          );
+
+          print(resp.statusCode);
+          print("verified: ${resp.data['verified'] as bool == true}");
+          if (resp.data['verified'] as bool) {
+            print(resp.data);
+            // final sendCodeResp =
+            await dio.post(
+              'https://$baseUrl/auth/sendcode',
+              options: Options(headers: {
+                HttpHeaders.contentTypeHeader: "application/json",
+              }),
+              data: jsonEncode(email),
+            );
+            // print(sendCodeResp);
+            setState(() {
+              isLoading = false;
+            });
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => const EnterVerificationNumberScreen()));
+          } else {
+            String? error;
+            switch (resp.data['code']) {
+              case "EMAIL_DUPLICATED":
+                error = resp.data['message'];
+            }
+            setState(() {
+              isLoading = false;
+              errorMsg = error;
+            });
+          }
         }
       } on DioException catch (e) {
         setState(() {

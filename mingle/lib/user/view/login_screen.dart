@@ -14,6 +14,7 @@ import 'package:mingle/user/view/home_screen/home_root_tab.dart';
 import 'package:mingle/user/view/home_screen/home_tab_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:mingle/user/view/signup_screen/select_country_screen.dart';
+import 'package:mingle/user/view/signup_screen/select_school_screen.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -195,7 +196,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                     ),
                     InkWell(
-                      onTap: () {},
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => const SelectCountryScreen(
+                                isPasswordReset: true,
+                              ))),
                       child: const Text(
                         "비밀번호 재설정",
                         style: TextStyle(

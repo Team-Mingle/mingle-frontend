@@ -11,7 +11,11 @@ import 'package:mingle/user/view/signup_screen/provider/country_selected_provide
 import 'package:mingle/user/view/signup_screen/select_school_screen.dart';
 
 class SelectCountryScreen extends ConsumerStatefulWidget {
-  const SelectCountryScreen({super.key});
+  final bool isPasswordReset;
+  const SelectCountryScreen({
+    super.key,
+    this.isPasswordReset = false,
+  });
 
   @override
   ConsumerState<SelectCountryScreen> createState() =>
@@ -61,24 +65,27 @@ class _SelectCountryScreenState extends ConsumerState<SelectCountryScreen> {
               padding: const EdgeInsets.only(top: 16.0),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "재학 중인 학교가",
                       style: TextStyle(
                           fontSize: 24.0, fontWeight: FontWeight.w400),
                     ),
-                    Text(
+                    const Text(
                       "어디에 위치해 있나요?",
                       style: TextStyle(
                           fontSize: 24.0, fontWeight: FontWeight.w400),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 16.0,
                     ),
-                    Text("원활한 앱 이용을 위해 재학 정보가 필요해요",
-                        style: TextStyle(
+                    Text(
+                        widget.isPasswordReset
+                            ? "비밀번호 재설정을 위해 본인인증이 필요해요."
+                            : "원활한 앱 이용을 위해 재학 정보가 필요해요",
+                        style: const TextStyle(
                             color: GRAYSCALE_GRAY_03,
                             fontSize: 14.0,
                             fontWeight: FontWeight.w400))
@@ -103,7 +110,9 @@ class _SelectCountryScreenState extends ConsumerState<SelectCountryScreen> {
             ),
             Expanded(child: Container()),
             NextButton(
-              nextScreen: const SelectSchoolScreen(),
+              nextScreen: SelectSchoolScreen(
+                isPasswordReset: widget.isPasswordReset,
+              ),
               buttonName: "다음으로",
               isSelectedProvider: [selectedCountryProvider],
             ),
