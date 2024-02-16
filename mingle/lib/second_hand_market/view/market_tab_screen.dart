@@ -34,6 +34,7 @@ class MarketTabScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         toolbarHeight: 48,
         backgroundColor: Colors.white,
         elevation: 0,

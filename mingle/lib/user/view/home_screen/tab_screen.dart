@@ -32,6 +32,7 @@ class TabScreen extends StatelessWidget {
       length: tabContents.length,
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           toolbarHeight: 57,
           backgroundColor: Colors.white,
           elevation: 0,

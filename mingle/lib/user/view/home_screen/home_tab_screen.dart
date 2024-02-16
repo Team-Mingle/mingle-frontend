@@ -337,41 +337,41 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 32.0),
-              Column(
-                children: [
-                  Column(
-                    children: [
-                      const Row(
-                        children: [
-                          Text(
-                            "소식 바로 보기",
-                            style: TextStyle(
-                              fontFamily: "Pretendard Variable",
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: GRAYSCALE_BLACK,
-                            ),
-                            textAlign: TextAlign.left,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12.0),
-                      Row(
-                        children: [
-                          customButton('학생회', () {
-                            // 첫 번째 버튼의 동작 추가
-                          }),
-                          const SizedBox(width: 10.0),
-                          customButton('밍글 소식', () {
-                            // 두 번째 버튼의 동작 추가
-                          }),
-                        ],
-                      ),
-                    ],
-                  )
-                ],
-              ),
+              // const SizedBox(height: 32.0),
+              // Column(
+              //   children: [
+              //     Column(
+              //       children: [
+              //         const Row(
+              //           children: [
+              //             Text(
+              //               "소식 바로 보기",
+              //               style: TextStyle(
+              //                 fontFamily: "Pretendard Variable",
+              //                 fontSize: 18,
+              //                 fontWeight: FontWeight.w500,
+              //                 color: GRAYSCALE_BLACK,
+              //               ),
+              //               textAlign: TextAlign.left,
+              //             ),
+              //           ],
+              //         ),
+              //         const SizedBox(height: 12.0),
+              //         Row(
+              //           children: [
+              //             customButton('학생회', () {
+              //               // 첫 번째 버튼의 동작 추가
+              //             }),
+              //             const SizedBox(width: 10.0),
+              //             customButton('밍글 소식', () {
+              //               // 두 번째 버튼의 동작 추가
+              //             }),
+              //           ],
+              //         ),
+              //       ],
+              //     )
+              //   ],
+              // ),
               const SizedBox(height: 32.0),
               PostCard(
                 title: '지금 광장에서는',
