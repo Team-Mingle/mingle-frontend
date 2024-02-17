@@ -11,8 +11,11 @@ import 'package:mingle/user/view/home_screen/search_screen.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
 
 class MarketTabScreen extends ConsumerWidget {
+  final Function(int)? changeTabIndex;
   MarketTabScreen({
+    this.changeTabIndex,
     Key? key,
+    
   }) : super(key: key);
 
   final dummyPostList = List.generate(50, (index) {

@@ -58,21 +58,38 @@ class _HomeRootTabState extends State<HomeRootTab> {
       case 0:
         // Navigator.of(context)
         //     .push(MaterialPageRoute(builder: (_) => const HomeTabScreen()));
-
         return HomeTabScreen(
-          isFromLogin: widget.isFromLogin,
           setIsFromLogin: setIsFromLogin,
+          changeTabIndex: (int index) {
+            _onItemTapped(index);
+          },
         );
       case 1:
-        return SquareTabScreen();
+        return SquareTabScreen(
+          changeTabIndex: (int index) {
+            _onItemTapped(index);
+          },
+        );
       case 2:
-        return LawnTabScreen();
+        return LawnTabScreen(
+          changeTabIndex: (int index) {
+            _onItemTapped(index);
+          },
+        );
       // case 3:
       //   return const ModuleReviewMainScreen();
       case 3:
-        return MarketTabScreen();
+        return MarketTabScreen(
+          changeTabIndex: (int index) {
+            _onItemTapped(index);
+          },
+        );
       default:
-        return HomeTabScreen();
+        return HomeTabScreen(
+          changeTabIndex: (int index) {
+            _onItemTapped(index);
+          },
+        );
     }
   }
 

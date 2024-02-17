@@ -147,14 +147,21 @@ class TabScreen extends StatelessWidget {
               right: 16.0,
               bottom: 16.0,
               child: FloatingActionButton(
-                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
                     builder: (_) => AddPostScreen(
-                          boardType: boardType,
-                        ))),
+                      boardType: boardType,
+                    ),
+                  ),
+                ),
                 backgroundColor: PRIMARY_COLOR_ORANGE_02,
-                child: const Icon(
-                  Icons.add,
-                  size: 36,
+                child: Transform.translate(
+                  offset: const Offset(2, 5),
+                  child: SvgPicture.asset(
+                    'assets/img/common/ic_pen.svg',
+                    width: 48,
+                    height: 48,
+                  ),
                 ),
               ),
             ),
