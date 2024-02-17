@@ -254,7 +254,7 @@ class _GeneralPostPreviewCardState
                                                       post.title,
                                                       style: const TextStyle(
                                                         fontFamily:
-                                                            "Pretendard Variable",
+                                                            "Pretendard",
                                                         fontSize: 14,
                                                         fontWeight:
                                                             FontWeight.w400,
@@ -276,7 +276,7 @@ class _GeneralPostPreviewCardState
                                                 post.content,
                                                 style: const TextStyle(
                                                   fontFamily:
-                                                      "Pretendard Variable",
+                                                      "Pretendard",
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w400,
                                                   color: GRAYSCALE_GRAY_05,
@@ -299,7 +299,7 @@ class _GeneralPostPreviewCardState
                                                         post.nickname,
                                                         style: const TextStyle(
                                                           fontFamily:
-                                                              "Pretendard Variable",
+                                                              "Pretendard",
                                                           fontSize: 11,
                                                           fontWeight:
                                                               FontWeight.w400,
@@ -322,7 +322,7 @@ class _GeneralPostPreviewCardState
                                                         post.createdAt,
                                                         style: const TextStyle(
                                                           fontFamily:
-                                                              "Pretendard Variable",
+                                                              "Pretendard",
                                                           fontSize: 11,
                                                           fontWeight:
                                                               FontWeight.w400,
@@ -346,7 +346,7 @@ class _GeneralPostPreviewCardState
                                                             .toString(),
                                                         style: const TextStyle(
                                                           fontFamily:
-                                                              "Pretendard Variable",
+                                                              "Pretendard",
                                                           fontSize: 11,
                                                           fontWeight:
                                                               FontWeight.w400,
@@ -369,7 +369,7 @@ class _GeneralPostPreviewCardState
                                                             .toString(),
                                                         style: const TextStyle(
                                                           fontFamily:
-                                                              "Pretendard Variable",
+                                                              "Pretendard",
                                                           fontSize: 11,
                                                           fontWeight:
                                                               FontWeight.w400,

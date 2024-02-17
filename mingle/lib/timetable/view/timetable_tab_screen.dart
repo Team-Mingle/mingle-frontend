@@ -834,7 +834,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                   style: TextStyle(
                     color: GRAYSCALE_GRAY_04,
                     fontSize: 12,
-                    fontFamily: 'Pretendard Variable',
+                    fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -843,7 +843,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 16,
-                    fontFamily: 'Pretendard Variable',
+                    fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w500,
                     height: 0,
                   ),
@@ -949,7 +949,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                           const Text(
                             "새 시간표 추가하기",
                             style: TextStyle(
-                              fontFamily: "Pretendard Variable",
+                              fontFamily: "Pretendard",
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
                               color: PRIMARY_COLOR_ORANGE_01,
@@ -1010,7 +1010,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                                     Text(
                                       "친구 목록",
                                       style: TextStyle(
-                                        fontFamily: "Pretendard Variable",
+                                        fontFamily: "Pretendard",
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500,
                                         color: Colors.black,
@@ -1071,7 +1071,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                           const Text(
                             "강의평가 홈 바로가기",
                             style: TextStyle(
-                              fontFamily: "Pretendard Variable",
+                              fontFamily: "Pretendard",
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                               color: Colors.black,

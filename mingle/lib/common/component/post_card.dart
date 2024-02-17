@@ -80,7 +80,7 @@ class PostCard extends ConsumerWidget {
               Text(
                 title,
                 style: const TextStyle(
-                  fontFamily: "Pretendard Variable",
+                  fontFamily: "Pretendard",
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
                   color: GRAYSCALE_BLACK,

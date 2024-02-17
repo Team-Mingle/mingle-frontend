@@ -49,7 +49,7 @@ class TabScreen extends StatelessWidget {
                     style: const TextStyle(
                       color: GRAYSCALE_GRAY_02,
                       fontSize: 11,
-                      fontFamily: 'Pretendard Variable',
+                      fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -58,7 +58,7 @@ class TabScreen extends StatelessWidget {
                     style: const TextStyle(
                       color: GRAYSCALE_BLACK_GRAY,
                       fontSize: 20,
-                      fontFamily: 'Pretendard Variable',
+                      fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w500,
                       height: 0,
                     ),
@@ -99,13 +99,13 @@ class TabScreen extends StatelessWidget {
             ),
             labelStyle: const TextStyle(
               fontSize: 14,
-              fontFamily: 'Pretendard Variable',
+              fontFamily: 'Pretendard',
               fontWeight: FontWeight.w600,
             ),
             unselectedLabelColor: GRAYSCALE_GRAY_04,
             unselectedLabelStyle: const TextStyle(
               fontSize: 14,
-              fontFamily: 'Pretendard Variable',
+              fontFamily: 'Pretendard',
               fontWeight: FontWeight.w400,
             ),
             tabs: [

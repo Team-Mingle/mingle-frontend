@@ -180,7 +180,7 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
                     //             Text(
                     //               "소식 바로 보기",
                     //               style: TextStyle(
-                    //                 fontFamily: "Pretendard Variable",
+                    //                 fontFamily: "Pretendard",
                     //                 fontSize: 18,
                     //                 fontWeight: FontWeight.w500,
                     //                 color: GRAYSCALE_BLACK,
@@ -326,7 +326,7 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
               child: Text(
                 buttonText,
                 style: const TextStyle(
-                  fontFamily: "Pretendard Variable",
+                  fontFamily: "Pretendard",
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                   color: GRAYSCALE_GRAY_04,

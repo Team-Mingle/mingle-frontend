@@ -78,7 +78,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen>
                   },
                   controller: _searchController,
                   decoration: const InputDecoration(
-                    hintText: '검색어를 입력하세요 왤케 아래에 있지...',
+                    hintText: '검색어를 입력하세요.',
                     hintStyle: TextStyle(
                       color: GRAYSCALE_GRAY_03,
                       fontSize: 11,
