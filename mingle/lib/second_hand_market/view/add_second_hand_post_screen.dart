@@ -511,7 +511,11 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
                     // imagePreviewFileList.isNotEmpty ? 160.0 :
                     48.0),
           ),
-          bottomSheet: SizedBox(
+          bottomSheet: Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.zero,
+            ),
             height: 48.0,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,

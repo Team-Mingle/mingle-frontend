@@ -15,7 +15,6 @@ class MarketTabScreen extends ConsumerWidget {
   MarketTabScreen({
     this.changeTabIndex,
     Key? key,
-    
   }) : super(key: key);
 
   final dummyPostList = List.generate(50, (index) {
@@ -111,6 +110,7 @@ class MarketTabScreen extends ConsumerWidget {
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => const AddSecondHandPostScreen())),
               backgroundColor: PRIMARY_COLOR_ORANGE_02,
+              shape: const CircleBorder(),
               child: const Icon(
                 Icons.add,
                 size: 36,

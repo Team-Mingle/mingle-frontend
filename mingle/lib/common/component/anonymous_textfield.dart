@@ -44,9 +44,13 @@ class _AnonymousTextfieldState extends State<AnonymousTextfield> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       width: MediaQuery.of(context).size.width,
       height: 56.0,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.zero,
+      ),
       child: Padding(
         padding: const EdgeInsets.only(
             left: 16.0, right: 17.0, top: 10.0, bottom: 10.0),

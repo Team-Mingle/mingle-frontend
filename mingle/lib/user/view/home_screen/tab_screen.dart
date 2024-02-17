@@ -90,6 +90,8 @@ class TabScreen extends StatelessWidget {
           ),
           bottom: TabBar(
             indicatorColor: PRIMARY_COLOR_ORANGE_01,
+            indicatorWeight: 2,
+            indicatorSize: TabBarIndicatorSize.tab,
             // indicatorPadding: const EdgeInsets.all(5),
             labelColor: Colors.black,
             padding: const EdgeInsets.symmetric(
@@ -155,6 +157,7 @@ class TabScreen extends StatelessWidget {
                   ),
                 ),
                 backgroundColor: PRIMARY_COLOR_ORANGE_02,
+                shape: const CircleBorder(),
                 child: Transform.translate(
                   offset: const Offset(2, 5),
                   child: SvgPicture.asset(

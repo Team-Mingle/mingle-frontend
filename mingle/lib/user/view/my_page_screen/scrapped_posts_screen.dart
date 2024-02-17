@@ -57,6 +57,8 @@ class _ScrappedPostsScreenState extends ConsumerState<ScrappedPostsScreen>
                 width: 80 * 2.0,
                 child: TabBar(
                   indicatorColor: Colors.orange,
+                  indicatorWeight: 2,
+                  indicatorSize: TabBarIndicatorSize.tab,
                   labelColor: Colors.black,
                   unselectedLabelColor: Colors.black,
                   controller: _tabController,
