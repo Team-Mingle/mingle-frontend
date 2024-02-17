@@ -24,6 +24,12 @@ abstract class CourseEvaluationRepository {
   @Headers({'accessToken': 'true'})
   Future<CourseEvaluationResponseDto> getCourseEvaluations(
       {@Path() required int courseId});
+
+  @POST('/create')
+  @Headers({'accessToken': 'true'})
+  Future<void> addCourseEvaluation(
+      {@Body() required AddCourseEvaluationDto addCourseEvaluationDto});
+
   // factory RestaurantRepository(Dio dio, {String baseUrl}) =
   //     _RestaurantRepository;
 
@@ -50,4 +56,23 @@ class CourseEvaluationResponseDto {
 
   factory CourseEvaluationResponseDto.fromJson(Map<String, dynamic> json) =>
       _$CourseEvaluationResponseDtoFromJson(json);
+}
+
+@JsonSerializable()
+class AddCourseEvaluationDto {
+  final int courseId;
+  final int year;
+  final int semester;
+  final String comment;
+  final String rating;
+
+  AddCourseEvaluationDto({
+    required this.courseId,
+    required this.year,
+    required this.semester,
+    required this.comment,
+    required this.rating,
+  });
+
+  Map<String, dynamic> toJson() => _$AddCourseEvaluationDtoToJson(this);
 }

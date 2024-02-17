@@ -11,7 +11,9 @@ import 'package:mingle/user/view/home_screen/search_screen.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
 
 class MarketTabScreen extends ConsumerWidget {
+  final Function(int)? changeTabIndex;
   MarketTabScreen({
+    this.changeTabIndex,
     Key? key,
   }) : super(key: key);
 
@@ -34,6 +36,7 @@ class MarketTabScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         toolbarHeight: 48,
         backgroundColor: Colors.white,
         elevation: 0,
@@ -107,6 +110,7 @@ class MarketTabScreen extends ConsumerWidget {
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => const AddSecondHandPostScreen())),
               backgroundColor: PRIMARY_COLOR_ORANGE_02,
+              shape: const CircleBorder(),
               child: const Icon(
                 Icons.add,
                 size: 36,

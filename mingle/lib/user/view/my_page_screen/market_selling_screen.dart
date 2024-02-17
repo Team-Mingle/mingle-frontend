@@ -46,11 +46,11 @@ class MarketSellingScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: const DefaultTabController(
+      body: DefaultTabController(
         length: 3,
         child: Column(
           children: [
-            TabBar(
+            const TabBar(
               indicatorColor: PRIMARY_COLOR_ORANGE_01,
               labelColor: Colors.black,
               padding: EdgeInsets.symmetric(
@@ -73,9 +73,16 @@ class MarketSellingScreen extends StatelessWidget {
                 Tab(text: "판매완료"),
               ],
             ),
+            const Divider(
+              height: 1.0,
+              color: GRAYSCALE_GRAY_02,
+            ),
             Expanded(
               child: TabBarView(
                 children: [
+                  Container(),
+                  Container(),
+                  Container(),
                   // Center(
                   //   child: ListView(
                   //     children: [

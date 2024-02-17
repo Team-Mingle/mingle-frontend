@@ -32,6 +32,7 @@ class TabScreen extends StatelessWidget {
       length: tabContents.length,
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           toolbarHeight: 57,
           backgroundColor: Colors.white,
           elevation: 0,
@@ -89,6 +90,8 @@ class TabScreen extends StatelessWidget {
           ),
           bottom: TabBar(
             indicatorColor: PRIMARY_COLOR_ORANGE_01,
+            indicatorWeight: 2,
+            indicatorSize: TabBarIndicatorSize.tab,
             // indicatorPadding: const EdgeInsets.all(5),
             labelColor: Colors.black,
             padding: const EdgeInsets.symmetric(
@@ -146,14 +149,22 @@ class TabScreen extends StatelessWidget {
               right: 16.0,
               bottom: 16.0,
               child: FloatingActionButton(
-                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
                     builder: (_) => AddPostScreen(
-                          boardType: boardType,
-                        ))),
+                      boardType: boardType,
+                    ),
+                  ),
+                ),
                 backgroundColor: PRIMARY_COLOR_ORANGE_02,
-                child: const Icon(
-                  Icons.add,
-                  size: 36,
+                shape: const CircleBorder(),
+                child: Transform.translate(
+                  offset: const Offset(2, 5),
+                  child: SvgPicture.asset(
+                    'assets/img/common/ic_pen.svg',
+                    width: 48,
+                    height: 48,
+                  ),
                 ),
               ),
             ),

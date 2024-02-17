@@ -41,7 +41,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen>
         preferredSize: const Size.fromHeight(48.0),
         child: AppBar(
           elevation: 0,
-          backgroundColor: GRAYSCALE_GRAY_01,
+          backgroundColor: Colors.white,
           titleSpacing: 0,
           leading: Container(
             margin: const EdgeInsets.only(
@@ -116,7 +116,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen>
         ),
       ),
       body: Container(
-        color: GRAYSCALE_GRAY_01,
+        color: Colors.white,
         child: Column(
           children: [
             const SizedBox(
@@ -130,6 +130,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen>
                   width: MediaQuery.of(context).size.width / 2,
                   child: TabBar(
                     indicatorColor: Colors.orange,
+                    indicatorWeight: 2,
+                    indicatorSize: TabBarIndicatorSize.tab,
                     labelColor: Colors.black,
                     unselectedLabelColor: Colors.black,
                     controller: _tabController,

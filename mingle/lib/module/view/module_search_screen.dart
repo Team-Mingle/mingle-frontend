@@ -9,7 +9,9 @@ import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/post/models/post_model.dart';
 
 class ModuleSearchScreen extends ConsumerStatefulWidget {
-  const ModuleSearchScreen({super.key});
+  final bool isAdd;
+  final Function? setModule;
+  const ModuleSearchScreen({super.key, this.isAdd = false, this.setModule});
 
   @override
   ConsumerState<ModuleSearchScreen> createState() => _ModuleSearchScreenState();
@@ -21,7 +23,6 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
   Future<CursorPagination<CourseModel>>? searchFuture;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -60,6 +61,7 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
             child: Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: TextFormField(
+                autofocus: true,
                 onEditingComplete: () {
                   setState(() {
                     searchFuture = ref
@@ -222,8 +224,16 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
 
   Widget coursePreviewCard(CourseModel course) {
     return GestureDetector(
-      onTap: () => Navigator.of(context).push(MaterialPageRoute(
-          builder: (_) => ModuleDetailsScreen(courseId: course.id))),
+      onTap: widget.isAdd
+          ? () {
+              widget.setModule!(course.name, course.id);
+              Navigator.pop(context);
+            }
+          : () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => ModuleDetailsScreen(
+                    courseId: course.id,
+                    moduleName: course.name,
+                  ))),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

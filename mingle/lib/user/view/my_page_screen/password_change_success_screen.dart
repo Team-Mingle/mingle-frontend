@@ -64,6 +64,9 @@ class PasswordChangeSuccessScreen extends StatelessWidget {
                     buttonName: "로그인 화면으로",
                     nextScreen: const LoginScreen(),
                     isReplacement: true,
+                  ),
+                  const SizedBox(
+                    height: 40.0,
                   )
                 ]),
           ),

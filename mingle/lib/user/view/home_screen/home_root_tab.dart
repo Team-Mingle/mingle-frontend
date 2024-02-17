@@ -12,8 +12,10 @@ import 'package:mingle/post/view/square_tab_screen.dart';
 import 'package:mingle/timetable/view/timetable_tab_screen.dart';
 
 class HomeRootTab extends StatefulWidget {
-  const HomeRootTab({
+  bool isFromLogin;
+  HomeRootTab({
     Key? key,
+    this.isFromLogin = false,
   }) : super(key: key);
 
   @override
@@ -35,7 +37,7 @@ class _HomeRootTabState extends State<HomeRootTab> {
     'assets/img/root_screen/ic_home_unselected.svg',
     'assets/img/root_screen/ic_square_unselected.svg',
     'assets/img/root_screen/ic_lawn_unselected.svg',
-    'assets/img/root_screen/ic_timetable_unselected.svg',
+    //'assets/img/root_screen/ic_timetable_unselected.svg',
     'assets/img/root_screen/ic_market_unselected.svg',
   ];
 
@@ -43,7 +45,7 @@ class _HomeRootTabState extends State<HomeRootTab> {
     'assets/img/root_screen/ic_home_selected.svg',
     'assets/img/root_screen/ic_square_selected.svg',
     'assets/img/root_screen/ic_lawn_selected.svg',
-    'assets/img/root_screen/ic_timetable_selected.svg',
+    //'assets/img/root_screen/ic_timetable_selected.svg',
     'assets/img/root_screen/ic_market_selected.svg',
   ];
 
@@ -51,7 +53,7 @@ class _HomeRootTabState extends State<HomeRootTab> {
     '홈',
     '광장',
     '잔디밭',
-    '시간표',
+    //'시간표',
     '장터',
   ];
 
@@ -66,19 +68,45 @@ class _HomeRootTabState extends State<HomeRootTab> {
       case 0:
         // Navigator.of(context)
         //     .push(MaterialPageRoute(builder: (_) => const HomeTabScreen()));
-
-        return const HomeTabScreen();
+        return HomeTabScreen(
+          setIsFromLogin: setIsFromLogin,
+          changeTabIndex: (int index) {
+            _onItemTapped(index);
+          },
+        );
       case 1:
-        return SquareTabScreen();
+        return SquareTabScreen(
+          changeTabIndex: (int index) {
+            _onItemTapped(index);
+          },
+        );
       case 2:
-        return LawnTabScreen();
+        return LawnTabScreen(
+          changeTabIndex: (int index) {
+            _onItemTapped(index);
+          },
+        );
+      // case 3:
+      //   return const ModuleReviewMainScreen();
       case 3:
-        return const ModuleReviewMainScreen();
-      case 4:
-        return MarketTabScreen();
+        return MarketTabScreen(
+          changeTabIndex: (int index) {
+            _onItemTapped(index);
+          },
+        );
       default:
-        return const HomeTabScreen();
+        return HomeTabScreen(
+          changeTabIndex: (int index) {
+            _onItemTapped(index);
+          },
+        );
     }
+  }
+
+  void setIsFromLogin() {
+    setState(() {
+      widget.isFromLogin = false;
+    });
   }
 
   @override

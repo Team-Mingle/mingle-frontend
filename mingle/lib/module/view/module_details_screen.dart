@@ -15,7 +15,9 @@ import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
 class ModuleDetailsScreen extends ConsumerStatefulWidget {
   final int courseId;
-  const ModuleDetailsScreen({super.key, required this.courseId});
+  final String moduleName;
+  const ModuleDetailsScreen(
+      {super.key, required this.courseId, required this.moduleName});
 
   @override
   ConsumerState<ModuleDetailsScreen> createState() =>
@@ -96,59 +98,56 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
                   }
                   CourseDetailModel post = snapshot.data!;
 
-                  return renderContent(post);
+                  return Stack(
+                    children: [
+                      renderContent(post),
+                    ],
+                  );
                 },
               ),
               Positioned(
                 right: 16.0,
                 bottom: 16.0,
-                child: ExpandableFab(
-                  distance: 112,
-                  children: [
-                    ActionButton(
-                      onPressed: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (_) => const AddModuleReviewScreen())),
-                      child: GestureDetector(
-                        onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (_) => const AddModuleReviewScreen())),
-                        child: Container(
-                          padding: const EdgeInsets.all(16.0),
-                          decoration: BoxDecoration(
-                              border: Border.all(color: GRAYSCALE_GRAY_02),
-                              borderRadius: BorderRadius.circular(8.0)),
-                          child: const Column(
-                            children: [
-                              // Text("시간표에 추가하기"),
-                              // SizedBox(
-                              //   height: 23.0,
-                              // ),
-                              Text("강의평 작성하기")
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    // ActionButton(
-                    //   onPressed: () {},
-                    //   icon: const Icon(Icons.insert_photo),
-                    // ),
-                    // ActionButton(
-                    //   onPressed: () {},
-                    //   icon: const Icon(Icons.videocam),
-                    // ),
-                  ],
-                ),
-
-                // FloatingActionButton(
-                //   onPressed: () {},
-                //   backgroundColor: PRIMARY_COLOR_ORANGE_02,
-                //   child: const Icon(
-                //     Icons.add,
-                //     size: 36,
-                //   ),
+                // child: ExpandableFab(
+                //   distance: 112,
+                //   children: [
+                //     ActionButton(
+                //       onPressed: () => print("hi"),
+                //       //  () => Navigator.of(context).push(
+                //       //     MaterialPageRoute(
+                //       //         builder: (_) => const AddModuleReviewScreen())),
+                //       child: Container(
+                //         padding: const EdgeInsets.all(16.0),
+                //         decoration: BoxDecoration(
+                //             color: Colors.white,
+                //             border: Border.all(color: GRAYSCALE_GRAY_02),
+                //             borderRadius: BorderRadius.circular(8.0)),
+                //         child: const Text("강의평 작성하기"),
+                //       ),
+                //     ),
+                //     // ActionButton(
+                //     //   onPressed: () {},
+                //     //   icon: const Icon(Icons.insert_photo),
+                //     // ),
+                //     // ActionButton(
+                //     //   onPressed: () {},
+                //     //   icon: const Icon(Icons.videocam),
+                //     // ),
+                //   ],
                 // ),
+
+                child: FloatingActionButton(
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => AddModuleReviewScreen(
+                            moduleId: widget.courseId,
+                            moduleName: widget.moduleName,
+                          ))),
+                  backgroundColor: PRIMARY_COLOR_ORANGE_02,
+                  child: const Icon(
+                    Icons.add,
+                    size: 36,
+                  ),
+                ),
               ),
             ],
           ),
@@ -206,7 +205,7 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
                     const SizedBox(
                       width: 12.0,
                     ),
-                    Text(courseDetailModel.courseCode)
+                    Expanded(child: Text(courseDetailModel.courseCode))
                   ],
                 ),
                 const SizedBox(
@@ -224,7 +223,7 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
                     const SizedBox(
                       width: 12.0,
                     ),
-                    Text(courseDetailModel.professor)
+                    Expanded(child: Text(courseDetailModel.professor))
                   ],
                 ),
                 const SizedBox(
@@ -243,7 +242,7 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
                       width: 12.0,
                     ),
                     //TODO: change to actual time
-                    Text("화2/수2")
+                    Expanded(child: Text("화2/수2"))
                   ],
                 ),
                 ExpandedSection(
@@ -290,7 +289,7 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
               }
               if (snapshot.hasError) {
                 return const Center(
-                  child: Text("다시 시도 ㄱㄱ"),
+                  child: Text("강의평가 불러오기에 실패했습니다."),
                 );
               }
               List<CourseEvaluationModel> moduleReviews =
@@ -336,17 +335,17 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
                   ],
                 ),
               ),
-              const Spacer(),
-              GestureDetector(
-                onTap: () {},
-                child: Row(
-                  children: [
-                    const Text("등록순"),
-                    SvgPicture.asset(
-                        "assets/img/module_review_screen/down_tick_icon.svg")
-                  ],
-                ),
-              ),
+              // const Spacer(),
+              // GestureDetector(
+              //   onTap: () {},
+              //   child: Row(
+              //     children: [
+              //       const Text("등록순"),
+              //       SvgPicture.asset(
+              //           "assets/img/module_review_screen/down_tick_icon.svg")
+              //     ],
+              //   ),
+              // ),
             ],
           ),
           const SizedBox(
@@ -356,7 +355,7 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
               moduleReviews.length,
               (index) => ModuleReviewCard(
                   reivew: moduleReviews[index].comment,
-                  author: moduleReviews[index].semester,
+                  author: moduleReviews[index].convertSemesterString(),
                   likes: 0, // TODO: change to likes
                   satisfaction:
                       moduleReviews[index].convertRatingToSatisfaction()))
@@ -711,6 +710,7 @@ class ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(onTap: onPressed, child: child);
+    // return IconButton(onPressed: onPressed, icon: const Icon(Icons.abc));
+    return Material(child: GestureDetector(onTap: onPressed, child: child));
   }
 }

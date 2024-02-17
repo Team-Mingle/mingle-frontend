@@ -56,6 +56,8 @@ class _LikedPostsScreenState extends ConsumerState<LikedPostsScreen>
                 width: 80 * 2.0,
                 child: TabBar(
                   indicatorColor: Colors.orange,
+                  indicatorWeight: 2,
+                  indicatorSize: TabBarIndicatorSize.tab,
                   labelColor: Colors.black,
                   unselectedLabelColor: Colors.black,
                   controller: _tabController,
@@ -67,11 +69,16 @@ class _LikedPostsScreenState extends ConsumerState<LikedPostsScreen>
               ),
             ),
           ),
+          const Divider(
+            height: 1.0,
+            color: GRAYSCALE_GRAY_02,
+          ),
           Expanded(
             child: TabBarView(
               controller: _tabController,
               children: [
                 GeneralPostPreviewCard(
+                  emptyMessage: "아직 좋아요 누른 게시물이 없어요!",
                   data: ref.watch(totalLikedPostProvider),
                   // postFuture: paginatePost("FREE", ref),
                   notifierProvider: ref.watch(totalLikedPostProvider.notifier),
@@ -81,6 +88,7 @@ class _LikedPostsScreenState extends ConsumerState<LikedPostsScreen>
                   cardType: CardType.square,
                 ),
                 GeneralPostPreviewCard(
+                  emptyMessage: "아직 좋아요 누른 게시물이 없어요!",
                   data: ref.watch(univLikedPostProvider),
                   // postFuture: paginatePost("FREE", ref),
                   notifierProvider: ref.watch(univLikedPostProvider.notifier),

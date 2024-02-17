@@ -57,6 +57,8 @@ class _CommentedPostsScreenState extends ConsumerState<CommentedPostsScreen>
                 width: 80 * 2.0,
                 child: TabBar(
                   indicatorColor: Colors.orange,
+                  indicatorWeight: 2,
+                  indicatorSize: TabBarIndicatorSize.tab,
                   labelColor: Colors.black,
                   unselectedLabelColor: Colors.black,
                   controller: _tabController,
@@ -68,11 +70,17 @@ class _CommentedPostsScreenState extends ConsumerState<CommentedPostsScreen>
               ),
             ),
           ),
+          const Divider(
+            height: 1.0,
+            color: GRAYSCALE_GRAY_02,
+          ),
           Expanded(
             child: TabBarView(
               controller: _tabController,
               children: [
                 GeneralPostPreviewCard(
+                  emptyMessage: "내가 댓글을 작성한 게시물이 없어요!",
+
                   data: ref.watch(totalCommentedPostProvider),
                   // postFuture: paginatePost("FREE", ref),
                   notifierProvider:
@@ -83,6 +91,8 @@ class _CommentedPostsScreenState extends ConsumerState<CommentedPostsScreen>
                   cardType: CardType.square,
                 ),
                 GeneralPostPreviewCard(
+                  emptyMessage: "내가 댓글을 작성한 게시물이 없어요!",
+
                   data: ref.watch(univCommentedPostProvider),
                   // postFuture: paginatePost("FREE", ref),
                   notifierProvider:

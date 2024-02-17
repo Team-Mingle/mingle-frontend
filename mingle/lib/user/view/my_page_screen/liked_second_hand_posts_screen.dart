@@ -22,7 +22,7 @@ class _LikedSecondHandPostsScreenState
   void initState() {
     // TODO: implement initState
     super.initState();
-    _tabController = TabController(length: 3, vsync: this); // TabController 초기화
+    _tabController = TabController(length: 2, vsync: this); // TabController 초기화
   }
 
   @override
@@ -48,6 +48,7 @@ class _LikedSecondHandPostsScreenState
         ),
       ),
       body: ItemPostPreviewCard(
+        emptyMessage: "찜한 내역이 없습니다.",
         data: ref.watch(likedSecondHandPostProvider),
         notifierProvider: ref.watch(likedSecondHandPostProvider.notifier),
         postDetailProvider: likedSecondHandPostDetailProvider,

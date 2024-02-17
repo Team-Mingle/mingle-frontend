@@ -48,187 +48,224 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
         setState(() {
           isLoading = true;
         });
-        final resp = await dio.post(
-          'https://$baseUrl/auth/verifyemail',
-          options: Options(headers: {
-            HttpHeaders.contentTypeHeader: "application/json",
-          }),
-          data: jsonEncode(email),
-        );
-        print(resp.data['verified'] as bool == true);
-        if (resp.data['verified'] as bool) {
-          print(resp.data);
-          // final sendCodeResp =
-          await dio.post(
-            'https://$baseUrl/auth/sendcode',
+        String stat = widget.isPasswordReset.toString();
+        print('상태 $stat');
+        if (widget.isPasswordReset) {
+          print("email sent");
+          final sendCodeResp = await dio.post(
+            'https://$baseUrl/auth/sendcode/pwd',
             options: Options(headers: {
               HttpHeaders.contentTypeHeader: "application/json",
             }),
             data: jsonEncode(email),
           );
-          // print(sendCodeResp);
-          setState(() {
-            isLoading = false;
-          });
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (_) => const EnterVerificationNumberScreen()));
-        } else {
-          String? error;
-          switch (resp.data['code']) {
-            case "EMAIL_DUPLICATED":
-              error = resp.data['message'];
+          if (sendCodeResp.statusCode == 200) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => const EnterVerificationNumberScreen(
+                      isPasswordReset: true,
+                    )));
+          } else {
+            throw Exception(
+                "Failed to send verification code for password reset");
           }
-          setState(() {
-            isLoading = false;
-            errorMsg = error;
-          });
+        } else {
+          final resp = await dio.post(
+            'https://$baseUrl/auth/verifyemail',
+            options: Options(headers: {
+              HttpHeaders.contentTypeHeader: "application/json",
+            }),
+            data: jsonEncode(email),
+          );
+
+          print(resp.statusCode);
+          print("verified: ${resp.data['verified'] as bool == true}");
+          if (resp.data['verified'] as bool) {
+            print(resp.data);
+            // final sendCodeResp =
+            await dio.post(
+              'https://$baseUrl/auth/sendcode',
+              options: Options(headers: {
+                HttpHeaders.contentTypeHeader: "application/json",
+              }),
+              data: jsonEncode(email),
+            );
+            // print(sendCodeResp);
+            setState(() {
+              isLoading = false;
+            });
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => const EnterVerificationNumberScreen()));
+          } else {
+            String? error;
+            switch (resp.data['code']) {
+              case "EMAIL_DUPLICATED":
+                error = resp.data['message'];
+            }
+            setState(() {
+              isLoading = false;
+              errorMsg = error;
+            });
+          }
         }
-      } catch (e) {
+      } on DioException catch (e) {
         setState(() {
           isLoading = false;
-          errorMsg = generalErrorMsg;
+          errorMsg = e.response?.data['message'];
         });
       }
     }
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 17.0),
-            child: IconButton(
-              icon: const ImageIcon(
-                AssetImage("assets/img/signup_screen/previous_screen_icon.png"),
-                color: GRAYSCALE_BLACK,
-              ),
-              onPressed: () {
-                ref.read(selectedEmailProvider.notifier).update((state) => "");
-                ref
-                    .read(selectedEmailExtensionProvider.notifier)
-                    .update((state) => "");
-                Navigator.pop(context);
-              },
-            ),
-          ),
-          title: SvgPicture.asset(
-            widget.isPasswordReset
-                ? "assets/img/signup_screen/second_indicator.svg"
-                : "assets/img/signup_screen/first_indicator.svg",
-          )),
-      body: DefaultPadding(
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.isPasswordReset ? "인증번호를 보낼" : "학교 이메일을",
-                      style: const TextStyle(
-                          fontSize: 24.0, fontWeight: FontWeight.w400),
-                    ),
-                    Text(
-                      widget.isPasswordReset ? "학교 이메일을 입력해 주세요." : "입력해 주세요.",
-                      style: const TextStyle(
-                          fontSize: 24.0, fontWeight: FontWeight.w400),
-                    ),
-                    const SizedBox(
-                      height: 16.0,
-                    ),
-                    Text(
-                        widget.isPasswordReset
-                            ? "비밀번호 재설정을 위해 본인인증이 필요해요."
-                            : "인증번호가 발송돼요.",
-                        style: const TextStyle(
-                            color: GRAYSCALE_GRAY_03,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w400))
-                  ],
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            leading: Padding(
+              padding: const EdgeInsets.only(left: 17.0),
+              child: IconButton(
+                icon: const ImageIcon(
+                  AssetImage(
+                      "assets/img/signup_screen/previous_screen_icon.png"),
+                  color: GRAYSCALE_BLACK,
                 ),
+                onPressed: () {
+                  ref
+                      .read(selectedEmailProvider.notifier)
+                      .update((state) => "");
+                  ref
+                      .read(selectedEmailExtensionProvider.notifier)
+                      .update((state) => "");
+                  Navigator.pop(context);
+                },
               ),
             ),
-            const SizedBox(
-              height: 40,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 136,
-                  height: 44,
-                  child: TextFormField(
-                    textAlignVertical: TextAlignVertical.bottom,
-                    onChanged: (email) {
-                      ref
-                          .read(selectedEmailProvider.notifier)
-                          .update((state) => email);
-                    },
-                    maxLines: null,
-                    decoration: const InputDecoration(
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: PRIMARY_COLOR_ORANGE_01)),
-                        border: UnderlineInputBorder(
-                            borderSide: BorderSide(color: GRAYSCALE_GRAY_03))),
+            title: SvgPicture.asset(
+              widget.isPasswordReset
+                  ? "assets/img/signup_screen/second_indicator.svg"
+                  : "assets/img/signup_screen/first_indicator.svg",
+            )),
+        body: DefaultPadding(
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.isPasswordReset ? "인증번호를 보낼" : "학교 이메일을",
+                        style: const TextStyle(
+                            fontSize: 24.0, fontWeight: FontWeight.w400),
+                      ),
+                      Text(
+                        widget.isPasswordReset
+                            ? "학교 이메일을 입력해 주세요."
+                            : "입력해 주세요.",
+                        style: const TextStyle(
+                            fontSize: 24.0, fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(
+                        height: 16.0,
+                      ),
+                      Text(
+                          widget.isPasswordReset
+                              ? "비밀번호 재설정을 위해 본인인증이 필요해요."
+                              : "인증번호가 발송돼요.",
+                          style: const TextStyle(
+                              color: GRAYSCALE_GRAY_03,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w400))
+                    ],
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text("@"),
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 136,
+                    height: 44,
+                    child: TextFormField(
+                      textAlignVertical: TextAlignVertical.bottom,
+                      onChanged: (email) {
+                        setState(() {
+                          errorMsg = "";
+                        });
+                        ref
+                            .read(selectedEmailProvider.notifier)
+                            .update((state) => email);
+                      },
+                      maxLines: null,
+                      decoration: const InputDecoration(
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: PRIMARY_COLOR_ORANGE_01)),
+                          border: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: GRAYSCALE_GRAY_03))),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text("@"),
+                  ),
+                  DropdownList(
+                    itemList: currentCountry == "홍콩"
+                        ? HONG_KONG_EMAIL_LIST
+                        : SINGAPORE_EMAIL_LIST,
+                    // currentCountry == "싱가포르"
+                    //     ? SINGAPORE_EMAIL_LIST
+                    //     : ENGLAND_EMAIL_LIST,
+                    hintText: "선택",
+                    isSelectedProvider: selectedEmailExtensionProvider,
+                    width: 145,
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 11.0,
+              ),
+              ShowUp(
+                delay: 0,
+                child: Text(
+                  errorMsg != null ? errorMsg! : "",
+                  style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.red,
+                      fontWeight: FontWeight.w400),
                 ),
-                DropdownList(
-                  itemList: currentCountry == "홍콩"
-                      ? HONG_KONG_EMAIL_LIST
-                      : currentCountry == "싱가포르"
-                          ? SINGAPORE_EMAIL_LIST
-                          : ENGLAND_EMAIL_LIST,
-                  hintText: "선택",
-                  isSelectedProvider: selectedEmailExtensionProvider,
-                  width: 144,
+              ),
+              Expanded(child: Container()),
+              NextButton(
+                nextScreen: EnterVerificationNumberScreen(
+                  isPasswordReset: widget.isPasswordReset,
                 ),
-              ],
-            ),
-            const SizedBox(
-              height: 11.0,
-            ),
-            ShowUp(
-              delay: 0,
-              child: Text(
-                errorMsg != null ? errorMsg! : "",
-                style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.red,
-                    fontWeight: FontWeight.w400),
+                buttonName: "인증번호 받기",
+                buttonIcon: const ImageIcon(
+                  AssetImage("assets/img/signup_screen/email_icon.png"),
+                  color: GRAYSCALE_GRAY_04,
+                ),
+                isSelectedProvider: [
+                  selectedEmailExtensionProvider,
+                  selectedEmailProvider
+                ],
+                validators: [validateForm],
+                isLoading: isLoading,
               ),
-            ),
-            Expanded(child: Container()),
-            NextButton(
-              nextScreen: EnterVerificationNumberScreen(
-                isPasswordReset: widget.isPasswordReset,
-              ),
-              buttonName: "인증번호 받기",
-              buttonIcon: const ImageIcon(
-                AssetImage("assets/img/signup_screen/email_icon.png"),
-                color: GRAYSCALE_GRAY_04,
-              ),
-              isSelectedProvider: [
-                selectedEmailExtensionProvider,
-                selectedEmailProvider
-              ],
-              // validators: [validateForm],
-              isLoading: isLoading,
-            ),
-            const SizedBox(
-              height: 40.0,
-            )
-          ]),
+              const SizedBox(
+                height: 40.0,
+              )
+            ]),
+          ),
         ),
       ),
     );

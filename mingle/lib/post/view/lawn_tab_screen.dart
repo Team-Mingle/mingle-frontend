@@ -6,7 +6,9 @@ import 'package:mingle/post/provider/post_provider.dart';
 import 'package:mingle/user/view/home_screen/tab_screen.dart';
 
 class LawnTabScreen extends ConsumerWidget {
+  final Function(int)? changeTabIndex;
   LawnTabScreen({
+    this.changeTabIndex,
     Key? key,
   }) : super(key: key);
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/module/components/viewing_pass_card.dart';
+import 'package:mingle/module/view/add_module_review_screen.dart';
 import 'package:mingle/module/view/module_search_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
@@ -15,18 +16,18 @@ class ModuleReviewMainScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 16.0),
-          child: IconButton(
-            icon: const ImageIcon(
-              AssetImage("assets/img/signup_screen/cross_icon.png"),
-              color: GRAYSCALE_BLACK,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
+        // leading: Padding(
+        //   padding: const EdgeInsets.only(left: 16.0),
+        //   child: IconButton(
+        //     icon: const ImageIcon(
+        //       AssetImage("assets/img/signup_screen/cross_icon.png"),
+        //       color: GRAYSCALE_BLACK,
+        //     ),
+        //     onPressed: () {
+        //       Navigator.pop(context);
+        //     },
+        //   ),
+        // ),
       ),
       body: DefaultPadding(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -137,16 +138,20 @@ class ModuleReviewMainScreen extends StatelessWidget {
                     const SizedBox(
                       width: 2.0,
                     ),
-                    const Text(
-                      "평가하기",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w500, color: Colors.white),
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => const AddModuleReviewScreen())),
+                      child: const Text(
+                        "평가하기",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, color: Colors.white),
+                      ),
                     )
                   ])),
             ),
           ),
           const SizedBox(
-            height: 12.0,
+            height: 11.0,
           )
         ]),
       ),

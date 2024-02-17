@@ -6,6 +6,7 @@ import 'package:mingle/post/provider/post_provider.dart';
 import 'package:mingle/user/view/home_screen/tab_screen.dart';
 
 class SquareTabScreen extends ConsumerWidget {
+  final Function(int)? changeTabIndex;
   final dummyPostList = List.generate(50, (index) {
     return {
       'title': 'Post ${index + 1}',
@@ -19,6 +20,7 @@ class SquareTabScreen extends ConsumerWidget {
 
   SquareTabScreen({
     Key? key,
+    this.changeTabIndex,
   }) : super(key: key);
 
   @override

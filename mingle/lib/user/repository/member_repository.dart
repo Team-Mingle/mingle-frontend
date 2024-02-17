@@ -32,7 +32,7 @@ abstract class MemberRepository {
   @Headers({'accessToken': 'true'})
   Future<void> logout();
 
-  @POST('/nickname')
+  @PATCH('/nickname')
   @Headers({'accessToken': 'true'})
   Future<void> changeNickname({@Body() required String nickname});
 

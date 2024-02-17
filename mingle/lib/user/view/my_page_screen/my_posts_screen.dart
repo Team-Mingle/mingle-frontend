@@ -56,6 +56,8 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen>
                 width: 80 * 2.0,
                 child: TabBar(
                   indicatorColor: Colors.orange,
+                  indicatorWeight: 2,
+                  indicatorSize: TabBarIndicatorSize.tab,
                   labelColor: Colors.black,
                   unselectedLabelColor: Colors.black,
                   controller: _tabController,
@@ -67,11 +69,17 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen>
               ),
             ),
           ),
+          const Divider(
+            height: 1.0,
+            color: GRAYSCALE_GRAY_02,
+          ),
           Expanded(
             child: TabBarView(
               controller: _tabController,
               children: [
                 GeneralPostPreviewCard(
+                  emptyMessage: "내가 작성한 게시물이 없어요!",
+
                   data: ref.watch(totalMyPostProvider),
                   // postFuture: paginatePost("FREE", ref),
                   notifierProvider: ref.watch(totalMyPostProvider.notifier),
@@ -80,6 +88,8 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen>
                   cardType: CardType.square,
                 ),
                 GeneralPostPreviewCard(
+                  emptyMessage: "내가 작성한 게시물이 없어요!",
+
                   data: ref.watch(univMyPostProvider),
                   // postFuture: paginatePost("FREE", ref),
                   notifierProvider: ref.watch(univMyPostProvider.notifier),

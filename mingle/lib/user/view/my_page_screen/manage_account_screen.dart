@@ -16,7 +16,7 @@ class ManageAccountScreen extends StatelessWidget {
     List<Widget> manageAccountScreen = [
       const ChangeNicknameScreen(),
       const SelectSchoolScreen(
-        isPassswordReset: true,
+        isPasswordReset: true,
       ),
       const QuitAgreementScreen()
     ];

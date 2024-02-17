@@ -1,11 +1,15 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/user/provider/user_provider.dart';
+import 'package:mingle/user/repository/member_repository.dart';
 import 'package:mingle/user/view/my_page_screen/password_change_success_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:mingle/user/view/signup_screen/provider/email_extension_selected_provider.dart';
+import 'package:mingle/user/view/signup_screen/provider/email_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/provider/password_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/provider/retype_password_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/service_agreement_screen.dart';
@@ -20,6 +24,62 @@ class EnterPasswordScreen extends ConsumerStatefulWidget {
 }
 
 class _EnterPasswordScreenState extends ConsumerState<EnterPasswordScreen> {
+  String? errorMsg;
+  String? newPassword;
+  String? newPasswordConfirm;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  void setErrorMsg(String msg) {
+    setState(() {
+      errorMsg = msg;
+    });
+  }
+
+  void submitPassword() {
+    ref.watch(selectedPasswordProvider) ==
+            ref.watch(selectedRetypePasswordProvider)
+        ? () => (Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => widget.isPasswordReset
+                ? const PasswordChangeSuccessScreen()
+                : const ServiceAgreementScreen())))
+        : () => setErrorMsg("비밀번호가 일치하지 않습니다");
+  }
+
+  void submitPasswordChange() {
+    // if (newPassword != newPasswordConfirm) {
+    //   setErrorMsg("비밀번호가 일치하지 않습니다");
+    //   return;
+    // }
+    // try {
+    //   //   final credentials = {
+    //   //   "email": emailController.text,
+    //   //   "password": passwordController.text,
+    //   //   "fcmToken": "string"
+    //   // };
+    //   // print(credentials);
+    //   // try {
+    //   //   final resp = await dio.post(
+    //   //     'https://$baseUrl/auth/login',
+    //   //     options: Options(headers: {
+    //   //       HttpHeaders.contentTypeHeader: "application/json",
+    //   //     }),
+    //   //     data: jsonEncode(credentials),
+    //   //   );
+    //   final data = {
+    //     "email":
+    //         "${ref.read(selectedEmailProvider)}@${ref.read(selectedEmailExtensionProvider)}",
+    //   "currentPassword":
+
+    //   }
+    // } on DioException catch (e) {
+
+    // }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,9 +144,11 @@ class _EnterPasswordScreenState extends ConsumerState<EnterPasswordScreen> {
               child: TextField(
                 obscureText: true,
                 onChanged: (password) {
-                  ref
-                      .read(selectedPasswordProvider.notifier)
-                      .update((state) => password);
+                  widget.isPasswordReset
+                      ? newPassword = password
+                      : ref
+                          .read(selectedPasswordProvider.notifier)
+                          .update((state) => password);
                 },
                 decoration: const InputDecoration(
                     hintText: "영문, 숫자 포함 6자리 이상*",
@@ -102,31 +164,37 @@ class _EnterPasswordScreenState extends ConsumerState<EnterPasswordScreen> {
             ),
             SizedBox(
               height: 44,
-              child: TextField(
+              child: TextFormField(
                 obscureText: true,
                 onChanged: (password) {
-                  ref
-                      .read(selectedRetypePasswordProvider.notifier)
-                      .update((state) => password);
+                  setState(() {
+                    errorMsg = null;
+                  });
+                  widget.isPasswordReset
+                      ? newPasswordConfirm = password
+                      : ref
+                          .read(selectedRetypePasswordProvider.notifier)
+                          .update((state) => password);
                 },
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
+                    errorText: errorMsg,
                     hintText: "비밀번호 재입력",
-                    hintStyle: TextStyle(color: GRAYSCALE_GRAY_02),
-                    focusedBorder: UnderlineInputBorder(
+                    hintStyle: const TextStyle(color: GRAYSCALE_GRAY_02),
+                    focusedBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: PRIMARY_COLOR_ORANGE_01)),
-                    border: UnderlineInputBorder(
+                    border: const UnderlineInputBorder(
                         borderSide: BorderSide(color: GRAYSCALE_GRAY_03))),
               ),
             ),
             Expanded(child: Container()),
             NextButton(
-              nextScreen: widget.isPasswordReset
-                  ? const PasswordChangeSuccessScreen()
-                  : const ServiceAgreementScreen(),
               buttonName: "다음으로",
               isSelectedProvider: [
                 selectedPasswordProvider,
                 selectedRetypePasswordProvider
+              ],
+              validators: [
+                widget.isPasswordReset ? submitPasswordChange : submitPassword
               ],
               isReplacement: widget.isPasswordReset,
             ),
