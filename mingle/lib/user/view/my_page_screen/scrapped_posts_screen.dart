@@ -68,6 +68,10 @@ class _ScrappedPostsScreenState extends ConsumerState<ScrappedPostsScreen>
               ),
             ),
           ),
+          const Divider(
+            height: 1.0,
+            color: GRAYSCALE_GRAY_02,
+          ),
           Expanded(
             child: TabBarView(
               controller: _tabController,

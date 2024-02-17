@@ -38,13 +38,13 @@ class SecondHandPostDetailScreen extends ConsumerStatefulWidget {
 
 class _SecondHandPostDetailScreenState
     extends ConsumerState<SecondHandPostDetailScreen> {
-  List imageList = [
-    "https://cdn.pixabay.com/photo/2014/04/14/20/11/pink-324175_1280.jpg",
-    "https://cdn.pixabay.com/photo/2014/02/27/16/10/flowers-276014_1280.jpg",
-    "https://cdn.pixabay.com/photo/2012/03/01/00/55/flowers-19830_1280.jpg",
-    "https://cdn.pixabay.com/photo/2015/06/19/20/13/sunset-815270_1280.jpg",
-    "https://cdn.pixabay.com/photo/2016/01/08/05/24/sunflower-1127174_1280.jpg",
-  ];
+  // List imageList = [
+  //   "https://cdn.pixabay.com/photo/2014/04/14/20/11/pink-324175_1280.jpg",
+  //   "https://cdn.pixabay.com/photo/2014/02/27/16/10/flowers-276014_1280.jpg",
+  //   "https://cdn.pixabay.com/photo/2012/03/01/00/55/flowers-19830_1280.jpg",
+  //   "https://cdn.pixabay.com/photo/2015/06/19/20/13/sunset-815270_1280.jpg",
+  //   "https://cdn.pixabay.com/photo/2016/01/08/05/24/sunflower-1127174_1280.jpg",
+  // ];
   int _current = 0;
   bool _isReserved = false;
   final bool _isLiked = false;
@@ -820,6 +820,7 @@ class _SecondHandPostDetailScreenState
         },
       ).toList(),
       options: CarouselOptions(
+        enableInfiniteScroll: false,
         height: 320,
         viewportFraction: 1.0,
         autoPlay: false,

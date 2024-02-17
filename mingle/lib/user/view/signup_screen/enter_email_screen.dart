@@ -115,77 +115,84 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
       }
     }
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 17.0),
-            child: IconButton(
-              icon: const ImageIcon(
-                AssetImage("assets/img/signup_screen/previous_screen_icon.png"),
-                color: GRAYSCALE_BLACK,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            leading: Padding(
+              padding: const EdgeInsets.only(left: 17.0),
+              child: IconButton(
+                icon: const ImageIcon(
+                  AssetImage(
+                      "assets/img/signup_screen/previous_screen_icon.png"),
+                  color: GRAYSCALE_BLACK,
+                ),
+                onPressed: () {
+                  ref
+                      .read(selectedEmailProvider.notifier)
+                      .update((state) => "");
+                  ref
+                      .read(selectedEmailExtensionProvider.notifier)
+                      .update((state) => "");
+                  Navigator.pop(context);
+                },
               ),
-              onPressed: () {
-                ref.read(selectedEmailProvider.notifier).update((state) => "");
-                ref
-                    .read(selectedEmailExtensionProvider.notifier)
-                    .update((state) => "");
-                Navigator.pop(context);
-              },
             ),
-          ),
-          title: SvgPicture.asset(
-            widget.isPasswordReset
-                ? "assets/img/signup_screen/second_indicator.svg"
-                : "assets/img/signup_screen/first_indicator.svg",
-          )),
-      body: DefaultPadding(
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.isPasswordReset ? "인증번호를 보낼" : "학교 이메일을",
-                      style: const TextStyle(
-                          fontSize: 24.0, fontWeight: FontWeight.w400),
-                    ),
-                    Text(
-                      widget.isPasswordReset ? "학교 이메일을 입력해 주세요." : "입력해 주세요.",
-                      style: const TextStyle(
-                          fontSize: 24.0, fontWeight: FontWeight.w400),
-                    ),
-                    const SizedBox(
-                      height: 16.0,
-                    ),
-                    Text(
-                        widget.isPasswordReset
-                            ? "비밀번호 재설정을 위해 본인인증이 필요해요."
-                            : "인증번호가 발송돼요.",
+            title: SvgPicture.asset(
+              widget.isPasswordReset
+                  ? "assets/img/signup_screen/second_indicator.svg"
+                  : "assets/img/signup_screen/first_indicator.svg",
+            )),
+        body: DefaultPadding(
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.isPasswordReset ? "인증번호를 보낼" : "학교 이메일을",
                         style: const TextStyle(
-                            color: GRAYSCALE_GRAY_03,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w400))
-                  ],
+                            fontSize: 24.0, fontWeight: FontWeight.w400),
+                      ),
+                      Text(
+                        widget.isPasswordReset
+                            ? "학교 이메일을 입력해 주세요."
+                            : "입력해 주세요.",
+                        style: const TextStyle(
+                            fontSize: 24.0, fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(
+                        height: 16.0,
+                      ),
+                      Text(
+                          widget.isPasswordReset
+                              ? "비밀번호 재설정을 위해 본인인증이 필요해요."
+                              : "인증번호가 발송돼요.",
+                          style: const TextStyle(
+                              color: GRAYSCALE_GRAY_03,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w400))
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: SizedBox(
+              const SizedBox(
+                height: 40,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 136,
                     height: 44,
                     child: TextFormField(
                       textAlignVertical: TextAlignVertical.bottom,
@@ -207,13 +214,11 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
                                   BorderSide(color: GRAYSCALE_GRAY_03))),
                     ),
                   ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text("@"),
-                ),
-                Expanded(
-                  child: DropdownList(
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text("@"),
+                  ),
+                  DropdownList(
                     itemList: currentCountry == "홍콩"
                         ? HONG_KONG_EMAIL_LIST
                         : SINGAPORE_EMAIL_LIST,
@@ -222,45 +227,45 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
                     //     : ENGLAND_EMAIL_LIST,
                     hintText: "선택",
                     isSelectedProvider: selectedEmailExtensionProvider,
-                    //width: 145,
+                    width: 145,
                   ),
+                ],
+              ),
+              const SizedBox(
+                height: 11.0,
+              ),
+              ShowUp(
+                delay: 0,
+                child: Text(
+                  errorMsg != null ? errorMsg! : "",
+                  style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.red,
+                      fontWeight: FontWeight.w400),
                 ),
-              ],
-            ),
-            const SizedBox(
-              height: 11.0,
-            ),
-            ShowUp(
-              delay: 0,
-              child: Text(
-                errorMsg != null ? errorMsg! : "",
-                style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.red,
-                    fontWeight: FontWeight.w400),
               ),
-            ),
-            Expanded(child: Container()),
-            NextButton(
-              nextScreen: EnterVerificationNumberScreen(
-                isPasswordReset: widget.isPasswordReset,
+              Expanded(child: Container()),
+              NextButton(
+                nextScreen: EnterVerificationNumberScreen(
+                  isPasswordReset: widget.isPasswordReset,
+                ),
+                buttonName: "인증번호 받기",
+                buttonIcon: const ImageIcon(
+                  AssetImage("assets/img/signup_screen/email_icon.png"),
+                  color: GRAYSCALE_GRAY_04,
+                ),
+                isSelectedProvider: [
+                  selectedEmailExtensionProvider,
+                  selectedEmailProvider
+                ],
+                validators: [validateForm],
+                isLoading: isLoading,
               ),
-              buttonName: "인증번호 받기",
-              buttonIcon: const ImageIcon(
-                AssetImage("assets/img/signup_screen/email_icon.png"),
-                color: GRAYSCALE_GRAY_04,
-              ),
-              isSelectedProvider: [
-                selectedEmailExtensionProvider,
-                selectedEmailProvider
-              ],
-              validators: [validateForm],
-              isLoading: isLoading,
-            ),
-            const SizedBox(
-              height: 40.0,
-            )
-          ]),
+              const SizedBox(
+                height: 40.0,
+              )
+            ]),
+          ),
         ),
       ),
     );

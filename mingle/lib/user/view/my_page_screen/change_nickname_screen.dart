@@ -1,22 +1,56 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/module/components/toast_message_card.dart';
+import 'package:mingle/user/provider/user_provider.dart';
+import 'package:mingle/user/repository/member_repository.dart';
 import 'package:mingle/user/view/my_page_screen/manage_account_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
-class ChangeNicknameScreen extends StatefulWidget {
+class ChangeNicknameScreen extends ConsumerStatefulWidget {
   const ChangeNicknameScreen({super.key});
 
   @override
-  State<ChangeNicknameScreen> createState() => _ChangeNicknameScreenState();
+  ConsumerState<ChangeNicknameScreen> createState() =>
+      _ChangeNicknameScreenState();
 }
 
-class _ChangeNicknameScreenState extends State<ChangeNicknameScreen> {
+class _ChangeNicknameScreenState extends ConsumerState<ChangeNicknameScreen> {
   String currentNickname = "";
+  late FToast fToast;
 
   @override
   void initState() {
     super.initState();
+    fToast = FToast();
+    fToast.init(context);
+  }
+
+  void submitNickname() async {
+    try {
+      final resp = await ref
+          .watch(memberRepositoryProvider)
+          .changeNickname(nickname: currentNickname);
+      ref
+          .read(currentUserProvider.notifier)
+          .update((state) => state!.copyWith(nickName: currentNickname));
+      fToast.showToast(
+        child: const ToastMessage(message: "닉네임 변경에 성공했습니다."),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
+      Navigator.of(context).pop();
+    } on DioException catch (e) {
+      print(e);
+      fToast.showToast(
+        child: ToastMessage(message: e.response?.data['message']),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
+    }
   }
 
   @override
@@ -50,17 +84,17 @@ class _ChangeNicknameScreenState extends State<ChangeNicknameScreen> {
               height: 56.0,
             ),
             Container(
+              padding: const EdgeInsets.symmetric(horizontal: 4.0),
               height: 44,
               decoration: const BoxDecoration(color: GRAYSCALE_GRAY_01),
               child: TextFormField(
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   enabled: false,
-                  hintText: "학교 이메일 주소",
-                  hintStyle: TextStyle(color: GRAYSCALE_GRAY_02),
-                  focusedBorder: UnderlineInputBorder(
+                  hintText: ref.watch(currentUserProvider)!.univName,
+                  hintStyle: const TextStyle(color: GRAYSCALE_GRAY_02),
+                  focusedBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(color: PRIMARY_COLOR_ORANGE_01)),
-                      
-                  border: UnderlineInputBorder(
+                  border: const UnderlineInputBorder(
                     borderSide: BorderSide(color: GRAYSCALE_GRAY_03),
                   ),
                 ),
@@ -89,6 +123,7 @@ class _ChangeNicknameScreenState extends State<ChangeNicknameScreen> {
                     currentNickname = value;
                   });
                 },
+                maxLength: 10,
                 decoration: InputDecoration(
                     hintText: "닉네임 작성",
                     suffix: Text("${currentNickname.length}/10"),
@@ -99,8 +134,11 @@ class _ChangeNicknameScreenState extends State<ChangeNicknameScreen> {
                         borderSide: BorderSide(color: GRAYSCALE_GRAY_03))),
               ),
             ),
-            Expanded(child: Container()),
-            NextButton(buttonName: "저장하기")
+            const Spacer(),
+            NextButton(
+              buttonName: "저장하기",
+              validators: [submitNickname],
+            )
           ],
         )),
       ),

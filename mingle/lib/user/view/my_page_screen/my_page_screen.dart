@@ -8,7 +8,9 @@ import 'package:mingle/common/const/data.dart';
 import 'package:mingle/secure_storage/secure_storage.dart';
 import 'package:mingle/user/components/my_page_tile.dart';
 import 'package:mingle/user/provider/is_fresh_login_provider.dart';
+import 'package:mingle/user/provider/user_provider.dart';
 import 'package:mingle/user/view/login_screen.dart';
+import 'package:mingle/user/view/my_page_screen/ask_mingle_screen.dart';
 import 'package:mingle/user/view/my_page_screen/commented_posts_screen.dart';
 import 'package:mingle/user/view/my_page_screen/liked_posts_screen.dart';
 import 'package:mingle/user/view/my_page_screen/liked_second_hand_posts_screen.dart';
@@ -28,6 +30,7 @@ class MyPageScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    print(ref.watch(currentUserProvider));
     List<String> activityTitles = [
       "스크랩한 글",
       "좋아요 누른 글",
@@ -61,7 +64,7 @@ class MyPageScreen extends ConsumerWidget {
     List<Widget> userUtilScreens = [
       const TermsAndConditionsScreen(),
       const PrivacyPolicyScreen(),
-      Container()
+      const AskMingleScreen()
     ];
 
     return Scaffold(
@@ -108,9 +111,10 @@ class MyPageScreen extends ConsumerWidget {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              "홍콩대학교 재학중인",
-                              style: TextStyle(
+                            Text(
+                              // "",
+                              ref.watch(currentUserProvider)!.univName,
+                              style: const TextStyle(
                                   color: GRAYSCALE_GRAY_04,
                                   fontSize: 14.0,
                                   fontWeight: FontWeight.w400),
@@ -121,9 +125,10 @@ class MyPageScreen extends ConsumerWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text(
-                                  "익명님",
-                                  style: TextStyle(
+                                Text(
+                                  // "",
+                                  ref.watch(currentUserProvider)!.nickName,
+                                  style: const TextStyle(
                                       fontSize: 24.0,
                                       fontWeight: FontWeight.w500),
                                 ),

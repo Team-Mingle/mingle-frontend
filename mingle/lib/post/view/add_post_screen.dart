@@ -95,6 +95,7 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
       body: SafeArea(
         child: Scaffold(
           body: Scaffold(
+            backgroundColor: Colors.white,
             appBar: AppBar(
               automaticallyImplyLeading: false,
               title: Row(
@@ -358,12 +359,13 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
                           border: InputBorder.none,
                           hintMaxLines: 5,
                           hintText: """밍글에서 나누고 싶은 이야기가 있나요?
+
 · 운영규칙을 위반하는 게시글은 삭제 될 수 있습니다.
-· 다른 유저들에게 불쾌감을 줄 수 있는 내용은 신고로   
-  제재될 수 있습니다.
+· 불쾌감을 줄 수 있는 내용은 신고로 제재될 수 있습니다.
 · 더 상세한 내용은 밍글 가이드라인을 참고하세요.""",
                           hintStyle: TextStyle(
                               color: GRAYSCALE_GRAY_02,
+                              fontSize: 13.0,
                               fontWeight: FontWeight.w600)),
                     ),
                   )
@@ -405,7 +407,10 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
                         ),
                       ),
                     ),
-              SizedBox(
+              Container(
+                decoration: const BoxDecoration(
+                    color: Colors.white,
+                    border: Border(top: BorderSide(color: GRAYSCALE_GRAY_01))),
                 height: 48.0,
                 child: Row(children: [
                   const SizedBox(

@@ -86,6 +86,7 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
     }
 
     try {
+      List<File> images = multipartFile.map((e) => e).toList();
       final response = await ref
           .watch(secondHandPostRepositoryProvider)
           .addSecondHandMarketPost(
@@ -96,7 +97,8 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
               location: location,
               chatUrl: chatUrl,
               isAnonymous: isAnonymous,
-              multipartFile: multipartFile);
+              multipartFile: images) as Response;
+      print(response);
       if (response.statusCode == 200) {
         final data = response.data;
         final int itemId = data['itemId'];
@@ -105,6 +107,7 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
         Navigator.of(context).pop();
       }
     } on DioException catch (e) {
+      print(e);
       // print(e.response?.statusCode);
       fToast.showToast(
         child: ToastMessage(message: e.response?.data['message']),

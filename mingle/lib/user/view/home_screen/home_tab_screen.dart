@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mingle/common/component/post_card.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/model/cursor_pagination_model.dart';
 import 'package:mingle/user/model/banner_model.dart';
 import 'package:mingle/user/provider/banner_provider.dart';
 import 'package:mingle/post/provider/post_provider.dart';
@@ -28,6 +30,9 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
   int _current = 0;
   final CarouselController _controller = CarouselController();
   late final Future<List<BannerModel>> _bannerProvider;
+  late CursorPaginationBase totalRecent;
+  late CursorPaginationBase univRecent;
+  late CursorPaginationBase bestPost;
 
   @override
   void initState() {
@@ -252,6 +257,11 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
         );
       });
     }
+    setState(() {
+      totalRecent = ref.read(totalRecentPostProvider);
+      univRecent = ref.read(univRecentPostProvider);
+      bestPost = ref.read(bestPostProvider);
+    });
     _bannerProvider = ref.read(bannerProvider.future);
     super.initState();
   }
@@ -315,82 +325,106 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
         ),
       ),
       // 스크롤 뷰
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            children: <Widget>[
-              const SizedBox(height: 16.0),
-              Column(
-                children: [
-                  FutureBuilder<List<BannerModel>>(
-                    future: _bannerProvider,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
-                      } else {
-                        return sliderWidget(snapshot.data!);
-                      }
-                    },
-                  ),
-                ],
-              ),
-              // const SizedBox(height: 32.0),
-              // Column(
-              //   children: [
-              //     Column(
-              //       children: [
-              //         const Row(
-              //           children: [
-              //             Text(
-              //               "소식 바로 보기",
-              //               style: TextStyle(
-              //                 fontFamily: "Pretendard Variable",
-              //                 fontSize: 18,
-              //                 fontWeight: FontWeight.w500,
-              //                 color: GRAYSCALE_BLACK,
-              //               ),
-              //               textAlign: TextAlign.left,
-              //             ),
-              //           ],
-              //         ),
-              //         const SizedBox(height: 12.0),
-              //         Row(
-              //           children: [
-              //             customButton('학생회', () {
-              //               // 첫 번째 버튼의 동작 추가
-              //             }),
-              //             const SizedBox(width: 10.0),
-              //             customButton('밍글 소식', () {
-              //               // 두 번째 버튼의 동작 추가
-              //             }),
-              //           ],
-              //         ),
-              //       ],
-              //     )
-              //   ],
-              // ),
-              const SizedBox(height: 32.0),
-              PostCard(
-                title: '지금 광장에서는',
-                data: ref.watch(totalRecentPostProvider),
-              ),
-              const SizedBox(height: 40.0),
-              PostCard(
-                title: '지금 잔디밭에서는',
-                data: ref.watch(univRecentPostProvider),
-              ),
-              const SizedBox(height: 40.0),
-              PostCard(
-                title: '불타오르는 게시글',
-                data: ref.watch(bestPostProvider),
-              ),
-              const SizedBox(height: 169),
-            ],
+      body: CustomScrollView(
+        slivers: [
+          CupertinoSliverRefreshControl(
+            onRefresh: () async {
+              await Future.delayed(
+                  const Duration(milliseconds: 1000),
+                  () => setState(() {
+                        totalRecent = ref.read(totalRecentPostProvider);
+                        univRecent = ref.read(univRecentPostProvider);
+                        bestPost = ref.read(bestPostProvider);
+                      }));
+              // await widget.notifierProvider!.paginate(forceRefetch: true);
+            },
           ),
-        ),
+          SliverList(
+              delegate: SliverChildListDelegate(
+            [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
+                  children: <Widget>[
+                    const SizedBox(height: 16.0),
+                    Column(
+                      children: [
+                        FutureBuilder<List<BannerModel>>(
+                          future: _bannerProvider,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              return sliderWidget(snapshot.data!);
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 32.0),
+                    Column(
+                      children: [
+                        Column(
+                          children: [
+                            const Row(
+                              children: [
+                                Text(
+                                  "소식 바로 보기",
+                                  style: TextStyle(
+                                    fontFamily: "Pretendard Variable",
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: GRAYSCALE_BLACK,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 12.0),
+                            Row(
+                              children: [
+                                customButton('학생회', () {
+                                  // 첫 번째 버튼의 동작 추가
+                                }),
+                                const SizedBox(width: 10.0),
+                                customButton('밍글 소식', () {
+                                  // 두 번째 버튼의 동작 추가
+                                }),
+                              ],
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 32.0),
+                    PostCard(
+                      title: '지금 광장에서는',
+                      // data: totalRecent,
+                      data: ref.watch(totalRecentPostProvider),
+                    ),
+                    const SizedBox(height: 40.0),
+                    PostCard(
+                      title: '지금 잔디밭에서는',
+                      // data: univRecent,
+                      data: ref.watch(univRecentPostProvider),
+                    ),
+                    const SizedBox(height: 40.0),
+                    PostCard(
+                      title: '불타오르는 게시글',
+                      // data: bestPost,
+                      data: ref.watch(bestPostProvider),
+                    ),
+                    const SizedBox(height: 169),
+                  ],
+                ),
+              ),
+            ],
+          ))
+        ],
+        // child:
       ),
     );
   }

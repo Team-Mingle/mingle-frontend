@@ -14,6 +14,10 @@ class CountdownTimer extends StatefulWidget {
   void resetTimer() {
     _CountdownTimerState().resetTimer();
   }
+
+  void startTimer() {
+    _CountdownTimerState().startTimer();
+  }
 }
 
 class _CountdownTimerState extends State<CountdownTimer> {
@@ -34,12 +38,20 @@ class _CountdownTimerState extends State<CountdownTimer> {
       minutes = 0;
       seconds = 0;
     });
+    // startTimer();
   }
 
   void startTimer() {
     // int counter = 180;
+    if (mounted) {
+      setState(() {
+        counter = 10;
+      });
+    }
+
     print("timer started");
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      print("timer ticking");
       if (counter == 1) {
         widget.setCountdownComplete(true);
         setState(() {

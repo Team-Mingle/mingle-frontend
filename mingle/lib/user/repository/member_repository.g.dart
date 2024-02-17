@@ -67,7 +67,7 @@ class _MemberRepository implements MemberRepository {
     _headers.removeWhere((k, v) => v == null);
     final _data = nickname;
     await _dio.fetch<void>(_setStreamType<void>(Options(
-      method: 'POST',
+      method: 'PATCH',
       headers: _headers,
       extra: _extra,
     )
