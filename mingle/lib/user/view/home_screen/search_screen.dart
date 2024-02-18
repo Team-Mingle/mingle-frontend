@@ -161,6 +161,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen>
                             CursorPagination<PostModel> postList =
                                 snapshot.data!;
                             return GeneralPostPreviewCard(
+                              boardType: "",
                               // postList: dummyPostList,
                               data: postList,
                               // postFuture: paginatePost("MINGLE", ref),

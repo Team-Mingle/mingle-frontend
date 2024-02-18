@@ -16,6 +16,7 @@ class GeneralPostPreviewCard extends ConsumerStatefulWidget {
 
   // final Future<List<PostModel>> postFuture;
   String emptyMessage;
+  final String boardType;
   final CursorPaginationBase data;
   final CardType cardType;
   final dynamic notifierProvider;
@@ -25,6 +26,7 @@ class GeneralPostPreviewCard extends ConsumerStatefulWidget {
   GeneralPostPreviewCard(
       {
       // required this.postList,
+      required this.boardType,
       required this.cardType,
       Key? key,
       required this.data,
@@ -220,6 +222,7 @@ class _GeneralPostPreviewCardState
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (_) => PostDetailScreen(
+                                          boardType: widget.boardType,
                                           allNotifierProvider:
                                               widget.allNotifierProvider,
                                           postId: post.postId,
@@ -246,8 +249,7 @@ class _GeneralPostPreviewCardState
                                             children: [
                                               Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
+                                                    MainAxisAlignment.start,
                                                 children: [
                                                   Expanded(
                                                     child: Text(

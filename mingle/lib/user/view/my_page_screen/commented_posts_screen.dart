@@ -79,6 +79,7 @@ class _CommentedPostsScreenState extends ConsumerState<CommentedPostsScreen>
               controller: _tabController,
               children: [
                 GeneralPostPreviewCard(
+                  boardType: "광장",
                   emptyMessage: "내가 댓글을 작성한 게시물이 없어요!",
 
                   data: ref.watch(totalCommentedPostProvider),
@@ -91,6 +92,7 @@ class _CommentedPostsScreenState extends ConsumerState<CommentedPostsScreen>
                   cardType: CardType.square,
                 ),
                 GeneralPostPreviewCard(
+                  boardType: "잔디밭",
                   emptyMessage: "내가 댓글을 작성한 게시물이 없어요!",
 
                   data: ref.watch(univCommentedPostProvider),

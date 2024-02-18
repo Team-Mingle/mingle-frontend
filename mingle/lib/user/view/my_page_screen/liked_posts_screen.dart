@@ -78,6 +78,7 @@ class _LikedPostsScreenState extends ConsumerState<LikedPostsScreen>
               controller: _tabController,
               children: [
                 GeneralPostPreviewCard(
+                  boardType: "광장",
                   emptyMessage: "아직 좋아요 누른 게시물이 없어요!",
                   data: ref.watch(totalLikedPostProvider),
                   // postFuture: paginatePost("FREE", ref),
@@ -88,6 +89,7 @@ class _LikedPostsScreenState extends ConsumerState<LikedPostsScreen>
                   cardType: CardType.square,
                 ),
                 GeneralPostPreviewCard(
+                  boardType: "잔디밭",
                   emptyMessage: "아직 좋아요 누른 게시물이 없어요!",
                   data: ref.watch(univLikedPostProvider),
                   // postFuture: paginatePost("FREE", ref),

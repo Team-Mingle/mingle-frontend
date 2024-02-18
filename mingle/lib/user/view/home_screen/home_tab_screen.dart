@@ -153,22 +153,21 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
                 child: Column(
                   children: <Widget>[
                     const SizedBox(height: 16.0),
-                    Column(
-                      children: [
-                        FutureBuilder<List<BannerModel>>(
-                          future: _bannerProvider,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const CircularProgressIndicator();
-                            } else if (snapshot.hasError) {
-                              return Text('Error: ${snapshot.error}');
-                            } else {
-                              return sliderWidget(snapshot.data!);
-                            }
-                          },
-                        ),
-                      ],
+                    FutureBuilder<List<BannerModel>>(
+                      future: _bannerProvider,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          return Stack(children: [
+                            sliderWidget(snapshot.data!),
+                            sliderIndicator(snapshot.data!)
+                          ]);
+                        }
+                      },
                     ),
                     const SizedBox(height: 32.0),
                     // Column(

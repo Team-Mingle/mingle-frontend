@@ -271,6 +271,7 @@ class _SecondHandPostDetailScreenState
                             ? <CupertinoActionSheetAction>[
                                 CupertinoActionSheetAction(
                                   onPressed: () {
+                                    deletePost();
                                     Navigator.pop(context);
                                   },
                                   isDestructiveAction: true,

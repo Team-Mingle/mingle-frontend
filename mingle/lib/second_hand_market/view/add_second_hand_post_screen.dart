@@ -97,15 +97,12 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
               location: location,
               chatUrl: chatUrl,
               isAnonymous: isAnonymous,
-              multipartFile: images) as Response;
+              multipartFile: images);
       print(response);
-      if (response.statusCode == 200) {
-        final data = response.data;
-        final int itemId = data['itemId'];
-        ref.watch(secondHandPostProvider.notifier).addPost(itemId: itemId);
-
-        Navigator.of(context).pop();
-      }
+      // final data = response.data;
+      final int itemId = response['itemId'];
+      ref.watch(secondHandPostProvider.notifier).addPost(itemId: itemId);
+      Navigator.of(context).pop();
     } on DioException catch (e) {
       print(e);
       // print(e.response?.statusCode);
@@ -122,9 +119,12 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Scaffold(
+          backgroundColor: Colors.white,
           body: Scaffold(
+            backgroundColor: Colors.white,
             appBar: AppBar(
               automaticallyImplyLeading: false,
               title: Row(
