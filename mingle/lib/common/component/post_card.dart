@@ -99,11 +99,12 @@ class PostCard extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 12.0),
-        GeneralPostPreviewCard(
-          boardType: title,
-          data: data,
-          cardType: CardType.home,
-        ),
+        postPreviewWidget,
+        // GeneralPostPreviewCard(
+        //   boardType: title,
+        //   data: data,
+        //   cardType: CardType.home,
+        // ),
       ],
     );
   }

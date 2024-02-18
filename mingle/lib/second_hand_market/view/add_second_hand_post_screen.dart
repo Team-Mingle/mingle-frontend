@@ -126,6 +126,7 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
           body: Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
+              surfaceTintColor: Colors.transparent,
               automaticallyImplyLeading: false,
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -360,6 +361,8 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
                           ),
                           Expanded(
                             child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              enableInteractiveSelection: false,
                               enabled: isSelling,
                               maxLines: 1,
                               onChanged: !isSelling

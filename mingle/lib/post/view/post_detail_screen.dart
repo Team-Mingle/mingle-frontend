@@ -287,6 +287,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
           backgroundColor: Colors.white,
           appBar: AppBar(
             backgroundColor: Colors.white,
+            surfaceTintColor: Colors.transparent,
             elevation: 0,
             leading: SizedBox(
               height: 10.0,
@@ -677,7 +678,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                     builder: (_) {
                       return ImageDetailScreen(
                         image: Image(
-                          fit: BoxFit.fill,
+                          fit: BoxFit.contain,
                           image: NetworkImage(
                             postImgUrl[index],
                           ),

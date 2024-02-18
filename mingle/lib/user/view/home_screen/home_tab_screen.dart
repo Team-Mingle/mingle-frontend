@@ -80,6 +80,8 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
         preferredSize: const Size.fromHeight(48.0),
         child: AppBar(
           backgroundColor: BACKGROUND_COLOR_GRAY,
+          surfaceTintColor: Colors.transparent,
+
           elevation: 0, // 그림자 제거
           leading: Padding(
             padding: const EdgeInsets.only(left: 8.0),
@@ -224,6 +226,7 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
                         data: ref.watch(bestPostProvider),
                         postType: "fire"),
                     const SizedBox(height: 72.0),
+
                     PostCard(
                         changeTabIndex: widget.changeTabIndex,
                         title: '뭐 살 거 없나?',

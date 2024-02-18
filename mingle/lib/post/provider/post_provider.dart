@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
 import 'package:mingle/common/model/pagination_params.dart';
@@ -355,12 +356,16 @@ class PostStateNotifier extends StateNotifier<CursorPaginationBase> {
     }
 
     final pState = state as CursorPagination;
-    final resp = await postRepository.getPostDetails(postId: postId);
-    print("likeCount: ${resp.likeCount}");
-    state = pState.copyWith(
-        data: pState.data
-            .map<PostModel>((e) => e.postId == postId ? resp : e)
-            .toList());
+    try {
+      final resp = await postRepository.getPostDetails(postId: postId);
+      print("likeCount: ${resp.likeCount}");
+      state = pState.copyWith(
+          data: pState.data
+              .map<PostModel>((e) => e.postId == postId ? resp : e)
+              .toList());
+    } on DioException catch (e) {
+      print(e);
+    }
   }
 
   void addPost({required int postId}) async {

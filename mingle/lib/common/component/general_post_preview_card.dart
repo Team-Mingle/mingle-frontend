@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
@@ -165,8 +166,11 @@ class _GeneralPostPreviewCardState
                     ? widget.cardType == CardType.home
                         ? SliverList(
                             delegate: SliverChildListDelegate([
-                            Center(
-                              child: Text(widget.emptyMessage),
+                            SizedBox(
+                              height: 70.0,
+                              child: Center(
+                                child: Text(widget.emptyMessage),
+                              ),
                             )
                           ]))
                         : SliverFillRemaining(
@@ -405,8 +409,19 @@ class _GeneralPostPreviewCardState
                                 if (index != postList.data.length - 1)
                                   buildDivider(1.0),
                                 if (index == postList.data.length - 1)
-                                  const SizedBox(
-                                    height: 20.0,
+                                  // const SizedBox(
+                                  //   height: 20.0,
+                                  // ),
+                                  SizedBox(
+                                    height: (() {
+                                      switch (widget.cardType) {
+                                        case CardType.home:
+                                          return 20.0;
+
+                                        default:
+                                          return 16.0;
+                                      }
+                                    })(),
                                   ),
                               ],
                             );

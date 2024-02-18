@@ -31,7 +31,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     final storage = ref.read(secureStorageProvider);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
     final Dio dio = ref.read(dioProvider);
-
+    if (accessToken == null) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const AppStartScreen()),
+          (route) => false);
+      return;
+    }
     try {
       final resp = await dio.get('https://$baseUrl/auth/verify-login-status',
           options: Options(headers: {'Authorization': 'Bearer $accessToken'}));
