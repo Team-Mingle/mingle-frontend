@@ -495,7 +495,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                   ),
                   Container(
                     color: GRAYSCALE_GRAY_01_5,
-                    height: 56.0,
+                    // height: 56.0,
                     child: const Padding(
                       padding: EdgeInsets.only(left: 10.0),
                       child: Column(

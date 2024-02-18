@@ -29,18 +29,21 @@ class PostCard extends ConsumerWidget {
     switch (postType) {
       case "square":
         postPreviewWidget = GeneralPostPreviewCard(
+          boardType: "광장",
           data: data,
           cardType: CardType.home,
         );
         break;
       case "lawn":
         postPreviewWidget = GeneralPostPreviewCard(
+          boardType: "잔디밭",
           data: data,
           cardType: CardType.home,
         );
         break;
       case "fire":
         postPreviewWidget = GeneralPostPreviewCard(
+          boardType: "불타는 게시판",
           data: data,
           cardType: CardType.home,
         );

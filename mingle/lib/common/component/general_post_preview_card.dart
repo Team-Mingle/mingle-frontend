@@ -252,21 +252,31 @@ class _GeneralPostPreviewCardState
                                                     MainAxisAlignment.start,
                                                 children: [
                                                   Expanded(
-                                                    child: Text(
-                                                      post.title,
-                                                      style: const TextStyle(
-                                                        fontFamily:
-                                                            "Pretendard",
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        color:
-                                                            GRAYSCALE_BLACK_GRAY,
-                                                      ),
-                                                      textAlign: TextAlign.left,
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          post.title,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontFamily:
+                                                                "Pretendard",
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            color:
+                                                                GRAYSCALE_BLACK_GRAY,
+                                                          ),
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                        if (post is PostModel &&
+                                                            post.fileAttached)
+                                                          SvgPicture.asset(
+                                                              "assets/img/post_screen/has_picture_icon.svg"),
+                                                      ],
                                                     ),
                                                   ),
                                                   const SizedBox(
@@ -277,8 +287,7 @@ class _GeneralPostPreviewCardState
                                               Text(
                                                 post.content,
                                                 style: const TextStyle(
-                                                  fontFamily:
-                                                      "Pretendard",
+                                                  fontFamily: "Pretendard",
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w400,
                                                   color: GRAYSCALE_GRAY_05,
