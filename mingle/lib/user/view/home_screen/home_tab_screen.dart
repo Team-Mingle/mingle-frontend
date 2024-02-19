@@ -164,7 +164,7 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
                         } else if (snapshot.hasError) {
                           return Text('Error: ${snapshot.error}');
                         } else {
-                          return Stack(children: [
+                          return Column(children: [
                             sliderWidget(snapshot.data!),
                             sliderIndicator(snapshot.data!)
                           ]);
