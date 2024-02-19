@@ -16,6 +16,7 @@ import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
 import 'dart:convert';
 
 import 'package:mingle/user/view/my_page_screen/terms_and_conditions_screen.dart';
+import 'package:page_transition/page_transition.dart';
 
 class HomeTabScreen extends ConsumerStatefulWidget {
   bool isFromLogin;
@@ -110,9 +111,11 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
               ),
               onPressed: () {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SearchScreen()),
-                );
+                    context,
+                    PageTransition(
+                        type: PageTransitionType.bottomToTop,
+                        duration: const Duration(milliseconds: 200),
+                        child: const SearchScreen()));
               },
             ),
             Padding(
@@ -213,19 +216,19 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
                       data: ref.watch(totalRecentPostProvider),
                       postType: "square",
                     ),
-                    const SizedBox(height: 72.0),
+                    const SizedBox(height: 54.0),
                     PostCard(
                         changeTabIndex: widget.changeTabIndex,
                         title: '지금 잔디밭에서는',
                         data: ref.watch(univRecentPostProvider),
                         postType: "lawn"),
-                    const SizedBox(height: 72.0),
+                    const SizedBox(height: 54.0),
                     PostCard(
                         changeTabIndex: widget.changeTabIndex,
                         title: '불타오르는 게시글',
                         data: ref.watch(bestPostProvider),
                         postType: "fire"),
-                    const SizedBox(height: 72.0),
+                    const SizedBox(height: 54.0),
 
                     PostCard(
                         changeTabIndex: widget.changeTabIndex,
