@@ -17,6 +17,7 @@ import 'dart:convert';
 
 import 'package:mingle/user/view/my_page_screen/terms_and_conditions_screen.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeTabScreen extends ConsumerStatefulWidget {
   bool isFromLogin;
@@ -163,7 +164,9 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
+                          return const CircularProgressIndicator(
+                            color: PRIMARY_COLOR_ORANGE_02,
+                          );
                         } else if (snapshot.hasError) {
                           return Text('Error: ${snapshot.error}');
                         } else {
@@ -254,15 +257,25 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
       items: bannerList.map(
         (banner) {
           return Builder(
-            builder: (context) {
-              return SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: Image(
-                    fit: BoxFit.fill,
-                    image: NetworkImage(
-                      banner.imgUrl,
+            builder: (BuildContext context) {
+              return GestureDetector(
+                onTap: () async {
+                  final url = banner.linkUrl;
+                  if (await canLaunchUrl(Uri.parse(url))) {
+                    await launchUrl(Uri.parse(url));
+                  } else {
+                    print('Could not launch $url');
+                  }
+                },
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image(
+                      fit: BoxFit.fill,
+                      image: NetworkImage(
+                        banner.imgUrl,
+                      ),
                     ),
                   ),
                 ),
