@@ -35,6 +35,7 @@ class SquareTabScreen extends ConsumerWidget {
       tab4: '밍글소식',
       tabContents: [
         GeneralPostPreviewCard(
+          boardType: "광장",
           // postList: dummyPostList,
           data: ref.watch(totalAllPostProvider),
           notifierProvider: ref.watch(totalAllPostProvider.notifier),
@@ -44,6 +45,7 @@ class SquareTabScreen extends ConsumerWidget {
           cardType: CardType.square,
         ),
         GeneralPostPreviewCard(
+          boardType: "광장",
           data: ref.watch(totalFreePostProvider),
           // postFuture: paginatePost("FREE", ref),
           notifierProvider: ref.watch(totalFreePostProvider.notifier),
@@ -52,6 +54,7 @@ class SquareTabScreen extends ConsumerWidget {
           cardType: CardType.square,
         ),
         GeneralPostPreviewCard(
+          boardType: "광장",
           data: ref.watch(totalQnAPostProvider),
           // postFuture: paginatePost("QNA", ref),
           notifierProvider: ref.watch(totalQnAPostProvider.notifier),
@@ -60,6 +63,7 @@ class SquareTabScreen extends ConsumerWidget {
           cardType: CardType.square,
         ),
         GeneralPostPreviewCard(
+          boardType: "광장",
           data: ref.watch(totalMinglePostProvider),
           // postFuture: paginatePost("KSA", ref),
           notifierProvider: ref.watch(totalMinglePostProvider.notifier),

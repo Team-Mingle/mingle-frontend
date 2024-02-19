@@ -78,6 +78,7 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen>
               controller: _tabController,
               children: [
                 GeneralPostPreviewCard(
+                  boardType: "광장",
                   emptyMessage: "내가 작성한 게시물이 없어요!",
 
                   data: ref.watch(totalMyPostProvider),
@@ -88,6 +89,7 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen>
                   cardType: CardType.square,
                 ),
                 GeneralPostPreviewCard(
+                  boardType: "잔디밭",
                   emptyMessage: "내가 작성한 게시물이 없어요!",
 
                   data: ref.watch(univMyPostProvider),

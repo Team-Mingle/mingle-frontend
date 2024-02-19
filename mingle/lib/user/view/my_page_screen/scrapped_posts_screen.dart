@@ -79,6 +79,8 @@ class _ScrappedPostsScreenState extends ConsumerState<ScrappedPostsScreen>
               controller: _tabController,
               children: [
                 GeneralPostPreviewCard(
+                  boardType: "광장",
+                  emptyMessage: "아직 스크랩한 글이 없어요!",
                   data: ref.watch(totalScrappedPostProvider),
                   // postFuture: paginatePost("FREE", ref),
                   notifierProvider:
@@ -89,6 +91,8 @@ class _ScrappedPostsScreenState extends ConsumerState<ScrappedPostsScreen>
                   cardType: CardType.square,
                 ),
                 GeneralPostPreviewCard(
+                  boardType: "진디밭",
+                  emptyMessage: "아직 스크랩한 글이 없어요!",
                   data: ref.watch(univScrappedPostProvider),
                   // postFuture: paginatePost("FREE", ref),
                   notifierProvider:

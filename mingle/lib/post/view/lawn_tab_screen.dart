@@ -35,6 +35,7 @@ class LawnTabScreen extends ConsumerWidget {
       tab4: '학생회',
       tabContents: [
         GeneralPostPreviewCard(
+          boardType: "잔디밭",
           // postList: dummyPostList,
           data: ref.watch(univAllPostProvider),
           notifierProvider: ref.watch(univAllPostProvider.notifier),
@@ -44,6 +45,7 @@ class LawnTabScreen extends ConsumerWidget {
           cardType: CardType.square,
         ),
         GeneralPostPreviewCard(
+          boardType: "잔디밭",
           data: ref.watch(univFreePostProvider),
           // postFuture: paginatePost("FREE", ref),
           notifierProvider: ref.watch(univFreePostProvider.notifier),
@@ -52,6 +54,7 @@ class LawnTabScreen extends ConsumerWidget {
           cardType: CardType.square,
         ),
         GeneralPostPreviewCard(
+          boardType: "잔디밭",
           data: ref.watch(univQnAPostProvider),
           // postFuture: paginatePost("QNA", ref),
           notifierProvider: ref.watch(univQnAPostProvider.notifier),
@@ -60,6 +63,7 @@ class LawnTabScreen extends ConsumerWidget {
           cardType: CardType.square,
         ),
         GeneralPostPreviewCard(
+          boardType: "잔디밭",
           data: ref.watch(univKsaPostProvider),
           // postFuture: paginatePost("KSA", ref),
           notifierProvider: ref.watch(univKsaPostProvider.notifier),

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
@@ -16,6 +17,7 @@ class GeneralPostPreviewCard extends ConsumerStatefulWidget {
 
   // final Future<List<PostModel>> postFuture;
   String emptyMessage;
+  final String boardType;
   final CursorPaginationBase data;
   final CardType cardType;
   final dynamic notifierProvider;
@@ -25,6 +27,7 @@ class GeneralPostPreviewCard extends ConsumerStatefulWidget {
   GeneralPostPreviewCard(
       {
       // required this.postList,
+      required this.boardType,
       required this.cardType,
       Key? key,
       required this.data,
@@ -163,8 +166,11 @@ class _GeneralPostPreviewCardState
                     ? widget.cardType == CardType.home
                         ? SliverList(
                             delegate: SliverChildListDelegate([
-                            Center(
-                              child: Text(widget.emptyMessage),
+                            SizedBox(
+                              height: 70.0,
+                              child: Center(
+                                child: Text(widget.emptyMessage),
+                              ),
                             )
                           ]))
                         : SliverFillRemaining(
@@ -220,6 +226,7 @@ class _GeneralPostPreviewCardState
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (_) => PostDetailScreen(
+                                          boardType: widget.boardType,
                                           allNotifierProvider:
                                               widget.allNotifierProvider,
                                           postId: post.postId,
@@ -246,25 +253,34 @@ class _GeneralPostPreviewCardState
                                             children: [
                                               Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
+                                                    MainAxisAlignment.start,
                                                 children: [
                                                   Expanded(
-                                                    child: Text(
-                                                      post.title,
-                                                      style: const TextStyle(
-                                                        fontFamily:
-                                                            "Pretendard Variable",
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        color:
-                                                            GRAYSCALE_BLACK_GRAY,
-                                                      ),
-                                                      textAlign: TextAlign.left,
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          post.title,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontFamily:
+                                                                "Pretendard",
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            color:
+                                                                GRAYSCALE_BLACK_GRAY,
+                                                          ),
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                        if (post is PostModel &&
+                                                            post.fileAttached)
+                                                          SvgPicture.asset(
+                                                              "assets/img/post_screen/has_picture_icon.svg"),
+                                                      ],
                                                     ),
                                                   ),
                                                   const SizedBox(
@@ -275,8 +291,7 @@ class _GeneralPostPreviewCardState
                                               Text(
                                                 post.content,
                                                 style: const TextStyle(
-                                                  fontFamily:
-                                                      "Pretendard Variable",
+                                                  fontFamily: "Pretendard",
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w400,
                                                   color: GRAYSCALE_GRAY_05,
@@ -299,7 +314,7 @@ class _GeneralPostPreviewCardState
                                                         post.nickname,
                                                         style: const TextStyle(
                                                           fontFamily:
-                                                              "Pretendard Variable",
+                                                              "Pretendard",
                                                           fontSize: 11,
                                                           fontWeight:
                                                               FontWeight.w400,
@@ -322,7 +337,7 @@ class _GeneralPostPreviewCardState
                                                         post.createdAt,
                                                         style: const TextStyle(
                                                           fontFamily:
-                                                              "Pretendard Variable",
+                                                              "Pretendard",
                                                           fontSize: 11,
                                                           fontWeight:
                                                               FontWeight.w400,
@@ -346,7 +361,7 @@ class _GeneralPostPreviewCardState
                                                             .toString(),
                                                         style: const TextStyle(
                                                           fontFamily:
-                                                              "Pretendard Variable",
+                                                              "Pretendard",
                                                           fontSize: 11,
                                                           fontWeight:
                                                               FontWeight.w400,
@@ -369,7 +384,7 @@ class _GeneralPostPreviewCardState
                                                             .toString(),
                                                         style: const TextStyle(
                                                           fontFamily:
-                                                              "Pretendard Variable",
+                                                              "Pretendard",
                                                           fontSize: 11,
                                                           fontWeight:
                                                               FontWeight.w400,
@@ -394,8 +409,19 @@ class _GeneralPostPreviewCardState
                                 if (index != postList.data.length - 1)
                                   buildDivider(1.0),
                                 if (index == postList.data.length - 1)
-                                  const SizedBox(
-                                    height: 20.0,
+                                  // const SizedBox(
+                                  //   height: 20.0,
+                                  // ),
+                                  SizedBox(
+                                    height: (() {
+                                      switch (widget.cardType) {
+                                        case CardType.home:
+                                          return 20.0;
+
+                                        default:
+                                          return 16.0;
+                                      }
+                                    })(),
                                   ),
                               ],
                             );

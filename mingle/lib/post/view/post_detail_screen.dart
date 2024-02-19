@@ -19,6 +19,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 class PostDetailScreen extends ConsumerStatefulWidget {
   final int postId;
+  final String boardType;
   final Function refreshList;
   final ProviderFamily<PostModel?, int>? postDetailProvider;
   final PostStateNotifier? notifierProvider;
@@ -27,6 +28,7 @@ class PostDetailScreen extends ConsumerStatefulWidget {
       {super.key,
       required this.postId,
       required this.refreshList,
+      required this.boardType,
       this.postDetailProvider,
       this.notifierProvider,
       this.allNotifierProvider});
@@ -269,6 +271,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
     }
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(child: renderContent(post)),
     );
   }
@@ -277,12 +280,14 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
     String createdDate = post.createdAt.split(" ")[0];
     String createdTime = post.createdAt.split(" ")[1];
     return Scaffold(
+      backgroundColor: Colors.white,
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
             backgroundColor: Colors.white,
+            surfaceTintColor: Colors.transparent,
             elevation: 0,
             leading: SizedBox(
               height: 10.0,
@@ -294,9 +299,9 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
               ),
             ),
             titleSpacing: 0,
-            title: const Text(
-              "게시판 이름",
-              style: TextStyle(
+            title: Text(
+              widget.boardType,
+              style: const TextStyle(
                   fontSize: 14.0,
                   fontWeight: FontWeight.w400,
                   color: GRAYSCALE_GRAY_03),
@@ -491,7 +496,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                   ),
                   Container(
                     color: GRAYSCALE_GRAY_01_5,
-                    height: 56.0,
+                    // height: 56.0,
                     child: const Padding(
                       padding: EdgeInsets.only(left: 10.0),
                       child: Column(
@@ -673,7 +678,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                     builder: (_) {
                       return ImageDetailScreen(
                         image: Image(
-                          fit: BoxFit.fill,
+                          fit: BoxFit.contain,
                           image: NetworkImage(
                             postImgUrl[index],
                           ),

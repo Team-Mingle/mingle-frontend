@@ -135,7 +135,7 @@
 //                                     child: Text(
 //                                       post['title'] ?? '',
 //                                       style: const TextStyle(
-//                                         fontFamily: "Pretendard Variable",
+//                                         fontFamily: "Pretendard",
 //                                         fontSize: 14,
 //                                         fontWeight: FontWeight.w400,
 //                                         color: GRAYSCALE_BLACK_GRAY,
@@ -169,7 +169,7 @@
 //                                     ? '${post['askingPrice'] ?? ''} ${post['currencies'] ?? ''}'
 //                                     : post['content'] ?? '',
 //                                 style: const TextStyle(
-//                                   fontFamily: "Pretendard Variable",
+//                                   fontFamily: "Pretendard",
 //                                   fontSize: 12,
 //                                   fontWeight: FontWeight.w400,
 //                                   color: GRAYSCALE_GRAY_05,
@@ -193,7 +193,7 @@
 //                                       Text(
 //                                         post['nickname'] ?? '',
 //                                         style: const TextStyle(
-//                                           fontFamily: "Pretendard Variable",
+//                                           fontFamily: "Pretendard",
 //                                           fontSize: 11,
 //                                           fontWeight: FontWeight.w400,
 //                                           color: GRAYSCALE_GREY_ORANGE,
@@ -210,7 +210,7 @@
 //                                       Text(
 //                                         post['timestamp'] ?? '',
 //                                         style: const TextStyle(
-//                                           fontFamily: "Pretendard Variable",
+//                                           fontFamily: "Pretendard",
 //                                           fontSize: 11,
 //                                           fontWeight: FontWeight.w400,
 //                                           color: GRAYSCALE_GREY_ORANGE,
@@ -231,7 +231,7 @@
 //                                       Text(
 //                                         post['likeCounts'] ?? '',
 //                                         style: const TextStyle(
-//                                           fontFamily: "Pretendard Variable",
+//                                           fontFamily: "Pretendard",
 //                                           fontSize: 11,
 //                                           fontWeight: FontWeight.w400,
 //                                           color: GRAYSCALE_GRAY_ORANGE_02,
@@ -249,7 +249,7 @@
 //                                       Text(
 //                                         post['commentCounts'] ?? '',
 //                                         style: const TextStyle(
-//                                           fontFamily: "Pretendard Variable",
+//                                           fontFamily: "Pretendard",
 //                                           fontSize: 11,
 //                                           fontWeight: FontWeight.w400,
 //                                           color: GRAYSCALE_GRAY_ORANGE_02,
@@ -367,7 +367,7 @@
 //                           style: TextStyle(
 //                             color: Colors.black,
 //                             fontSize: 14,
-//                             fontFamily: 'Pretendard Variable',
+//                             fontFamily: 'Pretendard',
 //                             fontWeight: FontWeight.w500,
 //                             height: 0,
 //                           ),

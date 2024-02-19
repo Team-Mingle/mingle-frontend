@@ -30,7 +30,7 @@ class _ModifyTimetableNameWidgetState extends State<ModifyTimetableNameWidget> {
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 16,
-                fontFamily: 'Pretendard Variable',
+                fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w500,
               ),
             ),

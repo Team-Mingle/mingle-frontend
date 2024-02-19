@@ -36,143 +36,148 @@ class _SearchScreenState extends ConsumerState<SearchScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(48.0),
-        child: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.white,
-          titleSpacing: 0,
-          leading: Container(
-            margin: const EdgeInsets.only(
-                left: 6.0, top: 4.0, bottom: 4.0, right: 0.0),
-            child: IconButton(
-              icon: Align(
-                alignment: Alignment.center,
-                child: SvgPicture.asset(
-                  'assets/img/home_screen/ic_search_back.svg',
-                  width: 24,
-                  height: 24,
-                ),
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ),
-          title: Padding(
-            padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: GRAYSCALE_GRAY_01_5,
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Center(
-                child: TextField(
-                  onEditingComplete: () {
-                    setState(() {
-                      searchFuture = ref
-                          .watch(postRepositoryProvider)
-                          .search(keyword: _searchController.text);
-                    });
-                  },
-                  controller: _searchController,
-                  decoration: const InputDecoration(
-                    hintText: '검색어를 입력하세요 왤케 아래에 있지...',
-                    hintStyle: TextStyle(
-                      color: GRAYSCALE_GRAY_03,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
-                  ),
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          actions: [
-            Container(
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(48.0),
+          child: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.white,
+            titleSpacing: 0,
+            leading: Container(
               margin: const EdgeInsets.only(
-                  left: 0.0, top: 4.0, bottom: 4.0, right: 7.0),
+                  left: 6.0, top: 4.0, bottom: 4.0, right: 0.0),
               child: IconButton(
                 icon: Align(
                   alignment: Alignment.center,
                   child: SvgPicture.asset(
-                    'assets/img/home_screen/ic_search_delete.svg',
+                    'assets/img/post_screen/cross_icon.svg',
                     width: 24,
                     height: 24,
                   ),
                 ),
                 onPressed: () {
-                  _searchController.clear();
+                  Navigator.pop(context);
                 },
               ),
             ),
-          ],
-        ),
-      ),
-      body: Container(
-        color: Colors.white,
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 12.0,
-            ),
-            PreferredSize(
-              preferredSize: const Size.fromHeight(40.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width / 2,
-                  child: TabBar(
-                    indicatorColor: Colors.orange,
-                    indicatorWeight: 2,
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    labelColor: Colors.black,
-                    unselectedLabelColor: Colors.black,
-                    controller: _tabController,
-                    tabs: const [
-                      Tab(text: '광장'),
-                      Tab(text: '잔디밭'),
-                    ],
+            title: Padding(
+              padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: GRAYSCALE_GRAY_01_5,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Center(
+                  child: TextField(
+                    onEditingComplete: () {
+                      setState(() {
+                        searchFuture = ref
+                            .watch(postRepositoryProvider)
+                            .search(keyword: _searchController.text);
+                      });
+                    },
+                    controller: _searchController,
+                    decoration: const InputDecoration(
+                      hintText: '검색어를 입력하세요.',
+                      hintStyle: TextStyle(
+                        color: GRAYSCALE_GRAY_03,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
+                    ),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      height: 13 / 11,
+                    ),
                   ),
                 ),
               ),
             ),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  searchFuture == null
-                      ? const Center(child: Text('탭 1 콘텐츠'))
-                      : FutureBuilder(
-                          future: searchFuture,
-                          builder: (context,
-                              AsyncSnapshot<CursorPagination<PostModel>>
-                                  snapshot) {
-                            if (!snapshot.hasData) {
-                              return const Center(
-                                  child: CircularProgressIndicator());
-                            }
-                            CursorPagination<PostModel> postList =
-                                snapshot.data!;
-                            return GeneralPostPreviewCard(
-                              // postList: dummyPostList,
-                              data: postList,
-                              // postFuture: paginatePost("MINGLE", ref),
-
-                              cardType: CardType.square,
-                            );
-                          }),
-                  const Center(child: Text('탭 2 콘텐츠')),
-                ],
+            actions: [
+              Container(
+                margin: const EdgeInsets.only(
+                    left: 0.0, top: 4.0, bottom: 4.0, right: 7.0),
+                child: IconButton(
+                  icon: Align(
+                    alignment: Alignment.center,
+                    child: SvgPicture.asset(
+                      'assets/img/home_screen/ic_search_delete.svg',
+                      width: 24,
+                      height: 24,
+                    ),
+                  ),
+                  onPressed: () {
+                    _searchController.clear();
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
+        ),
+        body: Container(
+          color: Colors.white,
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 12.0,
+              ),
+              PreferredSize(
+                preferredSize: const Size.fromHeight(40.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: TabBar(
+                      indicatorColor: Colors.orange,
+                      indicatorWeight: 2,
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      labelColor: Colors.black,
+                      unselectedLabelColor: Colors.black,
+                      controller: _tabController,
+                      tabs: const [
+                        Tab(text: '광장'),
+                        Tab(text: '잔디밭'),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    searchFuture == null
+                        ? const Center(child: Text('밍글에 궁금한 것을 물어보세요'))
+                        : FutureBuilder(
+                            future: searchFuture,
+                            builder: (context,
+                                AsyncSnapshot<CursorPagination<PostModel>>
+                                    snapshot) {
+                              if (!snapshot.hasData) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              }
+                              CursorPagination<PostModel> postList =
+                                  snapshot.data!;
+                              return GeneralPostPreviewCard(
+                                boardType: "",
+                                // postList: dummyPostList,
+                                data: postList,
+                                // postFuture: paginatePost("MINGLE", ref),
+
+                                cardType: CardType.square,
+                              );
+                            }),
+                    const Center(child: Text('탭 2 콘텐츠')),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

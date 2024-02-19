@@ -236,6 +236,7 @@ class _SecondHandPostDetailScreenState
             backgroundColor: Colors.white,
             appBar: AppBar(
               backgroundColor: Colors.white,
+              surfaceTintColor: Colors.transparent,
               elevation: 0,
               leading: SizedBox(
                 height: 10.0,
@@ -271,6 +272,7 @@ class _SecondHandPostDetailScreenState
                             ? <CupertinoActionSheetAction>[
                                 CupertinoActionSheetAction(
                                   onPressed: () {
+                                    deletePost();
                                     Navigator.pop(context);
                                   },
                                   isDestructiveAction: true,
@@ -590,7 +592,7 @@ class _SecondHandPostDetailScreenState
                     ),
                     Container(
                       color: GRAYSCALE_GRAY_01_5,
-                      height: 56.0,
+                      // height: 56.0,
                       child: const Padding(
                         padding: EdgeInsets.only(left: 10.0),
                         child: Column(
@@ -766,7 +768,7 @@ class _SecondHandPostDetailScreenState
                     borderRadius:
                         BorderRadius.circular(8.0), // 여기서 borderRadius를 설정합니다.
                     child: Image(
-                      fit: BoxFit.fill,
+                      fit: BoxFit.contain,
                       image: NetworkImage(
                         imgLink,
                       ),

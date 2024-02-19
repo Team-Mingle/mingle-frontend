@@ -16,6 +16,8 @@ import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
 import 'dart:convert';
 
 import 'package:mingle/user/view/my_page_screen/terms_and_conditions_screen.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeTabScreen extends ConsumerStatefulWidget {
   bool isFromLogin;
@@ -80,6 +82,8 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
         preferredSize: const Size.fromHeight(48.0),
         child: AppBar(
           backgroundColor: BACKGROUND_COLOR_GRAY,
+          surfaceTintColor: Colors.transparent,
+
           elevation: 0, // 그림자 제거
           leading: Padding(
             padding: const EdgeInsets.only(left: 8.0),
@@ -108,9 +112,11 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
               ),
               onPressed: () {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SearchScreen()),
-                );
+                    context,
+                    PageTransition(
+                        type: PageTransitionType.bottomToTop,
+                        duration: const Duration(milliseconds: 200),
+                        child: const SearchScreen()));
               },
             ),
             Padding(
@@ -153,22 +159,23 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
                 child: Column(
                   children: <Widget>[
                     const SizedBox(height: 16.0),
-                    Column(
-                      children: [
-                        FutureBuilder<List<BannerModel>>(
-                          future: _bannerProvider,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const CircularProgressIndicator();
-                            } else if (snapshot.hasError) {
-                              return Text('Error: ${snapshot.error}');
-                            } else {
-                              return sliderWidget(snapshot.data!);
-                            }
-                          },
-                        ),
-                      ],
+                    FutureBuilder<List<BannerModel>>(
+                      future: _bannerProvider,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator(
+                            color: PRIMARY_COLOR_ORANGE_02,
+                          );
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          return Column(children: [
+                            sliderWidget(snapshot.data!),
+                            sliderIndicator(snapshot.data!)
+                          ]);
+                        }
+                      },
                     ),
                     const SizedBox(height: 32.0),
                     // Column(
@@ -180,7 +187,7 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
                     //             Text(
                     //               "소식 바로 보기",
                     //               style: TextStyle(
-                    //                 fontFamily: "Pretendard Variable",
+                    //                 fontFamily: "Pretendard",
                     //                 fontSize: 18,
                     //                 fontWeight: FontWeight.w500,
                     //                 color: GRAYSCALE_BLACK,
@@ -212,19 +219,20 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
                       data: ref.watch(totalRecentPostProvider),
                       postType: "square",
                     ),
-                    const SizedBox(height: 72.0),
+                    const SizedBox(height: 54.0),
                     PostCard(
                         changeTabIndex: widget.changeTabIndex,
                         title: '지금 잔디밭에서는',
                         data: ref.watch(univRecentPostProvider),
                         postType: "lawn"),
-                    const SizedBox(height: 72.0),
+                    const SizedBox(height: 54.0),
                     PostCard(
                         changeTabIndex: widget.changeTabIndex,
                         title: '불타오르는 게시글',
                         data: ref.watch(bestPostProvider),
                         postType: "fire"),
-                    const SizedBox(height: 72.0),
+                    const SizedBox(height: 54.0),
+
                     PostCard(
                         changeTabIndex: widget.changeTabIndex,
                         title: '뭐 살 거 없나?',
@@ -249,15 +257,25 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
       items: bannerList.map(
         (banner) {
           return Builder(
-            builder: (context) {
-              return SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: Image(
-                    fit: BoxFit.fill,
-                    image: NetworkImage(
-                      banner.imgUrl,
+            builder: (BuildContext context) {
+              return GestureDetector(
+                onTap: () async {
+                  final url = banner.linkUrl;
+                  if (await canLaunchUrl(Uri.parse(url))) {
+                    await launchUrl(Uri.parse(url));
+                  } else {
+                    print('Could not launch $url');
+                  }
+                },
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image(
+                      fit: BoxFit.fill,
+                      image: NetworkImage(
+                        banner.imgUrl,
+                      ),
                     ),
                   ),
                 ),
@@ -326,7 +344,7 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
               child: Text(
                 buttonText,
                 style: const TextStyle(
-                  fontFamily: "Pretendard Variable",
+                  fontFamily: "Pretendard",
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                   color: GRAYSCALE_GRAY_04,

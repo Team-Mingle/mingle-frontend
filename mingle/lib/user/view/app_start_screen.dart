@@ -87,9 +87,11 @@ class AppStartScreen extends StatelessWidget {
                         width: 13.0,
                       ),
                       InkWell(
-                        onTap: () => Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                                builder: (_) => const LoginScreen())),
+                        onTap: () =>
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (_) => const LoginScreen(
+                                      isFromSplash: true,
+                                    ))),
                         child: const Text(
                           "로그인",
                           style: TextStyle(

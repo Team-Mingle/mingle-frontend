@@ -29,18 +29,21 @@ class PostCard extends ConsumerWidget {
     switch (postType) {
       case "square":
         postPreviewWidget = GeneralPostPreviewCard(
+          boardType: "광장",
           data: data,
           cardType: CardType.home,
         );
         break;
       case "lawn":
         postPreviewWidget = GeneralPostPreviewCard(
+          boardType: "잔디밭",
           data: data,
           cardType: CardType.home,
         );
         break;
       case "fire":
         postPreviewWidget = GeneralPostPreviewCard(
+          boardType: "불타는 게시판",
           data: data,
           cardType: CardType.home,
         );
@@ -80,7 +83,7 @@ class PostCard extends ConsumerWidget {
               Text(
                 title,
                 style: const TextStyle(
-                  fontFamily: "Pretendard Variable",
+                  fontFamily: "Pretendard",
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
                   color: GRAYSCALE_BLACK,
@@ -97,6 +100,11 @@ class PostCard extends ConsumerWidget {
         ),
         const SizedBox(height: 12.0),
         postPreviewWidget,
+        // GeneralPostPreviewCard(
+        //   boardType: title,
+        //   data: data,
+        //   cardType: CardType.home,
+        // ),
       ],
     );
   }

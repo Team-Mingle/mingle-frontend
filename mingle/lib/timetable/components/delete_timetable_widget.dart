@@ -26,7 +26,7 @@ class _DeleteTimetableWidgetState extends State<DeleteTimetableWidget> {
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 16,
-                fontFamily: 'Pretendard Variable',
+                fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w500,
               ),
             ),

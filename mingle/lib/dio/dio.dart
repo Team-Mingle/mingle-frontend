@@ -150,6 +150,8 @@ class CustomInterceptor extends Interceptor {
   // }
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
+    print("error error");
+    print(err);
     // 401에러가 났을때 (status code)
     // 토큰을 재발급 받는 시도를하고 토큰이 재발급되면
     // 다시 새로운 토큰으로 요청을한다.
@@ -167,10 +169,14 @@ class CustomInterceptor extends Interceptor {
     final isStatus401 = err.response?.statusCode == 401;
     final isPathRefresh = err.requestOptions.path == '/auth/token';
 
+    print("isStatus401: $isStatus401");
+    print("path: ${err.requestOptions.path}");
+
     if (isStatus401 && !isPathRefresh) {
       final dio = Dio();
 
       try {
+        print("trying refetching");
         final resp = await dio.post('https://$baseUrl/auth/refresh-token',
             options: Options(headers: {
               'X-Refresh-Token': refreshToken,

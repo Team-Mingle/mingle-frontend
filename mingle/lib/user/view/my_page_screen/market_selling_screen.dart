@@ -58,13 +58,13 @@ class MarketSellingScreen extends StatelessWidget {
               ),
               labelStyle: TextStyle(
                 fontSize: 14,
-                fontFamily: 'Pretendard Variable',
+                fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w600,
               ),
               unselectedLabelColor: GRAYSCALE_GRAY_04,
               unselectedLabelStyle: TextStyle(
                 fontSize: 14,
-                fontFamily: 'Pretendard Variable',
+                fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w400,
               ),
               tabs: [

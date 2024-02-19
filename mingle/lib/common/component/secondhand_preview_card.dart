@@ -48,7 +48,6 @@ class _SecondhandPreviewCardState extends ConsumerState<SecondhandPreviewCard> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: postList.data.take(3).toList().asMap().entries.map((entry) {
-            int idx = entry.key;
             SecondHandMarketPostModel post = entry.value;
             return InkWell(
               onTap: () {
@@ -119,7 +118,7 @@ class _SecondhandPreviewCardState extends ConsumerState<SecondhandPreviewCard> {
             width: (MediaQuery.of(context).size.width - 32),
             height: 48,
             decoration: BoxDecoration(
-                border: Border.all(color: GRAYSCALE_GRAY_02),
+                border: Border.all(color: const Color(0xffE9E7E7)),
                 borderRadius: BorderRadius.circular(10.0),
                 color: Colors.white),
             child: const Center(
@@ -132,7 +131,7 @@ class _SecondhandPreviewCardState extends ConsumerState<SecondhandPreviewCard> {
                       fontFamily: "Pretendard",
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xff686868),
+                      color: GRAYSCALE_GRAY_04,
                       height: 17 / 14,
                     ),
                   ),

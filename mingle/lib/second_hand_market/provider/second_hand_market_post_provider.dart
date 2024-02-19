@@ -176,7 +176,7 @@ class SecondHandPostStateNotifier extends StateNotifier<CursorPaginationBase> {
       return;
     }
     final pState = state as CursorPagination;
-    pState.data.removeWhere((e) => e.postId == postId);
+    pState.data.removeWhere((e) => e.id == postId);
     state = pState.copyWith(data: pState.data);
   }
 }
