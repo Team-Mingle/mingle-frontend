@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -42,6 +43,8 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
   int? mentionId;
   final ScrollController scrollController = ScrollController();
   final FocusNode focusNode = FocusNode();
+  int _current = 0;
+  final CarouselController _controller = CarouselController();
   final PostDetailModel fakePost = PostDetailModel(
       postId: 0,
       title: "",
@@ -664,75 +667,191 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
   }
 
   Widget renderImg(List<String> postImgUrl) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: List.generate(
-          postImgUrl.length,
-          (index) => Row(
-            children: [
-              GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) {
-                      return ImageDetailScreen(
-                        image: Image(
-                          fit: BoxFit.contain,
-                          image: NetworkImage(
-                            postImgUrl[index],
+    return SizedBox(
+      // height: 280,
+      child: Column(
+        children: [
+          sliderWidget(postImgUrl),
+          // const SizedBox(
+          //   height: 20.0,
+          // ),
+          sliderIndicator(postImgUrl)
+        ],
+      ),
+    );
+    // SingleChildScrollView(
+    //   scrollDirection: Axis.horizontal,
+    //   child: Row(
+    //     children: List.generate(
+    //       postImgUrl.length,
+    //       (index) => Row(
+    //         children: [
+    //           GestureDetector(
+    //             onTap: () => Navigator.push(
+    //               context,
+    //               MaterialPageRoute(
+    //                 builder: (_) {
+    //                   return ImageDetailScreen(
+    //                     images: postImgUrl,
+    //                     // controller: CarouselController(),
+    //                     onPageChange: () {},
+    //                     // Image(
+    //                     //   fit: BoxFit.contain,
+    //                     //   image: NetworkImage(
+    //                     //     postImgUrl[index],
+    //                     //   ),
+    //                     // ),
+    //                   );
+    //                 },
+    //               ),
+    //             ),
+    //             child: SizedBox(
+    //               height: 130.0,
+    //               width: 130.0,
+    //               child: ClipRRect(
+    //                 borderRadius: BorderRadius.circular(8.0),
+    //                 child: Image(
+    //                   fit: BoxFit.fill,
+    //                   image: NetworkImage(
+    //                     postImgUrl[index],
+    //                   ),
+    //                 ),
+    //               ),
+    //             ),
+    //           ),
+    //           SizedBox(
+    //             width: index < postImgUrl.length - 1 ? 4.0 : 0.0,
+    //           )
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    // );
+  }
+
+  Widget sliderWidget(List<String> item) {
+    // print("img length = ${item.itemImgList.length}");
+    // print("rebuilding");
+    // print(_current);
+    return CarouselSlider(
+      carouselController: _controller,
+      items: item.map(
+        (imgLink) {
+          return Builder(
+            builder: (context) {
+              return SizedBox(
+                width: MediaQuery.of(context).size.width,
+                // height: 300.0,
+                child: ClipRRect(
+                    borderRadius:
+                        BorderRadius.circular(8.0), // 여기서 borderRadius를 설정합니다.
+                    child: GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) {
+                            return ImageDetailScreen(
+                                onPageChange: (index) => setState(() {
+                                      _current = index;
+                                      _controller.jumpToPage(index);
+                                    }),
+                                currentIndex: _current,
+                                // controller: _controller,
+                                images: item
+                                // Image(
+
+                                //   fit: BoxFit.fill,
+                                //   image: NetworkImage(
+                                //     imgLink,
+                                //   ),
+                                // ),
+                                );
+                          },
+                        ),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                            8.0), // 여기서 borderRadius를 설정합니다.
+                        child: Hero(
+                          tag: imgLink,
+                          child: Image(
+                            fit: BoxFit.contain,
+                            image: NetworkImage(
+                              imgLink,
+                            ),
                           ),
                         ),
-                      );
-                    },
-                  ),
-                ),
-                child: SizedBox(
-                  height: 130.0,
-                  width: 130.0,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image(
-                      fit: BoxFit.fill,
-                      image: NetworkImage(
-                        postImgUrl[index],
                       ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: index < postImgUrl.length - 1 ? 4.0 : 0.0,
-              )
-            ],
-          ),
-        ),
+                    )),
+              );
+            },
+          );
+        },
+      ).toList(),
+      options: CarouselOptions(
+        enableInfiniteScroll: false,
+        height: 200,
+        viewportFraction: 1.0,
+        autoPlay: false,
+        initialPage: _current,
+        onPageChanged: (index, reason) {
+          setState(() {
+            _current = index;
+          });
+        },
       ),
     );
   }
-}
-          
-      //     FutureBuilder(
-      //   future: ref
-      //       .watch(postRepositoryProvider)
-      //       .getPostDetails(postId: widget.postId),
-      //   // postDetailFuture(postId),
-      //   builder: (context, AsyncSnapshot<PostDetailModel> snapshot) {
-      //     if (!snapshot.hasData) {
-      //       return const Center(
-      //         child: CircularProgressIndicator(),
-      //       );
-      //     }
-      //     if (snapshot.hasError) {
-      //       return const Center(
-      //         child: Text("다시 시도 ㄱㄱ"),
-      //       );
-      //     }
-      //     PostDetailModel post = snapshot.data!;
-      //     print(post.postImgUrl);
-      //     String createdDate = post.createdAt.split(" ")[0];
-      //     String createdTime = post.createdAt.split(" ")[1];
-      //     return 
-      // )),  }
-// }
 
+  // 위젯 분리 필요
+  Widget sliderIndicator(List<String> item) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: item.asMap().entries.map((entry) {
+          return GestureDetector(
+            onTap: () => _controller.animateToPage(entry.key),
+            child: Container(
+              width: 6.0, // 선택된 인디케이터는 가로로 길게
+              height: 6,
+              margin:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle, // BoxShape을 rectangle로 변경
+                // borderRadius: BorderRadius.circular(3.0),
+                color: _current == entry.key
+                    ? PRIMARY_COLOR_ORANGE_02
+                    : GRAYSCALE_GRAY_02,
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  //     FutureBuilder(
+  //   future: ref
+  //       .watch(postRepositoryProvider)
+  //       .getPostDetails(postId: widget.postId),
+  //   // postDetailFuture(postId),
+  //   builder: (context, AsyncSnapshot<PostDetailModel> snapshot) {
+  //     if (!snapshot.hasData) {
+  //       return const Center(
+  //         child: CircularProgressIndicator(),
+  //       );
+  //     }
+  //     if (snapshot.hasError) {
+  //       return const Center(
+  //         child: Text("다시 시도 ㄱㄱ"),
+  //       );
+  //     }
+  //     PostDetailModel post = snapshot.data!;
+  //     print(post.postImgUrl);
+  //     String createdDate = post.createdAt.split(" ")[0];
+  //     String createdTime = post.createdAt.split(" ")[1];
+  //     return
+  // )),  }
+// }
+}

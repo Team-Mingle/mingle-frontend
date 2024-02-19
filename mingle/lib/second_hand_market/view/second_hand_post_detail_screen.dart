@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/component/anonymous_textfield.dart';
@@ -753,7 +754,9 @@ class _SecondHandPostDetailScreenState
   }
 
   Widget sliderWidget(SecondHandMarketPostModel item) {
-    print("img length = ${item.itemImgList.length}");
+    // print("img length = ${item.itemImgList.length}");
+    // print("rebuilding");
+    // print(_current);
     return CarouselSlider(
       carouselController: _controller,
       items: item.itemImgList.map(
@@ -767,27 +770,38 @@ class _SecondHandPostDetailScreenState
                   child: ClipRRect(
                     borderRadius:
                         BorderRadius.circular(8.0), // 여기서 borderRadius를 설정합니다.
-                    child: Image(
-                      fit: BoxFit.contain,
-                      image: NetworkImage(
-                        imgLink,
+                    child: Hero(
+                      tag: imgLink,
+                      child: Image(
+                        fit: BoxFit.contain,
+                        image: NetworkImage(
+                          imgLink,
+                        ),
                       ),
                     ),
                   ),
                 ),
-                InkWell(
+                GestureDetector(
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (_) {
                         return ImageDetailScreen(
-                          image: Image(
-                            fit: BoxFit.fill,
-                            image: NetworkImage(
-                              imgLink,
-                            ),
-                          ),
-                        );
+                            onPageChange: (index) => setState(() {
+                                  _current = index;
+                                  _controller.jumpToPage(index);
+                                }),
+                            currentIndex: _current,
+                            // controller: _controller,
+                            images: item.itemImgList
+                            // Image(
+
+                            //   fit: BoxFit.fill,
+                            //   image: NetworkImage(
+                            //     imgLink,
+                            //   ),
+                            // ),
+                            );
                       },
                     ),
                   ),
@@ -826,6 +840,7 @@ class _SecondHandPostDetailScreenState
         height: 320,
         viewportFraction: 1.0,
         autoPlay: false,
+        initialPage: _current,
         onPageChanged: (index, reason) {
           setState(() {
             _current = index;
