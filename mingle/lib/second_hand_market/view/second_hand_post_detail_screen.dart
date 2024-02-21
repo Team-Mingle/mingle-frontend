@@ -815,12 +815,16 @@ class _SecondHandPostDetailScreenState
                     borderRadius:
                         BorderRadius.circular(8.0), // 여기서 borderRadius를 설정합니다.
                     child: Container(
-                      color: item.status == "예약중"
+                      color: item.status == "예약중" || item.status == "판매완료"
                           ? Colors.black.withOpacity(0.6)
                           : Colors.transparent,
                       child: Center(
                         child: Text(
-                          item.status == "예약중" ? "예약중" : "",
+                          item.status == "예약중"
+                              ? "예약중"
+                              : item.status == "판매완료"
+                                  ? "판매완료"
+                                  : "",
                           style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20.0,

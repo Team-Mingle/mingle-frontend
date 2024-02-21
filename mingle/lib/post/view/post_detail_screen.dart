@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/component/anonymous_textfield.dart';
@@ -476,8 +477,8 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                         const SizedBox(
                           height: 24.0,
                         ),
-                        Text(
-                          post.content,
+                        Linkify(
+                          text: post.content,
                           style: const TextStyle(
                               fontSize: 14.0, fontWeight: FontWeight.w400),
                         ),
@@ -564,12 +565,20 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                               post: post,
                               likeOrUnlikePost: likeOrUnlikePost,
                               scrapOrUnscrapPost: scrapOrUnscrapPost)
-                          : Skeletonizer(
-                              child: LikeAndCommentNumbersCard(
-                              post: fakePost,
-                              likeOrUnlikePost: () {},
-                              scrapOrUnscrapPost: () {},
-                            )),
+                          : FutureBuilder(
+                              future: Future.delayed(
+                                const Duration(milliseconds: 200),
+                                () => Skeletonizer(
+                                    child: LikeAndCommentNumbersCard(
+                                  post: fakePost,
+                                  likeOrUnlikePost: () {},
+                                  scrapOrUnscrapPost: () {},
+                                )),
+                              ),
+                              builder: (context, snapshot) {
+                                return Container();
+                              }),
+
                       const Divider(
                         height: 0.0,
                         thickness: 2.0,
@@ -625,17 +634,24 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                         height: 20.0,
                       ),
                       comments == null
-                          ? Skeletonizer(
-                              ignoreContainers: false,
-                              child: Column(
-                                children: List.generate(
-                                    fakeComments.length,
-                                    (index) => CommentCard(
-                                        refreshComments: refreshComments,
-                                        comment: fakeComments[index],
-                                        setParentAndMentionId: () {},
-                                        likeOrUnlikeComment: () {})),
-                              ))
+                          ? FutureBuilder(
+                              future: Future.delayed(
+                                  const Duration(milliseconds: 200),
+                                  () => Skeletonizer(
+                                      ignoreContainers: false,
+                                      child: Column(
+                                        children: List.generate(
+                                            fakeComments.length,
+                                            (index) => CommentCard(
+                                                refreshComments:
+                                                    refreshComments,
+                                                comment: fakeComments[index],
+                                                setParentAndMentionId: () {},
+                                                likeOrUnlikeComment: () {})),
+                                      ))),
+                              builder: (context, snapshot) {
+                                return Container();
+                              })
                           : Column(
                               children: List.generate(
                                 comments!.length,

@@ -46,7 +46,8 @@ class _ChangeNicknameScreenState extends ConsumerState<ChangeNicknameScreen> {
     } on DioException catch (e) {
       print(e);
       fToast.showToast(
-        child: ToastMessage(message: e.response?.data['message']),
+        child:
+            ToastMessage(message: e.response?.data['message'] ?? "다시 시도해주세요"),
         gravity: ToastGravity.CENTER,
         toastDuration: const Duration(seconds: 2),
       );

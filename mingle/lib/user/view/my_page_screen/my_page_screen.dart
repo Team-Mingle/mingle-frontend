@@ -72,6 +72,7 @@ class MyPageScreen extends ConsumerWidget {
       child: Scaffold(
         backgroundColor: BACKGROUND_COLOR_GRAY,
         appBar: AppBar(
+          surfaceTintColor: Colors.transparent,
           backgroundColor: BACKGROUND_COLOR_GRAY,
           elevation: 0,
           leading: Padding(
