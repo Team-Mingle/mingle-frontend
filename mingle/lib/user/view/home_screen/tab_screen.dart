@@ -162,8 +162,8 @@ class TabScreen extends StatelessWidget {
                   offset: const Offset(2, 5),
                   child: SvgPicture.asset(
                     'assets/img/common/ic_pen.svg',
-                    width: 48,
-                    height: 48,
+                    width: 55,
+                    height: 55,
                   ),
                 ),
               ),

@@ -250,7 +250,7 @@ class _SecondHandPostDetailScreenState
               ),
               titleSpacing: 0,
               title: const Text(
-                "거래 계시판",
+                "거래 게시판",
                 style: TextStyle(
                     fontSize: 14.0,
                     fontWeight: FontWeight.w400,
