@@ -168,7 +168,7 @@ class _GeneralPostPreviewCardState
                     await Future.delayed(
                         const Duration(milliseconds: 1000),
                         () => widget.notifierProvider!
-                            .paginate(forceRefetch: true));
+                            .paginate(forceRefetch: false));
                     // await widget.notifierProvider!.paginate(forceRefetch: true);
                   },
                 ),

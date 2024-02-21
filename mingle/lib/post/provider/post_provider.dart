@@ -221,6 +221,16 @@ final univRecentPostDetailProvider =
   return state.data.firstWhereOrNull((e) => e.postId == id);
 });
 
+final bestPostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
+  final state = ref.watch(bestPostProvider);
+
+  if (state is! CursorPagination) {
+    return null;
+  }
+
+  return state.data.firstWhereOrNull((e) => e.postId == id);
+});
+
 // class RecentPostStateNotifier extends StateNotifier<List<PostModel>?> {
 //   final PostRepository postRepository;
 //   final String boardType;

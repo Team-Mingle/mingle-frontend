@@ -99,7 +99,10 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
     super.initState();
     if (widget.notifierProvider != null) {
       widget.notifierProvider!.getDetail(postId: widget.postId);
+    } else {
+      getPost();
     }
+
     getComments().then((data) {
       setState(() {
         comments = data;
@@ -111,6 +114,14 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
     return ref
         .read(postRepositoryProvider)
         .getPostcomments(postId: widget.postId);
+  }
+
+  getPost() {
+    setState(() {
+      postFuture = ref
+          .watch(postRepositoryProvider)
+          .getPostDetails(postId: widget.postId);
+    });
   }
 
   void setParentCommentIdAndMentionId(int? parentId, int? mentId) {
@@ -241,9 +252,10 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
 
     if (widget.postDetailProvider == null) {
       return FutureBuilder(
-        future: ref
-            .watch(postRepositoryProvider)
-            .getPostDetails(postId: widget.postId),
+        future: postFuture,
+        // ref
+        //     .watch(postRepositoryProvider)
+        //     .getPostDetails(postId: widget.postId),
         // postDetailFuture(postId),
         builder: (context, AsyncSnapshot<PostDetailModel> snapshot) {
           if (!snapshot.hasData) {
@@ -432,252 +444,265 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
               )
             ],
           ),
-          body: CustomScrollView(controller: scrollController, slivers: [
-            CupertinoSliverRefreshControl(
-              onRefresh: () async {
-                refreshPost();
-                refreshComments();
-              },
-            ),
-            SliverList(
-                delegate: SliverChildListDelegate([
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      post.title,
-                      style: const TextStyle(
-                          fontSize: 18.0, fontWeight: FontWeight.w400),
-                    ),
-                    const SizedBox(
-                      height: 24.0,
-                    ),
-                    Text(
-                      post.content,
-                      style: const TextStyle(
-                          fontSize: 14.0, fontWeight: FontWeight.w400),
-                    ),
-                    Column(
-                      children: [
-                        const SizedBox(
-                          height: 16.0,
-                        ),
-                        if (post is PostDetailModel) renderImg(post.postImgUrl),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 12.0,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          post.nickname,
-                          // "익명", // TODO:render accordingly
-                          style: const TextStyle(
-                              color: GRAYSCALE_GRAY_04, fontSize: 12.0),
-                        ),
-                        const SizedBox(
-                          width: 4.0,
-                        ),
-                        const Text(
-                          "•",
-                          style: TextStyle(
-                              color: GRAYSCALE_GRAY_02, fontSize: 12.0),
-                        ),
-                        const SizedBox(
-                          width: 4.0,
-                        ),
-                        Text(
-                          // "07/17",
-                          createdDate,
-                          style: const TextStyle(
-                              color: GRAYSCALE_GRAY_03, fontSize: 12.0),
-                        ),
-                        const SizedBox(
-                          width: 4.0,
-                        ),
-                        Text(
-                          // "13:03",
-                          createdTime,
-                          style: const TextStyle(
-                              color: GRAYSCALE_GRAY_03, fontSize: 12.0),
-                        ),
-                        const SizedBox(
-                          width: 6.0,
-                        ),
-                        const Text(
-                          "조회",
-                          style: TextStyle(
-                              color: GRAYSCALE_GRAY_03, fontSize: 12.0),
-                        ),
-                        const SizedBox(
-                          width: 2.0,
-                        ),
-                        Text(
-                          // "26",
-                          post.viewCount.toString(),
-                          style: const TextStyle(
-                              color: GRAYSCALE_GRAY_03, fontSize: 12.0),
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 12.0,
-                    ),
-                  ],
+          body: CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              controller: scrollController,
+              slivers: [
+                CupertinoSliverRefreshControl(
+                  onRefresh: () async {
+                    Future.delayed(const Duration(seconds: 1), () {
+                      refreshPost();
+                      refreshComments();
+                    });
+                    //   refreshPost();
+                    //   refreshComments();
+                  },
                 ),
-              ),
-              Column(
-                children: [
-                  const Divider(
-                    thickness: 1.0,
-                    height: 0.0,
-                    color: GRAYSCALE_GRAY_01,
-                  ),
-                  post is PostDetailModel
-                      ? LikeAndCommentNumbersCard(
-                          post: post,
-                          likeOrUnlikePost: likeOrUnlikePost,
-                          scrapOrUnscrapPost: scrapOrUnscrapPost)
-                      : Skeletonizer(
-                          child: LikeAndCommentNumbersCard(
-                          post: fakePost,
-                          likeOrUnlikePost: () {},
-                          scrapOrUnscrapPost: () {},
-                        )),
-                  const Divider(
-                    height: 0.0,
-                    thickness: 2.0,
-                    color: GRAYSCALE_GRAY_01,
-                  ),
-                  Container(
-                    color: GRAYSCALE_GRAY_01_5,
-                    // height: 56.0,
-                    child: const Padding(
-                      padding: EdgeInsets.only(left: 10.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            height: 12.0,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "•",
-                                style: TextStyle(
-                                    color: GRAYSCALE_GRAY_03, fontSize: 11.0),
-                              ),
-                              Text("운영규칙을 위반하는 댓글은 삭제될 수 있습니다.",
-                                  style: TextStyle(
-                                      color: GRAYSCALE_GRAY_03, fontSize: 11.0))
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "•",
-                                style: TextStyle(
-                                    color: GRAYSCALE_GRAY_03, fontSize: 11.0),
-                              ),
-                              Text("악의적인 글 혹은 댓글은 오른쪽 상단 버튼을 통해 신고가 가능합니다.",
-                                  style: TextStyle(
-                                      color: GRAYSCALE_GRAY_03, fontSize: 11.0))
-                            ],
-                          ),
-                          SizedBox(
-                            height: 16.0,
-                          ),
-                        ],
-                      ),
+                SliverList(
+                    delegate: SliverChildListDelegate([
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          post.title,
+                          style: const TextStyle(
+                              fontSize: 18.0, fontWeight: FontWeight.w400),
+                        ),
+                        const SizedBox(
+                          height: 24.0,
+                        ),
+                        Text(
+                          post.content,
+                          style: const TextStyle(
+                              fontSize: 14.0, fontWeight: FontWeight.w400),
+                        ),
+                        Column(
+                          children: [
+                            const SizedBox(
+                              height: 16.0,
+                            ),
+                            if (post is PostDetailModel)
+                              renderImg(post.postImgUrl),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 12.0,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              post.nickname,
+                              // "익명", // TODO:render accordingly
+                              style: const TextStyle(
+                                  color: GRAYSCALE_GRAY_04, fontSize: 12.0),
+                            ),
+                            const SizedBox(
+                              width: 4.0,
+                            ),
+                            const Text(
+                              "•",
+                              style: TextStyle(
+                                  color: GRAYSCALE_GRAY_02, fontSize: 12.0),
+                            ),
+                            const SizedBox(
+                              width: 4.0,
+                            ),
+                            Text(
+                              // "07/17",
+                              createdDate,
+                              style: const TextStyle(
+                                  color: GRAYSCALE_GRAY_03, fontSize: 12.0),
+                            ),
+                            const SizedBox(
+                              width: 4.0,
+                            ),
+                            Text(
+                              // "13:03",
+                              createdTime,
+                              style: const TextStyle(
+                                  color: GRAYSCALE_GRAY_03, fontSize: 12.0),
+                            ),
+                            const SizedBox(
+                              width: 6.0,
+                            ),
+                            const Text(
+                              "조회",
+                              style: TextStyle(
+                                  color: GRAYSCALE_GRAY_03, fontSize: 12.0),
+                            ),
+                            const SizedBox(
+                              width: 2.0,
+                            ),
+                            Text(
+                              // "26",
+                              post.viewCount.toString(),
+                              style: const TextStyle(
+                                  color: GRAYSCALE_GRAY_03, fontSize: 12.0),
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 12.0,
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
-                  comments == null
-                      ? Skeletonizer(
-                          ignoreContainers: false,
+                  Column(
+                    children: [
+                      const Divider(
+                        thickness: 1.0,
+                        height: 0.0,
+                        color: GRAYSCALE_GRAY_01,
+                      ),
+                      post is PostDetailModel
+                          ? LikeAndCommentNumbersCard(
+                              post: post,
+                              likeOrUnlikePost: likeOrUnlikePost,
+                              scrapOrUnscrapPost: scrapOrUnscrapPost)
+                          : Skeletonizer(
+                              child: LikeAndCommentNumbersCard(
+                              post: fakePost,
+                              likeOrUnlikePost: () {},
+                              scrapOrUnscrapPost: () {},
+                            )),
+                      const Divider(
+                        height: 0.0,
+                        thickness: 2.0,
+                        color: GRAYSCALE_GRAY_01,
+                      ),
+                      Container(
+                        color: GRAYSCALE_GRAY_01_5,
+                        // height: 56.0,
+                        child: const Padding(
+                          padding: EdgeInsets.only(left: 10.0),
                           child: Column(
-                            children: List.generate(
-                                fakeComments.length,
-                                (index) => CommentCard(
-                                    refreshComments: refreshComments,
-                                    comment: fakeComments[index],
-                                    setParentAndMentionId: () {},
-                                    likeOrUnlikeComment: () {})),
-                          ))
-                      : Column(
-                          children: List.generate(
-                            comments!.length,
-                            (index) => Column(
-                              children: [
-                                index > 0
-                                    ? const Divider(
-                                        height: 24.0,
-                                        thickness: 0.0,
-                                      )
-                                    : Container(),
-                                CommentCard(
-                                    refreshComments: refreshComments,
-                                    likeOrUnlikeComment: likeOrUnlikeComment,
-                                    comment: comments![index],
-                                    setParentAndMentionId:
-                                        setParentCommentIdAndMentionId)
-                              ],
-                            ),
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                height: 12.0,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "•",
+                                    style: TextStyle(
+                                        color: GRAYSCALE_GRAY_03,
+                                        fontSize: 11.0),
+                                  ),
+                                  Text("운영규칙을 위반하는 댓글은 삭제될 수 있습니다.",
+                                      style: TextStyle(
+                                          color: GRAYSCALE_GRAY_03,
+                                          fontSize: 11.0))
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "•",
+                                    style: TextStyle(
+                                        color: GRAYSCALE_GRAY_03,
+                                        fontSize: 11.0),
+                                  ),
+                                  Text("악의적인 글 혹은 댓글은 오른쪽 상단 버튼을 통해 신고가 가능합니다.",
+                                      style: TextStyle(
+                                          color: GRAYSCALE_GRAY_03,
+                                          fontSize: 11.0))
+                                ],
+                              ),
+                              SizedBox(
+                                height: 16.0,
+                              ),
+                            ],
                           ),
                         ),
-                  const SizedBox(
-                    height: 12.0,
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      comments == null
+                          ? Skeletonizer(
+                              ignoreContainers: false,
+                              child: Column(
+                                children: List.generate(
+                                    fakeComments.length,
+                                    (index) => CommentCard(
+                                        refreshComments: refreshComments,
+                                        comment: fakeComments[index],
+                                        setParentAndMentionId: () {},
+                                        likeOrUnlikeComment: () {})),
+                              ))
+                          : Column(
+                              children: List.generate(
+                                comments!.length,
+                                (index) => Column(
+                                  children: [
+                                    index > 0
+                                        ? const Divider(
+                                            height: 24.0,
+                                            thickness: 0.0,
+                                          )
+                                        : Container(),
+                                    CommentCard(
+                                        refreshComments: refreshComments,
+                                        likeOrUnlikeComment:
+                                            likeOrUnlikeComment,
+                                        comment: comments![index],
+                                        setParentAndMentionId:
+                                            setParentCommentIdAndMentionId)
+                                  ],
+                                ),
+                              ),
+                            ),
+                      const SizedBox(
+                        height: 12.0,
+                      )
+                      // FutureBuilder(
+                      //     future: commentFuture,
+                      //     builder:
+                      //         (context, AsyncSnapshot<List<CommentModel>> snapshot) {
+                      //       if (!snapshot.hasData) {
+                      //   return Skeletonizer(
+                      //       ignoreContainers: false,
+                      //       child: Column(
+                      //         children: List.generate(
+                      //             fakeComments.length,
+                      //             (index) => CommentCard(
+                      //                 comment: fakeComments[index],
+                      //                 setParentAndMentionId: () {},
+                      //                 likeOrUnlikeComment: () {})),
+                      //       ));
+                      // }
+                      //       List<CommentModel> comments = snapshot.data!;
+                      //       return Column(
+                      //         children: List.generate(
+                      //           comments.length,
+                      //           (index) => Column(
+                      //             children: [
+                      //               index > 0
+                      //                   ? const Divider(
+                      //                       height: 24.0,
+                      //                       thickness: 0.0,
+                      //                     )
+                      //                   : Container(),
+                      //               CommentCard(
+                      //                   likeOrUnlikeComment: likeOrUnlikeComment,
+                      //                   comment: comments[index],
+                      //                   setParentAndMentionId:
+                      //                       setParentCommentIdAndMentionId)
+                      //             ],
+                      //           ),
+                      //         ),
+                      //       );
+                      //     })
+                    ],
                   )
-                  // FutureBuilder(
-                  //     future: commentFuture,
-                  //     builder:
-                  //         (context, AsyncSnapshot<List<CommentModel>> snapshot) {
-                  //       if (!snapshot.hasData) {
-                  //   return Skeletonizer(
-                  //       ignoreContainers: false,
-                  //       child: Column(
-                  //         children: List.generate(
-                  //             fakeComments.length,
-                  //             (index) => CommentCard(
-                  //                 comment: fakeComments[index],
-                  //                 setParentAndMentionId: () {},
-                  //                 likeOrUnlikeComment: () {})),
-                  //       ));
-                  // }
-                  //       List<CommentModel> comments = snapshot.data!;
-                  //       return Column(
-                  //         children: List.generate(
-                  //           comments.length,
-                  //           (index) => Column(
-                  //             children: [
-                  //               index > 0
-                  //                   ? const Divider(
-                  //                       height: 24.0,
-                  //                       thickness: 0.0,
-                  //                     )
-                  //                   : Container(),
-                  //               CommentCard(
-                  //                   likeOrUnlikeComment: likeOrUnlikeComment,
-                  //                   comment: comments[index],
-                  //                   setParentAndMentionId:
-                  //                       setParentCommentIdAndMentionId)
-                  //             ],
-                  //           ),
-                  //         ),
-                  //       );
-                  //     })
-                ],
-              )
-            ]))
-          ]),
+                ]))
+              ]),
           bottomNavigationBar:
               Container(height: parentCommentId != null ? 56.0 + 32.0 : 56.0),
         ),

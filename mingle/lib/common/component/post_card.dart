@@ -8,6 +8,7 @@ import 'package:mingle/common/model/cursor_pagination_model.dart';
 import 'package:mingle/post/provider/post_provider.dart';
 import 'package:mingle/post/view/lawn_tab_screen.dart';
 import 'package:mingle/post/view/square_tab_screen.dart';
+import 'package:mingle/second_hand_market/provider/second_hand_market_post_provider.dart';
 
 class PostCard extends ConsumerWidget {
   final String title;
@@ -31,6 +32,9 @@ class PostCard extends ConsumerWidget {
         postPreviewWidget = GeneralPostPreviewCard(
           boardType: "광장",
           data: data,
+          notifierProvider: ref.watch(totalRecentPostProvider.notifier),
+          allNotifierProvider: ref.watch(totalRecentPostProvider.notifier),
+          postDetailProvider: totalRecentPostDetailProvider,
           cardType: CardType.home,
         );
         break;
@@ -38,6 +42,9 @@ class PostCard extends ConsumerWidget {
         postPreviewWidget = GeneralPostPreviewCard(
           boardType: "잔디밭",
           data: data,
+          notifierProvider: ref.watch(univRecentPostProvider.notifier),
+          allNotifierProvider: ref.watch(univRecentPostProvider.notifier),
+          postDetailProvider: univRecentPostDetailProvider,
           cardType: CardType.home,
         );
         break;
@@ -45,11 +52,16 @@ class PostCard extends ConsumerWidget {
         postPreviewWidget = GeneralPostPreviewCard(
           boardType: "불타는 게시판",
           data: data,
+          notifierProvider: ref.watch(bestPostProvider.notifier),
+          allNotifierProvider: ref.watch(bestPostProvider.notifier),
+          postDetailProvider: bestPostDetailProvider,
           cardType: CardType.home,
         );
       case "secondhand":
         postPreviewWidget = SecondhandPreviewCard(
           data: data,
+          notifierProvider: ref.watch(secondHandPostProvider.notifier),
+          postDetailProvider: secondHandPostDetailProvider,
           onMorePressed: () => changeTabIndex?.call(3),
         );
         break;
