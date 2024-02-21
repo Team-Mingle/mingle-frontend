@@ -43,51 +43,29 @@ class _SelectNicknameScreenState extends ConsumerState<SelectNicknameScreen> {
       "password": ref.read(selectedPasswordProvider),
       "nickname": ref.read(selectedNicknameProvider)
     };
+    print(userInfo);
     try {
       setState(() {
         isLoading = true;
       });
-      final resp = await dio.post(
-        'https://$baseUrl/auth/verifyemail',
+      // final sendCodeResp =
+      await dio.post(
+        'https://$baseUrl/auth/sign-up',
         options: Options(headers: {
           HttpHeaders.contentTypeHeader: "application/json",
         }),
         data: jsonEncode(userInfo),
       );
-      print(resp.data['verified'] as bool == true);
-      if (resp.data['verified'] as bool) {
-        print(resp.data);
-        // final sendCodeResp =
-        await dio.post(
-          'https://$baseUrl/auth/sign-up',
-          options: Options(headers: {
-            HttpHeaders.contentTypeHeader: "application/json",
-          }),
-          data: jsonEncode(userInfo),
-        );
-        // print(sendCodeResp);
-        setState(() {
-          isLoading = false;
-        });
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (_) => const LoginScreen()));
-      } else {
-        String? error;
-        switch (resp.data['code']) {
-          case "CODE_MATCH_FAILED":
-            error = resp.data['message'];
-          case "CODE_VALIDITY_EXPIRED":
-            error = resp.data['message'];
-        }
-        setState(() {
-          isLoading = false;
-          errorMsg = error;
-        });
-      }
-    } catch (e) {
+      // print(sendCodeResp);
       setState(() {
         isLoading = false;
-        errorMsg = generalErrorMsg;
+      });
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (_) => const LoginScreen()));
+    } on DioException catch (e) {
+      print(e.response?.data['message']);
+      setState(() {
+        isLoading = false;
       });
     }
   }
@@ -161,6 +139,7 @@ class _SelectNicknameScreenState extends ConsumerState<SelectNicknameScreen> {
                       .update((state) => nickname);
                 },
                 decoration: InputDecoration(
+                    counterText: "",
                     hintText: "닉네임 작성",
                     suffix: Text(
                         "${ref.watch(selectedNicknameProvider).length}/10"),

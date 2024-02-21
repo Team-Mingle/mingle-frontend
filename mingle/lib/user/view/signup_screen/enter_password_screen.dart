@@ -49,13 +49,16 @@ class _EnterPasswordScreenState extends ConsumerState<EnterPasswordScreen> {
   }
 
   void submitPassword() {
-    ref.watch(selectedPasswordProvider) ==
-            ref.watch(selectedRetypePasswordProvider)
-        ? () => (Navigator.of(context).push(MaterialPageRoute(
+    // print("password submit");
+    // print(ref.watch(selectedPasswordProvider.notifier).state);
+    // print(ref.watch(selectedRetypePasswordProvider.notifier).state);
+    ref.watch(selectedPasswordProvider.notifier).state ==
+            ref.watch(selectedRetypePasswordProvider.notifier).state
+        ? Navigator.of(context).push(MaterialPageRoute(
             builder: (_) => widget.isPasswordReset
                 ? const PasswordChangeSuccessScreen()
-                : const ServiceAgreementScreen())))
-        : () => setErrorMsg("비밀번호가 일치하지 않습니다");
+                : const ServiceAgreementScreen()))
+        : setErrorMsg("비밀번호가 일치하지 않습니다");
   }
 
   void submitPasswordChange() async {
