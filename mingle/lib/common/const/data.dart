@@ -6,9 +6,18 @@ const ACCESS_TOKEN_KEY = 'ACCESS_TOKEN';
 const REFRESH_TOKEN_KEY = 'REFRESH_TOKEN';
 const ENCRYPTED_EMAIL_KEY = 'ENCRYPTED_EMAIL';
 const CURRENT_USER_KEY = 'CURRENT_USER';
-// const emulatorIp = '10.0.2.2:3000';
-// const simulatorIp = '127.0.0.1:3000';
 
+class FcmToken {
+  static String? _fcmtoken;
+
+  static void setFcmtoken(String token) {
+    _fcmtoken = token;
+  }
+
+  static String? getFcmtoken() {
+    return _fcmtoken;
+  }
+}
 // final ip = Platform.isIOS ? simulatorIp : emulatorIp;
 
 // const ip = "https://86f3-180-229-116-251.ngrok-free.app/";

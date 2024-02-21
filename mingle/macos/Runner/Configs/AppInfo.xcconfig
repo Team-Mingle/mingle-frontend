@@ -8,7 +8,7 @@
 PRODUCT_NAME = mingle
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = DanielsFlutterStudy.mingle
+PRODUCT_BUNDLE_IDENTIFIER = com.MingleGlobal.mingle
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 Daniels_Flutter_Study. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2023 MingleGlobal. All rights reserved.

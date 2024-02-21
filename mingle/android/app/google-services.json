@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "637637461782",
-    "project_id": "mingle-c9dd3",
-    "storage_bucket": "mingle-c9dd3.appspot.com"
+    "project_number": "998172981772",
+    "project_id": "mingle-20ac5",
+    "storage_bucket": "mingle-20ac5.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:637637461782:android:ddd5e6f4d43f67bdd5f237",
+        "mobilesdk_app_id": "1:998172981772:android:4538f97dc2058eb7b58c29",
         "android_client_info": {
-          "package_name": "com.TeamMingle.mingle"
+          "package_name": "com.MingleGlobal.mingle"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCWvoVd2L--HIYE_FWS3tcDnGsEU4h_Fuk"
+          "current_key": "AIzaSyC0DdpEnDbWxNUHxK8RPTXY_MCJKxwVEAY"
         }
       ],
       "services": {

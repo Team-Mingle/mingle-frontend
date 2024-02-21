@@ -25,11 +25,7 @@ class HomeRootTab extends StatefulWidget {
 class _HomeRootTabState extends State<HomeRootTab> {
   var messageString = "";
 
-  void getMyDeviceToken() async {
-    final token = await FirebaseMessaging.instance.getToken();
-
-    print("내 디바이스 토큰: $token");
-  }
+  
 
   int _selectedIndex = 0;
 
@@ -111,7 +107,6 @@ class _HomeRootTabState extends State<HomeRootTab> {
 
   @override
   void initState() {
-    getMyDeviceToken();
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       RemoteNotification? notification = message.notification;

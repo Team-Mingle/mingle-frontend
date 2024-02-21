@@ -44,38 +44,38 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCKjouJB2cRSKW5pwcAP2eTJSPJ9OsnM24',
-    appId: '1:637637461782:web:5a7ea094bbb7792dd5f237',
-    messagingSenderId: '637637461782',
-    projectId: 'mingle-c9dd3',
-    authDomain: 'mingle-c9dd3.firebaseapp.com',
-    storageBucket: 'mingle-c9dd3.appspot.com',
-    measurementId: 'G-LH6VTQJG8M',
+    apiKey: 'AIzaSyDKrDblriyRN8PjxnqpwIv3oFoO_HmFad8',
+    appId: '1:998172981772:web:844ee45393e2d3a4b58c29',
+    messagingSenderId: '998172981772',
+    projectId: 'mingle-20ac5',
+    authDomain: 'mingle-20ac5.firebaseapp.com',
+    storageBucket: 'mingle-20ac5.appspot.com',
+    measurementId: 'G-Q1VSHRYJYD',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCWvoVd2L--HIYE_FWS3tcDnGsEU4h_Fuk',
-    appId: '1:637637461782:android:ddd5e6f4d43f67bdd5f237',
-    messagingSenderId: '637637461782',
-    projectId: 'mingle-c9dd3',
-    storageBucket: 'mingle-c9dd3.appspot.com',
+    apiKey: 'AIzaSyC0DdpEnDbWxNUHxK8RPTXY_MCJKxwVEAY',
+    appId: '1:998172981772:android:4538f97dc2058eb7b58c29',
+    messagingSenderId: '998172981772',
+    projectId: 'mingle-20ac5',
+    storageBucket: 'mingle-20ac5.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDOsobhLO10ZmKjuJZtGvoeL7IEJM0IOQY',
-    appId: '1:637637461782:ios:8869c65a3e67e179d5f237',
-    messagingSenderId: '637637461782',
-    projectId: 'mingle-c9dd3',
-    storageBucket: 'mingle-c9dd3.appspot.com',
-    iosBundleId: 'com.TeamMingle.mingle',
+    apiKey: 'AIzaSyC9oTxfFMmXQh7Bw0OIyL86Sj-Kjfq0hNk',
+    appId: '1:998172981772:ios:f069fb2b9b4c8a33b58c29',
+    messagingSenderId: '998172981772',
+    projectId: 'mingle-20ac5',
+    storageBucket: 'mingle-20ac5.appspot.com',
+    iosBundleId: 'com.MingleGlobal.mingle',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDOsobhLO10ZmKjuJZtGvoeL7IEJM0IOQY',
-    appId: '1:637637461782:ios:23c69d217a45285cd5f237',
-    messagingSenderId: '637637461782',
-    projectId: 'mingle-c9dd3',
-    storageBucket: 'mingle-c9dd3.appspot.com',
+    apiKey: 'AIzaSyC9oTxfFMmXQh7Bw0OIyL86Sj-Kjfq0hNk',
+    appId: '1:998172981772:ios:afd1152b80a3bc47b58c29',
+    messagingSenderId: '998172981772',
+    projectId: 'mingle-20ac5',
+    storageBucket: 'mingle-20ac5.appspot.com',
     iosBundleId: 'DanielsFlutterStudy.mingle.RunnerTests',
   );
 }
