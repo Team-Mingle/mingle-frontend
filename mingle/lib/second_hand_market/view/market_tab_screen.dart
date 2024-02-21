@@ -37,12 +37,13 @@ class MarketTabScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         automaticallyImplyLeading: false,
         toolbarHeight: 48,
         backgroundColor: Colors.white,
         elevation: 0,
         title: const Text(
-          '거래게시판',
+          '장터',
           style: TextStyle(
             color: GRAYSCALE_BLACK_GRAY,
             fontSize: 20,
@@ -113,6 +114,7 @@ class MarketTabScreen extends ConsumerWidget {
               backgroundColor: PRIMARY_COLOR_ORANGE_02,
               shape: const CircleBorder(),
               child: const Icon(
+                color: Colors.white,
                 Icons.add,
                 size: 36,
               ),

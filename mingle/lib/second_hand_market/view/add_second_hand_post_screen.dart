@@ -107,7 +107,7 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
       print(e);
       // print(e.response?.statusCode);
       fToast.showToast(
-        child: ToastMessage(message: e.response?.data['message']),
+        child: ToastMessage(message: e.toString()),
         gravity: ToastGravity.CENTER,
         toastDuration: const Duration(seconds: 2),
       );

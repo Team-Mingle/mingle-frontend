@@ -23,7 +23,10 @@ class _App extends StatelessWidget {
     return ProviderScope(
       child: MaterialApp(
           theme: ThemeData(
-              fontFamily: 'Pretendard', disabledColor: GRAYSCALE_GRAY_02),
+              fontFamily: 'Pretendard',
+              disabledColor: GRAYSCALE_GRAY_02,
+              bottomSheetTheme: const BottomSheetThemeData(
+                  backgroundColor: Colors.transparent)),
           debugShowCheckedModeBanner: false,
           home: const SplashScreen()),
     );

@@ -188,11 +188,14 @@ class CustomInterceptor extends Interceptor {
         final newRefreshToken = resp.data['refreshToken'];
 
         final options = err.requestOptions;
+        print(options.data);
         options.headers.addAll({'authorization': 'Bearer $accessToken'});
         await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
         await storage.write(key: REFRESH_TOKEN_KEY, value: newRefreshToken);
-
-        final response = await dio.fetch(options);
+        final data = options.data;
+        final newOptions =
+            options.copyWith(data: data is FormData ? data.clone() : data);
+        final response = await dio.fetch(newOptions);
 
         return handler.resolve(response);
       } on DioException catch (e) {

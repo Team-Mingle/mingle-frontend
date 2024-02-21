@@ -1,12 +1,15 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/dio/dio.dart';
+import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/post/models/add_post_model.dart';
 import 'package:mingle/post/models/category_model.dart';
 import 'package:mingle/post/provider/post_provider.dart';
@@ -21,6 +24,8 @@ class AddPostScreen extends ConsumerStatefulWidget {
 }
 
 class _AddPostScreenState extends ConsumerState<AddPostScreen> {
+  late FToast fToast;
+
   final ImagePicker imagePicker = ImagePicker();
   List<File> imageFileList = [];
   List<XFile> imagePreviewFileList = [];
@@ -30,58 +35,80 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
   // String boardType = widget.boardType;
   String categoryType = "";
   String categoryName = "";
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
+    fToast = FToast();
+    fToast.init(context);
   }
 
   void handleSubmit(WidgetRef ref) async {
+    setState(() {
+      isLoading = true;
+    });
     AddPostModel addPostModel = AddPostModel(
         title: title,
         content: content,
         categoryType: categoryType,
         isAnonymous: isAnonymous);
-    // print(title);
-    // print(content);
-    // print(boardType);
-    // print(categoryType);
-    // print(isAnonymous);
+    print(title);
+    print(content);
+    print(widget.boardType);
+    print(categoryType);
+    print(isAnonymous);
     print(imageFileList);
+    try {
+      final response = await ref.watch(postRepositoryProvider).addPost(
+            boardType: widget.boardType,
+            // addPostModel: FormData.fromMap(
+            //     {...addPostModel.toJson(), "multipartFile": imageFileList})
+            //  addPostModel.toJson(),
+            // multipartFile: imageFileList,
 
-    final response = await ref.watch(postRepositoryProvider).addPost(
-          boardType: widget.boardType,
-          // addPostModel: FormData.fromMap(
-          //     {...addPostModel.toJson(), "multipartFile": imageFileList})
-          //  addPostModel.toJson(),
-          // multipartFile: imageFileList,
-
-          title: addPostModel.title,
-          content: addPostModel.content,
-          categoryType: addPostModel.categoryType,
-          isAnonymous: addPostModel.isAnonymous,
-          multipartFile: imageFileList,
-        ) as Map<String, dynamic>;
-    final int postId = response['postId'];
-    switch (categoryType) {
-      case 'FREE':
-        widget.boardType == 'TOTAL'
-            ? ref.watch(totalFreePostProvider.notifier).addPost(postId: postId)
-            : ref.watch(univFreePostProvider.notifier).addPost(postId: postId);
-      case 'QNA':
-        widget.boardType == 'TOTAL'
-            ? ref.watch(totalQnAPostProvider.notifier).addPost(postId: postId)
-            : ref.watch(univQnAPostProvider.notifier).addPost(postId: postId);
-      case 'KSA':
-        ref.watch(univKsaPostProvider.notifier).addPost(postId: postId);
-      case 'MINGLE':
-        ref.watch(totalMinglePostProvider.notifier).addPost(postId: postId);
+            title: addPostModel.title,
+            content: addPostModel.content,
+            categoryType: addPostModel.categoryType,
+            isAnonymous: addPostModel.isAnonymous,
+            multipartFile: imageFileList,
+          ) as Map<String, dynamic>;
+      final int postId = response['postId'];
+      switch (categoryType) {
+        case 'FREE':
+          widget.boardType == 'TOTAL'
+              ? ref
+                  .watch(totalFreePostProvider.notifier)
+                  .addPost(postId: postId)
+              : ref
+                  .watch(univFreePostProvider.notifier)
+                  .addPost(postId: postId);
+        case 'QNA':
+          widget.boardType == 'TOTAL'
+              ? ref.watch(totalQnAPostProvider.notifier).addPost(postId: postId)
+              : ref.watch(univQnAPostProvider.notifier).addPost(postId: postId);
+        case 'KSA':
+          ref.watch(univKsaPostProvider.notifier).addPost(postId: postId);
+        case 'MINGLE':
+          ref.watch(totalMinglePostProvider.notifier).addPost(postId: postId);
+      }
+      widget.boardType == 'TOTAL'
+          ? ref.watch(totalAllPostProvider.notifier).addPost(postId: postId)
+          : ref.watch(univAllPostProvider.notifier).addPost(postId: postId);
+      setState(() {
+        isLoading = false;
+      });
+      Navigator.of(context).pop();
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      fToast.showToast(
+        child: ToastMessage(message: e.toString()),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
     }
-    widget.boardType == 'TOTAL'
-        ? ref.watch(totalAllPostProvider.notifier).addPost(postId: postId)
-        : ref.watch(univAllPostProvider.notifier).addPost(postId: postId);
-
-    Navigator.of(context).pop();
     // print(response);
   }
 
@@ -94,12 +121,15 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
     return PopScope(
       canPop: false,
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: SafeArea(
           child: Scaffold(
+            backgroundColor: Colors.white,
             body: Scaffold(
               backgroundColor: Colors.white,
               appBar: AppBar(
                 automaticallyImplyLeading: false,
+                surfaceTintColor: Colors.transparent,
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
@@ -127,18 +157,22 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
                           fontWeight: FontWeight.w400),
                     ),
                     const Spacer(),
-                    GestureDetector(
-                      onTap: canSubmit ? () => handleSubmit(ref) : () {},
-                      child: Text(
-                        "게시",
-                        style: TextStyle(
-                            color: canSubmit
-                                ? PRIMARY_COLOR_ORANGE_01
-                                : GRAYSCALE_GRAY_03,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w400),
-                      ),
-                    ),
+                    isLoading
+                        ? const CircularProgressIndicator(
+                            color: PRIMARY_COLOR_ORANGE_01,
+                          )
+                        : GestureDetector(
+                            onTap: canSubmit ? () => handleSubmit(ref) : () {},
+                            child: Text(
+                              "게시",
+                              style: TextStyle(
+                                  color: canSubmit
+                                      ? PRIMARY_COLOR_ORANGE_01
+                                      : GRAYSCALE_GRAY_03,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ),
                   ],
                 ),
                 centerTitle: false,
@@ -201,10 +235,11 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
                                                 child: Text(
                                                   currentName,
                                                   style: TextStyle(
-                                                    fontWeight:
-                                                        categoryType == 'FREE'
-                                                            ? FontWeight.bold
-                                                            : FontWeight.normal,
+                                                    fontWeight: categoryType ==
+                                                            currentModel
+                                                                .categoryName
+                                                        ? FontWeight.bold
+                                                        : FontWeight.normal,
                                                   ),
                                                 ),
                                               ),
@@ -385,27 +420,28 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
                     ? Container(
                         height: 0.0,
                       )
-                    : Padding(
+                    : Container(
+                        width: MediaQuery.of(context).size.width,
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: SizedBox(
-                          height: 122.0,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: List.generate(
-                                    imageFileList.length,
-                                    (index) => Row(
-                                          children: [
-                                            selectedImageCard(index),
-                                            SizedBox(
-                                              width: index ==
-                                                      imageFileList.length - 1
-                                                  ? 0.0
-                                                  : 4.0,
-                                            )
-                                          ],
-                                        ))),
+                        color: Colors.white,
+                        height: 122.0,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: List.generate(
+                              imageFileList.length,
+                              (index) => Row(
+                                children: [
+                                  selectedImageCard(index),
+                                  SizedBox(
+                                    width: index == imageFileList.length - 1
+                                        ? 0.0
+                                        : 4.0,
+                                  )
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -519,6 +555,7 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
                   onTap: () {
                     setState(() {
                       imageFileList.removeAt(index);
+                      imagePreviewFileList.removeAt(index);
                     });
                   },
                 ),

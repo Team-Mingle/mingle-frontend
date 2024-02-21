@@ -53,6 +53,7 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
 
       Future.delayed(const Duration(seconds: 0)).then((_) {
         showModalBottomSheet<void>(
+          backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),

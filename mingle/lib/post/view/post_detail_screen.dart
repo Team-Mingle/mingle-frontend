@@ -247,20 +247,74 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
         // postDetailFuture(postId),
         builder: (context, AsyncSnapshot<PostDetailModel> snapshot) {
           if (!snapshot.hasData) {
-            return const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
+            return Scaffold(
+              appBar: AppBar(
+                backgroundColor: Colors.white,
+                surfaceTintColor: Colors.transparent,
+                elevation: 0,
+                leading: SizedBox(
+                  height: 10.0,
+                  width: 10.0,
+                  child: InkWell(
+                    child: Image.asset(
+                        "assets/img/signup_screen/previous_screen_icon.png"),
+                    onTap: () => Navigator.of(context).pop(),
+                  ),
+                ),
+                titleSpacing: 0,
+                title: Text(
+                  widget.boardType,
+                  style: const TextStyle(
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w400,
+                      color: GRAYSCALE_GRAY_03),
+                ),
+                centerTitle: false,
+              ),
+              backgroundColor: Colors.white,
+              body: const Center(
+                child: CircularProgressIndicator(
+                  color: PRIMARY_COLOR_ORANGE_01,
+                ),
               ),
             );
           }
+
           if (snapshot.hasError) {
-            return const Center(
-              child: Text("다시 시도 ㄱㄱ"),
+            return Scaffold(
+              appBar: AppBar(
+                backgroundColor: Colors.white,
+                surfaceTintColor: Colors.transparent,
+                elevation: 0,
+                leading: SizedBox(
+                  height: 10.0,
+                  width: 10.0,
+                  child: InkWell(
+                    child: Image.asset(
+                        "assets/img/signup_screen/previous_screen_icon.png"),
+                    onTap: () => Navigator.of(context).pop(),
+                  ),
+                ),
+                titleSpacing: 0,
+                title: Text(
+                  widget.boardType,
+                  style: const TextStyle(
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w400,
+                      color: GRAYSCALE_GRAY_03),
+                ),
+                centerTitle: false,
+              ),
+              backgroundColor: Colors.white,
+              body: const Center(child: Text("다시 시도해주세요")),
             );
           }
           PostDetailModel post = snapshot.data!;
 
-          return renderContent(post);
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: SafeArea(child: renderContent(post)),
+          );
         },
       );
     }
@@ -269,7 +323,9 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
 
     if (post == null) {
       return const Center(
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(
+          color: PRIMARY_COLOR_ORANGE_01,
+        ),
       );
     }
 
@@ -742,47 +798,45 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
               return SizedBox(
                 width: MediaQuery.of(context).size.width,
                 // height: 300.0,
-                child: ClipRRect(
-                    borderRadius:
-                        BorderRadius.circular(8.0), // 여기서 borderRadius를 설정합니다.
-                    child: GestureDetector(
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) {
-                            return ImageDetailScreen(
-                                onPageChange: (index) => setState(() {
-                                      _current = index;
-                                      _controller.jumpToPage(index);
-                                    }),
-                                currentIndex: _current,
-                                // controller: _controller,
-                                images: item
-                                // Image(
+                child: GestureDetector(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) {
+                        return ImageDetailScreen(
+                            onPageChange: (index) => setState(() {
+                                  _current = index;
+                                  _controller.jumpToPage(index);
+                                }),
+                            currentIndex: _current,
+                            // controller: _controller,
+                            images: item
+                            // Image(
 
-                                //   fit: BoxFit.fill,
-                                //   image: NetworkImage(
-                                //     imgLink,
-                                //   ),
-                                // ),
-                                );
-                          },
-                        ),
-                      ),
+                            //   fit: BoxFit.fill,
+                            //   image: NetworkImage(
+                            //     imgLink,
+                            //   ),
+                            // ),
+                            );
+                      },
+                    ),
+                  ),
+                  child: Center(
+                    child: Hero(
+                      tag: imgLink,
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                            8.0), // 여기서 borderRadius를 설정합니다.
-                        child: Hero(
-                          tag: imgLink,
-                          child: Image(
-                            fit: BoxFit.contain,
-                            image: NetworkImage(
-                              imgLink,
-                            ),
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Image(
+                          fit: BoxFit.contain,
+                          image: NetworkImage(
+                            imgLink,
                           ),
                         ),
                       ),
-                    )),
+                    ),
+                  ),
+                ),
               );
             },
           );
