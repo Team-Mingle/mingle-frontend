@@ -336,6 +336,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
   }
 
   Widget renderContent(PostModel post) {
+    print(PostModel.convertUTCtoLocal(post.createdAt));
     String createdDate = post.createdAt.split(" ")[0];
     String createdTime = post.createdAt.split(" ")[1];
     return Scaffold(
@@ -474,9 +475,10 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                     ),
                     Row(
                       children: [
-                        const Text(
-                          "익명", // TODO:render accordingly
-                          style: TextStyle(
+                        Text(
+                          post.nickname,
+                          // "익명", // TODO:render accordingly
+                          style: const TextStyle(
                               color: GRAYSCALE_GRAY_04, fontSize: 12.0),
                         ),
                         const SizedBox(

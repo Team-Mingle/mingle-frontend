@@ -334,7 +334,9 @@ class _GeneralPostPreviewCardState
                                                       const SizedBox(
                                                           width: 4.0),
                                                       Text(
-                                                        post.createdAt,
+                                                        PostModel
+                                                            .convertUTCtoLocal(
+                                                                post.createdAt),
                                                         style: const TextStyle(
                                                           fontFamily:
                                                               "Pretendard",

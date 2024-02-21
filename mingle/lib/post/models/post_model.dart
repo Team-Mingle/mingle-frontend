@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'post_model.g.dart';
@@ -35,6 +36,38 @@ class PostModel {
 
   factory PostModel.fromJson(Map<String, dynamic> json) =>
       _$PostModelFromJson(json);
+
+  static convertUTCtoLocal(String utc) {
+    DateTime dateTime = DateFormat('yy/MM/dd hh:mm').parse(utc, true).toLocal();
+    DateTime now = DateFormat('yyyy-MM-dd hh:mm:ss')
+        .parse(DateTime.now().toString(), false);
+    int monthDiff = now.month - dateTime.month;
+    int dayDiff = now.day - dateTime.day;
+    int hourDiff = now.hour - dateTime.hour;
+    int minutesDiff = now.minute - dateTime.minute;
+
+    if (monthDiff > 0) {
+      return '$monthDiff달 전';
+    } else if (dayDiff > 0) {
+      return '$dayDiff일 전';
+    } else if (hourDiff > 0) {
+      return '$hourDiff시간 전';
+    } else if (minutesDiff > 0) {
+      return '$minutesDiff분 전';
+    } else {
+      return '방금 전';
+    }
+
+    // if (dayDiff > 0) {
+    //   return '$dayDiff일 전';
+    // } else if (hourDiff > 0) {
+    //   return '$hourDiff시간 전';
+    // } else if (minutesDiff > 0) {
+    //   return '$minutesDiff분 전';
+    // } else {
+    //   return '방금 전';
+    // }
+  }
 }
 
 // "postId": 0,
