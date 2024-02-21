@@ -5,11 +5,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/component/countdown_timer.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/dio/dio.dart';
+import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/user/view/login_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:mingle/user/view/signup_screen/enter_password_screen.dart';
@@ -28,10 +30,13 @@ class SelectNicknameScreen extends ConsumerStatefulWidget {
 
 class _SelectNicknameScreenState extends ConsumerState<SelectNicknameScreen> {
   bool isLoading = false;
+  late FToast fToast;
   String? errorMsg;
   @override
   void initState() {
     super.initState();
+    fToast = FToast();
+    fToast.init(context);
   }
 
   void validateForm() async {
@@ -63,10 +68,15 @@ class _SelectNicknameScreenState extends ConsumerState<SelectNicknameScreen> {
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (_) => const LoginScreen()));
     } on DioException catch (e) {
-      print(e.response?.data['message']);
       setState(() {
         isLoading = false;
       });
+      fToast.showToast(
+        child:
+            ToastMessage(message: e.response?.data['message'] ?? "다시 시도해주세요"),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
     }
   }
 
