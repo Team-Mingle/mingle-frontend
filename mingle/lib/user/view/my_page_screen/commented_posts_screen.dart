@@ -49,30 +49,44 @@ class _CommentedPostsScreenState extends ConsumerState<CommentedPostsScreen>
           ),
         ),
         body: Column(children: [
-          PreferredSize(
-            preferredSize: const Size.fromHeight(40.0),
-            child: Align(
-              alignment: Alignment.center,
-              child: SizedBox(
-                width: 80 * 2.0,
-                child: TabBar(
-                  indicatorColor: Colors.orange,
-                  indicatorWeight: 2,
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  labelColor: Colors.black,
-                  unselectedLabelColor: Colors.black,
-                  controller: _tabController,
-                  tabs: const [
-                    Tab(text: '광장'),
-                    Tab(text: '잔디밭'),
-                  ],
+          Stack(
+            children: [
+              const Column(
+                children: [
+                  SizedBox(
+                    height: 46,
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Divider(
+                      height: 2.0,
+                      color: GRAYSCALE_GRAY_02,
+                    ),
+                  ),
+                ],
+              ),
+              PreferredSize(
+                preferredSize: const Size.fromHeight(40.0),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    width: 80 * 2.0,
+                    child: TabBar(
+                      indicatorColor: Colors.orange,
+                      indicatorWeight: 2,
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      labelColor: Colors.black,
+                      unselectedLabelColor: Colors.black,
+                      controller: _tabController,
+                      tabs: const [
+                        Tab(text: '광장'),
+                        Tab(text: '잔디밭'),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          const Divider(
-            height: 1.0,
-            color: GRAYSCALE_GRAY_02,
+            ],
           ),
           Expanded(
             child: TabBarView(
