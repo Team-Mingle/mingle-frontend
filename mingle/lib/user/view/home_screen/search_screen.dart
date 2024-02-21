@@ -172,7 +172,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen>
                                 cardType: CardType.square,
                               );
                             }),
-                    const Center(child: Text('탭 2 콘텐츠')),
+                    const Center(child: Text('밍글에 궁금한 것을 물어보세요')),
                   ],
                 ),
               ),

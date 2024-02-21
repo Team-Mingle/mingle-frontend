@@ -487,7 +487,8 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                             const SizedBox(
                               height: 16.0,
                             ),
-                            if (post is PostDetailModel)
+                            if (post is PostDetailModel &&
+                                post.postImgUrl.isNotEmpty)
                               renderImg(post.postImgUrl),
                           ],
                         ),

@@ -107,8 +107,7 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
       print(e);
       // print(e.response?.statusCode);
       fToast.showToast(
-        child:
-            ToastMessage(message: e.response?.data['message'] ?? "다시 시도해주세요"),
+        child: ToastMessage(message: e.toString()),
         gravity: ToastGravity.CENTER,
         toastDuration: const Duration(seconds: 2),
       );
