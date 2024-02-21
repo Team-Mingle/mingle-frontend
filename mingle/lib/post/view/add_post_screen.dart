@@ -99,12 +99,13 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
         isLoading = false;
       });
       Navigator.of(context).pop();
-    } catch (e) {
+    } on DioException catch (e) {
       setState(() {
         isLoading = false;
       });
       fToast.showToast(
-        child: ToastMessage(message: e.toString()),
+        child:
+            ToastMessage(message: e.response?.data['message'] ?? "다시 시도해주세요"),
         gravity: ToastGravity.CENTER,
         toastDuration: const Duration(seconds: 2),
       );
