@@ -34,7 +34,7 @@ abstract class MemberRepository {
 
   @PATCH('/nickname')
   @Headers({'accessToken': 'true'})
-  Future<void> changeNickname({@Body() required String nickname});
+  Future<void> changeNickname({@Body() required String newNickname});
 
   @GET('/{boardType}/scraps')
   @Headers({'accessToken': 'true'})

@@ -60,12 +60,12 @@ class _MemberRepository implements MemberRepository {
   }
 
   @override
-  Future<void> changeNickname({required String nickname}) async {
+  Future<void> changeNickname({required String newNickname}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
-    final _data = nickname;
+    final _data = newNickname;
     await _dio.fetch<void>(_setStreamType<void>(Options(
       method: 'PATCH',
       headers: _headers,

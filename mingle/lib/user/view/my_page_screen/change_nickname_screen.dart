@@ -33,7 +33,7 @@ class _ChangeNicknameScreenState extends ConsumerState<ChangeNicknameScreen> {
     try {
       final resp = await ref
           .watch(memberRepositoryProvider)
-          .changeNickname(nickname: currentNickname);
+          .changeNickname(newNickname: currentNickname);
       ref
           .read(currentUserProvider.notifier)
           .update((state) => state!.copyWith(nickName: currentNickname));
