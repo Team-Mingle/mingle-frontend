@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -20,10 +21,16 @@ class SplashScreen extends ConsumerStatefulWidget {
 }
 
 class _SplashScreenState extends ConsumerState<SplashScreen> {
+  void getMyDeviceToken() async {
+    final fcmtoken = await FirebaseMessaging.instance.getToken();
+    print("내 디바이스 토큰: $fcmtoken");
+    FcmToken.setFcmtoken(fcmtoken!); 
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    getMyDeviceToken();
     checkToken();
   }
 
@@ -44,6 +51,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       ref
           .read(currentUserProvider.notifier)
           .update((state) => UserModel.fromJson(resp.data));
+      //FirebaseAnalytics.instance.logLogin(loginMethod: 'login');
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (_) => HomeRootTab()), (route) => false);
     } catch (e) {

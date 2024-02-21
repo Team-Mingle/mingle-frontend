@@ -48,12 +48,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    void accessFcmtoken() {
+      String? fcmtoken = FcmToken.getFcmtoken();
+      if (fcmtoken != null) {
+        print("저장된 FCM 토큰: $fcmtoken");
+      } else {
+        print("FCM 토큰이 저장되지 않았습니다.");
+      }
+    }
+
     final dio = ref.watch(dioProvider);
     void validateForm() async {
+      String? fcmtoken = FcmToken.getFcmtoken();
       final credentials = {
         "email": emailController.text,
         "password": passwordController.text,
-        "fcmToken": "string"
+        "fcmToken": fcmtoken ?? "String",
       };
       print(credentials);
       try {

@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,39 +49,20 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCKjouJB2cRSKW5pwcAP2eTJSPJ9OsnM24',
-    appId: '1:637637461782:web:5a7ea094bbb7792dd5f237',
-    messagingSenderId: '637637461782',
-    projectId: 'mingle-c9dd3',
-    authDomain: 'mingle-c9dd3.firebaseapp.com',
-    storageBucket: 'mingle-c9dd3.appspot.com',
-    measurementId: 'G-LH6VTQJG8M',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCWvoVd2L--HIYE_FWS3tcDnGsEU4h_Fuk',
-    appId: '1:637637461782:android:ddd5e6f4d43f67bdd5f237',
-    messagingSenderId: '637637461782',
-    projectId: 'mingle-c9dd3',
-    storageBucket: 'mingle-c9dd3.appspot.com',
+    apiKey: 'AIzaSyCgyHZmcxvWha41Th8V2MtMltM4ckLhkiA',
+    appId: '1:861115253936:android:cf389da542e5f83b9aa775',
+    messagingSenderId: '861115253936',
+    projectId: 'mingle-new',
+    storageBucket: 'mingle-new.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDOsobhLO10ZmKjuJZtGvoeL7IEJM0IOQY',
-    appId: '1:637637461782:ios:8869c65a3e67e179d5f237',
-    messagingSenderId: '637637461782',
-    projectId: 'mingle-c9dd3',
-    storageBucket: 'mingle-c9dd3.appspot.com',
-    iosBundleId: 'com.TeamMingle.mingle',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDOsobhLO10ZmKjuJZtGvoeL7IEJM0IOQY',
-    appId: '1:637637461782:ios:23c69d217a45285cd5f237',
-    messagingSenderId: '637637461782',
-    projectId: 'mingle-c9dd3',
-    storageBucket: 'mingle-c9dd3.appspot.com',
-    iosBundleId: 'DanielsFlutterStudy.mingle.RunnerTests',
+    apiKey: 'AIzaSyBRXug_-e2GENXymkP7wd_LQkZ0dEmiP8o',
+    appId: '1:861115253936:ios:851b606a7d0b75f19aa775',
+    messagingSenderId: '861115253936',
+    projectId: 'mingle-new',
+    storageBucket: 'mingle-new.appspot.com',
+    iosBundleId: 'com.teamingle.mingle',
   );
 }
