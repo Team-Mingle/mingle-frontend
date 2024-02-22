@@ -294,9 +294,11 @@ class MyPageScreen extends ConsumerWidget {
                             // storage.delete(key: ACCESS_TOKEN_KEY);
                             // storage.delete(key: REFRESH_TOKEN_KEY);
                             storage.deleteAll();
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (_) => const LoginScreen()));
+                            Navigator.of(context)
+                                .pushReplacement(MaterialPageRoute(
+                                    builder: (_) => const LoginScreen(
+                                          isFromSplash: false,
+                                        )));
                           },
                         ),
                       ],

@@ -36,11 +36,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   void initState() {
     emailController.addListener(() {
-      print("email");
       setState(() {});
     });
     passwordController.addListener(() {
-      print("pw");
       setState(() {});
     });
     super.initState();
@@ -64,9 +62,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           }),
           data: jsonEncode(credentials),
         );
-        print(resp.data);
         if (resp.statusCode == 200) {
-          print(resp.data);
           final refreshToken = resp.data['refreshToken'];
           final accessToken = resp.data['accessToken'];
           final encryptedEmail = resp.data['hashedEmail'];
@@ -102,173 +98,161 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           // print(r.data);
           await Navigator.of(context).push(MaterialPageRoute(
               builder: (_) => HomeRootTab(isFromLogin: true)));
-        } else {
-          String? error;
-          print(resp.data['code']);
-          switch (resp.data['code']) {
-            case "FAILED_TO_LOGIN":
-              error = resp.data['message'];
-            case "MEMBER_DELETED_ERROR":
-              error = resp.data['message'];
-            case "MEMBER_REPORTED_ERROR":
-              error = resp.data['message'];
-            default:
-              error = "뭔가 잘못됨";
-          }
-          setState(() {
-            errorMsg = error;
-          });
         }
       } on DioException catch (e) {
-        String error = generalErrorMsg;
-        switch (e.response!.data['code']) {
-          case "FAILED_TO_LOGIN":
-            error = e.response!.data['message'];
-          case "MEMBER_DELETED_ERROR":
-            error = e.response!.data['message'];
-          case "MEMBER_REPORTED_ERROR":
-            error = e.response!.data['message'];
-          default:
-            error = generalErrorMsg;
-        }
+        // String error = generalErrorMsg;
+        // switch (e.response!.data['code']) {
+        //   case "FAILED_TO_LOGIN":
+        //     error = e.response!.data['message'];
+        //   case "MEMBER_DELETED_ERROR":
+        //     error = e.response!.data['message'];
+        //   case "MEMBER_REPORTED_ERROR":
+        //     error = e.response!.data['message'];
+        //   default:
+        //     error = generalErrorMsg;
+        // }
         setState(() {
-          errorMsg = error;
+          errorMsg = e.response?.data['message'] ?? generalErrorMsg;
         });
       }
     }
 
-    return Form(
-      key: formGlobalKey,
-      child: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Scaffold(
-            backgroundColor: Colors.white,
-            appBar: widget.isFromSplash
-                ? AppBar(
-                    backgroundColor: Colors.white,
-                    elevation: 0,
-                    leading: IconButton(
-                      icon: const ImageIcon(
-                        AssetImage(
-                            "assets/img/signup_screen/previous_screen_icon.png"),
-                        color: GRAYSCALE_BLACK,
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ))
-                : AppBar(
-                    backgroundColor: Colors.white,
-                    elevation: 0,
-                  ),
-            body: DefaultPadding(
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 34,
-                      ),
-                      const Text(
-                        "로그인",
-                        style: TextStyle(
-                            fontSize: 24.0, fontWeight: FontWeight.w400),
-                      ),
-                      const SizedBox(
-                        height: 32.0,
-                      ),
-                      TextFormField(
-                        controller: emailController,
-                        obscureText: false,
-                        decoration: const InputDecoration(
-                            hintText: "학교 이메일 주소",
-                            hintStyle: TextStyle(color: GRAYSCALE_GRAY_02),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: PRIMARY_COLOR_ORANGE_01)),
-                            border: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: GRAYSCALE_GRAY_03))),
-                      ),
-                      const SizedBox(
-                        height: 25.0,
-                      ),
-                      TextFormField(
-                        controller: passwordController,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                            errorText: errorMsg,
-                            hintText: "비밀번호",
-                            hintStyle:
-                                const TextStyle(color: GRAYSCALE_GRAY_02),
-                            focusedBorder: const UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: PRIMARY_COLOR_ORANGE_01)),
-                            border: const UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: GRAYSCALE_GRAY_03))),
-                      ),
-                      const SizedBox(
-                        height: 66.0,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          InkWell(
-                            onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (_) =>
-                                        const SelectCountryScreen())),
-                            child: const Text(
-                              "회원가입",
-                              style: TextStyle(
-                                  color: GRAYSCALE_GRAY_04,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w400),
+    return PopScope(
+      canPop: false,
+      child: Form(
+        key: formGlobalKey,
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Scaffold(
+              backgroundColor: Colors.white,
+              appBar: widget.isFromSplash
+                  ? AppBar(
+                      backgroundColor: Colors.white,
+                      elevation: 0,
+                      leading: IconButton(
+                        icon: const ImageIcon(
+                          AssetImage(
+                              "assets/img/signup_screen/previous_screen_icon.png"),
+                          color: GRAYSCALE_BLACK,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ))
+                  : AppBar(
+                      automaticallyImplyLeading: false,
+                      backgroundColor: Colors.white,
+                      elevation: 0,
+                    ),
+              body: DefaultPadding(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 34,
+                        ),
+                        const Text(
+                          "로그인",
+                          style: TextStyle(
+                              fontSize: 24.0, fontWeight: FontWeight.w400),
+                        ),
+                        const SizedBox(
+                          height: 32.0,
+                        ),
+                        TextFormField(
+                          controller: emailController,
+                          obscureText: false,
+                          decoration: const InputDecoration(
+                              hintText: "학교 이메일 주소",
+                              hintStyle: TextStyle(color: GRAYSCALE_GRAY_02),
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: PRIMARY_COLOR_ORANGE_01)),
+                              border: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: GRAYSCALE_GRAY_03))),
+                        ),
+                        const SizedBox(
+                          height: 25.0,
+                        ),
+                        TextFormField(
+                          controller: passwordController,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                              errorText: errorMsg,
+                              hintText: "비밀번호",
+                              hintStyle:
+                                  const TextStyle(color: GRAYSCALE_GRAY_02),
+                              focusedBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: PRIMARY_COLOR_ORANGE_01)),
+                              border: const UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: GRAYSCALE_GRAY_03))),
+                        ),
+                        const SizedBox(
+                          height: 66.0,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            InkWell(
+                              onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (_) =>
+                                          const SelectCountryScreen())),
+                              child: const Text(
+                                "회원가입",
+                                style: TextStyle(
+                                    color: GRAYSCALE_GRAY_04,
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w400),
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 16.0,
-                            width: 48,
-                            child: VerticalDivider(
-                              thickness: 1,
-                              color: GRAYSCALE_GRAY_04,
+                            const SizedBox(
+                              height: 16.0,
+                              width: 48,
+                              child: VerticalDivider(
+                                thickness: 1,
+                                color: GRAYSCALE_GRAY_04,
+                              ),
                             ),
-                          ),
-                          InkWell(
-                            onTap: () =>
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (_) => const SelectCountryScreen(
-                                          isPasswordReset: true,
-                                        ))),
-                            child: const Text(
-                              "비밀번호 재설정",
-                              style: TextStyle(
-                                  color: GRAYSCALE_GRAY_04,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w400),
+                            InkWell(
+                              onTap: () =>
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (_) => const SelectCountryScreen(
+                                            isPasswordReset: true,
+                                          ))),
+                              child: const Text(
+                                "비밀번호 재설정",
+                                style: TextStyle(
+                                    color: GRAYSCALE_GRAY_04,
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w400),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Expanded(
-                        child: Container(),
-                      ),
-                      NextButton(
-                        nextScreen: const SplashScreen(),
-                        buttonName: "로그인",
-                        checkSelected: emailController.text.isNotEmpty &&
-                            passwordController.text.isNotEmpty,
-                        validators: [validateForm],
-                      ),
-                      const SizedBox(
-                        height: 40.0,
-                      )
-                    ]),
-              ),
-            )),
+                          ],
+                        ),
+                        Expanded(
+                          child: Container(),
+                        ),
+                        NextButton(
+                          nextScreen: const SplashScreen(),
+                          buttonName: "로그인",
+                          checkSelected: emailController.text.isNotEmpty &&
+                              passwordController.text.isNotEmpty,
+                          validators: [validateForm],
+                        ),
+                        const SizedBox(
+                          height: 40.0,
+                        )
+                      ]),
+                ),
+              )),
+        ),
       ),
     );
   }
