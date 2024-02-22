@@ -75,8 +75,8 @@ class _GeneralPostPreviewCardState
   }
 
   void refreshList() {
-    widget.notifierProvider!.paginate();
-    widget.allNotifierProvider!.paginate();
+    widget.notifierProvider!.paginate(normalRefetch: true);
+    widget.allNotifierProvider!.paginate(normalRefetch: true);
   }
 
   Widget buildDivider(double height) {

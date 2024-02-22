@@ -142,13 +142,18 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
         slivers: [
           CupertinoSliverRefreshControl(
             onRefresh: () async {
-              await Future.delayed(
-                  const Duration(milliseconds: 1000),
-                  () => setState(() {
-                        totalRecent = ref.read(totalRecentPostProvider);
-                        univRecent = ref.read(univRecentPostProvider);
-                        bestPost = ref.read(bestPostProvider);
-                      }));
+              await Future.delayed(const Duration(milliseconds: 1000), () {
+                print('refreshing');
+                ref
+                    .watch(univRecentPostProvider.notifier)
+                    .paginate(normalRefetch: true);
+                ref
+                    .watch(totalRecentPostProvider.notifier)
+                    .paginate(normalRefetch: true);
+                ref
+                    .watch(bestPostProvider.notifier)
+                    .paginate(normalRefetch: true);
+              });
               // await widget.notifierProvider!.paginate(forceRefetch: true);
             },
           ),

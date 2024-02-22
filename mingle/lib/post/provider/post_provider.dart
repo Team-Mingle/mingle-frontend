@@ -270,7 +270,8 @@ class PostStateNotifier extends StateNotifier<CursorPaginationBase> {
       bool fetchMore = false,
       // 강제로 다시 로딩하기
       // true - CursorPaginationLoading()
-      bool forceRefetch = false}) async {
+      bool forceRefetch = false,
+      bool normalRefetch = false}) async {
     try {
       // 5 가지 가능성
       // State의 상태
@@ -285,7 +286,7 @@ class PostStateNotifier extends StateNotifier<CursorPaginationBase> {
       // 1) hasmore = false (기존 상태에서 더 데이터가 없다는 값을 들고있다면)
       // 2) 로딩중 - fetchMore : true
       //    fetchMore가 아닐때 - 새로고침의 의도가 있다
-      if (state is CursorPagination && !forceRefetch) {
+      if (state is CursorPagination && !forceRefetch && !normalRefetch) {
         final pState = state as CursorPagination;
         print(pState.meta);
         if (!pState.meta!.hasMore) {
@@ -348,6 +349,7 @@ class PostStateNotifier extends StateNotifier<CursorPaginationBase> {
       } else {
         resp.meta = CursorPaginationMeta(
             page: 0, size: resp.data.length, hasMore: resp.data.length == 20);
+        print("I'm here");
         state = resp;
       }
     } catch (e) {

@@ -102,9 +102,30 @@ class _GeneralPostPreviewCardState extends ConsumerState<ItemPostPreviewCard> {
 
     if (widget.data is CursorPaginationError) {
       CursorPaginationError error = widget.data as CursorPaginationError;
-      return Center(
-        child: Text(error.message),
-      );
+      return CustomScrollView(
+          controller: scrollController,
+          shrinkWrap: true,
+          physics: widget.cardType == CardType.home
+              ? const NeverScrollableScrollPhysics()
+              : const AlwaysScrollableScrollPhysics(),
+
+          // physics: const NeverScrollableScrollPhysics(),
+          slivers: [
+            CupertinoSliverRefreshControl(
+              onRefresh: () async {
+                await Future.delayed(
+                    const Duration(milliseconds: 1000),
+                    () =>
+                        widget.notifierProvider!.paginate(forceRefetch: true));
+                // await widget.notifierProvider!.paginate(forceRefetch: true);
+              },
+            ),
+            SliverFillRemaining(
+              child: Center(
+                child: Text(error.message),
+              ),
+            )
+          ]);
     }
 
     final postList = widget.data as CursorPagination;
@@ -336,8 +357,7 @@ class _GeneralPostPreviewCardState extends ConsumerState<ItemPostPreviewCard> {
                                                     ? '${post.price ?? ''} ${post.currency ?? ''}'
                                                     : post.content ?? '',
                                                 style: const TextStyle(
-                                                  fontFamily:
-                                                      "Pretendard",
+                                                  fontFamily: "Pretendard",
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w400,
                                                   color: GRAYSCALE_GRAY_05,

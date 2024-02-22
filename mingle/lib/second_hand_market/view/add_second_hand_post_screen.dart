@@ -33,6 +33,7 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
   String location = "";
   String chatUrl = "";
   List<String> currencies = ["hkd", "krw", "sgd"];
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
@@ -45,6 +46,9 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
   // }
 
   void handleSubmit() async {
+    setState(() {
+      isLoading = true;
+    });
     // print(title);
     // print(content);
     // print(boardType);
@@ -69,11 +73,14 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
         content.isEmpty ||
         location.isEmpty ||
         (isSelling && price.isEmpty)) {
+      setState(() {
+        isLoading = false;
+      });
       fToast.showToast(
-        child: const ToastMessage(message: "필수 작성란을 모두 채웠는지 확인해 주세요."),
-        gravity: ToastGravity.CENTER,
-        toastDuration: const Duration(seconds: 2),
-      );
+          child: const ToastMessage(message: "필수 작성란을 모두 채웠는지 확인해 주세요."),
+          gravity: ToastGravity.CENTER,
+          toastDuration: const Duration(seconds: 2),
+          isDismissable: true);
       return;
     }
     if (multipartFile.isEmpty) {
@@ -102,12 +109,19 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
       // final data = response.data;
       final int itemId = response['itemId'];
       ref.watch(secondHandPostProvider.notifier).addPost(itemId: itemId);
+      setState(() {
+        isLoading = false;
+      });
       Navigator.of(context).pop();
     } on DioException catch (e) {
+      setState(() {
+        isLoading = false;
+      });
       print(e);
       // print(e.response?.statusCode);
       fToast.showToast(
-        child: ToastMessage(message: e.toString()),
+        child:
+            ToastMessage(message: e.response?.data['message'] ?? "다시 시도해주세요"),
         gravity: ToastGravity.CENTER,
         toastDuration: const Duration(seconds: 2),
       );
@@ -157,13 +171,17 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
                   const Spacer(),
                   GestureDetector(
                     onTap: () => handleSubmit(),
-                    child: const Text(
-                      "게시",
-                      style: TextStyle(
-                          color: PRIMARY_COLOR_ORANGE_01,
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w400),
-                    ),
+                    child: isLoading
+                        ? const CircularProgressIndicator(
+                            color: PRIMARY_COLOR_ORANGE_01,
+                          )
+                        : const Text(
+                            "게시",
+                            style: TextStyle(
+                                color: PRIMARY_COLOR_ORANGE_01,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w400),
+                          ),
                   ),
                 ],
               ),
