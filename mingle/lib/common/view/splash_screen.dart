@@ -6,12 +6,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/dio/dio.dart';
-import 'package:mingle/secure_storage/secure_storage.dart';
 import 'package:mingle/user/model/user_model.dart';
 import 'package:mingle/user/provider/user_provider.dart';
 import 'package:mingle/user/view/app_start_screen.dart';
 import 'package:mingle/user/view/home_screen/home_root_tab.dart';
 import 'package:mingle/user/view/login_screen.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -21,22 +21,16 @@ class SplashScreen extends ConsumerStatefulWidget {
 }
 
 class _SplashScreenState extends ConsumerState<SplashScreen> {
-  void getMyDeviceToken() async {
-    final fcmtoken = await FirebaseMessaging.instance.getToken();
-    print("내 디바이스 토큰: $fcmtoken");
-    FcmToken.setFcmtoken(fcmtoken!); 
-  }
-
+  final _secureStorage = const FlutterSecureStorage();
+  
   @override
   void initState() {
-    super.initState();
-    getMyDeviceToken();
     checkToken();
+    super.initState();
   }
 
   void checkToken() async {
-    final storage = ref.read(secureStorageProvider);
-    final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+    final accessToken = await _secureStorage.read(key: ACCESS_TOKEN_KEY);
     final Dio dio = ref.read(dioProvider);
     if (accessToken == null) {
       Navigator.of(context).pushAndRemoveUntil(
@@ -60,13 +54,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
           MaterialPageRoute(builder: (_) => const AppStartScreen()),
           (route) => false);
     }
-    //   Navigator.of(context).pushAndRemoveUntil(
-    //       MaterialPageRoute(builder: (_) => const HomeRootTab()), (route) => false);
-    // } catch (e) {
-    //   Navigator.of(context).pushAndRemoveUntil(
-    //       MaterialPageRoute(builder: (_) => const LoginScreen()),
-    //       (route) => false);
-    // }
   }
 
   @override

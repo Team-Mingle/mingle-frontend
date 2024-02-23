@@ -11,6 +11,7 @@ import 'package:mingle/user/model/banner_model.dart';
 import 'package:mingle/user/provider/banner_provider.dart';
 import 'package:mingle/post/provider/post_provider.dart';
 import 'package:mingle/user/provider/is_fresh_login_provider.dart';
+import 'package:mingle/user/view/home_screen/notificaiton_screen.dart';
 import 'package:mingle/user/view/home_screen/search_screen.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
 import 'dart:convert';
@@ -131,7 +132,14 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
                     height: 28,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          type: PageTransitionType.bottomToTop,
+                          duration: const Duration(milliseconds: 200),
+                          child:  NotificationScreen()));
+                },
               ),
             ),
           ],

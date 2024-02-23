@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,12 @@ void initializeNotification() async {
     android: AndroidInitializationSettings("@mipmap/ic_launcher"),
   ));
 
+  FirebaseMessaging.instance.requestPermission(
+    badge: true,
+    alert: true,
+    sound: true,
+  );
+
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
     badge: true,
@@ -36,49 +43,28 @@ void initializeNotification() async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
+    name: "mingle",
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const _App());
   initializeNotification();
 }
 
-class _App extends StatelessWidget {
+class _App extends StatefulWidget {
   const _App();
 
   @override
-  Widget build(BuildContext context) {
-    return ProviderScope(
-      child: MaterialApp(
-          theme: ThemeData(
-              fontFamily: 'Pretendard',
-              disabledColor: GRAYSCALE_GRAY_02,
-              bottomSheetTheme: const BottomSheetThemeData(
-                  backgroundColor: Colors.transparent)),
-          debugShowCheckedModeBanner: false,
-          home: const SplashScreen()),
-    );
-  }
+  State<_App> createState() => _AppState();
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
+class _AppState extends State<_App> {
   var messageString = "";
-
-  void getMyDeviceToken() async {
-    final fcmtoken = await FirebaseMessaging.instance.getToken();
-    print("내 디바이스 토큰: $fcmtoken");
-  }
 
   @override
   void initState() {
-    getMyDeviceToken();
+    FirebaseMessaging.instance.requestPermission();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       RemoteNotification? notification = message.notification;
 
@@ -106,15 +92,15 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text("메시지 내용: $messageString"),
-          ],
-        ),
-      ),
+    return ProviderScope(
+      child: MaterialApp(
+          theme: ThemeData(
+              fontFamily: 'Pretendard',
+              disabledColor: GRAYSCALE_GRAY_02,
+              bottomSheetTheme: const BottomSheetThemeData(
+                  backgroundColor: Colors.transparent)),
+          debugShowCheckedModeBanner: false,
+          home: const SplashScreen()),
     );
   }
 }

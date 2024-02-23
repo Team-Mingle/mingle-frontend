@@ -59,10 +59,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBRXug_-e2GENXymkP7wd_LQkZ0dEmiP8o',
-    appId: '1:861115253936:ios:851b606a7d0b75f19aa775',
+    appId: '1:861115253936:ios:645e41e98cf5c3629aa775',
     messagingSenderId: '861115253936',
     projectId: 'mingle-new',
     storageBucket: 'mingle-new.appspot.com',
-    iosBundleId: 'com.teamingle.mingle',
+    iosBundleId: 'com.teamingle.mingle.ImageNotification',
   );
 }

@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
@@ -30,17 +32,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final formGlobalKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final _secureStorage = const FlutterSecureStorage();
 
   String? errorMsg;
+
+  Future<String?> getMyDeviceToken() async {
+    String? fcmToken = await _secureStorage.read(key: FCM_TOKEN_KEY);
+
+    if (fcmToken == null) {
+      
+      fcmToken = await FirebaseMessaging.instance.getToken();
+      print("내 디바이스 토큰 저장: $fcmToken");
+      await _secureStorage.write(key: FCM_TOKEN_KEY, value: fcmToken!);
+    }
+
+    return fcmToken;
+  }
 
   @override
   void initState() {
     emailController.addListener(() {
-      print("email");
       setState(() {});
     });
     passwordController.addListener(() {
-      print("pw");
       setState(() {});
     });
     super.initState();
@@ -48,22 +62,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    void accessFcmtoken() {
-      String? fcmtoken = FcmToken.getFcmtoken();
-      if (fcmtoken != null) {
-        print("저장된 FCM 토큰: $fcmtoken");
-      } else {
-        print("FCM 토큰이 저장되지 않았습니다.");
-      }
-    }
-
     final dio = ref.watch(dioProvider);
+
     void validateForm() async {
-      String? fcmtoken = FcmToken.getFcmtoken();
+      final String? fcmtoken = await getMyDeviceToken();
       final credentials = {
         "email": emailController.text,
         "password": passwordController.text,
-        "fcmToken": fcmtoken ?? "String",
+        "fcmToken": fcmtoken,
       };
       print(credentials);
       try {
@@ -95,6 +101,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           await storage.write(key: REFRESH_TOKEN_KEY, value: refreshToken);
           await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
           await storage.write(key: ENCRYPTED_EMAIL_KEY, value: encryptedEmail);
+          await storage.write(key: FCM_TOKEN_KEY, value: fcmtoken);
           ref.read(currentUserProvider.notifier).update((state) => user);
           // final r = await dio.post('https://$baseUrl/auth/refresh-token',
           //     options: Options(headers: {
