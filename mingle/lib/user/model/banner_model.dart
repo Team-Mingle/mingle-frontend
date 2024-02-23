@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part '../provider/banner_model.g.dart';
+part 'banner_model.g.dart';
 
 @JsonSerializable()
 class BannerModel {

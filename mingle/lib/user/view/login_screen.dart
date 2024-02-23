@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
@@ -32,8 +34,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final formGlobalKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final _secureStorage = const FlutterSecureStorage();
 
   String? errorMsg;
+
+  Future<String?> getMyDeviceToken() async {
+    String? fcmToken = await _secureStorage.read(key: FCM_TOKEN_KEY);
+
+    if (fcmToken == null) {
+      
+      fcmToken = await FirebaseMessaging.instance.getToken();
+      print("내 디바이스 토큰 저장: $fcmToken");
+      await _secureStorage.write(key: FCM_TOKEN_KEY, value: fcmToken!);
+    }
+
+    return fcmToken;
+  }
 
   @override
   void initState() {
@@ -49,11 +65,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final dio = ref.watch(dioProvider);
+
     void validateForm() async {
+      final String? fcmtoken = await getMyDeviceToken();
       final credentials = {
         "email": emailController.text,
         "password": passwordController.text,
-        "fcmToken": "string"
+        "fcmToken": fcmtoken,
       };
       print(credentials);
       try {
@@ -83,6 +101,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           await storage.write(key: REFRESH_TOKEN_KEY, value: refreshToken);
           await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
           await storage.write(key: ENCRYPTED_EMAIL_KEY, value: encryptedEmail);
+          await storage.write(key: FCM_TOKEN_KEY, value: fcmtoken);
           await storage.write(key: IS_FRESH_LOGIN_KEY, value: "y");
           ref.read(currentUserProvider.notifier).update((state) => user);
           // final r = await dio.post('https://$baseUrl/auth/refresh-token',
