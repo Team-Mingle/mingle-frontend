@@ -13,6 +13,7 @@ import 'package:mingle/secure_storage/secure_storage.dart';
 import 'package:mingle/user/model/user_model.dart';
 import 'package:mingle/user/provider/is_fresh_login_provider.dart';
 import 'package:mingle/user/provider/user_provider.dart';
+import 'package:mingle/user/view/app_start_screen.dart';
 import 'package:mingle/user/view/home_screen/home_root_tab.dart';
 import 'package:mingle/user/view/home_screen/home_tab_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
