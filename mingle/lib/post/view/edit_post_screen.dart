@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -83,20 +84,36 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
       switch (widget.categoryType) {
         case 'FREE':
           widget.boardType == 'TOTAL'
-              ? ref.watch(totalFreePostProvider.notifier).paginate()
-              : ref.watch(univFreePostProvider.notifier).paginate();
+              ? await ref
+                  .watch(totalFreePostProvider.notifier)
+                  .paginate(normalRefetch: true)
+              : await ref
+                  .watch(univFreePostProvider.notifier)
+                  .paginate(normalRefetch: true);
         case 'QNA':
           widget.boardType == 'TOTAL'
-              ? ref.watch(totalQnAPostProvider.notifier).paginate()
-              : ref.watch(univQnAPostProvider.notifier).paginate();
+              ? await ref
+                  .watch(totalQnAPostProvider.notifier)
+                  .paginate(normalRefetch: true)
+              : await ref
+                  .watch(univQnAPostProvider.notifier)
+                  .paginate(normalRefetch: true);
         case 'KSA':
-          ref.watch(univKsaPostProvider.notifier).paginate();
+          await ref
+              .watch(univKsaPostProvider.notifier)
+              .paginate(normalRefetch: true);
         case 'MINGLE':
-          ref.watch(totalMinglePostProvider.notifier).paginate();
+          await ref
+              .watch(totalMinglePostProvider.notifier)
+              .paginate(normalRefetch: true);
       }
       widget.boardType == 'TOTAL'
-          ? ref.watch(totalAllPostProvider.notifier).paginate()
-          : ref.watch(univAllPostProvider.notifier).paginate();
+          ? await ref
+              .watch(totalAllPostProvider.notifier)
+              .paginate(normalRefetch: true)
+          : await ref
+              .watch(univAllPostProvider.notifier)
+              .paginate(normalRefetch: true);
       await widget.refreshPost();
       Navigator.of(context).pop();
     } on DioException catch (e) {
@@ -118,9 +135,12 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
 
     List<CategoryModel> categories = ref.watch(postCategoryProvider);
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Scaffold(
+          backgroundColor: Colors.white,
           body: Scaffold(
+            backgroundColor: Colors.white,
             appBar: AppBar(
               automaticallyImplyLeading: false,
               title: Row(
@@ -410,7 +430,8 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
                   ? Container(
                       height: 0.0,
                     )
-                  : Padding(
+                  : Container(
+                      color: Colors.white,
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: SizedBox(
                         height: 122.0,
@@ -434,7 +455,10 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
                         ),
                       ),
                     ),
-              SizedBox(
+              Container(
+                decoration: const BoxDecoration(
+                    color: Colors.white,
+                    border: Border(top: BorderSide(color: GRAYSCALE_GRAY_01))),
                 height: 48.0,
                 child: Row(children: [
                   const SizedBox(
