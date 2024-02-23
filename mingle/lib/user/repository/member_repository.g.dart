@@ -267,6 +267,43 @@ class _MemberRepository implements MemberRepository {
   }
 
   @override
+  Future<CursorPagination<SecondHandMarketPostModel>> getMySecondHandPosts({
+    required String boardType,
+    PaginationParams? paginationParams = const PaginationParams(),
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(paginationParams?.toJson() ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<CursorPagination<SecondHandMarketPostModel>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/${boardType}/items',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = CursorPagination<SecondHandMarketPostModel>.fromJson(
+      _result.data!,
+      (json) =>
+          SecondHandMarketPostModel.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
   Future<void> withdraw({required WithdrawModel withdrawModel}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};

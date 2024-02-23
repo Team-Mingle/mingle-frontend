@@ -22,6 +22,8 @@ class ItemPostPreviewCard extends ConsumerStatefulWidget {
   final CardType cardType;
   final SecondHandPostStateNotifier? notifierProvider;
   final ProviderFamily<SecondHandMarketPostModel?, int>? postDetailProvider;
+  // final dynamic notifierProvider;
+  // final dynamic postDetailProvider;
 
   ItemPostPreviewCard({
     // required this.postList,

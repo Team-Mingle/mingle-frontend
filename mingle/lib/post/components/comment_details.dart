@@ -110,7 +110,11 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
         children: [
           Text(
             widget.comment.nickname,
-            style: const TextStyle(color: GRAYSCALE_GRAY_04, fontSize: 12.0),
+            style: TextStyle(
+                color: widget.comment.commentFromAuthor
+                    ? GRAYSCALE_GRAY_ORANGE_02
+                    : GRAYSCALE_GRAY_03,
+                fontSize: 12.0),
           ),
           const SizedBox(
             width: 4.0,

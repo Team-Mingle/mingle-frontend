@@ -11,6 +11,7 @@ import 'package:mingle/common/view/splash_screen.dart';
 import 'package:mingle/dio/dio.dart';
 import 'package:mingle/secure_storage/secure_storage.dart';
 import 'package:mingle/user/model/user_model.dart';
+import 'package:mingle/user/provider/is_fresh_login_provider.dart';
 import 'package:mingle/user/provider/user_provider.dart';
 import 'package:mingle/user/view/home_screen/home_root_tab.dart';
 import 'package:mingle/user/view/home_screen/home_tab_screen.dart';
@@ -81,6 +82,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           await storage.write(key: REFRESH_TOKEN_KEY, value: refreshToken);
           await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
           await storage.write(key: ENCRYPTED_EMAIL_KEY, value: encryptedEmail);
+          await storage.write(key: IS_FRESH_LOGIN_KEY, value: "y");
           ref.read(currentUserProvider.notifier).update((state) => user);
           // final r = await dio.post('https://$baseUrl/auth/refresh-token',
           //     options: Options(headers: {

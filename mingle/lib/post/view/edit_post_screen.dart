@@ -48,6 +48,7 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
   List<File> imagesToAdd = [];
   List<File> initialImages = [];
   late FToast fToast;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -67,6 +68,9 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
     // print(categoryType);
     // print(isAnonymous);
     // print(imageFileList);
+    setState(() {
+      isLoading = true;
+    });
 
     try {
       final response = await ref.watch(postRepositoryProvider).editPost(
@@ -115,8 +119,14 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
               .watch(univAllPostProvider.notifier)
               .paginate(normalRefetch: true);
       await widget.refreshPost();
+      setState(() {
+        isLoading = false;
+      });
       Navigator.of(context).pop();
     } on DioException catch (e) {
+      setState(() {
+        isLoading = false;
+      });
       fToast.showToast(
         child:
             ToastMessage(message: e.response?.data['message'] ?? "다시 시도해주세요"),
@@ -170,18 +180,22 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
                         fontWeight: FontWeight.w400),
                   ),
                   const Spacer(),
-                  GestureDetector(
-                    onTap: canSubmit ? () => handleSubmit(ref) : () {},
-                    child: Text(
-                      "게시",
-                      style: TextStyle(
-                          color: canSubmit
-                              ? PRIMARY_COLOR_ORANGE_01
-                              : GRAYSCALE_GRAY_03,
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w400),
-                    ),
-                  ),
+                  isLoading
+                      ? const CircularProgressIndicator(
+                          color: PRIMARY_COLOR_ORANGE_01,
+                        )
+                      : GestureDetector(
+                          onTap: canSubmit ? () => handleSubmit(ref) : () {},
+                          child: Text(
+                            "게시",
+                            style: TextStyle(
+                                color: canSubmit
+                                    ? PRIMARY_COLOR_ORANGE_01
+                                    : GRAYSCALE_GRAY_03,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ),
                 ],
               ),
               centerTitle: false,

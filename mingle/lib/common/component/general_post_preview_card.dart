@@ -96,9 +96,12 @@ class _GeneralPostPreviewCardState
   @override
   Widget build(BuildContext context) {
     if (widget.data is CursorPaginationLoading) {
-      return const Center(
-        child: CircularProgressIndicator(
-          color: PRIMARY_COLOR_ORANGE_02,
+      return Container(
+        color: Colors.white,
+        child: const Center(
+          child: CircularProgressIndicator(
+            color: PRIMARY_COLOR_ORANGE_02,
+          ),
         ),
       );
     }
