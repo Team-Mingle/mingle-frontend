@@ -170,9 +170,13 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
   }
 
   void refreshPost() async {
+    print("refreshing this post");
     if (widget.notifierProvider != null) {
-      widget.notifierProvider!.getDetail(postId: widget.postId);
-      widget.allNotifierProvider!.getDetail(postId: widget.postId);
+      print("getting details");
+      setState(() {
+        widget.notifierProvider!.getDetail(postId: widget.postId);
+        widget.allNotifierProvider!.getDetail(postId: widget.postId);
+      });
     } else {
       setState(() {
         postFuture = ref
@@ -350,6 +354,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
 
   Widget renderContent(PostModel post) {
     print(PostModel.convertUTCtoLocal(post.createdAt));
+    print("post is detail model? ${post is PostDetailModel}");
     String createdDate = post.createdAt.split(" ")[0];
     String createdTime = post.createdAt.split(" ")[1];
     return Scaffold(
@@ -451,7 +456,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
               slivers: [
                 CupertinoSliverRefreshControl(
                   onRefresh: () async {
-                    Future.delayed(const Duration(seconds: 1), () {
+                    await Future.delayed(const Duration(seconds: 1), () {
                       refreshPost();
                       refreshComments();
                     });

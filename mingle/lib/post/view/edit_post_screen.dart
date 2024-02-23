@@ -1,11 +1,14 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/post/models/category_model.dart';
 import 'package:mingle/post/provider/post_provider.dart';
 import 'package:mingle/post/repository/post_repository.dart';
@@ -44,12 +47,17 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
   List<File> imageUrlsToDelete = [];
   List<File> imagesToAdd = [];
   List<File> initialImages = [];
+  late FToast fToast;
+  bool isLoading = false;
+
   @override
   void initState() {
     print(widget.postImgUrl);
     super.initState();
     imageFileList.addAll(widget.postImgUrl.map((img) => File(img)).toList());
     initialImages.addAll(widget.postImgUrl.map((img) => File(img)).toList());
+    fToast = FToast();
+    fToast.init(context);
     // imagePreviewFileList.addAll(widget.postImgUrl.map((img) => XFile(img)).toList());
   }
 
@@ -60,38 +68,72 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
     // print(categoryType);
     // print(isAnonymous);
     // print(imageFileList);
+    setState(() {
+      isLoading = true;
+    });
 
-    final response = await ref.watch(postRepositoryProvider).editPost(
-        postId: widget.postId,
-        // addPostModel: FormData.fromMap(
-        //     {...addPostModel.toJson(), "multipartFile": imageFileList})
-        //  addPostModel.toJson(),
-        // multipartFile: imageFileList,
+    try {
+      final response = await ref.watch(postRepositoryProvider).editPost(
+          postId: widget.postId,
+          // addPostModel: FormData.fromMap(
+          //     {...addPostModel.toJson(), "multipartFile": imageFileList})
+          //  addPostModel.toJson(),
+          // multipartFile: imageFileList,
 
-        title: widget.title,
-        content: widget.content,
-        isAnonymous: widget.isAnonymous,
-        imageUrlsToDelete: imageUrlsToDelete,
-        imagesToAdd: imagesToAdd);
-    switch (widget.categoryType) {
-      case 'FREE':
-        widget.boardType == 'TOTAL'
-            ? ref.watch(totalFreePostProvider.notifier).paginate()
-            : ref.watch(univFreePostProvider.notifier).paginate();
-      case 'QNA':
-        widget.boardType == 'TOTAL'
-            ? ref.watch(totalQnAPostProvider.notifier).paginate()
-            : ref.watch(univQnAPostProvider.notifier).paginate();
-      case 'KSA':
-        ref.watch(univKsaPostProvider.notifier).paginate();
-      case 'MINGLE':
-        ref.watch(totalMinglePostProvider.notifier).paginate();
+          title: widget.title,
+          content: widget.content,
+          isAnonymous: widget.isAnonymous,
+          imageUrlsToDelete: imageUrlsToDelete,
+          imagesToAdd: imagesToAdd);
+      switch (widget.categoryType) {
+        case 'FREE':
+          widget.boardType == 'TOTAL'
+              ? await ref
+                  .watch(totalFreePostProvider.notifier)
+                  .paginate(normalRefetch: true)
+              : await ref
+                  .watch(univFreePostProvider.notifier)
+                  .paginate(normalRefetch: true);
+        case 'QNA':
+          widget.boardType == 'TOTAL'
+              ? await ref
+                  .watch(totalQnAPostProvider.notifier)
+                  .paginate(normalRefetch: true)
+              : await ref
+                  .watch(univQnAPostProvider.notifier)
+                  .paginate(normalRefetch: true);
+        case 'KSA':
+          await ref
+              .watch(univKsaPostProvider.notifier)
+              .paginate(normalRefetch: true);
+        case 'MINGLE':
+          await ref
+              .watch(totalMinglePostProvider.notifier)
+              .paginate(normalRefetch: true);
+      }
+      widget.boardType == 'TOTAL'
+          ? await ref
+              .watch(totalAllPostProvider.notifier)
+              .paginate(normalRefetch: true)
+          : await ref
+              .watch(univAllPostProvider.notifier)
+              .paginate(normalRefetch: true);
+      await widget.refreshPost();
+      setState(() {
+        isLoading = false;
+      });
+      Navigator.of(context).pop();
+    } on DioException catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      fToast.showToast(
+        child:
+            ToastMessage(message: e.response?.data['message'] ?? "다시 시도해주세요"),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
     }
-    widget.boardType == 'TOTAL'
-        ? ref.watch(totalAllPostProvider.notifier).paginate()
-        : ref.watch(univAllPostProvider.notifier).paginate();
-    await widget.refreshPost();
-    Navigator.of(context).pop();
     // print(response);
   }
 
@@ -103,9 +145,12 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
 
     List<CategoryModel> categories = ref.watch(postCategoryProvider);
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Scaffold(
+          backgroundColor: Colors.white,
           body: Scaffold(
+            backgroundColor: Colors.white,
             appBar: AppBar(
               automaticallyImplyLeading: false,
               title: Row(
@@ -135,18 +180,22 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
                         fontWeight: FontWeight.w400),
                   ),
                   const Spacer(),
-                  GestureDetector(
-                    onTap: canSubmit ? () => handleSubmit(ref) : () {},
-                    child: Text(
-                      "게시",
-                      style: TextStyle(
-                          color: canSubmit
-                              ? PRIMARY_COLOR_ORANGE_01
-                              : GRAYSCALE_GRAY_03,
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w400),
-                    ),
-                  ),
+                  isLoading
+                      ? const CircularProgressIndicator(
+                          color: PRIMARY_COLOR_ORANGE_01,
+                        )
+                      : GestureDetector(
+                          onTap: canSubmit ? () => handleSubmit(ref) : () {},
+                          child: Text(
+                            "게시",
+                            style: TextStyle(
+                                color: canSubmit
+                                    ? PRIMARY_COLOR_ORANGE_01
+                                    : GRAYSCALE_GRAY_03,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ),
                 ],
               ),
               centerTitle: false,
@@ -395,7 +444,8 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
                   ? Container(
                       height: 0.0,
                     )
-                  : Padding(
+                  : Container(
+                      color: Colors.white,
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: SizedBox(
                         height: 122.0,
@@ -419,7 +469,10 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
                         ),
                       ),
                     ),
-              SizedBox(
+              Container(
+                decoration: const BoxDecoration(
+                    color: Colors.white,
+                    border: Border(top: BorderSide(color: GRAYSCALE_GRAY_01))),
                 height: 48.0,
                 child: Row(children: [
                   const SizedBox(

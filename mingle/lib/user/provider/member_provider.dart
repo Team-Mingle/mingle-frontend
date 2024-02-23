@@ -185,24 +185,26 @@ final univCommentedPostDetailProvider =
   return state.data.firstWhereOrNull((e) => e.postId == id);
 });
 
-final itemMyPostProvider =
-    StateNotifierProvider<MemberPostStateNotifier, CursorPaginationBase>((ref) {
-  final postRepository = ref.watch(postRepositoryProvider);
+final itemMyPostProvider = StateNotifierProvider<
+    MemberSecondHandPostStateNotifier, CursorPaginationBase>((ref) {
+  final secondHandPostRepository = ref.watch(secondHandPostRepositoryProvider);
   final memberRepository = ref.watch(memberRepositoryProvider);
 
   final notifier = ItemMyPostStateNotifier(
-      postRepository: postRepository, memberRepository: memberRepository);
+      secondHandPostRepository: secondHandPostRepository,
+      memberRepository: memberRepository);
 
   return notifier;
 });
 
-final itemLikedPostProvider =
-    StateNotifierProvider<MemberPostStateNotifier, CursorPaginationBase>((ref) {
-  final postRepository = ref.watch(postRepositoryProvider);
+final itemLikedPostProvider = StateNotifierProvider<
+    MemberSecondHandPostStateNotifier, CursorPaginationBase>((ref) {
+  final secondHandPostRepository = ref.watch(secondHandPostRepositoryProvider);
   final memberRepository = ref.watch(memberRepositoryProvider);
 
   final notifier = ItemLikedPostStateNotifier(
-      postRepository: postRepository, memberRepository: memberRepository);
+      memberRepository: memberRepository,
+      secondHandPostRepository: secondHandPostRepository);
 
   return notifier;
 });
@@ -218,35 +220,37 @@ final itemCommentedPostProvider =
   return notifier;
 });
 
-final itemMyPostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
+final itemMyPostDetailProvider =
+    Provider.family<SecondHandMarketPostModel?, int>((ref, id) {
   final state = ref.watch(itemMyPostProvider);
 
   if (state is! CursorPagination) {
     return null;
   }
 
-  return state.data.firstWhereOrNull((e) => e.postId == id);
+  return state.data.firstWhereOrNull((e) => e.id == id);
 });
 
-final itemLikedPostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
+final itemLikedPostDetailProvider =
+    Provider.family<SecondHandMarketPostModel?, int>((ref, id) {
   final state = ref.watch(itemLikedPostProvider);
 
   if (state is! CursorPagination) {
     return null;
   }
 
-  return state.data.firstWhereOrNull((e) => e.postId == id);
+  return state.data.firstWhereOrNull((e) => e.id == id);
 });
 
 final itemCommentedPostDetailProvider =
-    Provider.family<PostModel?, int>((ref, id) {
+    Provider.family<SecondHandMarketPostModel?, int>((ref, id) {
   final state = ref.watch(itemCommentedPostProvider);
 
   if (state is! CursorPagination) {
     return null;
   }
 
-  return state.data.firstWhereOrNull((e) => e.postId == id);
+  return state.data.firstWhereOrNull((e) => e.id == id);
 });
 
 class MemberPostStateNotifier extends PostStateNotifier
@@ -283,7 +287,8 @@ class MemberPostStateNotifier extends PostStateNotifier
       bool fetchMore = false,
       // 강제로 다시 로딩하기
       // true - CursorPaginationLoading()
-      bool forceRefetch = false}) async {
+      bool forceRefetch = false,
+      bool normalRefetch = false}) async {
     try {
       // 5 가지 가능성
       // State의 상태
@@ -298,7 +303,7 @@ class MemberPostStateNotifier extends PostStateNotifier
       // 1) hasmore = false (기존 상태에서 더 데이터가 없다는 값을 들고있다면)
       // 2) 로딩중 - fetchMore : true
       //    fetchMore가 아닐때 - 새로고침의 의도가 있다
-      if (state is CursorPagination && !forceRefetch) {
+      if (state is CursorPagination && !forceRefetch && !normalRefetch) {
         final pState = state as CursorPagination;
         print(pState.meta);
         if (!pState.meta!.hasMore) {
@@ -356,6 +361,9 @@ class MemberPostStateNotifier extends PostStateNotifier
         case 'comments':
           resp = await memberRepository.getMyCommentedPosts(
               boardType: boardType, paginationParams: paginationParams);
+        // case 'items':
+        //   resp = await memberRepository.getMySecondHandPosts(boardType: boardType,
+        //       paginationParams: paginationParams);
         default:
           resp = await memberRepository.getScrappedPosts(
               boardType: boardType, paginationParams: paginationParams);
@@ -552,34 +560,32 @@ class UnivCommentedPostStateNotifier extends MemberPostStateNotifier {
             postType: 'comments');
 }
 
-class ItemMyPostStateNotifier extends MemberPostStateNotifier {
+class ItemMyPostStateNotifier extends MemberSecondHandPostStateNotifier {
   @override
-  final PostRepository postRepository;
+  final SecondHandPostRepository secondHandPostRepository;
   @override
   final MemberRepository memberRepository;
 
   ItemMyPostStateNotifier(
-      {required this.postRepository, required this.memberRepository})
+      {required this.secondHandPostRepository, required this.memberRepository})
       : super(
             memberRepository: memberRepository,
-            postRepository: postRepository,
-            boardType: 'ITEM',
-            postType: 'posts');
+            secondHandPostRepository: secondHandPostRepository,
+            postType: 'items');
 }
 
-class ItemLikedPostStateNotifier extends MemberPostStateNotifier {
+class ItemLikedPostStateNotifier extends MemberSecondHandPostStateNotifier {
   @override
-  final PostRepository postRepository;
+  final SecondHandPostRepository secondHandPostRepository;
   @override
   final MemberRepository memberRepository;
 
   ItemLikedPostStateNotifier(
-      {required this.postRepository, required this.memberRepository})
+      {required this.secondHandPostRepository, required this.memberRepository})
       : super(
             memberRepository: memberRepository,
-            postRepository: postRepository,
-            boardType: 'ITEM',
-            postType: 'likes');
+            secondHandPostRepository: secondHandPostRepository,
+            postType: 'item-likes');
 }
 
 class ItemCommentedPostStateNotifier extends MemberPostStateNotifier {
@@ -599,9 +605,11 @@ class ItemCommentedPostStateNotifier extends MemberPostStateNotifier {
 
 class MemberSecondHandPostStateNotifier extends SecondHandPostStateNotifier {
   final MemberRepository memberRepository;
+  final String postType;
   MemberSecondHandPostStateNotifier(
       {required super.secondHandPostRepository,
-      required this.memberRepository});
+      required this.memberRepository,
+      required this.postType});
   @override
   Future<void> paginate(
       {int fetchCount = 20,
@@ -610,7 +618,8 @@ class MemberSecondHandPostStateNotifier extends SecondHandPostStateNotifier {
       bool fetchMore = false,
       // 강제로 다시 로딩하기
       // true - CursorPaginationLoading()
-      bool forceRefetch = false}) async {
+      bool forceRefetch = false,
+      bool normalRefetch = false}) async {
     try {
       // 5 가지 가능성
       // State의 상태
@@ -625,7 +634,7 @@ class MemberSecondHandPostStateNotifier extends SecondHandPostStateNotifier {
       // 1) hasmore = false (기존 상태에서 더 데이터가 없다는 값을 들고있다면)
       // 2) 로딩중 - fetchMore : true
       //    fetchMore가 아닐때 - 새로고침의 의도가 있다
-      if (state is CursorPagination && !forceRefetch) {
+      if (state is CursorPagination && !forceRefetch && !normalRefetch) {
         final pState = state as CursorPagination;
         print(pState.meta);
         if (!pState.meta!.hasMore) {
@@ -668,8 +677,19 @@ class MemberSecondHandPostStateNotifier extends SecondHandPostStateNotifier {
         }
       }
 
-      final resp = await memberRepository.getMyLikedSecondHandPosts(
-          boardType: "ITEM", paginationParams: paginationParams);
+      final CursorPagination<SecondHandMarketPostModel> resp;
+
+      switch (postType) {
+        case "items":
+          resp = await memberRepository.getMySecondHandPosts(
+              boardType: "ITEM", paginationParams: paginationParams);
+        case "item-likes":
+          resp = await memberRepository.getMyLikedSecondHandPosts(
+              boardType: "ITEM", paginationParams: paginationParams);
+        default:
+          resp = await memberRepository.getMySecondHandPosts(
+              boardType: "ITEM", paginationParams: paginationParams);
+      }
 
       if (state is CursorPaginationFetchingMore) {
         final pState = state as CursorPaginationFetchingMore;
@@ -698,7 +718,8 @@ class LikedSecondHandPostStateNotifier
     extends MemberSecondHandPostStateNotifier {
   LikedSecondHandPostStateNotifier(
       {required super.secondHandPostRepository,
-      required super.memberRepository});
+      required super.memberRepository,
+      required super.postType});
 }
 
 final likedSecondHandPostProvider = StateNotifierProvider<
@@ -708,7 +729,8 @@ final likedSecondHandPostProvider = StateNotifierProvider<
 
   final notifier = LikedSecondHandPostStateNotifier(
       secondHandPostRepository: secondHandPostRepository,
-      memberRepository: memberRepository);
+      memberRepository: memberRepository,
+      postType: 'item-likes');
 
   return notifier;
 });

@@ -147,7 +147,7 @@ class _QuitAgreementScreenState extends State<QuitAgreementScreen> {
                         ),
                 ),
                 const SizedBox(
-                  width: 24.0,
+                  width: 10.0,
                 ),
                 const Text(
                   "안내사항을 모두 확인하였으며,이에 동의합니다.",

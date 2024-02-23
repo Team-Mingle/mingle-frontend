@@ -5,8 +5,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mingle/common/component/post_card.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/const/data.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
 import 'package:mingle/second_hand_market/provider/second_hand_market_post_provider.dart';
+import 'package:mingle/secure_storage/secure_storage.dart';
 import 'package:mingle/user/model/banner_model.dart';
 import 'package:mingle/user/provider/banner_provider.dart';
 import 'package:mingle/post/provider/post_provider.dart';
@@ -49,7 +51,20 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
 
   @override
   void initState() {
-    if (ref.read(isFreshLoginProvider)) {
+    showModal();
+    setState(() {
+      totalRecent = ref.read(totalRecentPostProvider);
+      univRecent = ref.read(univRecentPostProvider);
+      bestPost = ref.read(bestPostProvider);
+    });
+
+    _bannerProvider = ref.read(bannerProvider.future);
+    super.initState();
+  }
+
+  void showModal() async {
+    if (await ref.read(secureStorageProvider).read(key: IS_FRESH_LOGIN_KEY) ==
+        'y') {
       // widget.setIsFromLogin!();
 
       Future.delayed(const Duration(seconds: 0)).then((_) {
@@ -64,16 +79,11 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
           builder: (BuildContext context) {
             return startbottomsheet(ref: ref);
           },
-        );
+        ).whenComplete(() => ref
+            .read(secureStorageProvider)
+            .write(key: IS_FRESH_LOGIN_KEY, value: "n"));
       });
     }
-    setState(() {
-      totalRecent = ref.read(totalRecentPostProvider);
-      univRecent = ref.read(univRecentPostProvider);
-      bestPost = ref.read(bestPostProvider);
-    });
-    _bannerProvider = ref.read(bannerProvider.future);
-    super.initState();
   }
 
   @override
@@ -150,13 +160,18 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
         slivers: [
           CupertinoSliverRefreshControl(
             onRefresh: () async {
-              await Future.delayed(
-                  const Duration(milliseconds: 1000),
-                  () => setState(() {
-                        totalRecent = ref.read(totalRecentPostProvider);
-                        univRecent = ref.read(univRecentPostProvider);
-                        bestPost = ref.read(bestPostProvider);
-                      }));
+              await Future.delayed(const Duration(milliseconds: 1000), () {
+                print('refreshing');
+                ref
+                    .watch(univRecentPostProvider.notifier)
+                    .paginate(normalRefetch: true);
+                ref
+                    .watch(totalRecentPostProvider.notifier)
+                    .paginate(normalRefetch: true);
+                ref
+                    .watch(bestPostProvider.notifier)
+                    .paginate(normalRefetch: true);
+              });
               // await widget.notifierProvider!.paginate(forceRefetch: true);
             },
           ),

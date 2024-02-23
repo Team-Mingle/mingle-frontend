@@ -180,68 +180,67 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
                           style: const TextStyle(
                               color: GRAYSCALE_GRAY_03,
                               fontSize: 14.0,
-                              fontWeight: FontWeight.w400))
+                              fontWeight: FontWeight.w400)),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: 136,
+                            height: 44,
+                            child: TextFormField(
+                              textAlignVertical: TextAlignVertical.bottom,
+                              onChanged: (email) {
+                                setState(() {
+                                  errorMsg = "";
+                                });
+                                ref
+                                    .read(selectedEmailProvider.notifier)
+                                    .update((state) => email);
+                              },
+                              maxLines: null,
+                              decoration: const InputDecoration(
+                                  focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: PRIMARY_COLOR_ORANGE_01)),
+                                  border: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: GRAYSCALE_GRAY_03))),
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Text("@"),
+                          ),
+                          DropdownList(
+                            itemList: currentCountry == "홍콩"
+                                ? HONG_KONG_EMAIL_LIST
+                                : SINGAPORE_EMAIL_LIST,
+                            // currentCountry == "싱가포르"
+                            //     ? SINGAPORE_EMAIL_LIST
+                            //     : ENGLAND_EMAIL_LIST,
+                            hintText: "선택",
+                            isSelectedProvider: selectedEmailExtensionProvider,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 11.0,
+                      ),
+                      ShowUp(
+                        delay: 0,
+                        child: Text(
+                          errorMsg != null ? errorMsg! : "",
+                          style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.red,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      ),
                     ],
                   ),
-                ),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 136,
-                    height: 44,
-                    child: TextFormField(
-                      textAlignVertical: TextAlignVertical.bottom,
-                      onChanged: (email) {
-                        setState(() {
-                          errorMsg = "";
-                        });
-                        ref
-                            .read(selectedEmailProvider.notifier)
-                            .update((state) => email);
-                      },
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: PRIMARY_COLOR_ORANGE_01)),
-                          border: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: GRAYSCALE_GRAY_03))),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text("@"),
-                  ),
-                  DropdownList(
-                    itemList: currentCountry == "홍콩"
-                        ? HONG_KONG_EMAIL_LIST
-                        : SINGAPORE_EMAIL_LIST,
-                    // currentCountry == "싱가포르"
-                    //     ? SINGAPORE_EMAIL_LIST
-                    //     : ENGLAND_EMAIL_LIST,
-                    hintText: "선택",
-                    isSelectedProvider: selectedEmailExtensionProvider,
-                    width: 145,
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 11.0,
-              ),
-              ShowUp(
-                delay: 0,
-                child: Text(
-                  errorMsg != null ? errorMsg! : "",
-                  style: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.red,
-                      fontWeight: FontWeight.w400),
                 ),
               ),
               Expanded(child: Container()),

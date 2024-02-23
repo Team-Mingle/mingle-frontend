@@ -72,7 +72,7 @@ class _CommentedPostsScreenState extends ConsumerState<CommentedPostsScreen>
                   child: SizedBox(
                     width: 80 * 2.0,
                     child: TabBar(
-                      indicatorColor: Colors.orange,
+                      indicatorColor: PRIMARY_COLOR_ORANGE_01,
                       indicatorWeight: 2,
                       indicatorSize: TabBarIndicatorSize.tab,
                       labelColor: Colors.black,

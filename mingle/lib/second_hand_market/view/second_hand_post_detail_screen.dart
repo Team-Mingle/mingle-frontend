@@ -543,18 +543,10 @@ class _SecondHandPostDetailScreenState
                       const SizedBox(
                         width: 4.0,
                       ),
-                      const Text(
-                        "07/17",
-                        style:
-                            TextStyle(color: GRAYSCALE_GRAY_03, fontSize: 12.0),
-                      ),
-                      const SizedBox(
-                        width: 4.0,
-                      ),
-                      const Text(
-                        "13:03",
-                        style:
-                            TextStyle(color: GRAYSCALE_GRAY_03, fontSize: 12.0),
+                      Text(
+                        item.createdAt ?? '',
+                        style: const TextStyle(
+                            color: GRAYSCALE_GRAY_03, fontSize: 12.0),
                       ),
                       const SizedBox(
                         width: 6.0,

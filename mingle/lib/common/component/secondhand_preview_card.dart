@@ -49,7 +49,7 @@ class _SecondhandPreviewCardState extends ConsumerState<SecondhandPreviewCard> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: postList.data.take(3).toList().asMap().entries.map((entry) {
             SecondHandMarketPostModel post = entry.value;
-            return InkWell(
+            return GestureDetector(
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => SecondHandPostDetailScreen(
@@ -62,6 +62,8 @@ class _SecondhandPreviewCardState extends ConsumerState<SecondhandPreviewCard> {
               child: SizedBox(
                 width: (MediaQuery.of(context).size.width - 32) / 3,
                 child: Card(
+                  elevation: 1.5,
+                  surfaceTintColor: Colors.transparent,
                   color: Colors.white,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,6 +72,7 @@ class _SecondhandPreviewCardState extends ConsumerState<SecondhandPreviewCard> {
                         width: double.infinity,
                         height: 88,
                         decoration: BoxDecoration(
+                          //
                           borderRadius: BorderRadius.circular(4),
                           image: DecorationImage(
                             image: NetworkImage(post.imgThumbnailUrl),
@@ -116,7 +119,7 @@ class _SecondhandPreviewCardState extends ConsumerState<SecondhandPreviewCard> {
           onTap: widget.onMorePressed,
           child: Container(
             width: (MediaQuery.of(context).size.width - 32),
-            height: 48,
+            height: 40,
             decoration: BoxDecoration(
                 border: Border.all(color: const Color(0xffE9E7E7)),
                 borderRadius: BorderRadius.circular(10.0),

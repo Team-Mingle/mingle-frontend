@@ -72,6 +72,13 @@ abstract class MemberRepository {
     @Queries() PaginationParams? paginationParams = const PaginationParams(),
   });
 
+  @GET('/{boardType}/items')
+  @Headers({'accessToken': 'true'})
+  Future<CursorPagination<SecondHandMarketPostModel>> getMySecondHandPosts({
+    @Path() required String boardType,
+    @Queries() PaginationParams? paginationParams = const PaginationParams(),
+  });
+
   @DELETE('/withdrawal')
   @Headers({'accessToken': 'true'})
   Future<void> withdraw({@Body() required WithdrawModel withdrawModel});

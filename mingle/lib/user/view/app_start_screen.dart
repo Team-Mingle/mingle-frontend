@@ -96,6 +96,7 @@ class AppStartScreen extends StatelessWidget {
                           "로그인",
                           style: TextStyle(
                               decoration: TextDecoration.underline,
+                              decorationColor: PRIMARY_COLOR_ORANGE_01,
                               color: PRIMARY_COLOR_ORANGE_01,
                               fontSize: 14.0,
                               fontWeight: FontWeight.w400),

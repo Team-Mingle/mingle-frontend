@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mingle/common/component/item_post_preview_card.dart';
 import 'package:mingle/common/component/post_preview_card.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/second_hand_market/model/second_hand_market_post_detail_model.dart';
+import 'package:mingle/second_hand_market/model/second_hand_market_post_model.dart';
+import 'package:mingle/second_hand_market/provider/second_hand_market_post_provider.dart';
+import 'package:mingle/user/provider/member_provider.dart';
 
-class MarketSellingScreen extends StatelessWidget {
+class MarketSellingScreen extends ConsumerWidget {
   MarketSellingScreen({super.key});
 
   final dummyPostList = List.generate(50, (index) {
@@ -21,7 +27,7 @@ class MarketSellingScreen extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR_GRAY,
       appBar: AppBar(
@@ -46,82 +52,57 @@ class MarketSellingScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: DefaultTabController(
-        length: 3,
-        child: Column(
-          children: [
-            const TabBar(
-              indicatorColor: PRIMARY_COLOR_ORANGE_01,
-              labelColor: Colors.black,
-              padding: EdgeInsets.symmetric(
-                horizontal: 20,
-              ),
-              labelStyle: TextStyle(
-                fontSize: 14,
-                fontFamily: 'Pretendard',
-                fontWeight: FontWeight.w600,
-              ),
-              unselectedLabelColor: GRAYSCALE_GRAY_04,
-              unselectedLabelStyle: TextStyle(
-                fontSize: 14,
-                fontFamily: 'Pretendard',
-                fontWeight: FontWeight.w400,
-              ),
-              tabs: [
-                Tab(text: "판매중"),
-                Tab(text: "예약중"),
-                Tab(text: "판매완료"),
-              ],
-            ),
-            const Divider(
-              height: 1.0,
-              color: GRAYSCALE_GRAY_02,
-            ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  Container(),
-                  Container(),
-                  Container(),
-                  // Center(
-                  //   child: ListView(
-                  //     children: [
-                  //       PostPreviewCard(
-                  //         postList: dummyPostList,
-                  //         cardType: CardType.selling,
-                  //       ),
-                  //       const SizedBox(height: 48.0),
-                  //     ],
-                  //   ),
-                  // ),
-                  // Center(
-                  //   child: ListView(
-                  //     children: [
-                  //       PostPreviewCard(
-                  //         postList: dummyPostList,
-                  //         cardType: CardType.selling,
-                  //       ),
-                  //       const SizedBox(height: 48.0),
-                  //     ],
-                  //   ),
-                  // ),
-                  // Center(
-                  //   child: ListView(
-                  //     children: [
-                  //       PostPreviewCard(
-                  //         postList: dummyPostList,
-                  //         cardType: CardType.selling,
-                  //       ),
-                  //       const SizedBox(height: 48.0),
-                  //     ],
-                  //   ),
-                  // ),
-                ],
-              ),
-            ),
-          ],
-        ),
+      body: ItemPostPreviewCard(
+        data: ref.watch(itemMyPostProvider),
+        notifierProvider: ref.watch(itemMyPostProvider.notifier),
+        postDetailProvider: itemMyPostDetailProvider,
+        cardType: CardType.market,
       ),
+      // DefaultTabController(
+      //   length: 3,
+      //   child: Column(
+      //     children: [
+      //       const TabBar(
+      //         indicatorSize: TabBarIndicatorSize.tab,
+      //         indicatorColor: PRIMARY_COLOR_ORANGE_01,
+      //         labelColor: Colors.black,
+      //         padding: EdgeInsets.symmetric(
+      //           horizontal: 20,
+      //         ),
+      //         labelStyle: TextStyle(
+      //           fontSize: 14,
+      //           fontFamily: 'Pretendard',
+      //           fontWeight: FontWeight.w600,
+      //         ),
+      //         unselectedLabelColor: GRAYSCALE_GRAY_04,
+      //         unselectedLabelStyle: TextStyle(
+      //           fontSize: 14,
+      //           fontFamily: 'Pretendard',
+      //           fontWeight: FontWeight.w400,
+      //         ),
+      //         tabs: [
+      //           Tab(text: "판매중"),
+      //           Tab(text: "예약중"),
+      //           Tab(text: "판매완료"),
+      //         ],
+      //       ),
+      //       const Divider(
+      //         height: 1.0,
+      //         color: GRAYSCALE_GRAY_02,
+      //       ),
+      //       Expanded(
+      //         child: TabBarView(
+      //           children: [
+      //             Container(),
+      //             Container(),
+      //             Container(),
+
+      //           ],
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 }
