@@ -601,8 +601,8 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                         child: const Padding(
                           padding: EdgeInsets.only(
                             left: 4.17,
-                            top: 12.0,
-                            bottom: 16.0,
+                            top: 5.0,
+                            bottom: 5.0,
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

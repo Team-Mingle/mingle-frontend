@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/component/like_animation.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/post/components/indicator_widget.dart';
 import 'package:mingle/post/models/comment_model.dart';
 import 'package:mingle/post/repository/comment_repository.dart';
 
@@ -122,6 +123,7 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
             ),
             child: Row(
               children: [
+                // buildRoleIndicator(widget.comment.nickname, widget.comment.memberRole, fontSize),
                 Text(
                   widget.comment.nickname,
                   style: TextStyle(

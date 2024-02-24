@@ -7,8 +7,10 @@ import 'package:mingle/second_hand_market/provider/second_hand_market_post_provi
 import 'package:mingle/second_hand_market/view/add_second_hand_post_screen.dart';
 import 'package:mingle/second_hand_market/view/second_hand_market_search_screen.dart';
 import 'package:mingle/user/view/home_screen/home_tab_screen.dart';
+import 'package:mingle/user/view/home_screen/notificaiton_screen.dart';
 import 'package:mingle/user/view/home_screen/search_screen.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
+import 'package:page_transition/page_transition.dart';
 
 class MarketTabScreen extends ConsumerWidget {
   final Function(int)? changeTabIndex;
@@ -75,8 +77,7 @@ class MarketTabScreen extends ConsumerWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => const SecondHandMarketSearchScreen()),
+                MaterialPageRoute(builder: (context) => const SearchScreen()),
               );
             },
           ),
@@ -91,7 +92,14 @@ class MarketTabScreen extends ConsumerWidget {
                   height: 28,
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        type: PageTransitionType.bottomToTop,
+                        duration: const Duration(milliseconds: 200),
+                        child: const NotificationScreen()));
+              },
             ),
           ),
         ],

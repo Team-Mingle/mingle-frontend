@@ -95,6 +95,8 @@ class _AppState extends State<_App> {
     return ProviderScope(
       child: MaterialApp(
           theme: ThemeData(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
               fontFamily: 'Pretendard',
               disabledColor: GRAYSCALE_GRAY_02,
               bottomSheetTheme: const BottomSheetThemeData(
