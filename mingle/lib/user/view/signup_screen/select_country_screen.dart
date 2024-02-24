@@ -6,7 +6,9 @@ import 'package:mingle/common/component/dropdown_list.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
+import 'package:mingle/user/repository/auth_repository.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
+import 'package:mingle/user/view/signup_screen/model/country_model.dart';
 import 'package:mingle/user/view/signup_screen/provider/country_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/select_school_screen.dart';
 
@@ -23,12 +25,18 @@ class SelectCountryScreen extends ConsumerStatefulWidget {
 }
 
 class _SelectCountryScreenState extends ConsumerState<SelectCountryScreen> {
-  late List<String> countryList;
+  late List<CountryModel> countryList;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+  }
+
+  void setCountryList() async {
+    setState(() {
+      // countryList = ref.watch(authRepositoryProvider).getCountries();
+    });
   }
 
   @override
