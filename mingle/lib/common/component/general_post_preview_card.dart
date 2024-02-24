@@ -247,7 +247,7 @@ class _GeneralPostPreviewCardState
                                     height: (() {
                                       switch (widget.cardType) {
                                         case CardType.home:
-                                          return 20.0;
+                                          return 10.0;
 
                                         default:
                                           return 16.0;
@@ -453,7 +453,7 @@ class _GeneralPostPreviewCardState
                                     height: (() {
                                       switch (widget.cardType) {
                                         case CardType.home:
-                                          return 20.0;
+                                          return 10.0;
 
                                         default:
                                           return 16.0;
