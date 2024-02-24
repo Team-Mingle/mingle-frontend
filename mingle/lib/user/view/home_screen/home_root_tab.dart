@@ -101,42 +101,45 @@ class _HomeRootTabState extends State<HomeRootTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _getSelectedScreen(_selectedIndex),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        iconSize: 48.0,
-        selectedFontSize: 10.0,
-        unselectedFontSize: 10.0,
-        backgroundColor: Colors.white,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: GRAYSCALE_GRAY_03,
-        items: List.generate(
-          _normalSvgImagePaths.length,
-          (index) {
-            return BottomNavigationBarItem(
-              icon: Stack(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 2.0),
-                    child: SvgPicture.asset(
-                      _selectedIndex == index
-                          ? _selectedSvgImagePaths[index]
-                          : _normalSvgImagePaths[index],
-                      width: 24,
-                      height: 24,
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        body: _getSelectedScreen(_selectedIndex),
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+          iconSize: 48.0,
+          selectedFontSize: 10.0,
+          unselectedFontSize: 10.0,
+          backgroundColor: Colors.white,
+          selectedItemColor: Colors.black,
+          unselectedItemColor: GRAYSCALE_GRAY_03,
+          items: List.generate(
+            _normalSvgImagePaths.length,
+            (index) {
+              return BottomNavigationBarItem(
+                icon: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 2.0),
+                      child: SvgPicture.asset(
+                        _selectedIndex == index
+                            ? _selectedSvgImagePaths[index]
+                            : _normalSvgImagePaths[index],
+                        width: 24,
+                        height: 24,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              label: _labels[index],
-            );
-          },
+                  ],
+                ),
+                label: _labels[index],
+              );
+            },
+          ),
+          selectedLabelStyle: const TextStyle(color: Colors.black),
+          unselectedLabelStyle: const TextStyle(color: GRAYSCALE_GRAY_03),
         ),
-        selectedLabelStyle: const TextStyle(color: Colors.black),
-        unselectedLabelStyle: const TextStyle(color: GRAYSCALE_GRAY_03),
       ),
     );
   }
