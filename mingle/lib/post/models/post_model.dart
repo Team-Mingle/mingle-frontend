@@ -47,7 +47,7 @@ class PostModel {
     int hourDiff = now.hour - dateTime.hour;
     int minutesDiff = now.minute - dateTime.minute;
 
-    if (yearDiff > 0) {
+    if (yearDiff > 0 && monthDiff >= 12) {
       return '$yearDiff년 전';
     } else if (monthDiff > 0) {
       return '$monthDiff달 전';
