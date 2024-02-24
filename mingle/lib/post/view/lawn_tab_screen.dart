@@ -12,16 +12,6 @@ class LawnTabScreen extends ConsumerWidget {
     Key? key,
   }) : super(key: key);
 
-  final dummyPostList = List.generate(50, (index) {
-    return {
-      'title': 'Post ${index + 1}',
-      'content': 'This is the content of Post ${index + 1}.',
-      'nickname': 'User${index + 1}',
-      'timestamp': '${index + 1} hours ago',
-      'likeCounts': '${10 + index}',
-      'commentCounts': '${5 + index}',
-    };
-  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

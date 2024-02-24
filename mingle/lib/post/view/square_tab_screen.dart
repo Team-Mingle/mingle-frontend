@@ -7,18 +7,8 @@ import 'package:mingle/user/view/home_screen/tab_screen.dart';
 
 class SquareTabScreen extends ConsumerWidget {
   final Function(int)? changeTabIndex;
-  final dummyPostList = List.generate(50, (index) {
-    return {
-      'title': 'Post ${index + 1}',
-      'content': 'This is the content of Post ${index + 1}.',
-      'nickname': 'User${index + 1}',
-      'timestamp': '${index + 1} hours ago',
-      'likeCounts': '${10 + index}',
-      'commentCounts': '${5 + index}',
-    };
-  });
 
-  SquareTabScreen({
+  const SquareTabScreen({
     Key? key,
     this.changeTabIndex,
   }) : super(key: key);

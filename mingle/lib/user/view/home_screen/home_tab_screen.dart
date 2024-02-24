@@ -148,7 +148,7 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
                       PageTransition(
                           type: PageTransitionType.bottomToTop,
                           duration: const Duration(milliseconds: 200),
-                          child:  NotificationScreen()));
+                          child: const NotificationScreen()));
                 },
               ),
             ),

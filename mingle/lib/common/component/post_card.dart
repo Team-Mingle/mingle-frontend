@@ -9,6 +9,7 @@ import 'package:mingle/post/provider/post_provider.dart';
 import 'package:mingle/post/view/lawn_tab_screen.dart';
 import 'package:mingle/post/view/square_tab_screen.dart';
 import 'package:mingle/second_hand_market/provider/second_hand_market_post_provider.dart';
+import 'package:mingle/user/view/home_screen/fired_screen.dart';
 
 class PostCard extends ConsumerWidget {
   final String title;
@@ -81,7 +82,8 @@ class PostCard extends ConsumerWidget {
                 changeTabIndex?.call(2);
                 break;
               case "fire":
-                print("불타는 게시판 생성중");
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) =>  fireScreen()));
                 break;
               case "secondhand":
                 changeTabIndex?.call(3);
