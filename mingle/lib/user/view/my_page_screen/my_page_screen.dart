@@ -38,6 +38,9 @@ class MyPageScreen extends ConsumerWidget {
       "내가 작성한 댓글"
     ];
 
+    String univName = ref.watch(currentUserProvider)!.univName;
+    String nickName = ref.watch(currentUserProvider)!.nickName;
+
     List<String> secondHandMarketTitles = ["판매 내역", "찜한 내역"];
 
     List<String> moduleReviewTitles = ["이용권 및 포인트", "내가 작성한 강의평"];
@@ -117,8 +120,7 @@ class MyPageScreen extends ConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                // "",
-                                ref.watch(currentUserProvider)!.univName,
+                                "$univName 재학 중인",
                                 style: const TextStyle(
                                     color: GRAYSCALE_GRAY_04,
                                     fontSize: 14.0,
@@ -132,8 +134,7 @@ class MyPageScreen extends ConsumerWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    // "",
-                                    ref.watch(currentUserProvider)!.nickName,
+                                    "$nickName 님",
                                     style: const TextStyle(
                                       fontFamily: "Pretendard",
                                       fontSize: 24,
@@ -224,35 +225,35 @@ class MyPageScreen extends ConsumerWidget {
                     const SizedBox(
                       height: 21.0,
                     ),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "강의평가",
-                        style: TextStyle(
-                            fontSize: 18.0, fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 16.0,
-                    ),
-                    Container(
-                      height: 120.0,
-                      // width: 335.0,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          color: Colors.white,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: MyPageTile(
-                        titles: moduleReviewTitles,
-                        screens: moduleReviewScreens,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 21.0,
-                    ),
+                    // const Align(
+                    //   alignment: Alignment.centerLeft,
+                    //   child: Text(
+                    //     "강의평가",
+                    //     style: TextStyle(
+                    //         fontSize: 18.0, fontWeight: FontWeight.w500),
+                    //   ),
+                    // ),
+                    // const SizedBox(
+                    //   height: 16.0,
+                    // ),
+                    // Container(
+                    //   height: 120.0,
+                    //   // width: 335.0,
+                    //   decoration: BoxDecoration(
+                    //     color: Colors.white,
+                    //     border: Border.all(
+                    //       color: Colors.white,
+                    //     ),
+                    //     borderRadius: BorderRadius.circular(10.0),
+                    //   ),
+                    //   child: MyPageTile(
+                    //     titles: moduleReviewTitles,
+                    //     screens: moduleReviewScreens,
+                    //   ),
+                    // ),
+                    // const SizedBox(
+                    //   height: 21.0,
+                    // ),
                     Container(
                       height: 168.0,
                       // width: 335.0,
