@@ -45,6 +45,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       fcmToken = await FirebaseMessaging.instance.getToken();
       print("내 디바이스 토큰 저장: $fcmToken");
       await _secureStorage.write(key: FCM_TOKEN_KEY, value: fcmToken!);
+    } else {
+      print("저장된 토큰 : $fcmToken");
     }
 
     return fcmToken;

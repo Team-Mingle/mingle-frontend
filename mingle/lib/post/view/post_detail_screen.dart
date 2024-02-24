@@ -587,50 +587,30 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
 
                       const Divider(
                         height: 0.0,
-                        thickness: 2.0,
+                        thickness: 1.0,
                         color: GRAYSCALE_GRAY_01,
                       ),
                       Container(
                         color: GRAYSCALE_GRAY_01_5,
-                        // height: 56.0,
+                        width: MediaQuery.of(context).size.width,
                         child: const Padding(
-                          padding: EdgeInsets.only(left: 10.0),
+                          padding: EdgeInsets.only(
+                            left: 4.17,
+                            top: 12.0,
+                            bottom: 16.0,
+                          ),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(
-                                height: 12.0,
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    "•",
-                                    style: TextStyle(
-                                        color: GRAYSCALE_GRAY_03,
-                                        fontSize: 11.0),
-                                  ),
-                                  Text("운영규칙을 위반하는 댓글은 삭제될 수 있습니다.",
-                                      style: TextStyle(
-                                          color: GRAYSCALE_GRAY_03,
-                                          fontSize: 11.0))
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    "•",
-                                    style: TextStyle(
-                                        color: GRAYSCALE_GRAY_03,
-                                        fontSize: 11.0),
-                                  ),
-                                  Text("악의적인 글 혹은 댓글은 오른쪽 상단 버튼을 통해 신고가 가능합니다.",
-                                      style: TextStyle(
-                                          color: GRAYSCALE_GRAY_03,
-                                          fontSize: 11.0))
-                                ],
-                              ),
-                              SizedBox(
-                                height: 16.0,
+                              Text(
+                                "• 운영규칙을 위반하는 댓글은 삭제될 수 있습니다. \n• 악의적인 글 혹은 댓글은 오른쪽 상단 버튼을 통해 신고가 가능합니다.",
+                                style: TextStyle(
+                                  fontFamily: "Pretendard",
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xff959595),
+                                  height: 28 / 11,
+                                ),
                               ),
                             ],
                           ),

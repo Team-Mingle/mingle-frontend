@@ -41,6 +41,9 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
     }
 
     return Column(mainAxisSize: MainAxisSize.min, children: [
+      const SizedBox(
+        height: 6.0,
+      ),
       Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -66,41 +69,45 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
           ),
           const Spacer(),
           // Flexible(fit: FlexFit.loose, child: Container()),
-          GestureDetector(
-              onTap: () => showCupertinoModalPopup<void>(
-                    context: context,
-                    builder: (BuildContext context) => CupertinoActionSheet(
-                      cancelButton: CupertinoActionSheetAction(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('취소하기'),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 4.0,
+              right: 4.0,
+              top: 1.0,
+            ),
+            child: GestureDetector(
+                onTap: () => showCupertinoModalPopup<void>(
+                      context: context,
+                      builder: (BuildContext context) => CupertinoActionSheet(
+                        cancelButton: CupertinoActionSheetAction(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('취소하기'),
+                        ),
+                        actions: <CupertinoActionSheetAction>[
+                          widget.comment.myComment
+                              ? CupertinoActionSheetAction(
+                                  onPressed: () {
+                                    deleteComment();
+                                    Navigator.pop(context);
+                                  },
+                                  isDestructiveAction: true,
+                                  child: const Text('삭제하기'),
+                                )
+                              : CupertinoActionSheetAction(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  isDestructiveAction: true,
+                                  child: const Text('신고하기'),
+                                ),
+                        ],
                       ),
-                      actions: <CupertinoActionSheetAction>[
-                        widget.comment.myComment
-                            ? CupertinoActionSheetAction(
-                                onPressed: () {
-                                  deleteComment();
-                                  Navigator.pop(context);
-                                },
-                                isDestructiveAction: true,
-                                child: const Text('삭제하기'),
-                              )
-                            : CupertinoActionSheetAction(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                isDestructiveAction: true,
-                                child: const Text('신고하기'),
-                              ),
-                      ],
                     ),
-                  ),
-              child: SvgPicture.asset(
-                  "assets/img/post_screen/triple_dot_icon.svg")),
-          const SizedBox(
-            width: 4.0,
-          )
+                child: SvgPicture.asset(
+                    "assets/img/post_screen/triple_dot_icon.svg")),
+          ),
         ],
       ),
       const SizedBox(
@@ -108,82 +115,138 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
       ),
       Row(
         children: [
-          Text(
-            widget.comment.nickname,
-            style: TextStyle(
-                color: widget.comment.commentFromAuthor
-                    ? GRAYSCALE_GRAY_ORANGE_02
-                    : GRAYSCALE_GRAY_03,
-                fontSize: 12.0),
-          ),
-          const SizedBox(
-            width: 4.0,
-          ),
-          const Text(
-            "•",
-            style: TextStyle(color: GRAYSCALE_GRAY_02, fontSize: 12.0),
-          ),
-          const SizedBox(
-            width: 4.0,
-          ),
-          Text(
-            // "07/17",
-            createdDate,
-            style: const TextStyle(color: GRAYSCALE_GRAY_03, fontSize: 12.0),
-          ),
-          const SizedBox(
-            width: 4.0,
-          ),
-          Text(
-            // "13:03",
-            createdTime,
-            style: const TextStyle(color: GRAYSCALE_GRAY_03, fontSize: 12.0),
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 3.0,
+              bottom: 2.0,
+            ),
+            child: Row(
+              children: [
+                Text(
+                  widget.comment.nickname,
+                  style: TextStyle(
+                    color: widget.comment.commentFromAuthor
+                        ? GRAYSCALE_GRAY_ORANGE_02
+                        : GRAYSCALE_GRAY_03,
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.w400,
+                    height: 15 / 12,
+                  ),
+                ),
+                const SizedBox(
+                  width: 4.0,
+                ),
+                const Text(
+                  "•",
+                  style: TextStyle(
+                    color: GRAYSCALE_GRAY_02,
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.w400,
+                    height: 15 / 12,
+                  ),
+                ),
+                const SizedBox(
+                  width: 4.0,
+                ),
+                Text(
+                  createdDate,
+                  style: const TextStyle(
+                    color: GRAYSCALE_GRAY_03,
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.w400,
+                    height: 15 / 12,
+                  ),
+                ),
+                const SizedBox(
+                  width: 4.0,
+                ),
+                Text(
+                  createdTime,
+                  style: const TextStyle(
+                    color: GRAYSCALE_GRAY_03,
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.w400,
+                    height: 15 / 12,
+                  ),
+                ),
+              ],
+            ),
           ),
           const Spacer(),
-          GestureDetector(
-            onTap: () {
-              widget.likeOrUnlikeComment(widget.comment.commentId);
-              if (widget.comment.liked) {
-                setState(() {
-                  widget.comment.likeCount -= 1;
-                  widget.comment.liked = false;
-                });
-              } else {
-                setState(() {
-                  widget.comment.likeCount += 1;
-                  widget.comment.liked = true;
-                });
-              }
-            },
-            child: LikeAnimation(
-              isAnimating: widget.comment.liked,
-              child: SvgPicture.asset(
-                widget.comment.liked
-                    ? "assets/img/post_screen/thumbs_up_selected_icon.svg"
-                    : "assets/img/post_screen/thumbs_up_icon.svg",
-                width: 12.8,
-                height: 12.0,
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 2.0,
+              bottom: 2,
+              left: 4,
+              right: 2,
+            ),
+            child: GestureDetector(
+              onTap: () {
+                widget.likeOrUnlikeComment(widget.comment.commentId);
+                if (widget.comment.liked) {
+                  setState(() {
+                    widget.comment.likeCount -= 1;
+                    widget.comment.liked = false;
+                  });
+                } else {
+                  setState(() {
+                    widget.comment.likeCount += 1;
+                    widget.comment.liked = true;
+                  });
+                }
+              },
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 1,
+                      bottom: 3,
+                      left: 1.2,
+                      right: 2,
+                    ),
+                    child: LikeAnimation(
+                      isAnimating: widget.comment.liked,
+                      child: SvgPicture.asset(
+                        widget.comment.liked
+                            ? "assets/img/post_screen/thumbs_up_selected_icon.svg"
+                            : "assets/img/post_screen/thumbs_up_icon.svg",
+                        width: 12.8,
+                        height: 12.0,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 4.0,
+                  ),
+                  Text(
+                    widget.comment.likeCount.toString(),
+                    style: const TextStyle(
+                      color: GRAYSCALE_GRAY_03,
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.w400,
+                      height: 15 / 12,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
           const SizedBox(
-            width: 6.0,
-          ),
-          Text(
-            // "0",
-            widget.comment.likeCount.toString(),
-            style: const TextStyle(color: GRAYSCALE_GRAY_03, fontSize: 12.0),
-          ),
-          const SizedBox(
             width: 22.0,
           ),
-          GestureDetector(
-            onTap: () => widget.setParentAndMentionId(
-                widget.parentCommentId, widget.comment.commentId),
-            child: SvgPicture.asset(
-              "assets/img/post_screen/reply_icon.svg",
-              width: 16.0,
-              height: 16.0,
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 4.0,
+              vertical: 2.0,
+            ),
+            child: GestureDetector(
+              onTap: () => widget.setParentAndMentionId(
+                  widget.parentCommentId, widget.comment.commentId),
+              child: SvgPicture.asset(
+                "assets/img/post_screen/reply_icon.svg",
+                width: 16.0,
+                height: 16.0,
+              ),
             ),
           ),
           const SizedBox(

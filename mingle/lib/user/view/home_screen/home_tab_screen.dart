@@ -402,7 +402,7 @@ class startbottomsheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 512.0,
+      height: 552.0,
       width: MediaQuery.of(context).size.width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -600,6 +600,9 @@ class startbottomsheet extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(
+            height: 40.0,
+          )
         ],
       ),
     );
