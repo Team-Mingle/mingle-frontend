@@ -31,9 +31,8 @@ class _ChangeNicknameScreenState extends ConsumerState<ChangeNicknameScreen> {
 
   void submitNickname() async {
     try {
-      final resp = await ref
-          .watch(memberRepositoryProvider)
-          .changeNickname(newNickname: currentNickname);
+      final resp = await ref.watch(memberRepositoryProvider).changeNickname(
+          newNickname: ChangeNicknameDto(newNickname: currentNickname));
       ref
           .read(currentUserProvider.notifier)
           .update((state) => state!.copyWith(nickName: currentNickname));
@@ -45,6 +44,7 @@ class _ChangeNicknameScreenState extends ConsumerState<ChangeNicknameScreen> {
       Navigator.of(context).pop();
     } on DioException catch (e) {
       print(e);
+      print(e.response?.data['message']);
       fToast.showToast(
         child:
             ToastMessage(message: e.response?.data['message'] ?? "다시 시도해주세요"),
