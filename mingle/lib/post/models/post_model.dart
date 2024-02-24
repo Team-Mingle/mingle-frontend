@@ -41,12 +41,15 @@ class PostModel {
     DateTime dateTime = DateFormat('yy/MM/dd hh:mm').parse(utc, true).toLocal();
     DateTime now = DateFormat('yyyy-MM-dd hh:mm:ss')
         .parse(DateTime.now().toString(), false);
+    int yearDiff = now.year - dateTime.year;
     int monthDiff = now.month - dateTime.month;
     int dayDiff = now.day - dateTime.day;
     int hourDiff = now.hour - dateTime.hour;
     int minutesDiff = now.minute - dateTime.minute;
 
-    if (monthDiff > 0) {
+    if (yearDiff > 0) {
+      return '$yearDiff년 전';
+    } else if (monthDiff > 0) {
       return '$monthDiff달 전';
     } else if (dayDiff > 0) {
       return '$dayDiff일 전';

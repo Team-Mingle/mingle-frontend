@@ -6,6 +6,8 @@ import 'package:mingle/common/component/dropdown_list.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
+import 'package:mingle/user/components/university_domain_dropdown.dart';
+import 'package:mingle/user/components/university_name_dropdown.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:mingle/user/view/signup_screen/enter_email_screen.dart';
 import 'package:mingle/user/view/signup_screen/provider/country_selected_provider.dart';
@@ -91,19 +93,18 @@ class _SelectSchoolScreenState extends ConsumerState<SelectSchoolScreen> {
             const SizedBox(
               height: 8,
             ),
-            SizedBox(
-              width: 170,
-              child: DropdownList(
-                itemList: currentCountry == "홍콩"
-                    ? HONG_KONG_SCHOOL_LIST
-                    : SINGAPORE_SCHOOL_LIST,
-                // currentCountry == "싱가포르"
-                //     ? SINGAPORE_SCHOOL_LIST
-                //     : ENGLAND_SCHOOL_LIST,
-                hintText: "학교 선택",
-                isSelectedProvider: selectedSchoolProvider,
-              ),
-            ),
+            const SizedBox(width: 170, child: UniversityNameDropdownList()
+                // DropdownList(
+                //   itemList: currentCountry == "홍콩"
+                //       ? HONG_KONG_SCHOOL_LIST
+                //       : SINGAPORE_SCHOOL_LIST,
+                //   // currentCountry == "싱가포르"
+                //   //     ? SINGAPORE_SCHOOL_LIST
+                //   //     : ENGLAND_SCHOOL_LIST,
+                //   hintText: "학교 선택",
+                //   isSelectedProvider: selectedSchoolProvider,
+                // ),
+                ),
             Expanded(
               child: Container(),
             ),

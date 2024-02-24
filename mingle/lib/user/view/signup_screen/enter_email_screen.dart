@@ -11,6 +11,7 @@ import 'package:mingle/common/component/showup_animation.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/dio/dio.dart';
+import 'package:mingle/user/components/university_domain_dropdown.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:mingle/user/view/signup_screen/enter_verifiction_number_screen.dart';
 import 'package:mingle/user/view/signup_screen/provider/country_selected_provider.dart';
@@ -200,7 +201,8 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
                                     .read(selectedEmailProvider.notifier)
                                     .update((state) => email);
                               },
-                              maxLines: null,
+                              textAlign: TextAlign.center,
+                              // maxLines: null,
                               decoration: const InputDecoration(
                                   focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
@@ -214,16 +216,17 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
                             padding: EdgeInsets.symmetric(horizontal: 8.0),
                             child: Text("@"),
                           ),
-                          DropdownList(
-                            itemList: currentCountry == "홍콩"
-                                ? HONG_KONG_EMAIL_LIST
-                                : SINGAPORE_EMAIL_LIST,
-                            // currentCountry == "싱가포르"
-                            //     ? SINGAPORE_EMAIL_LIST
-                            //     : ENGLAND_EMAIL_LIST,
-                            hintText: "선택",
-                            isSelectedProvider: selectedEmailExtensionProvider,
-                          ),
+                          const UniversityDomainDropdownList()
+                          // DropdownList(
+                          //   itemList: currentCountry == "홍콩"
+                          //       ? HONG_KONG_EMAIL_LIST
+                          //       : SINGAPORE_EMAIL_LIST,
+                          //   // currentCountry == "싱가포르"
+                          //   //     ? SINGAPORE_EMAIL_LIST
+                          //   //     : ENGLAND_EMAIL_LIST,
+                          //   hintText: "선택",
+                          //   isSelectedProvider: selectedEmailExtensionProvider,
+                          // ),
                         ],
                       ),
                       const SizedBox(

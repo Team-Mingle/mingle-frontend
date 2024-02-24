@@ -19,10 +19,10 @@ final authRepositoryProvider = Provider((ref) {
 abstract class AuthRepository {
   factory AuthRepository(Dio dio, {String baseUrl}) = _AuthRepository;
 
-  @POST('/countries')
+  @GET('/countries')
   Future<List<CountryModel>> getCountries();
 
-  @POST('email-domains/{countryName}')
+  @GET('/email-domains/{countryName}')
   Future<List<UniversityDomainModel>> getEmailDomains(
       {@Path() required String countryName});
 

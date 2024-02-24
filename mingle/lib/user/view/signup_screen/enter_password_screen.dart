@@ -67,7 +67,7 @@ class _EnterPasswordScreenState extends ConsumerState<EnterPasswordScreen> {
       return;
     }
     try {
-      final dio = ref.watch(dioProvider);
+      final dio = Dio();
       //   final credentials = {
       //   "email": emailController.text,
       //   "password": passwordController.text,
@@ -85,10 +85,10 @@ class _EnterPasswordScreenState extends ConsumerState<EnterPasswordScreen> {
       final data = {
         "email":
             "${ref.read(selectedEmailProvider)}@${ref.read(selectedEmailExtensionProvider)}",
+        "verificationCode": ref.watch(enteredVerificationNumberProvider),
         "updatePassword": newPassword,
-        "verificationCode": ref.watch(enteredVerificationNumberProvider)
       };
-      final resp = await dio.post(
+      final resp = await dio.patch(
         'https://$baseUrl/auth/password',
         options: Options(headers: {
           HttpHeaders.contentTypeHeader: "application/json",
@@ -98,8 +98,9 @@ class _EnterPasswordScreenState extends ConsumerState<EnterPasswordScreen> {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (_) => const PasswordChangeSuccessScreen()));
     } on DioException catch (e) {
+      print(e);
       fToast.showToast(
-        child: ToastMessage(message: e.response?.data["message"]),
+        child: const ToastMessage(message: "다시 시도해주세요"),
         gravity: ToastGravity.CENTER,
         toastDuration: const Duration(seconds: 2),
       );

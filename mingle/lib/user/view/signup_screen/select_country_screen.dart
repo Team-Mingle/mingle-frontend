@@ -6,6 +6,7 @@ import 'package:mingle/common/component/dropdown_list.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
+import 'package:mingle/user/components/country_dropdown.dart';
 import 'package:mingle/user/repository/auth_repository.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:mingle/user/view/signup_screen/model/country_model.dart';
@@ -108,14 +109,14 @@ class _SelectCountryScreenState extends ConsumerState<SelectCountryScreen> {
             const SizedBox(
               height: 8,
             ),
-            SizedBox(
-              width: 170,
-              child: DropdownList(
-                itemList: COUNTRY_LIST,
-                hintText: "국가 선택",
-                isSelectedProvider: selectedCountryProvider,
-              ),
-            ),
+            const SizedBox(width: 170, child: CountryDropdownList()
+
+                // DropdownList(
+                //   itemList: COUNTRY_LIST,
+                //   hintText: "국가 선택",
+                //   isSelectedProvider: selectedCountryProvider,
+                // ),
+                ),
             Expanded(child: Container()),
             NextButton(
               nextScreen: SelectSchoolScreen(

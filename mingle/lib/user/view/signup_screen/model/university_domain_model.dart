@@ -6,7 +6,7 @@ part 'university_domain_model.g.dart';
 class UniversityDomainModel {
   final int universityId;
   final String displayUniversityName;
-  final String domain;
+  final List<String> domain;
 
   UniversityDomainModel({
     required this.universityId,

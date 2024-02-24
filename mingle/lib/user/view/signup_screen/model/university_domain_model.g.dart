@@ -11,7 +11,8 @@ UniversityDomainModel _$UniversityDomainModelFromJson(
     UniversityDomainModel(
       universityId: json['universityId'] as int,
       displayUniversityName: json['displayUniversityName'] as String,
-      domain: json['domain'] as String,
+      domain:
+          (json['domain'] as List<dynamic>).map((e) => e as String).toList(),
     );
 
 Map<String, dynamic> _$UniversityDomainModelToJson(
