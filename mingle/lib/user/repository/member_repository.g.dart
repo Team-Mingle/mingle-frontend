@@ -18,6 +18,16 @@ Map<String, dynamic> _$WithdrawModelToJson(WithdrawModel instance) =>
       'pwd': instance.pwd,
     };
 
+ChangeNicknameDto _$ChangeNicknameDtoFromJson(Map<String, dynamic> json) =>
+    ChangeNicknameDto(
+      newNickname: json['newNickname'] as String,
+    );
+
+Map<String, dynamic> _$ChangeNicknameDtoToJson(ChangeNicknameDto instance) =>
+    <String, dynamic>{
+      'newNickname': instance.newNickname,
+    };
+
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
@@ -60,12 +70,13 @@ class _MemberRepository implements MemberRepository {
   }
 
   @override
-  Future<void> changeNickname({required String newNickname}) async {
+  Future<void> changeNickname({required ChangeNicknameDto newNickname}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
-    final _data = newNickname;
+    final _data = <String, dynamic>{};
+    _data.addAll(newNickname.toJson());
     await _dio.fetch<void>(_setStreamType<void>(Options(
       method: 'PATCH',
       headers: _headers,

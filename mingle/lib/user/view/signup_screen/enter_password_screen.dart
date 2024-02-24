@@ -223,10 +223,12 @@ class _EnterPasswordScreenState extends ConsumerState<EnterPasswordScreen> {
                   Expanded(child: Container()),
                   NextButton(
                     buttonName: "다음으로",
-                    isSelectedProvider: [
-                      selectedPasswordProvider,
-                      selectedRetypePasswordProvider
-                    ],
+                    isSelectedProvider: widget.isPasswordReset
+                        ? []
+                        : [
+                            selectedPasswordProvider,
+                            selectedRetypePasswordProvider
+                          ],
                     validators: [
                       widget.isPasswordReset
                           ? submitPasswordChange

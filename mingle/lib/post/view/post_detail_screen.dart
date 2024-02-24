@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/component/anonymous_textfield.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/view/image_detail_screen.dart';
@@ -19,6 +20,7 @@ import 'package:mingle/post/repository/comment_repository.dart';
 import 'package:mingle/post/repository/post_repository.dart';
 import 'package:mingle/post/view/edit_post_screen.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PostDetailScreen extends ConsumerStatefulWidget {
   final int postId;
@@ -88,7 +90,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
   late Future<PostDetailModel> postFuture;
 
   List<CommentModel>? comments;
-
+  late FToast fToast;
   @override
   void dispose() {
     scrollController.dispose();
@@ -99,6 +101,8 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
   @override
   void initState() {
     super.initState();
+    fToast = FToast();
+    fToast.init(context);
     if (widget.notifierProvider != null) {
       widget.notifierProvider!.getDetail(postId: widget.postId);
     } else {
@@ -484,6 +488,15 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                           height: 24.0,
                         ),
                         Linkify(
+                          onOpen: (link) async {
+                            if (!await launchUrl(Uri.parse(link.url))) {
+                              fToast.showToast(
+                                child: const Text("링크를 열 수 없습니다."),
+                                gravity: ToastGravity.CENTER,
+                                toastDuration: const Duration(seconds: 2),
+                              );
+                            }
+                          },
                           text: post.content,
                           style: const TextStyle(
                               fontSize: 14.0, fontWeight: FontWeight.w400),

@@ -13,6 +13,7 @@ import 'package:mingle/post/models/comment_model.dart';
 import 'package:mingle/post/models/post_detail_model.dart';
 import 'package:mingle/post/models/post_model.dart';
 import 'package:mingle/second_hand_market/model/second_hand_market_post_model.dart';
+import 'package:mingle/user/view/my_page_screen/change_nickname_screen.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'member_repository.g.dart';
@@ -34,7 +35,7 @@ abstract class MemberRepository {
 
   @PATCH('/nickname')
   @Headers({'accessToken': 'true'})
-  Future<void> changeNickname({@Body() required String newNickname});
+  Future<void> changeNickname({@Body() required ChangeNicknameDto newNickname});
 
   @GET('/{boardType}/scraps')
   @Headers({'accessToken': 'true'})
@@ -110,4 +111,13 @@ class WithdrawModel {
 
   factory WithdrawModel.fromJson(Map<String, dynamic> json) =>
       _$WithdrawModelFromJson(json);
+}
+
+@JsonSerializable()
+class ChangeNicknameDto {
+  final String newNickname;
+
+  ChangeNicknameDto({required this.newNickname});
+
+  Map<String, dynamic> toJson() => _$ChangeNicknameDtoToJson(this);
 }

@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/component/like_animation.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/post/components/indicator_widget.dart';
 import 'package:mingle/post/models/comment_model.dart';
 import 'package:mingle/post/repository/comment_repository.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CommentDetails extends ConsumerStatefulWidget {
   final CommentModel comment;
@@ -29,6 +32,16 @@ class CommentDetails extends ConsumerStatefulWidget {
 }
 
 class _CommentDetailsState extends ConsumerState<CommentDetails> {
+  late FToast fToast;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fToast = FToast();
+    fToast.init(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     String createdDate = widget.comment.createdAt.split(" ")[0];
@@ -49,26 +62,40 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           widget.parentNickname == null
-              ? Text(
-                  widget.comment.content,
-                  style: const TextStyle(fontSize: 13.0),
+              ? Expanded(
+                  child: Text(
+                    widget.comment.content,
+                    style: const TextStyle(fontSize: 13.0),
+                  ),
                 )
-              : RichText(
-                  text: TextSpan(children: [
-                  TextSpan(
-                      text: "@${widget.parentNickname}",
-                      style: const TextStyle(
-                          fontSize: 13.0, color: PRIMARY_COLOR_ORANGE_01)),
-                  const TextSpan(text: " "),
-                  TextSpan(
+              : Expanded(
+                  child: RichText(
+                      text: TextSpan(children: [
+                    TextSpan(
+                        text: "@${widget.parentNickname}",
+                        style: const TextStyle(
+                            fontSize: 13.0, color: PRIMARY_COLOR_ORANGE_01)),
+                    const TextSpan(text: " "),
+                    LinkifySpan(
                       text: widget.comment.content,
                       style:
-                          const TextStyle(fontSize: 13.0, color: Colors.black)),
-                ])),
+                          const TextStyle(fontSize: 13.0, color: Colors.black),
+                      onOpen: (link) async {
+                        if (!await launchUrl(Uri.parse(link.url))) {
+                          fToast.showToast(
+                            child: const Text("링크를 열 수 없습니다."),
+                            gravity: ToastGravity.CENTER,
+                            toastDuration: const Duration(seconds: 2),
+                          );
+                        }
+                      },
+                    )
+                  ])),
+                ),
           const SizedBox(
             width: 12.0,
           ),
-          const Spacer(),
+          // const Spacer(),
           // Flexible(fit: FlexFit.loose, child: Container()),
           Padding(
             padding: const EdgeInsets.only(
@@ -234,7 +261,7 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
             ),
           ),
           const SizedBox(
-            width: 22.0,
+            width: 11.0,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(
