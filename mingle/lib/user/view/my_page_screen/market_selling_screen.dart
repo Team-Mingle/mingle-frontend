@@ -52,57 +52,75 @@ class MarketSellingScreen extends ConsumerWidget {
           ),
         ),
       ),
-      body: ItemPostPreviewCard(
-        data: ref.watch(itemMyPostProvider),
-        notifierProvider: ref.watch(itemMyPostProvider.notifier),
-        postDetailProvider: itemMyPostDetailProvider,
-        cardType: CardType.market,
+      body:
+          // ItemPostPreviewCard(
+          //   data: ref.watch(itemMyPostProvider),
+          //   notifierProvider: ref.watch(itemMyPostProvider.notifier),
+          //   postDetailProvider: itemMyPostDetailProvider,
+          //   cardType: CardType.market,
+          // ),
+          DefaultTabController(
+        length: 3,
+        child: Column(
+          children: [
+            const TabBar(
+              indicatorSize: TabBarIndicatorSize.tab,
+              indicatorColor: PRIMARY_COLOR_ORANGE_01,
+              labelColor: Colors.black,
+              padding: EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
+              labelStyle: TextStyle(
+                fontSize: 14,
+                fontFamily: 'Pretendard',
+                fontWeight: FontWeight.w600,
+              ),
+              unselectedLabelColor: GRAYSCALE_GRAY_04,
+              unselectedLabelStyle: TextStyle(
+                fontSize: 14,
+                fontFamily: 'Pretendard',
+                fontWeight: FontWeight.w400,
+              ),
+              tabs: [
+                Tab(text: "판매중"),
+                Tab(text: "예약중"),
+                Tab(text: "판매완료"),
+              ],
+            ),
+            const Divider(
+              height: 1.0,
+              color: GRAYSCALE_GRAY_02,
+            ),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  ItemPostPreviewCard(
+                    data: ref.watch(mySellingSecondHandPostProvider),
+                    notifierProvider:
+                        ref.watch(mySellingSecondHandPostProvider.notifier),
+                    postDetailProvider: mySellingSecondHandPostDetailProvider,
+                    cardType: CardType.market,
+                  ),
+                  ItemPostPreviewCard(
+                    data: ref.watch(myReservedSecondHandPostProvider),
+                    notifierProvider:
+                        ref.watch(myReservedSecondHandPostProvider.notifier),
+                    postDetailProvider: myReservedSecondHandPostDetailProvider,
+                    cardType: CardType.market,
+                  ),
+                  ItemPostPreviewCard(
+                    data: ref.watch(mySoldoutSecondHandPostProvider),
+                    notifierProvider:
+                        ref.watch(mySoldoutSecondHandPostProvider.notifier),
+                    postDetailProvider: mySoldoutSecondHandPostDetailProvider,
+                    cardType: CardType.market,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
-      // DefaultTabController(
-      //   length: 3,
-      //   child: Column(
-      //     children: [
-      //       const TabBar(
-      //         indicatorSize: TabBarIndicatorSize.tab,
-      //         indicatorColor: PRIMARY_COLOR_ORANGE_01,
-      //         labelColor: Colors.black,
-      //         padding: EdgeInsets.symmetric(
-      //           horizontal: 20,
-      //         ),
-      //         labelStyle: TextStyle(
-      //           fontSize: 14,
-      //           fontFamily: 'Pretendard',
-      //           fontWeight: FontWeight.w600,
-      //         ),
-      //         unselectedLabelColor: GRAYSCALE_GRAY_04,
-      //         unselectedLabelStyle: TextStyle(
-      //           fontSize: 14,
-      //           fontFamily: 'Pretendard',
-      //           fontWeight: FontWeight.w400,
-      //         ),
-      //         tabs: [
-      //           Tab(text: "판매중"),
-      //           Tab(text: "예약중"),
-      //           Tab(text: "판매완료"),
-      //         ],
-      //       ),
-      //       const Divider(
-      //         height: 1.0,
-      //         color: GRAYSCALE_GRAY_02,
-      //       ),
-      //       Expanded(
-      //         child: TabBarView(
-      //           children: [
-      //             Container(),
-      //             Container(),
-      //             Container(),
-
-      //           ],
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 }

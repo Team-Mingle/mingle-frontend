@@ -9,6 +9,7 @@ import 'package:mingle/post/provider/post_provider.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/second_hand_market/model/second_hand_market_post_model.dart';
 import 'package:mingle/second_hand_market/provider/second_hand_market_post_provider.dart';
+import 'package:mingle/second_hand_market/repository/second_hand_market_post_repository.dart';
 import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.dart';
 
 enum CardType { home, square, lawn, market, selling }
@@ -71,6 +72,16 @@ class _GeneralPostPreviewCardState extends ConsumerState<ItemPostPreviewCard> {
         return 1;
       case CardType.selling:
         return 1;
+    }
+  }
+
+  void likeOrUnlikePost(int itemId) async {
+    final resp = await ref
+        .watch(secondHandPostRepositoryProvider)
+        .likeSecondHandMarketPost(itemId: itemId);
+
+    if (widget.notifierProvider != null) {
+      widget.notifierProvider!.getDetail(itemId: itemId);
     }
   }
 
@@ -156,7 +167,7 @@ class _GeneralPostPreviewCardState extends ConsumerState<ItemPostPreviewCard> {
                     await Future.delayed(
                         const Duration(milliseconds: 1000),
                         () => widget.notifierProvider!
-                            .paginate(forceRefetch: true));
+                            .paginate(normalRefetch: true));
                     // await widget.notifierProvider!.paginate(forceRefetch: true);
                   },
                 ),
@@ -329,19 +340,29 @@ class _GeneralPostPreviewCardState extends ConsumerState<ItemPostPreviewCard> {
                                                           CardType.market ||
                                                       widget.cardType ==
                                                           CardType.selling)
-                                                    SvgPicture.asset(
-                                                      widget.cardType ==
-                                                              CardType.market
-                                                          ? (post.isLiked
-                                                              ? 'assets/img/second_hand_market_screen/heart_icon_filled.svg'
-                                                              : 'assets/img/second_hand_market_screen/heart_icon.svg')
-                                                          : widget.cardType ==
-                                                                  CardType
-                                                                      .selling
-                                                              ? 'assets/img/post_screen/triple_dot_icon.svg'
-                                                              : '', // 다른 경우에 대한 처리 (비어있는 문자열로 설정)
-                                                      width: 20,
-                                                      height: 20,
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          post.isLiked =
+                                                              !post.isLiked;
+                                                        });
+                                                        likeOrUnlikePost(
+                                                            post.id);
+                                                      },
+                                                      child: SvgPicture.asset(
+                                                        widget.cardType ==
+                                                                CardType.market
+                                                            ? (post.isLiked
+                                                                ? 'assets/img/second_hand_market_screen/heart_icon_filled.svg'
+                                                                : 'assets/img/second_hand_market_screen/heart_icon.svg')
+                                                            : widget.cardType ==
+                                                                    CardType
+                                                                        .selling
+                                                                ? 'assets/img/post_screen/triple_dot_icon.svg'
+                                                                : '', // 다른 경우에 대한 처리 (비어있는 문자열로 설정)
+                                                        width: 20,
+                                                        height: 20,
+                                                      ),
                                                     ),
                                                   const SizedBox(
                                                     width: 4.0,

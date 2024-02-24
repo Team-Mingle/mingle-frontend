@@ -64,18 +64,18 @@ abstract class MemberRepository {
     @Queries() PaginationParams? paginationParams = const PaginationParams(),
   });
 
-  @GET('/{boardType}/item-likes')
+  @GET('/item-likes/{itemStatus}')
   @Headers({'accessToken': 'true'})
   Future<CursorPagination<SecondHandMarketPostModel>>
       getMyLikedSecondHandPosts({
-    @Path() required String boardType,
+    @Path() required String itemStatus,
     @Queries() PaginationParams? paginationParams = const PaginationParams(),
   });
 
-  @GET('/{boardType}/items')
+  @GET('/items/{itemStatus}')
   @Headers({'accessToken': 'true'})
   Future<CursorPagination<SecondHandMarketPostModel>> getMySecondHandPosts({
-    @Path() required String boardType,
+    @Path() required String itemStatus,
     @Queries() PaginationParams? paginationParams = const PaginationParams(),
   });
 

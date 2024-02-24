@@ -185,74 +185,6 @@ final univCommentedPostDetailProvider =
   return state.data.firstWhereOrNull((e) => e.postId == id);
 });
 
-final itemMyPostProvider = StateNotifierProvider<
-    MemberSecondHandPostStateNotifier, CursorPaginationBase>((ref) {
-  final secondHandPostRepository = ref.watch(secondHandPostRepositoryProvider);
-  final memberRepository = ref.watch(memberRepositoryProvider);
-
-  final notifier = ItemMyPostStateNotifier(
-      secondHandPostRepository: secondHandPostRepository,
-      memberRepository: memberRepository);
-
-  return notifier;
-});
-
-final itemLikedPostProvider = StateNotifierProvider<
-    MemberSecondHandPostStateNotifier, CursorPaginationBase>((ref) {
-  final secondHandPostRepository = ref.watch(secondHandPostRepositoryProvider);
-  final memberRepository = ref.watch(memberRepositoryProvider);
-
-  final notifier = ItemLikedPostStateNotifier(
-      memberRepository: memberRepository,
-      secondHandPostRepository: secondHandPostRepository);
-
-  return notifier;
-});
-
-final itemCommentedPostProvider =
-    StateNotifierProvider<MemberPostStateNotifier, CursorPaginationBase>((ref) {
-  final postRepository = ref.watch(postRepositoryProvider);
-  final memberRepository = ref.watch(memberRepositoryProvider);
-
-  final notifier = ItemCommentedPostStateNotifier(
-      postRepository: postRepository, memberRepository: memberRepository);
-
-  return notifier;
-});
-
-final itemMyPostDetailProvider =
-    Provider.family<SecondHandMarketPostModel?, int>((ref, id) {
-  final state = ref.watch(itemMyPostProvider);
-
-  if (state is! CursorPagination) {
-    return null;
-  }
-
-  return state.data.firstWhereOrNull((e) => e.id == id);
-});
-
-final itemLikedPostDetailProvider =
-    Provider.family<SecondHandMarketPostModel?, int>((ref, id) {
-  final state = ref.watch(itemLikedPostProvider);
-
-  if (state is! CursorPagination) {
-    return null;
-  }
-
-  return state.data.firstWhereOrNull((e) => e.id == id);
-});
-
-final itemCommentedPostDetailProvider =
-    Provider.family<SecondHandMarketPostModel?, int>((ref, id) {
-  final state = ref.watch(itemCommentedPostProvider);
-
-  if (state is! CursorPagination) {
-    return null;
-  }
-
-  return state.data.firstWhereOrNull((e) => e.id == id);
-});
-
 class MemberPostStateNotifier extends PostStateNotifier
 
 // StateNotifier<CursorPaginationBase>
@@ -560,56 +492,23 @@ class UnivCommentedPostStateNotifier extends MemberPostStateNotifier {
             postType: 'comments');
 }
 
-class ItemMyPostStateNotifier extends MemberSecondHandPostStateNotifier {
-  @override
-  final SecondHandPostRepository secondHandPostRepository;
-  @override
-  final MemberRepository memberRepository;
-
-  ItemMyPostStateNotifier(
-      {required this.secondHandPostRepository, required this.memberRepository})
-      : super(
-            memberRepository: memberRepository,
-            secondHandPostRepository: secondHandPostRepository,
-            postType: 'items');
-}
-
-class ItemLikedPostStateNotifier extends MemberSecondHandPostStateNotifier {
-  @override
-  final SecondHandPostRepository secondHandPostRepository;
-  @override
-  final MemberRepository memberRepository;
-
-  ItemLikedPostStateNotifier(
-      {required this.secondHandPostRepository, required this.memberRepository})
-      : super(
-            memberRepository: memberRepository,
-            secondHandPostRepository: secondHandPostRepository,
-            postType: 'item-likes');
-}
-
-class ItemCommentedPostStateNotifier extends MemberPostStateNotifier {
-  @override
-  final PostRepository postRepository;
-  @override
-  final MemberRepository memberRepository;
-
-  ItemCommentedPostStateNotifier(
-      {required this.postRepository, required this.memberRepository})
-      : super(
-            memberRepository: memberRepository,
-            postRepository: postRepository,
-            boardType: 'ITEM',
-            postType: 'comments');
+class MySecondHandPostStateNotifier extends MemberSecondHandPostStateNotifier {
+  MySecondHandPostStateNotifier(
+      {required super.secondHandPostRepository,
+      required super.memberRepository,
+      required super.postType,
+      required super.itemStatus});
 }
 
 class MemberSecondHandPostStateNotifier extends SecondHandPostStateNotifier {
   final MemberRepository memberRepository;
   final String postType;
+  final String itemStatus;
   MemberSecondHandPostStateNotifier(
       {required super.secondHandPostRepository,
       required this.memberRepository,
-      required this.postType});
+      required this.postType,
+      required this.itemStatus});
   @override
   Future<void> paginate(
       {int fetchCount = 20,
@@ -682,13 +581,13 @@ class MemberSecondHandPostStateNotifier extends SecondHandPostStateNotifier {
       switch (postType) {
         case "items":
           resp = await memberRepository.getMySecondHandPosts(
-              boardType: "ITEM", paginationParams: paginationParams);
+              itemStatus: itemStatus, paginationParams: paginationParams);
         case "item-likes":
           resp = await memberRepository.getMyLikedSecondHandPosts(
-              boardType: "ITEM", paginationParams: paginationParams);
+              itemStatus: itemStatus, paginationParams: paginationParams);
         default:
           resp = await memberRepository.getMySecondHandPosts(
-              boardType: "ITEM", paginationParams: paginationParams);
+              itemStatus: itemStatus, paginationParams: paginationParams);
       }
 
       if (state is CursorPaginationFetchingMore) {
@@ -714,30 +613,148 @@ class MemberSecondHandPostStateNotifier extends SecondHandPostStateNotifier {
   }
 }
 
-class LikedSecondHandPostStateNotifier
-    extends MemberSecondHandPostStateNotifier {
-  LikedSecondHandPostStateNotifier(
-      {required super.secondHandPostRepository,
-      required super.memberRepository,
-      required super.postType});
-}
-
-final likedSecondHandPostProvider = StateNotifierProvider<
-    LikedSecondHandPostStateNotifier, CursorPaginationBase>((ref) {
+final likedSellingSecondHandPostProvider = StateNotifierProvider<
+    MemberSecondHandPostStateNotifier, CursorPaginationBase>((ref) {
   final secondHandPostRepository = ref.watch(secondHandPostRepositoryProvider);
   final memberRepository = ref.watch(memberRepositoryProvider);
 
-  final notifier = LikedSecondHandPostStateNotifier(
+  final notifier = MemberSecondHandPostStateNotifier(
       secondHandPostRepository: secondHandPostRepository,
       memberRepository: memberRepository,
-      postType: 'item-likes');
+      postType: 'item-likes',
+      itemStatus: "SELLING");
 
   return notifier;
 });
 
-final likedSecondHandPostDetailProvider =
+final likedSellingSecondHandPostDetailProvider =
     Provider.family<SecondHandMarketPostModel?, int>((ref, id) {
-  final state = ref.watch(likedSecondHandPostProvider);
+  final state = ref.watch(likedSellingSecondHandPostProvider);
+
+  if (state is! CursorPagination) {
+    return null;
+  }
+
+  return state.data.firstWhereOrNull((e) => e.id == id);
+});
+
+final likedReservedSecondHandPostProvider = StateNotifierProvider<
+    MemberSecondHandPostStateNotifier, CursorPaginationBase>((ref) {
+  final secondHandPostRepository = ref.watch(secondHandPostRepositoryProvider);
+  final memberRepository = ref.watch(memberRepositoryProvider);
+
+  final notifier = MemberSecondHandPostStateNotifier(
+      secondHandPostRepository: secondHandPostRepository,
+      memberRepository: memberRepository,
+      postType: 'item-likes',
+      itemStatus: "RESERVED");
+
+  return notifier;
+});
+
+final likedReservedSecondHandPostDetailProvider =
+    Provider.family<SecondHandMarketPostModel?, int>((ref, id) {
+  final state = ref.watch(likedReservedSecondHandPostProvider);
+
+  if (state is! CursorPagination) {
+    return null;
+  }
+
+  return state.data.firstWhereOrNull((e) => e.id == id);
+});
+
+final likedSoldoutSecondHandPostProvider = StateNotifierProvider<
+    MemberSecondHandPostStateNotifier, CursorPaginationBase>((ref) {
+  final secondHandPostRepository = ref.watch(secondHandPostRepositoryProvider);
+  final memberRepository = ref.watch(memberRepositoryProvider);
+
+  final notifier = MemberSecondHandPostStateNotifier(
+      secondHandPostRepository: secondHandPostRepository,
+      memberRepository: memberRepository,
+      postType: 'item-likes',
+      itemStatus: "SOLDOUT");
+
+  return notifier;
+});
+
+final likedSoldoutSecondHandPostDetailProvider =
+    Provider.family<SecondHandMarketPostModel?, int>((ref, id) {
+  final state = ref.watch(likedSoldoutSecondHandPostProvider);
+
+  if (state is! CursorPagination) {
+    return null;
+  }
+
+  return state.data.firstWhereOrNull((e) => e.id == id);
+});
+
+final mySellingSecondHandPostProvider = StateNotifierProvider<
+    MemberSecondHandPostStateNotifier, CursorPaginationBase>((ref) {
+  final secondHandPostRepository = ref.watch(secondHandPostRepositoryProvider);
+  final memberRepository = ref.watch(memberRepositoryProvider);
+
+  final notifier = MemberSecondHandPostStateNotifier(
+      secondHandPostRepository: secondHandPostRepository,
+      memberRepository: memberRepository,
+      postType: 'items',
+      itemStatus: "SELLING");
+
+  return notifier;
+});
+
+final mySellingSecondHandPostDetailProvider =
+    Provider.family<SecondHandMarketPostModel?, int>((ref, id) {
+  final state = ref.watch(mySellingSecondHandPostProvider);
+
+  if (state is! CursorPagination) {
+    return null;
+  }
+
+  return state.data.firstWhereOrNull((e) => e.id == id);
+});
+
+final myReservedSecondHandPostProvider = StateNotifierProvider<
+    MemberSecondHandPostStateNotifier, CursorPaginationBase>((ref) {
+  final secondHandPostRepository = ref.watch(secondHandPostRepositoryProvider);
+  final memberRepository = ref.watch(memberRepositoryProvider);
+
+  final notifier = MemberSecondHandPostStateNotifier(
+      secondHandPostRepository: secondHandPostRepository,
+      memberRepository: memberRepository,
+      postType: 'items',
+      itemStatus: "RESERVED");
+
+  return notifier;
+});
+
+final myReservedSecondHandPostDetailProvider =
+    Provider.family<SecondHandMarketPostModel?, int>((ref, id) {
+  final state = ref.watch(myReservedSecondHandPostProvider);
+
+  if (state is! CursorPagination) {
+    return null;
+  }
+
+  return state.data.firstWhereOrNull((e) => e.id == id);
+});
+
+final mySoldoutSecondHandPostProvider = StateNotifierProvider<
+    MemberSecondHandPostStateNotifier, CursorPaginationBase>((ref) {
+  final secondHandPostRepository = ref.watch(secondHandPostRepositoryProvider);
+  final memberRepository = ref.watch(memberRepositoryProvider);
+
+  final notifier = MemberSecondHandPostStateNotifier(
+      secondHandPostRepository: secondHandPostRepository,
+      memberRepository: memberRepository,
+      postType: 'items',
+      itemStatus: "SOLDOUT");
+
+  return notifier;
+});
+
+final mySoldoutSecondHandPostDetailProvider =
+    Provider.family<SecondHandMarketPostModel?, int>((ref, id) {
+  final state = ref.watch(mySoldoutSecondHandPostProvider);
 
   if (state is! CursorPagination) {
     return null;

@@ -159,6 +159,7 @@ class CustomInterceptor extends Interceptor {
 
     final refreshToken = await storage.read(key: REFRESH_TOKEN_KEY);
     final encryptedEmail = await storage.read(key: ENCRYPTED_EMAIL_KEY);
+    print(refreshToken);
     // refreshToken 아예 없으면
     // 당연히 에러를 던진다
     if (refreshToken == null) {
@@ -199,6 +200,7 @@ class CustomInterceptor extends Interceptor {
 
         return handler.resolve(response);
       } on DioException catch (e) {
+        print(e.requestOptions.path);
         return handler.reject(e);
       }
     }

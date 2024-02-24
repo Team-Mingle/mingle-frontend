@@ -231,7 +231,7 @@ class _MemberRepository implements MemberRepository {
   @override
   Future<CursorPagination<SecondHandMarketPostModel>>
       getMyLikedSecondHandPosts({
-    required String boardType,
+    required String itemStatus,
     PaginationParams? paginationParams = const PaginationParams(),
   }) async {
     const _extra = <String, dynamic>{};
@@ -249,7 +249,7 @@ class _MemberRepository implements MemberRepository {
     )
             .compose(
               _dio.options,
-              '/${boardType}/item-likes',
+              '/item-likes/${itemStatus}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -268,7 +268,7 @@ class _MemberRepository implements MemberRepository {
 
   @override
   Future<CursorPagination<SecondHandMarketPostModel>> getMySecondHandPosts({
-    required String boardType,
+    required String itemStatus,
     PaginationParams? paginationParams = const PaginationParams(),
   }) async {
     const _extra = <String, dynamic>{};
@@ -286,7 +286,7 @@ class _MemberRepository implements MemberRepository {
     )
             .compose(
               _dio.options,
-              '/${boardType}/items',
+              '/items/${itemStatus}',
               queryParameters: queryParameters,
               data: _data,
             )
