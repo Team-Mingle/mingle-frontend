@@ -8,6 +8,7 @@ import 'package:mingle/common/component/anonymous_textfield.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/view/image_detail_screen.dart';
 import 'package:mingle/post/components/comment_card.dart';
+import 'package:mingle/post/components/indicator_widget.dart';
 import 'package:mingle/post/components/like_and_comment_numbers_card.dart';
 import 'package:mingle/post/models/add_comment_model.dart';
 import 'package:mingle/post/models/comment_model.dart';
@@ -502,12 +503,16 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                         ),
                         Row(
                           children: [
-                            Text(
+                            buildRoleIndicator(
                               post.nickname,
-                              // "익명", // TODO:render accordingly
-                              style: const TextStyle(
-                                  color: GRAYSCALE_GRAY_04, fontSize: 12.0),
+                              post.memberRole,
+                              12,
                             ),
+                            // Text(
+                            //   post.nickname,
+                            //   style: const TextStyle(
+                            //       color: GRAYSCALE_GRAY_04, fontSize: 12.0),
+                            // ),
                             const SizedBox(
                               width: 4.0,
                             ),
@@ -591,7 +596,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                         color: GRAYSCALE_GRAY_01,
                       ),
                       Container(
-                        color: GRAYSCALE_GRAY_01_5,
+                        color: const Color(0xFFE9E7E7),
                         width: MediaQuery.of(context).size.width,
                         child: const Padding(
                           padding: EdgeInsets.only(

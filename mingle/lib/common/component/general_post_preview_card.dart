@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
+import 'package:mingle/post/components/indicator_widget.dart';
 import 'package:mingle/post/models/post_model.dart';
 import 'package:mingle/post/provider/post_provider.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
@@ -292,7 +293,12 @@ class _GeneralPostPreviewCardState
                                                 children: [
                                                   Expanded(
                                                     child: Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
                                                       children: [
+                                                        buildTypeIndicator(
+                                                            post.categoryType),
                                                         Text(
                                                           post.title,
                                                           style:
@@ -318,10 +324,13 @@ class _GeneralPostPreviewCardState
                                                       ],
                                                     ),
                                                   ),
-                                                  const SizedBox(
-                                                    width: 4.0,
-                                                  )
                                                 ],
+                                              ),
+                                              SizedBox(
+                                                height:
+                                                    post.categoryType == "FREE"
+                                                        ? 6.0
+                                                        : 2.0,
                                               ),
                                               Text(
                                                 post.content,
@@ -329,7 +338,8 @@ class _GeneralPostPreviewCardState
                                                   fontFamily: "Pretendard",
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w400,
-                                                  color: GRAYSCALE_GRAY_05,
+                                                  color: Color(0xff534949),
+                                                  height: 15 / 12,
                                                 ),
                                                 textAlign: TextAlign.left,
                                                 maxLines: getMaxLines(),
@@ -345,19 +355,10 @@ class _GeneralPostPreviewCardState
                                                 children: [
                                                   Row(
                                                     children: [
-                                                      Text(
+                                                      buildRoleIndicator(
                                                         post.nickname,
-                                                        style: const TextStyle(
-                                                          fontFamily:
-                                                              "Pretendard",
-                                                          fontSize: 11,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color:
-                                                              GRAYSCALE_GREY_ORANGE,
-                                                        ),
-                                                        textAlign:
-                                                            TextAlign.left,
+                                                        post.memberRole,
+                                                        11,
                                                       ),
                                                       const SizedBox(
                                                           width: 4.0),
