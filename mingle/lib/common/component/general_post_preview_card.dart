@@ -120,10 +120,10 @@ class _GeneralPostPreviewCardState
           slivers: [
             CupertinoSliverRefreshControl(
               onRefresh: () async {
-                await Future.delayed(
-                    const Duration(milliseconds: 1000),
-                    () =>
-                        widget.notifierProvider!.paginate(forceRefetch: false));
+                await Future.delayed(const Duration(milliseconds: 1000), () {
+                  print("refreshing");
+                  widget.notifierProvider!.paginate(normalRefetch: true);
+                });
                 // await widget.notifierProvider!.paginate(forceRefetch: true);
               },
             ),
@@ -194,7 +194,7 @@ class _GeneralPostPreviewCardState
                     await Future.delayed(
                         const Duration(milliseconds: 1000),
                         () => widget.notifierProvider!
-                            .paginate(forceRefetch: false));
+                            .paginate(normalRefetch: true));
                     // await widget.notifierProvider!.paginate(forceRefetch: true);
                   },
                 ),
