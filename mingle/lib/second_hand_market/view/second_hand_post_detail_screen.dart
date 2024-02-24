@@ -16,6 +16,7 @@ import 'package:mingle/second_hand_market/model/second_hand_market_post_detail_m
 import 'package:mingle/second_hand_market/model/second_hand_market_post_model.dart';
 import 'package:mingle/second_hand_market/provider/second_hand_market_post_provider.dart';
 import 'package:mingle/second_hand_market/repository/second_hand_market_post_repository.dart';
+import 'package:mingle/user/provider/member_provider.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -148,6 +149,24 @@ class _SecondHandPostDetailScreenState
         .watch(secondHandPostRepositoryProvider)
         .editItemStatus(itemId: widget.itemId, itemStatusType: actualStatus);
     refreshPost();
+    // await ref
+    //     .watch(likedSellingSecondHandPostProvider.notifier)
+    //     .paginate(normalRefetch: true);
+    // await ref
+    //     .watch(likedReservedSecondHandPostProvider.notifier)
+    //     .paginate(normalRefetch: true);
+    // await ref
+    //     .watch(likedSoldoutSecondHandPostProvider.notifier)
+    //     .paginate(normalRefetch: true);
+    // await ref
+    //     .watch(mySellingSecondHandPostProvider.notifier)
+    //     .paginate(normalRefetch: true);
+    // await ref
+    //     .watch(myReservedSecondHandPostProvider.notifier)
+    //     .paginate(normalRefetch: true);
+    // await ref
+    //     .watch(mySoldoutSecondHandPostProvider.notifier)
+    //     .paginate(normalRefetch: true);
   }
 
   void likeOrUnlikePost() async {

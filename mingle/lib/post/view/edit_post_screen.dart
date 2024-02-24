@@ -62,12 +62,12 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
   }
 
   void handleSubmit(WidgetRef ref) async {
-    // print(title);
-    // print(content);
-    // print(boardType);
-    // print(categoryType);
-    // print(isAnonymous);
-    // print(imageFileList);
+    print(widget.title);
+    print(widget.content);
+    print(widget.boardType);
+    print(widget.categoryType);
+    print(widget.isAnonymous);
+    print(imagesToAdd);
     setState(() {
       isLoading = true;
     });
@@ -558,11 +558,13 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
   }
 
   Widget selectedImageCard(int index) {
-    Image currentImage = Image.file(
-      File(imageFileList[index].path),
-      // File(imageFileList[index]),
-      fit: BoxFit.cover,
-    );
+    NetworkImage currentImage = NetworkImage(imageFileList[index].path);
+    // Image.file(
+    //   imageFileList[index],
+    //   // File(imageFileList[index].path),
+    //   // File(imageFileList[index]),
+    //   fit: BoxFit.cover,
+    // );
     return ClipRRect(
       borderRadius: BorderRadius.circular(8.0),
       child: SizedBox(
@@ -570,7 +572,8 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
         width: 90.0,
         child: Stack(
           children: [
-            SizedBox(height: 90.0, width: 90.0, child: currentImage),
+            SizedBox(
+                height: 90.0, width: 90.0, child: Image(image: currentImage)),
             Align(
               alignment: Alignment.topRight,
               child: Padding(

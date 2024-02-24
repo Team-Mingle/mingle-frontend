@@ -47,12 +47,70 @@ class _LikedSecondHandPostsScreenState
               fontSize: 16.0, fontWeight: FontWeight.w400, color: Colors.black),
         ),
       ),
-      body: ItemPostPreviewCard(
-        emptyMessage: "찜한 내역이 없습니다.",
-        data: ref.watch(likedSecondHandPostProvider),
-        notifierProvider: ref.watch(likedSecondHandPostProvider.notifier),
-        postDetailProvider: likedSecondHandPostDetailProvider,
-        cardType: CardType.market,
+      body: DefaultTabController(
+        length: 3,
+        child: Column(
+          children: [
+            const TabBar(
+              indicatorSize: TabBarIndicatorSize.tab,
+              indicatorColor: PRIMARY_COLOR_ORANGE_01,
+              labelColor: Colors.black,
+              padding: EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
+              labelStyle: TextStyle(
+                fontSize: 14,
+                fontFamily: 'Pretendard',
+                fontWeight: FontWeight.w600,
+              ),
+              unselectedLabelColor: GRAYSCALE_GRAY_04,
+              unselectedLabelStyle: TextStyle(
+                fontSize: 14,
+                fontFamily: 'Pretendard',
+                fontWeight: FontWeight.w400,
+              ),
+              tabs: [
+                Tab(text: "판매중"),
+                Tab(text: "예약중"),
+                Tab(text: "판매완료"),
+              ],
+            ),
+            const Divider(
+              height: 1.0,
+              color: GRAYSCALE_GRAY_02,
+            ),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  ItemPostPreviewCard(
+                    data: ref.watch(likedSellingSecondHandPostProvider),
+                    notifierProvider:
+                        ref.watch(likedSellingSecondHandPostProvider.notifier),
+                    postDetailProvider:
+                        likedSellingSecondHandPostDetailProvider,
+                    cardType: CardType.market,
+                  ),
+                  ItemPostPreviewCard(
+                    data: ref.watch(likedReservedSecondHandPostProvider),
+                    notifierProvider:
+                        ref.watch(likedReservedSecondHandPostProvider.notifier),
+                    postDetailProvider:
+                        likedReservedSecondHandPostDetailProvider,
+                    cardType: CardType.market,
+                  ),
+                  ItemPostPreviewCard(
+                    data: ref.watch(likedSoldoutSecondHandPostProvider),
+                    notifierProvider:
+                        ref.watch(likedSoldoutSecondHandPostProvider.notifier),
+                    postDetailProvider:
+                        likedSellingSecondHandPostDetailProvider,
+                    cardType: CardType.market,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -22,7 +22,7 @@ class SplashScreen extends ConsumerStatefulWidget {
 
 class _SplashScreenState extends ConsumerState<SplashScreen> {
   final _secureStorage = const FlutterSecureStorage();
-  
+
   @override
   void initState() {
     checkToken();
