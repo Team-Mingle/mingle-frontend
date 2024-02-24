@@ -49,26 +49,32 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           widget.parentNickname == null
-              ? Text(
-                  widget.comment.content,
-                  style: const TextStyle(fontSize: 13.0),
+              ? Expanded(
+                  child: Text(
+                    widget.comment.content,
+                    style: const TextStyle(fontSize: 13.0),
+                  ),
                 )
-              : RichText(
-                  text: TextSpan(children: [
-                  TextSpan(
-                      text: "@${widget.parentNickname}",
-                      style: const TextStyle(
-                          fontSize: 13.0, color: PRIMARY_COLOR_ORANGE_01)),
-                  const TextSpan(text: " "),
-                  TextSpan(
-                      text: widget.comment.content,
-                      style:
-                          const TextStyle(fontSize: 13.0, color: Colors.black)),
-                ])),
+              : Expanded(
+                  child: RichText(
+                      text: TextSpan(children: [
+                    TextSpan(
+                        text: "@${widget.parentNickname}",
+                        style: const TextStyle(
+                            fontSize: 13.0, color: PRIMARY_COLOR_ORANGE_01)),
+                    const TextSpan(text: " "),
+                    TextSpan(
+                        text: widget.comment.content,
+                        style: const TextStyle(
+                          fontSize: 13.0,
+                          color: Colors.black,
+                        )),
+                  ])),
+                ),
           const SizedBox(
             width: 12.0,
           ),
-          const Spacer(),
+          // const Spacer(),
           // Flexible(fit: FlexFit.loose, child: Container()),
           Padding(
             padding: const EdgeInsets.only(
@@ -234,7 +240,7 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
             ),
           ),
           const SizedBox(
-            width: 22.0,
+            width: 11.0,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(
