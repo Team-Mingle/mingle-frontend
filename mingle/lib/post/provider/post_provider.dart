@@ -357,7 +357,7 @@ class PostStateNotifier extends StateNotifier<CursorPaginationBase> {
           state = CursorPaginationLoading();
         }
       }
-      final CursorPagination resp;
+      final CursorPagination<PostModel> resp;
       if (boardType == '' && categoryType == '' && keyword != '') {
         print("searching");
         resp = await postRepository.search(keyword: keyword!);
