@@ -231,6 +231,33 @@ final bestPostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
   return state.data.firstWhereOrNull((e) => e.postId == id);
 });
 
+StateNotifierProvider<PostStateNotifier, CursorPaginationBase>
+    searchPostProvider(String keyword) {
+  return StateNotifierProvider<PostStateNotifier, CursorPaginationBase>((ref) {
+    final repository = ref.watch(postRepositoryProvider);
+
+    final notifier = PostStateNotifier(
+        postRepository: repository,
+        boardType: '',
+        categoryType: '',
+        keyword: keyword);
+
+    return notifier;
+  });
+}
+
+ProviderFamily<PostModel?, int> searchPostDetailProvider(String keyword) {
+  return Provider.family<PostModel?, int>((ref, id) {
+    final state = ref.watch(searchPostProvider(keyword));
+
+    if (state is! CursorPagination) {
+      return null;
+    }
+
+    return state.data.firstWhereOrNull((e) => e.postId == id);
+  });
+}
+
 // class RecentPostStateNotifier extends StateNotifier<List<PostModel>?> {
 //   final PostRepository postRepository;
 //   final String boardType;
@@ -250,10 +277,12 @@ class PostStateNotifier extends StateNotifier<CursorPaginationBase> {
   final PostRepository postRepository;
   final String boardType;
   final String categoryType;
+  final String? keyword;
   PostStateNotifier(
       {required this.postRepository,
       required this.boardType,
-      required this.categoryType})
+      required this.categoryType,
+      this.keyword})
       : super(CursorPaginationLoading()) {
     paginate();
   }
@@ -328,13 +357,18 @@ class PostStateNotifier extends StateNotifier<CursorPaginationBase> {
           state = CursorPaginationLoading();
         }
       }
-
-      final resp = boardType == "best"
-          ? await postRepository.paginateBest()
-          : await postRepository.paginate(
-              boardType: boardType,
-              categoryType: categoryType,
-              paginationParams: paginationParams);
+      final CursorPagination resp;
+      if (boardType == '' && categoryType == '' && keyword != '') {
+        print("searching");
+        resp = await postRepository.search(keyword: keyword!);
+      } else {
+        resp = boardType == "best"
+            ? await postRepository.paginateBest()
+            : await postRepository.paginate(
+                boardType: boardType,
+                categoryType: categoryType,
+                paginationParams: paginationParams);
+      }
 
       if (state is CursorPaginationFetchingMore) {
         final pState = state as CursorPaginationFetchingMore;

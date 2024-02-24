@@ -247,8 +247,8 @@ class _GeneralPostPreviewCardState
                                   SizedBox(
                                     height: (() {
                                       switch (widget.cardType) {
-                                        case CardType.home:
-                                          return 10.0;
+                                        // case CardType.home:
+                                        //   return 20.0;
 
                                         default:
                                           return 16.0;
@@ -307,7 +307,7 @@ class _GeneralPostPreviewCardState
                                                                 "Pretendard",
                                                             fontSize: 14,
                                                             fontWeight:
-                                                                FontWeight.w400,
+                                                                FontWeight.w500,
                                                             color:
                                                                 GRAYSCALE_BLACK_GRAY,
                                                           ),
@@ -337,9 +337,8 @@ class _GeneralPostPreviewCardState
                                                 style: const TextStyle(
                                                   fontFamily: "Pretendard",
                                                   fontSize: 12,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Color(0xff534949),
-                                                  height: 15 / 12,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: GRAYSCALE_GRAY_05,
                                                 ),
                                                 textAlign: TextAlign.left,
                                                 maxLines: getMaxLines(),
@@ -446,21 +445,6 @@ class _GeneralPostPreviewCardState
 
                                 if (index != postList.data.length - 1)
                                   buildDivider(1.0),
-                                if (index == postList.data.length - 1)
-                                  // const SizedBox(
-                                  //   height: 20.0,
-                                  // ),
-                                  SizedBox(
-                                    height: (() {
-                                      switch (widget.cardType) {
-                                        case CardType.home:
-                                          return 10.0;
-
-                                        default:
-                                          return 16.0;
-                                      }
-                                    })(),
-                                  ),
                               ],
                             );
                           },
