@@ -33,9 +33,11 @@ final secondHandPostDetailProvider =
 
 class SecondHandPostStateNotifier extends StateNotifier<CursorPaginationBase> {
   final SecondHandPostRepository secondHandPostRepository;
+  final String? keyword;
 
   SecondHandPostStateNotifier({
     required this.secondHandPostRepository,
+    this.keyword,
   }) : super(CursorPaginationLoading()) {
     paginate();
   }
@@ -111,8 +113,10 @@ class SecondHandPostStateNotifier extends StateNotifier<CursorPaginationBase> {
         }
       }
 
-      final resp = await secondHandPostRepository.paginate(
-          paginationParams: paginationParams);
+      final resp = keyword != null
+          ? await secondHandPostRepository.search(keyword: keyword!)
+          : await secondHandPostRepository.paginate(
+              paginationParams: paginationParams);
 
       if (state is CursorPaginationFetchingMore) {
         final pState = state as CursorPaginationFetchingMore;

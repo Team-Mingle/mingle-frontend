@@ -5,7 +5,9 @@ import 'package:mingle/common/component/item_post_preview_card.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
 import 'package:mingle/second_hand_market/model/second_hand_market_post_model.dart';
+import 'package:mingle/second_hand_market/provider/second_hand_market_post_provider.dart';
 import 'package:mingle/second_hand_market/repository/second_hand_market_post_repository.dart';
+import 'package:collection/collection.dart';
 
 class SecondHandMarketSearchScreen extends ConsumerStatefulWidget {
   const SecondHandMarketSearchScreen({
@@ -22,6 +24,9 @@ class _SearchScreenState extends ConsumerState<SecondHandMarketSearchScreen>
   final TextEditingController _searchController = TextEditingController();
   late TabController _tabController;
   Future<CursorPagination<SecondHandMarketPostModel>>? searchFuture;
+  StateNotifierProvider<SecondHandPostStateNotifier, CursorPaginationBase>?
+      searchPostProvier;
+  ProviderFamily<SecondHandMarketPostModel?, int>? searchPostDetailProvider;
 
   @override
   void initState() {
@@ -38,11 +43,12 @@ class _SearchScreenState extends ConsumerState<SecondHandMarketSearchScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(48.0),
         child: AppBar(
           elevation: 0,
-          backgroundColor: GRAYSCALE_GRAY_01,
+          backgroundColor: Colors.white,
           titleSpacing: 0,
           leading: Container(
             margin: const EdgeInsets.only(
@@ -51,7 +57,7 @@ class _SearchScreenState extends ConsumerState<SecondHandMarketSearchScreen>
               icon: Align(
                 alignment: Alignment.center,
                 child: SvgPicture.asset(
-                  'assets/img/home_screen/ic_search_back.svg',
+                  'assets/img/post_screen/cross_icon.svg',
                   width: 24,
                   height: 24,
                 ),
@@ -75,11 +81,34 @@ class _SearchScreenState extends ConsumerState<SecondHandMarketSearchScreen>
                       searchFuture = ref
                           .watch(secondHandPostRepositoryProvider)
                           .search(keyword: _searchController.text);
+                      searchPostProvier = StateNotifierProvider<
+                          SecondHandPostStateNotifier,
+                          CursorPaginationBase>((ref) {
+                        final repository =
+                            ref.watch(secondHandPostRepositoryProvider);
+
+                        final notifier = SecondHandPostStateNotifier(
+                            secondHandPostRepository: repository,
+                            keyword: _searchController.text);
+
+                        return notifier;
+                      });
+                      searchPostDetailProvider =
+                          Provider.family<SecondHandMarketPostModel?, int>(
+                              (ref, id) {
+                        final state = ref.watch(searchPostProvier!);
+
+                        if (state is! CursorPagination) {
+                          return null;
+                        }
+
+                        return state.data.firstWhereOrNull((e) => e.id == id);
+                      });
                     });
                   },
                   controller: _searchController,
                   decoration: const InputDecoration(
-                    hintText: '검색어를 입력하세요 왤케 아래에 있지...',
+                    hintText: '검색어를 입력하세요.',
                     hintStyle: TextStyle(
                       color: GRAYSCALE_GRAY_03,
                       fontSize: 11,
@@ -90,6 +119,7 @@ class _SearchScreenState extends ConsumerState<SecondHandMarketSearchScreen>
                   ),
                   style: const TextStyle(
                     fontSize: 14,
+                    height: 13 / 11,
                   ),
                 ),
               ),
@@ -117,7 +147,7 @@ class _SearchScreenState extends ConsumerState<SecondHandMarketSearchScreen>
         ),
       ),
       body: Container(
-        color: GRAYSCALE_GRAY_01,
+        color: Colors.white,
         child: Column(
           children: [
             const SizedBox(
@@ -143,32 +173,50 @@ class _SearchScreenState extends ConsumerState<SecondHandMarketSearchScreen>
             //   ),
             // ),
             Expanded(
-              child: searchFuture == null
-                  ? const Center(child: Text('탭 1 콘텐츠'))
-                  : FutureBuilder(
-                      future: searchFuture,
-                      builder: (context,
-                          AsyncSnapshot<
-                                  CursorPagination<SecondHandMarketPostModel>>
-                              snapshot) {
-                        if (!snapshot.hasData) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-                        CursorPagination<SecondHandMarketPostModel> postList =
-                            snapshot.data!;
-                        return ItemPostPreviewCard(
-                          // postList: dummyPostList,
-                          data: postList,
-                          // postFuture: paginatePost("MINGLE", ref),
-
-                          cardType: CardType.market,
-                        );
-                      }),
-            ),
+                child: searchFuture == null
+                    ? const Center(child: Text('장터 게시물을 검색해보세요!'))
+                    : ItemPostPreviewCard(
+                        cardType: CardType.market,
+                        data: ref.watch(searchPostProvier!),
+                        notifierProvider:
+                            ref.watch(searchPostProvier!.notifier),
+                        postDetailProvider: searchPostDetailProvider,
+                      )),
           ],
         ),
       ),
     );
   }
 }
+
+// onEditingComplete: () {
+//                     setState(() {
+//                       searchFuture = ref
+//                           .watch(secondHandPostRepositoryProvider)
+//                           .search(keyword: _searchController.text);
+//                       searchPostProvier = StateNotifierProvider<
+//                           SecondHandPostStateNotifier,
+//                           CursorPaginationBase>((ref) {
+//                         final repository =
+//                             ref.watch(secondHandPostRepositoryProvider);
+
+//                         final notifier = SecondHandPostStateNotifier(
+//                             secondHandPostRepository: repository,
+//                             keyword: _searchController.text);
+
+//                         return notifier;
+//                       });
+//                       searchPostDetailProvider =
+//                           Provider.family<SecondHandMarketPostModel?, int>(
+//                               (ref, id) {
+//                         final state = ref.watch(searchPostProvier!);
+
+//                         if (state is! CursorPagination) {
+//                           return null;
+//                         }
+
+//                         return state.data
+//                             .firstWhereOrNull((e) => e.postId == id);
+//                       });
+//                     });
+//                   },

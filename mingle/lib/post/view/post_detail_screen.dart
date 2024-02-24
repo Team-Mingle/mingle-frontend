@@ -576,19 +576,12 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                               post: post,
                               likeOrUnlikePost: likeOrUnlikePost,
                               scrapOrUnscrapPost: scrapOrUnscrapPost)
-                          : FutureBuilder(
-                              future: Future.delayed(
-                                const Duration(milliseconds: 200),
-                                () => Skeletonizer(
-                                    child: LikeAndCommentNumbersCard(
-                                  post: fakePost,
-                                  likeOrUnlikePost: () {},
-                                  scrapOrUnscrapPost: () {},
-                                )),
-                              ),
-                              builder: (context, snapshot) {
-                                return Container();
-                              }),
+                          : Skeletonizer(
+                              child: LikeAndCommentNumbersCard(
+                              post: fakePost,
+                              likeOrUnlikePost: () {},
+                              scrapOrUnscrapPost: () {},
+                            )),
 
                       const Divider(
                         height: 0.0,
@@ -596,11 +589,11 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                         color: GRAYSCALE_GRAY_01,
                       ),
                       Container(
-                        color: const Color(0xFFE9E7E7),
+                        color: GRAYSCALE_GRAY_01,
                         width: MediaQuery.of(context).size.width,
                         child: const Padding(
                           padding: EdgeInsets.only(
-                            left: 4.17,
+                            left: 10.0,
                             top: 5.0,
                             bottom: 5.0,
                           ),
@@ -613,8 +606,8 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                                   fontFamily: "Pretendard",
                                   fontSize: 11,
                                   fontWeight: FontWeight.w600,
-                                  color: Color(0xff959595),
-                                  height: 28 / 11,
+                                  color: GRAYSCALE_GRAY_03,
+                                  // height: 28 / 11,
                                 ),
                               ),
                             ],
@@ -644,26 +637,38 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                                 return Container();
                               })
                           : Column(
-                              children: List.generate(
-                                comments!.length,
-                                (index) => Column(
-                                  children: [
-                                    index > 0
-                                        ? const Divider(
-                                            height: 24.0,
-                                            thickness: 0.0,
-                                          )
-                                        : Container(),
-                                    CommentCard(
-                                        refreshComments: refreshComments,
-                                        likeOrUnlikeComment:
-                                            likeOrUnlikeComment,
-                                        comment: comments![index],
-                                        setParentAndMentionId:
-                                            setParentCommentIdAndMentionId)
-                                  ],
-                                ),
-                              ),
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: comments!.isEmpty
+                                  ? [
+                                      const Center(
+                                          child: Text(
+                                        "아직 모인 사람이 없어요.",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            color: GRAYSCALE_GRAY_02),
+                                      ))
+                                    ]
+                                  : List.generate(
+                                      comments!.length,
+                                      (index) => Column(
+                                        children: [
+                                          index > 0
+                                              ? const Divider(
+                                                  height: 24.0,
+                                                  thickness: 0.0,
+                                                )
+                                              : Container(),
+                                          CommentCard(
+                                              refreshComments: refreshComments,
+                                              likeOrUnlikeComment:
+                                                  likeOrUnlikeComment,
+                                              comment: comments![index],
+                                              setParentAndMentionId:
+                                                  setParentCommentIdAndMentionId)
+                                        ],
+                                      ),
+                                    ),
                             ),
                       const SizedBox(
                         height: 12.0,

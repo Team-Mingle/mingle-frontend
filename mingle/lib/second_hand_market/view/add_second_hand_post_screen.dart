@@ -260,6 +260,7 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
                     ),
                   ),
                   const Divider(
+                    color: GRAYSCALE_GRAY_02,
                     height: 32.0,
                   ),
                   Padding(
@@ -284,6 +285,7 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
                     ),
                   ),
                   const Divider(
+                    color: GRAYSCALE_GRAY_02,
                     height: 32.0,
                   ),
                   Padding(
@@ -360,6 +362,7 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
                     ),
                   ),
                   const Divider(
+                    color: GRAYSCALE_GRAY_02,
                     height: 1.0,
                   ),
                   Stack(children: [
@@ -407,6 +410,7 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
                     ),
                   ]),
                   const Divider(
+                    color: GRAYSCALE_GRAY_02,
                     height: 1.0,
                   ),
                   Padding(
@@ -451,6 +455,7 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
                     ),
                   ),
                   const Divider(
+                    color: GRAYSCALE_GRAY_02,
                     height: 32.0,
                   ),
                   Padding(
@@ -494,6 +499,7 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
                     ),
                   ),
                   const Divider(
+                    color: GRAYSCALE_GRAY_02,
                     height: 32.0,
                   ),
                   Padding(
@@ -542,6 +548,7 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const Divider(
+                  color: GRAYSCALE_GRAY_02,
                   height: 1.0,
                 ),
                 const SizedBox(

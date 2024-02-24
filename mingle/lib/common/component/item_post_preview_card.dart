@@ -326,7 +326,7 @@ class _GeneralPostPreviewCardState extends ConsumerState<ItemPostPreviewCard> {
                                                             "Pretendard",
                                                         fontSize: 14,
                                                         fontWeight:
-                                                            FontWeight.w400,
+                                                            FontWeight.w500,
                                                         color:
                                                             GRAYSCALE_BLACK_GRAY,
                                                       ),
