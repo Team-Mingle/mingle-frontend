@@ -121,9 +121,17 @@ class _SecondhandPreviewCardState extends ConsumerState<SecondhandPreviewCard> {
             width: (MediaQuery.of(context).size.width - 32),
             height: 40,
             decoration: BoxDecoration(
-                border: Border.all(color: const Color(0xffE9E7E7)),
-                borderRadius: BorderRadius.circular(10.0),
-                color: Colors.white),
+              borderRadius: BorderRadius.circular(10.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 1,
+                  blurRadius: 2,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+              color: Colors.white,
+            ),
             child: const Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
