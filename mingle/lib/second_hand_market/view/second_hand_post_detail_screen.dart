@@ -10,6 +10,7 @@ import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/view/image_detail_screen.dart';
 import 'package:mingle/post/components/comment_card.dart';
 import 'package:mingle/post/models/comment_model.dart';
+import 'package:mingle/post/models/post_model.dart';
 import 'package:mingle/second_hand_market/components/second_hand_market_post_like_and_comment_numbers_card.dart';
 import 'package:mingle/second_hand_market/model/second_hand_market_post_comment_model.dart';
 import 'package:mingle/second_hand_market/model/second_hand_market_post_detail_model.dart';
@@ -563,7 +564,7 @@ class _SecondHandPostDetailScreenState
                         width: 4.0,
                       ),
                       Text(
-                        item.createdAt ?? '',
+                        PostModel.convertUTCtoLocal(item.createdAt),
                         style: const TextStyle(
                             color: GRAYSCALE_GRAY_03, fontSize: 12.0),
                       ),

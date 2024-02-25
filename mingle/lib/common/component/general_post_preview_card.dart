@@ -369,7 +369,7 @@ class _GeneralPostPreviewCardState
                                                               width: 4.0),
                                                           Text(
                                                             PostModel
-                                                                .convertUTCtoLocal(
+                                                                .convertUTCtoLocalPreview(
                                                                     post.createdAt),
                                                             style:
                                                                 const TextStyle(

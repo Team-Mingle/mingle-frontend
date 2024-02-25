@@ -428,7 +428,9 @@ class _GeneralPostPreviewCardState extends ConsumerState<ItemPostPreviewCard> {
                                                       const SizedBox(
                                                           width: 4.0),
                                                       Text(
-                                                        post.createdAt ?? '',
+                                                        PostModel
+                                                            .convertUTCtoLocalPreview(
+                                                                post.createdAt),
                                                         style: const TextStyle(
                                                           fontFamily:
                                                               "Pretendard",

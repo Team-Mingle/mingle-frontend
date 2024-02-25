@@ -37,12 +37,14 @@ class PostModel {
   factory PostModel.fromJson(Map<String, dynamic> json) =>
       _$PostModelFromJson(json);
 
-  static convertUTCtoLocal(String utc) {
+  static convertUTCtoLocalPreview(String utc) {
     DateTime dateTime = DateFormat('yy/MM/dd hh:mm').parse(utc, true).toLocal();
     DateTime now = DateFormat('yyyy-MM-dd hh:mm:ss')
         .parse(DateTime.now().toString(), false);
     int yearDiff = now.year - dateTime.year;
-    int monthDiff = now.month - dateTime.month;
+    int monthDiff = yearDiff > 0
+        ? (12 + now.month - dateTime.month)
+        : (now.month - dateTime.month);
     int dayDiff = now.day - dateTime.day;
     int hourDiff = now.hour - dateTime.hour;
     int minutesDiff = now.minute - dateTime.minute;
@@ -60,16 +62,21 @@ class PostModel {
     } else {
       return '방금 전';
     }
+  }
 
-    // if (dayDiff > 0) {
-    //   return '$dayDiff일 전';
-    // } else if (hourDiff > 0) {
-    //   return '$hourDiff시간 전';
-    // } else if (minutesDiff > 0) {
-    //   return '$minutesDiff분 전';
-    // } else {
-    //   return '방금 전';
-    // }
+  static convertUTCtoLocal(String utc) {
+    DateTime dateTime = DateFormat('yy/MM/dd hh:mm').parse(utc, true).toLocal();
+    String year = (dateTime.year % 100).toString();
+    String month = dateTime.month.toString();
+    String date = dateTime.day.toString();
+    String hour = dateTime.hour.toString();
+    String minute = dateTime.minute.toString();
+    year = year.length == 1 ? '0$year' : year;
+    month = month.length == 1 ? '0$month' : month;
+    date = date.length == 1 ? '0$date' : date;
+    hour = hour.length == 1 ? '0$hour' : hour;
+    minute = minute.length == 1 ? '0$minute' : minute;
+    return '$year/$month/$date $hour:$minute';
   }
 }
 

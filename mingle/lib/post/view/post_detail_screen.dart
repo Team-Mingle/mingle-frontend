@@ -358,10 +358,11 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
   }
 
   Widget renderContent(PostModel post) {
-    print(PostModel.convertUTCtoLocal(post.createdAt));
+    print(PostModel.convertUTCtoLocalPreview(post.createdAt));
     print("post is detail model? ${post is PostDetailModel}");
-    String createdDate = post.createdAt.split(" ")[0];
-    String createdTime = post.createdAt.split(" ")[1];
+    String createdAtLocal = PostModel.convertUTCtoLocal(post.createdAt);
+    String createdDate = createdAtLocal.split(" ")[0];
+    String createdTime = createdAtLocal.split(" ")[1];
     return Scaffold(
       backgroundColor: Colors.white,
       body: GestureDetector(

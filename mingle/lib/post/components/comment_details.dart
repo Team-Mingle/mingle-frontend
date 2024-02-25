@@ -8,6 +8,7 @@ import 'package:mingle/common/component/like_animation.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/post/components/indicator_widget.dart';
 import 'package:mingle/post/models/comment_model.dart';
+import 'package:mingle/post/models/post_model.dart';
 import 'package:mingle/post/repository/comment_repository.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -44,8 +45,10 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
 
   @override
   Widget build(BuildContext context) {
-    String createdDate = widget.comment.createdAt.split(" ")[0];
-    String createdTime = widget.comment.createdAt.split(" ")[1];
+    String createdAtLocal =
+        PostModel.convertUTCtoLocal(widget.comment.createdAt);
+    String createdDate = createdAtLocal.split(" ")[0];
+    String createdTime = createdAtLocal.split(" ")[1];
 
     void deleteComment() async {
       final resp = await ref
