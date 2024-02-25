@@ -71,6 +71,8 @@ class _DropdownListState extends ConsumerState<UniversityNameDropdownList> {
                           ))
                   .toList(),
               value: selectedValue,
+              dropdownStyleData: const DropdownStyleData(
+                  decoration: BoxDecoration(color: Colors.white)),
               onChanged: (String? value) {
                 if (value != null) {
                   ref.read(selectedUnivIdProvider.notifier).update((state) =>

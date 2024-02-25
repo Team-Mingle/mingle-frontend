@@ -73,6 +73,8 @@ class _DropdownListState extends ConsumerState<CountryDropdownList> {
                 "국가 선택",
                 style: TextStyle(fontSize: 14.0),
               ),
+              dropdownStyleData: const DropdownStyleData(
+                  decoration: BoxDecoration(color: Colors.white)),
               buttonStyleData: ButtonStyleData(
                 height: 44,
                 width: widget.width,
