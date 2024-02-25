@@ -166,17 +166,20 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
                           ? const CircularProgressIndicator(
                               color: PRIMARY_COLOR_ORANGE_01,
                             )
-                          : GestureDetector(
-                              onTap:
-                                  canSubmit ? () => handleSubmit(ref) : () {},
-                              child: Text(
-                                "게시",
-                                style: TextStyle(
-                                    color: canSubmit
-                                        ? PRIMARY_COLOR_ORANGE_01
-                                        : GRAYSCALE_GRAY_03,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w400),
+                          : AbsorbPointer(
+                              absorbing: isLoading,
+                              child: GestureDetector(
+                                onTap:
+                                    canSubmit ? () => handleSubmit(ref) : () {},
+                                child: Text(
+                                  "게시",
+                                  style: TextStyle(
+                                      color: canSubmit
+                                          ? PRIMARY_COLOR_ORANGE_01
+                                          : GRAYSCALE_GRAY_03,
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w400),
+                                ),
                               ),
                             ),
                     ],

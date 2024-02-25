@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -169,19 +170,22 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
                         fontWeight: FontWeight.w400),
                   ),
                   const Spacer(),
-                  GestureDetector(
-                    onTap: () => handleSubmit(),
-                    child: isLoading
-                        ? const CircularProgressIndicator(
-                            color: PRIMARY_COLOR_ORANGE_01,
-                          )
-                        : const Text(
-                            "게시",
-                            style: TextStyle(
-                                color: PRIMARY_COLOR_ORANGE_01,
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w400),
-                          ),
+                  AbsorbPointer(
+                    absorbing: false,
+                    child: GestureDetector(
+                      onTap: () => handleSubmit(),
+                      child: isLoading
+                          ? const CircularProgressIndicator(
+                              color: PRIMARY_COLOR_ORANGE_01,
+                            )
+                          : const Text(
+                              "게시",
+                              style: TextStyle(
+                                  color: PRIMARY_COLOR_ORANGE_01,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                    ),
                   ),
                 ],
               ),
