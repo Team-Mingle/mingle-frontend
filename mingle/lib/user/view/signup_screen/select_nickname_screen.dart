@@ -19,6 +19,7 @@ import 'package:mingle/user/view/signup_screen/provider/email_extension_selected
 import 'package:mingle/user/view/signup_screen/provider/email_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/provider/nickname_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/provider/password_selected_provider.dart';
+import 'package:mingle/user/view/signup_screen/provider/selected_univ_id_provider.dart';
 
 class SelectNicknameScreen extends ConsumerStatefulWidget {
   const SelectNicknameScreen({super.key});
@@ -42,7 +43,7 @@ class _SelectNicknameScreenState extends ConsumerState<SelectNicknameScreen> {
   void validateForm() async {
     final dio = ref.watch(dioProvider);
     final userInfo = {
-      "univId": 1,
+      "univId": ref.read(selectedUnivIdProvider),
       "email":
           "${ref.read(selectedEmailProvider)}@${ref.read(selectedEmailExtensionProvider)}",
       "password": ref.read(selectedPasswordProvider),

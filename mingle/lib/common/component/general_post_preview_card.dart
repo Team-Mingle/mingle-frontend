@@ -180,126 +180,125 @@ class _GeneralPostPreviewCardState
                   ]
                 : [],
           ),
-          child: CustomScrollView(
-              controller: scrollController,
-              shrinkWrap: true,
-              physics: widget.cardType == CardType.home
-                  ? const NeverScrollableScrollPhysics()
-                  : const AlwaysScrollableScrollPhysics(),
+          child: Expanded(
+            child: CustomScrollView(
+                controller: scrollController,
+                shrinkWrap: true,
+                physics: widget.cardType == CardType.home
+                    ? const NeverScrollableScrollPhysics()
+                    : const AlwaysScrollableScrollPhysics(),
 
-              // physics: const NeverScrollableScrollPhysics(),
-              slivers: [
-                CupertinoSliverRefreshControl(
-                  onRefresh: () async {
-                    await Future.delayed(
-                        const Duration(milliseconds: 1000),
-                        () => widget.notifierProvider!
-                            .paginate(normalRefetch: true));
-                    // await widget.notifierProvider!.paginate(forceRefetch: true);
-                  },
-                ),
-                postList.data.isEmpty
-                    ? widget.cardType == CardType.home
-                        ? SliverList(
-                            delegate: SliverChildListDelegate([
-                            SizedBox(
-                              height: 70.0,
+                // physics: const NeverScrollableScrollPhysics(),
+                slivers: [
+                  CupertinoSliverRefreshControl(
+                    onRefresh: () async {
+                      await Future.delayed(
+                          const Duration(milliseconds: 1000),
+                          () => widget.notifierProvider!
+                              .paginate(normalRefetch: true));
+                      // await widget.notifierProvider!.paginate(forceRefetch: true);
+                    },
+                  ),
+                  postList.data.isEmpty
+                      ? widget.cardType == CardType.home
+                          ? SliverList(
+                              delegate: SliverChildListDelegate([
+                              SizedBox(
+                                height: 70.0,
+                                child: Center(
+                                  child: Text(widget.emptyMessage),
+                                ),
+                              )
+                            ]))
+                          : SliverFillRemaining(
                               child: Center(
                                 child: Text(widget.emptyMessage),
                               ),
                             )
-                          ]))
-                        : SliverFillRemaining(
-                            child: Center(
-                              child: Text(widget.emptyMessage),
-                            ),
-                          )
-                    : SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          childCount: postList.data.length + 1,
-                          // ListView.builder(
-                          // controller: scrollController,
-                          // shrinkWrap: true,
-                          // physics: const AlwaysScrollableScrollPhysics(),
-                          // // physics: const NeverScrollableScrollPhysics(),
-                          // itemCount: postList.data.length + 1,
-                          (context, index) {
-                            if (index == postList.data.length) {
-                              return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0, vertical: 8.0),
-                                  child: Center(
-                                      child: postList
-                                              is CursorPaginationFetchingMore
-                                          ? const CircularProgressIndicator(
-                                              color: PRIMARY_COLOR_ORANGE_02,
-                                            )
-                                          : Container())
-                                  // const Text('마지막 데이터입니다 ㅠㅠ')),
-                                  );
-                            }
-                            final post = postList.data[index];
-
-                            return Column(
-                              children: [
-                                // 첫번째 줄에만 padding
-                                if (index == 0)
-                                  SizedBox(
-                                    height: (() {
-                                      switch (widget.cardType) {
-                                        // case CardType.home:
-                                        //   return 20.0;
-
-                                        default:
-                                          return 16.0;
-                                      }
-                                    })(),
-                                  ),
-                                InkWell(
-                                  onTap: () {
-                                    print('Item $index tapped');
-
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (_) => PostDetailScreen(
-                                          boardType: widget.boardType,
-                                          allNotifierProvider:
-                                              widget.allNotifierProvider,
-                                          postId: post.postId,
-                                          refreshList: refreshList,
-                                          postDetailProvider:
-                                              widget.postDetailProvider,
-                                          notifierProvider:
-                                              widget.notifierProvider,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  child: Padding(
+                      : SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            childCount: postList.data.length + 1,
+                            // ListView.builder(
+                            // controller: scrollController,
+                            // shrinkWrap: true,
+                            // physics: const AlwaysScrollableScrollPhysics(),
+                            // // physics: const NeverScrollableScrollPhysics(),
+                            // itemCount: postList.data.length + 1,
+                            (context, index) {
+                              if (index == postList.data.length) {
+                                return Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start, // 사진 위쪽 정렬
-                                      children: [
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
+                                        horizontal: 16.0, vertical: 8.0),
+                                    child: Center(
+                                        child: postList
+                                                is CursorPaginationFetchingMore
+                                            ? const CircularProgressIndicator(
+                                                color: PRIMARY_COLOR_ORANGE_02,
+                                              )
+                                            : Container())
+                                    // const Text('마지막 데이터입니다 ㅠㅠ')),
+                                    );
+                              }
+                              final post = postList.data[index];
+
+                              return Expanded(
+                                child: Column(
+                                  children: [
+                                    // 첫번째 줄에만 padding
+                                    if (index == 0)
+                                      SizedBox(
+                                        height: (() {
+                                          switch (widget.cardType) {
+                                            // case CardType.home:
+                                            //   return 20.0;
+
+                                            default:
+                                              return 16.0;
+                                          }
+                                        })(),
+                                      ),
+                                    InkWell(
+                                      onTap: () {
+                                        print('Item $index tapped');
+
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (_) => PostDetailScreen(
+                                              boardType: widget.boardType,
+                                              allNotifierProvider:
+                                                  widget.allNotifierProvider,
+                                              postId: post.postId,
+                                              refreshList: refreshList,
+                                              postDetailProvider:
+                                                  widget.postDetailProvider,
+                                              notifierProvider:
+                                                  widget.notifierProvider,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16),
+                                        child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment
+                                              .start, // 사진 위쪽 정렬
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
-                                                  Expanded(
-                                                    child: Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        buildTypeIndicator(
-                                                            post.categoryType),
-                                                        Text(
+                                                  Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      buildTypeIndicator(
+                                                          post.categoryType),
+                                                      Expanded(
+                                                        child: Text(
                                                           post.title,
                                                           style:
                                                               const TextStyle(
@@ -317,141 +316,149 @@ class _GeneralPostPreviewCardState
                                                           overflow: TextOverflow
                                                               .ellipsis,
                                                         ),
-                                                        if (post is PostModel &&
-                                                            post.fileAttached)
-                                                          SvgPicture.asset(
-                                                              "assets/img/post_screen/has_picture_icon.svg"),
-                                                      ],
-                                                    ),
+                                                      ),
+                                                      if (post is PostModel &&
+                                                          post.fileAttached)
+                                                        SvgPicture.asset(
+                                                            "assets/img/post_screen/has_picture_icon.svg"),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                height:
-                                                    post.categoryType == "FREE"
+                                                  SizedBox(
+                                                    height: post.categoryType ==
+                                                            "FREE"
                                                         ? 6.0
                                                         : 2.0,
-                                              ),
-                                              Text(
-                                                post.content,
-                                                style: const TextStyle(
-                                                  fontFamily: "Pretendard",
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: GRAYSCALE_GRAY_05,
-                                                ),
-                                                textAlign: TextAlign.left,
-                                                maxLines: getMaxLines(),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              const SizedBox(
-                                                height: 6.0,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      buildRoleIndicator(
-                                                        post.nickname,
-                                                        post.memberRole,
-                                                        11,
-                                                      ),
-                                                      const SizedBox(
-                                                          width: 4.0),
-                                                      SvgPicture.asset(
-                                                        'assets/img/common/ic_dot.svg',
-                                                        width: 2,
-                                                        height: 2,
-                                                      ),
-                                                      const SizedBox(
-                                                          width: 4.0),
-                                                      Text(
-                                                        PostModel
-                                                            .convertUTCtoLocal(
-                                                                post.createdAt),
-                                                        style: const TextStyle(
-                                                          fontFamily:
-                                                              "Pretendard",
-                                                          fontSize: 11,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color:
-                                                              GRAYSCALE_GREY_ORANGE,
-                                                        ),
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                      ),
-                                                    ],
+                                                  ),
+                                                  Text(
+                                                    post.content,
+                                                    style: const TextStyle(
+                                                      fontFamily: "Pretendard",
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: GRAYSCALE_GRAY_05,
+                                                    ),
+                                                    textAlign: TextAlign.left,
+                                                    maxLines: getMaxLines(),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 6.0,
                                                   ),
                                                   Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                     children: [
-                                                      SvgPicture.asset(
-                                                        'assets/img/common/ic_like.svg',
-                                                        width: 16,
-                                                        height: 16,
+                                                      Row(
+                                                        children: [
+                                                          buildRoleIndicator(
+                                                            post.nickname,
+                                                            post.memberRole,
+                                                            11,
+                                                          ),
+                                                          const SizedBox(
+                                                              width: 4.0),
+                                                          SvgPicture.asset(
+                                                            'assets/img/common/ic_dot.svg',
+                                                            width: 2,
+                                                            height: 2,
+                                                          ),
+                                                          const SizedBox(
+                                                              width: 4.0),
+                                                          Text(
+                                                            PostModel
+                                                                .convertUTCtoLocal(
+                                                                    post.createdAt),
+                                                            style:
+                                                                const TextStyle(
+                                                              fontFamily:
+                                                                  "Pretendard",
+                                                              fontSize: 11,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color:
+                                                                  GRAYSCALE_GREY_ORANGE,
+                                                            ),
+                                                            textAlign:
+                                                                TextAlign.left,
+                                                          ),
+                                                        ],
                                                       ),
-                                                      Text(
-                                                        post.likeCount
-                                                            .toString(),
-                                                        style: const TextStyle(
-                                                          fontFamily:
-                                                              "Pretendard",
-                                                          fontSize: 11,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color:
-                                                              GRAYSCALE_GRAY_ORANGE_02,
-                                                        ),
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      SvgPicture.asset(
-                                                        'assets/img/common/ic_comment.svg',
-                                                        width: 16,
-                                                        height: 16,
-                                                      ),
-                                                      Text(
-                                                        post.commentCount
-                                                            .toString(),
-                                                        style: const TextStyle(
-                                                          fontFamily:
-                                                              "Pretendard",
-                                                          fontSize: 11,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color:
-                                                              GRAYSCALE_GRAY_ORANGE_02,
-                                                        ),
-                                                        textAlign:
-                                                            TextAlign.left,
+                                                      Row(
+                                                        children: [
+                                                          SvgPicture.asset(
+                                                            'assets/img/common/ic_like.svg',
+                                                            width: 16,
+                                                            height: 16,
+                                                          ),
+                                                          Text(
+                                                            post.likeCount
+                                                                .toString(),
+                                                            style:
+                                                                const TextStyle(
+                                                              fontFamily:
+                                                                  "Pretendard",
+                                                              fontSize: 11,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color:
+                                                                  GRAYSCALE_GRAY_ORANGE_02,
+                                                            ),
+                                                            textAlign:
+                                                                TextAlign.left,
+                                                          ),
+                                                          const SizedBox(
+                                                            width: 10,
+                                                          ),
+                                                          SvgPicture.asset(
+                                                            'assets/img/common/ic_comment.svg',
+                                                            width: 16,
+                                                            height: 16,
+                                                          ),
+                                                          Text(
+                                                            post.commentCount
+                                                                .toString(),
+                                                            style:
+                                                                const TextStyle(
+                                                              fontFamily:
+                                                                  "Pretendard",
+                                                              fontSize: 11,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color:
+                                                                  GRAYSCALE_GRAY_ORANGE_02,
+                                                            ),
+                                                            textAlign:
+                                                                TextAlign.left,
+                                                          ),
+                                                        ],
                                                       ),
                                                     ],
                                                   ),
                                                 ],
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
-                                ),
 
-                                if (index != postList.data.length - 1)
-                                  buildDivider(1.0),
-                              ],
-                            );
-                          },
+                                    if (index != postList.data.length - 1)
+                                      buildDivider(1.0),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                // ),
-              ])
+                  // ),
+                ]),
+          )
 
           // FutureBuilder(
           //     future: postFuture,

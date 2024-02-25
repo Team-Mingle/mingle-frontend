@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/user/provider/user_provider.dart';
 import 'package:mingle/user/repository/auth_repository.dart';
 import 'package:mingle/user/view/signup_screen/model/country_model.dart';
 import 'package:mingle/user/view/signup_screen/model/university_domain_model.dart';
@@ -30,9 +31,11 @@ class _DropdownListState extends ConsumerState<UniversityNameDropdownList> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: ref
-            .watch(authRepositoryProvider)
-            .getEmailDomains(countryName: ref.watch(selectedCountryProvider)),
+        future: ref.watch(authRepositoryProvider).getEmailDomains(
+            countryName:
+                // ref.watch(currentUserProvider) != null ? ref.watch(currentUserProvider). :
+
+                ref.watch(selectedCountryProvider)),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Container(

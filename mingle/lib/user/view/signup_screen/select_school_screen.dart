@@ -27,7 +27,6 @@ class SelectSchoolScreen extends ConsumerStatefulWidget {
 class _SelectSchoolScreenState extends ConsumerState<SelectSchoolScreen> {
   @override
   Widget build(BuildContext context) {
-    final String currentCountry = ref.read(selectedCountryProvider);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
