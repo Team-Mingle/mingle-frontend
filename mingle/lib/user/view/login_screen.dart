@@ -35,6 +35,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final _secureStorage = const FlutterSecureStorage();
+  bool isLoading = false;
 
   String? errorMsg;
 
@@ -68,6 +69,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final dio = ref.watch(dioProvider);
 
     void validateForm() async {
+      setState(() {
+        isLoading = true;
+      });
       final String? fcmtoken = await getMyDeviceToken();
       final credentials = {
         "email": emailController.text,
@@ -91,16 +95,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           final String nickName = resp.data['nickName'];
           final String univName = resp.data['univName'];
           final String hashedEmail = resp.data['hashedEmail'];
+          // final String country = resp.data['country'];
 
           final UserModel user = UserModel(
-              memberId: memberId,
-              hashedEmail: hashedEmail,
-              nickName: nickName,
-              univName: univName);
+            memberId: memberId,
+            hashedEmail: hashedEmail,
+            nickName: nickName,
+            univName: univName,
+          );
 
           final storage = ref.read(secureStorageProvider);
           await storage.write(key: REFRESH_TOKEN_KEY, value: refreshToken);
           await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
+          // await storage.write(key: ACCESS_TOKEN_KEY, value: "mingle-user");
+
           await storage.write(key: ENCRYPTED_EMAIL_KEY, value: encryptedEmail);
           await storage.write(key: FCM_TOKEN_KEY, value: fcmtoken);
           await storage.write(key: IS_FRESH_LOGIN_KEY, value: "y");
@@ -119,6 +127,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           //     }),
           //     data: jsonEncode({"encryptedEmail": encryptedEmail}));
           // print(r.data);
+          setState(() {
+            isLoading = false;
+          });
           await Navigator.of(context).push(MaterialPageRoute(
               builder: (_) => HomeRootTab(isFromLogin: true)));
         }
@@ -134,6 +145,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         //   default:
         //     error = generalErrorMsg;
         // }
+        setState(() {
+          isLoading = false;
+        });
         setState(() {
           errorMsg = e.response?.data['message'] ?? generalErrorMsg;
         });
@@ -263,6 +277,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           child: Container(),
                         ),
                         NextButton(
+                          isLoading: isLoading,
                           nextScreen: const SplashScreen(),
                           buttonName: "로그인",
                           checkSelected: emailController.text.isNotEmpty &&

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -67,6 +68,7 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
     print(widget.boardType);
     print(widget.categoryType);
     print(widget.isAnonymous);
+    print(imageUrlsToDelete);
     print(imagesToAdd);
     setState(() {
       isLoading = true;
@@ -139,6 +141,8 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(imagesToAdd);
+    print(imageFileList);
     bool canSubmit = widget.title.isNotEmpty &&
         widget.content.isNotEmpty &&
         widget.categoryType.isNotEmpty;
@@ -282,93 +286,6 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
                                           );
                                         }
                                       }),
-                                      // ListTile(
-                                      //   title: Center(
-                                      //     child: Text(
-                                      //       '자유',
-                                      //       style: TextStyle(
-                                      //         fontWeight: categoryType == 'FREE'
-                                      //             ? FontWeight.bold
-                                      //             : FontWeight.normal,
-                                      //       ),
-                                      //     ),
-                                      //   ),
-                                      //   onTap: () {
-                                      //     Navigator.pop(context);
-                                      //     setState(() {
-                                      //       categoryType = 'FREE';
-                                      //       categoryName = '자유'; // 선택한 항목 설정
-                                      //     });
-                                      //   },
-                                      // ),
-                                      // const SizedBox(
-                                      //   height: 20.0,
-                                      // ),
-                                      // ListTile(
-                                      //   title: Center(
-                                      //     child: Text(
-                                      //       '질문',
-                                      //       style: TextStyle(
-                                      //         fontWeight: categoryType == 'QNA'
-                                      //             ? FontWeight.bold
-                                      //             : FontWeight.normal,
-                                      //       ),
-                                      //     ),
-                                      //   ),
-                                      //   onTap: () {
-                                      //     Navigator.pop(context);
-                                      //     setState(() {
-                                      //       categoryType = 'QNA';
-                                      //       categoryName = '질문'; // 선택한 항목 설정
-                                      //     });
-                                      //   },
-                                      // ),
-                                      // const SizedBox(
-                                      //   height: 20.0,
-                                      // ),
-                                      // ListTile(
-                                      //   title: Center(
-                                      //     child: Text(
-                                      //       '밍글소식',
-                                      //       style: TextStyle(
-                                      //         fontWeight:
-                                      //             categoryType == 'MINGLE'
-                                      //                 ? FontWeight.bold
-                                      //                 : FontWeight.normal,
-                                      //       ),
-                                      //     ),
-                                      //   ),
-                                      //   onTap: () {
-                                      //     Navigator.pop(context);
-                                      //     setState(() {
-                                      //       categoryType =
-                                      //           'MINGLE'; // 선택한 항목 설정
-                                      //       categoryName = '밍글소식';
-                                      //     });
-                                      //   },
-                                      // ),
-                                      // const SizedBox(
-                                      //   height: 20.0,
-                                      // ),
-                                      // ListTile(
-                                      //   title: Center(
-                                      //     child: Text(
-                                      //       '학생회',
-                                      //       style: TextStyle(
-                                      //         fontWeight: categoryType == 'KSA'
-                                      //             ? FontWeight.bold
-                                      //             : FontWeight.normal,
-                                      //       ),
-                                      //     ),
-                                      //   ),
-                                      //   onTap: () {
-                                      //     Navigator.pop(context);
-                                      //     setState(() {
-                                      //       categoryType = 'KSA'; // 선택한 항목 설정
-                                      //       categoryName = '학생회';
-                                      //     });
-                                      //   },
-                                      // ),
                                     ],
                                   ),
                                 ),
@@ -440,32 +357,52 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              imageFileList.isEmpty
+              imageFileList.isEmpty && imagesToAdd.isEmpty
                   ? Container(
                       height: 0.0,
                     )
                   : Container(
+                      width: MediaQuery.of(context).size.width,
                       color: Colors.white,
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: SizedBox(
-                        height: 122.0,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: List.generate(
-                                  imageFileList.length,
-                                  (index) => Row(
-                                        children: [
-                                          selectedImageCard(index),
-                                          SizedBox(
-                                            width: index ==
-                                                    imageFileList.length - 1
-                                                ? 0.0
-                                                : 4.0,
-                                          )
-                                        ],
-                                      ))),
+                      height: 144.0,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            ...List.generate(
+                                imageFileList.length,
+                                (index) => Row(
+                                      children: [
+                                        selectedImageCard(
+                                            index, true, imageFileList),
+                                        SizedBox(
+                                          width:
+                                              index == imageFileList.length - 1
+                                                  ? 0.0
+                                                  : 4.0,
+                                        )
+                                      ],
+                                    )),
+                            if (imageFileList.isNotEmpty)
+                              const SizedBox(
+                                width: 4.0,
+                              ),
+                            ...List.generate(
+                              imagesToAdd.length,
+                              (index) => Row(
+                                children: [
+                                  selectedImageCard(index, false, imagesToAdd),
+                                  SizedBox(
+                                    width: index == imagesToAdd.length - 1
+                                        ? 0.0
+                                        : 4.0,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -478,8 +415,16 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
                   const SizedBox(
                     width: 16.0,
                   ),
-                  InkWell(
-                    onTap: selectImages,
+                  GestureDetector(
+                    onTap: imageFileList.isEmpty
+                        ? () => fToast.showToast(
+                              child: const ToastMessage(
+                                message: "이미지가 없는 게시물에는\n 이미지를 추가할 수 없습니다.",
+                              ),
+                              gravity: ToastGravity.CENTER,
+                              toastDuration: const Duration(seconds: 2),
+                            )
+                        : selectImages,
                     child: SvgPicture.asset(
                         "assets/img/post_screen/image_picker_icon.svg"),
                   ),
@@ -536,29 +481,44 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
         return File(files[index].path);
       });
       List<File> imgUrlToAdd = [];
-      List<XFile> imgPreviewUrlToAdd = [];
+      // List<XFile> imgPreviewUrlToAdd = [];
       // case 1 : selected img not in current list of images
       // - add to list of images and imgUrlToAdd
       // case 2 : selected img already in current list of images
       // - dont do anything
       for (int i = 0; i < selectedImages.length; i++) {
         File img = selectedImages[i];
-        XFile imgPreview = files[i];
-        if (!imageFileList.contains(img)) {
-          imgUrlToAdd.add(img);
-          imgPreviewUrlToAdd.add(imgPreview);
-        }
+        // XFile imgPreview = files[i];
+        // if (!imageFileList.contains(img)) {
+        imgUrlToAdd.add(img);
+        // imgPreviewUrlToAdd.add(imgPreview);
+        // }
       }
       setState(() {
-        imageFileList.addAll(imgUrlToAdd);
+        // imageFileList.addAll(imgUrlToAdd);
         imagesToAdd.addAll(imgUrlToAdd);
       });
-      print(imageFileList);
+      print(imagesToAdd);
     }
   }
 
-  Widget selectedImageCard(int index) {
-    NetworkImage currentImage = NetworkImage(imageFileList[index].path);
+  Widget selectedImageCard(int index, bool isInitialImage, List<File> images) {
+    print(index);
+    Image currentImage = isInitialImage
+        ? Image(
+            image: NetworkImage(images[index].path),
+            fit: BoxFit.cover,
+          )
+        : Image.file(
+            images[index],
+            fit: BoxFit.cover,
+          );
+
+    // Image.file(
+    //   imageFileList[index],
+    //   fit: BoxFit.cover,
+    // );
+    // NetworkImage currentImage = NetworkImage(imageFileList[index].path);
     // Image.file(
     //   imageFileList[index],
     //   // File(imageFileList[index].path),
@@ -572,8 +532,11 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
         width: 90.0,
         child: Stack(
           children: [
-            SizedBox(
-                height: 90.0, width: 90.0, child: Image(image: currentImage)),
+            SizedBox(height: 90.0, width: 90.0, child: currentImage),
+            // Image(
+            //   image: currentImage,
+            //   fit: BoxFit.cover,
+            // )),
             Align(
               alignment: Alignment.topRight,
               child: Padding(
@@ -586,11 +549,13 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
                   ),
                   onTap: () {
                     setState(() {
-                      imageFileList.removeAt(index);
-                      if (initialImages.contains(imageFileList[index])) {
-                        imageUrlsToDelete.add(imageFileList[index]);
+                      if (isInitialImage) {
+                        imageUrlsToDelete.add(images[index]);
                       }
+                      images.removeAt(index);
                     });
+                    print(imageFileList);
+                    print(imagesToAdd);
                   },
                 ),
               ),

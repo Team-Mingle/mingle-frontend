@@ -8,12 +8,14 @@ class UserModel {
   final String hashedEmail;
   final String nickName;
   final String univName;
+  final String? country;
 
   UserModel({
     required this.memberId,
     required this.hashedEmail,
     required this.nickName,
     required this.univName,
+    this.country,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -28,7 +30,8 @@ class UserModel {
         memberId: memberId ?? this.memberId,
         hashedEmail: hashedEmail ?? this.hashedEmail,
         nickName: nickName ?? this.nickName,
-        univName: univName ?? this.univName);
+        univName: univName ?? this.univName,
+        country: country);
   }
 }
 
