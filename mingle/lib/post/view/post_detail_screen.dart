@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/component/anonymous_textfield.dart';
+import 'package:mingle/common/component/report_modal.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/view/image_detail_screen.dart';
 import 'package:mingle/post/components/comment_card.dart';
@@ -437,13 +438,16 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                                     )
                                   ]
                                 : <CupertinoActionSheetAction>[
-                                    CupertinoActionSheetAction(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      isDestructiveAction: true,
-                                      child: const Text('신고하기'),
-                                    )
+                                    reportModal("POST", post.postId, context,
+                                        ref, fToast)
+                                    // CupertinoActionSheetAction(
+                                    //   onPressed: () {
+                                    //     ;
+                                    //     Navigator.pop(context);
+                                    //   },
+                                    //   isDestructiveAction: true,
+                                    //   child: const Text('신고하기'),
+                                    // )
                                   ],
                           ),
                         )

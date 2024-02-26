@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/component/like_animation.dart';
+import 'package:mingle/common/component/report_modal.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/post/components/indicator_widget.dart';
 import 'package:mingle/post/models/comment_model.dart';
@@ -126,13 +127,15 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
                                   isDestructiveAction: true,
                                   child: const Text('삭제하기'),
                                 )
-                              : CupertinoActionSheetAction(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  isDestructiveAction: true,
-                                  child: const Text('신고하기'),
-                                ),
+                              : reportModal("COMMENT", widget.comment.commentId,
+                                  context, ref, fToast)
+                          // CupertinoActionSheetAction(
+                          //     onPressed: () {
+                          //       Navigator.pop(context);
+                          //     },
+                          //     isDestructiveAction: true,
+                          //     child: const Text('신고하기'),
+                          //   ),
                         ],
                       ),
                     ),

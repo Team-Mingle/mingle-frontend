@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/component/anonymous_textfield.dart';
+import 'package:mingle/common/component/report_modal.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/view/image_detail_screen.dart';
 import 'package:mingle/post/components/comment_card.dart';
@@ -66,10 +68,13 @@ class _SecondHandPostDetailScreenState
   String selectedOption = "";
   final ScrollController scrollController = ScrollController();
   final FocusNode focusNode = FocusNode();
+  late FToast fToast;
 
   @override
   void initState() {
     super.initState();
+    fToast = FToast();
+    fToast.init(context);
     if (widget.notifierProvider != null) {
       widget.notifierProvider!.getDetail(itemId: widget.itemId);
     }
@@ -423,13 +428,15 @@ class _SecondHandPostDetailScreenState
                                     child: const Text("판매상태 변경하기"))
                               ]
                             : <CupertinoActionSheetAction>[
-                                CupertinoActionSheetAction(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  isDestructiveAction: true,
-                                  child: const Text('신고하기'),
-                                ),
+                                reportModal(
+                                    "ITEM", item.id, context, ref, fToast)
+                                // CupertinoActionSheetAction(
+                                //   onPressed: () {
+                                //     Navigator.pop(context);
+                                //   },
+                                //   isDestructiveAction: true,
+                                //   child: const Text('신고하기'),
+                                // ),
                               ]),
                   ),
                   child: SvgPicture.asset(
