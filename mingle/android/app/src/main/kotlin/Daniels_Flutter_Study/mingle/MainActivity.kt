@@ -1,4 +1,4 @@
-package Daniels_Flutter_Study.mingle
+package com.community.mingle
 
 import io.flutter.embedding.android.FlutterActivity
 
