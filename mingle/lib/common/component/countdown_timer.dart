@@ -21,7 +21,7 @@ class CountdownTimer extends StatefulWidget {
 }
 
 class _CountdownTimerState extends State<CountdownTimer> {
-  int counter = 10;
+  int counter = 180;
   int minutes = 0;
   int seconds = 0;
   late Timer timer;
@@ -34,7 +34,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
 
   void resetTimer() {
     setState(() {
-      counter = 10;
+      counter = 180;
       minutes = 0;
       seconds = 0;
     });
@@ -45,7 +45,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
     // int counter = 180;
     if (mounted) {
       setState(() {
-        counter = 10;
+        counter = 180;
       });
     }
 

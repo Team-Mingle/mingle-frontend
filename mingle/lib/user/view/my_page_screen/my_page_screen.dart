@@ -300,6 +300,10 @@ class MyPageScreen extends ConsumerWidget {
                                 .update((_) => true);
                             // storage.delete(key: ACCESS_TOKEN_KEY);
                             // storage.delete(key: REFRESH_TOKEN_KEY);
+                            ref
+                                .watch(currentUserProvider.notifier)
+                                .update((_) => null);
+
                             storage.deleteAll();
                             Navigator.of(context)
                                 .pushReplacement(MaterialPageRoute(
