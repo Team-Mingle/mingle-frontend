@@ -3,22 +3,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mingle/common/component/general_post_preview_card.dart';
 // import 'package:mingle/common/component/post_preview_card.dart';
 import 'package:mingle/post/provider/post_provider.dart';
+import 'package:mingle/user/provider/user_provider.dart';
 import 'package:mingle/user/view/home_screen/tab_screen.dart';
 
 class LawnTabScreen extends ConsumerWidget {
   final Function(int)? changeTabIndex;
-  LawnTabScreen({
+  const LawnTabScreen({
     this.changeTabIndex,
     Key? key,
   }) : super(key: key);
 
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    String univName = ref.watch(currentUserProvider)!.univName;
     return TabScreen(
       boardType: "UNIV",
       title: '잔디밭',
-      subtitle: '밍글대',
+      subtitle: univName,
       tab1: '전체글',
       tab2: '자유',
       tab3: '질문',

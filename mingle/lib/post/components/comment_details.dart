@@ -65,37 +65,22 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
       Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          widget.parentNickname == null
-              ? Expanded(
-                  child: Text(
-                    widget.comment.content,
-                    style: const TextStyle(fontSize: 13.0),
-                  ),
-                )
-              : Expanded(
-                  child: RichText(
-                      text: TextSpan(children: [
-                    TextSpan(
-                        text: "@${widget.parentNickname}",
-                        style: const TextStyle(
-                            fontSize: 13.0, color: PRIMARY_COLOR_ORANGE_01)),
-                    const TextSpan(text: " "),
-                    LinkifySpan(
-                      text: widget.comment.content,
-                      style:
-                          const TextStyle(fontSize: 13.0, color: Colors.black),
-                      onOpen: (link) async {
-                        if (!await launchUrl(Uri.parse(link.url))) {
-                          fToast.showToast(
-                            child: const Text("링크를 열 수 없습니다."),
-                            gravity: ToastGravity.CENTER,
-                            toastDuration: const Duration(seconds: 2),
-                          );
-                        }
-                      },
-                    )
-                  ])),
-                ),
+          Expanded(
+            child: Linkify(
+              onOpen: (link) async {
+                if (!await launchUrl(Uri.parse(link.url))) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('링크를 열 수 없습니다.')),
+                  );
+                }
+              },
+              text: widget.parentNickname != null
+                  ? "@${widget.parentNickname} ${widget.comment.content}"
+                  : widget.comment.content,
+              style: const TextStyle(fontSize: 13.0, color: Colors.black),
+              linkStyle: const TextStyle(color: PRIMARY_COLOR_ORANGE_01),
+            ),
+          ),
           const SizedBox(
             width: 12.0,
           ),
