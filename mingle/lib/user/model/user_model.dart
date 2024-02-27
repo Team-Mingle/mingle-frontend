@@ -8,14 +8,14 @@ class UserModel {
   final String hashedEmail;
   final String nickName;
   final String univName;
-  final String? country;
+  final String country;
 
   UserModel({
     required this.memberId,
     required this.hashedEmail,
     required this.nickName,
     required this.univName,
-    this.country,
+    required this.country,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>

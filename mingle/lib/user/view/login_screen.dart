@@ -95,13 +95,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           final String nickName = resp.data['nickName'];
           final String univName = resp.data['univName'];
           final String hashedEmail = resp.data['hashedEmail'];
-          // final String country = resp.data['country'];
+          final String country = resp.data['country'];
 
           final UserModel user = UserModel(
             memberId: memberId,
             hashedEmail: hashedEmail,
             nickName: nickName,
             univName: univName,
+            country: country,
           );
 
           final storage = ref.read(secureStorageProvider);
