@@ -5,6 +5,7 @@ import 'package:mingle/common/component/general_post_preview_card.dart';
 import 'package:mingle/common/component/secondhand_preview_card.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
+import 'package:mingle/post/models/post_model.dart';
 import 'package:mingle/post/provider/post_provider.dart';
 import 'package:mingle/post/view/lawn_tab_screen.dart';
 import 'package:mingle/post/view/square_tab_screen.dart';
@@ -83,7 +84,7 @@ class PostCard extends ConsumerWidget {
                 break;
               case "fire":
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) =>  fireScreen()));
+                    MaterialPageRoute(builder: (_) => const fireScreen()));
                 break;
               case "secondhand":
                 changeTabIndex?.call(3);

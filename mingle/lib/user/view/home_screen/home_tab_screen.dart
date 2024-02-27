@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -295,11 +296,16 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
                   width: MediaQuery.of(context).size.width,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
-                    child: Image(
+                    child: CachedNetworkImage(
                       fit: BoxFit.fill,
-                      image: NetworkImage(
-                        banner.imgUrl,
-                      ),
+                      imageUrl:
+                          banner.imgUrl, // Use imageUrl instead of NetworkImage
+                      // placeholder: (context, url) =>
+                      //     const CircularProgressIndicator(
+                      //   color: PRIMARY_COLOR_ORANGE_02,
+                      // ),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                     ),
                   ),
                 ),

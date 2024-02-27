@@ -64,6 +64,7 @@ dependencies:
   firebase_core_platform_interface: ^5.0.0
   firebase_analytics: ^10.8.6
   hooks_riverpod: ^2.4.10
+  cached_network_image: ^3.3.1
 
 dev_dependencies:
   flutter_test:

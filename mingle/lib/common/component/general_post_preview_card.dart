@@ -136,7 +136,6 @@ class _GeneralPostPreviewCardState
     }
 
     final postList = widget.data as CursorPagination;
-    print("포스트 길이: ${postList.data.length} ${postList.data}");
     return CupertinoTheme(
       data: const CupertinoThemeData(
           primaryColor: PRIMARY_COLOR_ORANGE_02, applyThemeToAll: true),
@@ -191,13 +190,10 @@ class _GeneralPostPreviewCardState
                           )
                     : SliverList(
                         delegate: SliverChildBuilderDelegate(
-                          childCount: postList.data.length + 1,
-                          // ListView.builder(
-                          // controller: scrollController,
-                          // shrinkWrap: true,
-                          // physics: const AlwaysScrollableScrollPhysics(),
-                          // // physics: const NeverScrollableScrollPhysics(),
-                          // itemCount: postList.data.length + 1,
+                          childCount: widget.boardType == "불타는 게시판" &&
+                                  widget.cardType == CardType.home
+                              ? 4
+                              : postList.data.length + 1,
                           (context, index) {
                             if (index == postList.data.length) {
                               return Padding(
@@ -289,8 +285,7 @@ class _GeneralPostPreviewCardState
                                                           TextOverflow.ellipsis,
                                                     ),
                                                   ),
-                                                  if (post is PostModel &&
-                                                      post.fileAttached)
+                                                  if (post.fileAttached)
                                                     SvgPicture.asset(
                                                         "assets/img/post_screen/has_picture_icon.svg"),
                                                 ],
@@ -411,8 +406,10 @@ class _GeneralPostPreviewCardState
                                     ),
                                   ),
                                 ),
-
-                                if (index != postList.data.length - 1)
+                                if (index != postList.data.length - 1 ||
+                                    (widget.boardType == "불타는 게시판" &&
+                                        widget.cardType == CardType.home &&
+                                        index < 3))
                                   buildDivider(1.0),
                               ],
                             );
