@@ -11,6 +11,7 @@ final notificationRepositoryProvider = Provider((ref) {
   final dio = ref.watch(dioProvider);
   final notificationRepository =
       NotificationRepository(dio, baseUrl: "https://$baseUrl/notification");
+  print("결과 $notificationRepository");
   return notificationRepository;
 });
 

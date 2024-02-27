@@ -1,29 +1,170 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/model/cursor_pagination_model.dart';
+import 'package:mingle/post/models/post_model.dart';
+import 'package:mingle/post/provider/post_provider.dart';
+import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/user/model/notification_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mingle/user/provider/member_provider.dart';
 
-class NotificationItem extends StatelessWidget {
+class NotificationItem extends ConsumerStatefulWidget {
   final NotificationModel notification;
+  // final CursorPaginationBase data;
+  final dynamic notifierProvider;
+  final dynamic allNotifierProvider;
+  final ProviderFamily<PostModel?, int>? postDetailProvider;
 
-  const NotificationItem({Key? key, required this.notification})
-      : super(key: key);
+  const NotificationItem({
+    Key? key,
+    required this.notification,
+    //  required this.data,
+    this.notifierProvider,
+    this.allNotifierProvider,
+    this.postDetailProvider,
+  }) : super(key: key);
+
+  @override
+  ConsumerState<NotificationItem> createState() => _NotificationItemState();
+}
+
+class _NotificationItemState extends ConsumerState<NotificationItem> {
+  void refreshList() {
+    widget.notifierProvider!.paginate(normalRefetch: true);
+    widget.allNotifierProvider!.paginate(normalRefetch: true);
+  }
 
   @override
   Widget build(BuildContext context) {
-    String imagePath = _getImagePath(notification.contentType);
+    String imagePath = _getImagePath(widget.notification.contentType);
 
-    bool isTradingBoard = notification.boardType == '거래게시판';
+    bool isTradingBoard = widget.notification.boardType == '거래게시판';
 
-    String boardTypeToShow = isTradingBoard ? '거래게시판' : notification.boardType;
+    String boardTypeToShow =
+        isTradingBoard ? '거래게시판' : widget.notification.boardType;
 
     return GestureDetector(
       onTap: () {
-        print(notification.notificationId);
+        switch (widget.notification.boardType) {
+          case "광장":
+            switch (widget.notification.categoryType) {
+              case "자유":
+                print(widget.notification.notificationId);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => PostDetailScreen(
+                      boardType: widget.notification.boardType,
+                      postId: widget.notification.notificationId,
+                      refreshList: refreshList,
+                      notifierProvider:
+                          ref.watch(totalFreePostProvider.notifier),
+                      allNotifierProvider:
+                          ref.watch(totalFreePostProvider.notifier),
+                      postDetailProvider: totalFreePostDetailProvider,
+                    ),
+                  ),
+                );
+              case "질문":
+                print(widget.notification.notificationId);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => PostDetailScreen(
+                      boardType: widget.notification.boardType,
+                      postId: widget.notification.notificationId,
+                      refreshList: refreshList,
+                      notifierProvider:
+                          ref.watch(totalQnAPostProvider.notifier),
+                      allNotifierProvider:
+                          ref.watch(totalQnAPostProvider.notifier),
+                      postDetailProvider: totalQnAPostDetailProvider,
+                    ),
+                  ),
+                );
+              case "밍글소식":
+                print(widget.notification.notificationId);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => PostDetailScreen(
+                      boardType: widget.notification.boardType,
+                      postId: widget.notification.notificationId,
+                      refreshList: refreshList,
+                      notifierProvider:
+                          ref.watch(totalMinglePostProvider.notifier),
+                      allNotifierProvider:
+                          ref.watch(totalMinglePostProvider.notifier),
+                      postDetailProvider: totalMinglePostDetailProvider,
+                    ),
+                  ),
+                );
+
+              default:
+                print("Unknown post type: ${widget.notification.categoryType}");
+            }
+            break;
+          case "잔디밭":
+            switch (widget.notification.categoryType) {
+              case "자유":
+                print(widget.notification.notificationId);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => PostDetailScreen(
+                      boardType: widget.notification.boardType,
+                      postId: widget.notification.notificationId,
+                      refreshList: refreshList,
+                      notifierProvider:
+                          ref.watch(univFreePostProvider.notifier),
+                      allNotifierProvider:
+                          ref.watch(univFreePostProvider.notifier),
+                      postDetailProvider: univFreePostDetailProvider,
+                    ),
+                  ),
+                );
+              case "질문":
+                print(widget.notification.notificationId);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => PostDetailScreen(
+                      boardType: widget.notification.boardType,
+                      postId: widget.notification.notificationId,
+                      refreshList: refreshList,
+                      notifierProvider: ref.watch(univQnAPostProvider.notifier),
+                      allNotifierProvider:
+                          ref.watch(univQnAPostProvider.notifier),
+                      postDetailProvider: univQnAPostDetailProvider,
+                    ),
+                  ),
+                );
+              case "학생회":
+                print(widget.notification.notificationId);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => PostDetailScreen(
+                      boardType: widget.notification.boardType,
+                      postId: widget.notification.notificationId,
+                      refreshList: refreshList,
+                      notifierProvider: ref.watch(univKsaPostProvider.notifier),
+                      allNotifierProvider:
+                          ref.watch(univKsaPostProvider.notifier),
+                      postDetailProvider: univKsaPostDetailProvider,
+                    ),
+                  ),
+                );
+
+              default:
+                print("Unknown post type: ${widget.notification.categoryType}");
+            }
+            break;
+
+          default:
+            print("Unknown post type: ${widget.notification.boardType}");
+        }
       },
       child: Container(
         decoration: BoxDecoration(
-          color: notification.isRead ? Colors.white : const Color(0xFFFFECE9),
+          color: widget.notification.isRead
+              ? Colors.white
+              : const Color(0xFFFFECE9),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
         child: Column(
@@ -45,7 +186,7 @@ class NotificationItem extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 6.0),
                   child: Text(
-                    notification.notificationType,
+                    widget.notification.notificationType,
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
@@ -60,7 +201,7 @@ class NotificationItem extends StatelessWidget {
               height: 8.0,
             ),
             Text(
-              notification.content,
+              widget.notification.content,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
@@ -89,7 +230,7 @@ class NotificationItem extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    notification.boardType,
+                    widget.notification.boardType,
                     style: const TextStyle(
                       fontFamily: "Pretendard",
                       fontSize: 12,
@@ -103,7 +244,7 @@ class NotificationItem extends StatelessWidget {
                     style: TextStyle(color: GRAYSCALE_GRAY_02, fontSize: 12.0),
                   ),
                   Text(
-                    notification.categoryType,
+                    widget.notification.categoryType,
                     style: const TextStyle(
                       fontFamily: "Pretendard",
                       fontSize: 12,
