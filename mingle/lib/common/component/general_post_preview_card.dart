@@ -133,35 +133,10 @@ class _GeneralPostPreviewCardState
               ),
             )
           ]);
-
-      // return CustomScrollView(
-      //     shrinkWrap: true,
-      //     controller: scrollController,
-      //     physics: widget.cardType == CardType.home
-      //         ? const NeverScrollableScrollPhysics()
-      //         : const AlwaysScrollableScrollPhysics(),
-
-      //     // physics: const NeverScrollableScrollPhysics(),
-      //     slivers: [
-      //       CupertinoSliverRefreshControl(
-      //         onRefresh: () async {
-      //           await Future.delayed(
-      //               const Duration(milliseconds: 1000),
-      //               () =>
-      //                   widget.notifierProvider!.paginate(forceRefetch: true));
-      //           // await widget.notifierProvider!.paginate(forceRefetch: true);
-      //         },
-      //       ),
-      //       const SliverFillRemaining(
-      //         child: Center(
-      //           child: Text('데이터를 가져오는데 실패했습니다'),
-      //         ),
-      //       )
-      //     ]);
     }
 
     final postList = widget.data as CursorPagination;
-    print(postList.data.length);
+    print("포스트 길이: ${postList.data.length} ${postList.data}");
     return CupertinoTheme(
       data: const CupertinoThemeData(
           primaryColor: PRIMARY_COLOR_ORANGE_02, applyThemeToAll: true),
@@ -445,20 +420,7 @@ class _GeneralPostPreviewCardState
                         ),
                       ),
                 // ),
-              ])
-
-          // FutureBuilder(
-          //     future: postFuture,
-          //     builder: (context, snapshot) {
-          //       if (!snapshot.hasData) {
-          //         return const Center(
-          //           child: CircularProgressIndicator(),
-          //         );
-          //       }
-          //       List<PostModel> postList = snapshot.data!;
-          //       return
-          //     }),
-          ),
+              ])),
     );
   }
 }

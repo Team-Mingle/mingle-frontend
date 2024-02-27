@@ -379,13 +379,15 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
             surfaceTintColor: Colors.transparent,
             elevation: 0,
             leading: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 14.0,
+                vertical: 14.0,
+              ),
               child: InkWell(
                 child: SvgPicture.asset(
                   'assets/img/common/ic_back.svg',
-                  width: 16,
-                  height: 16,
+                  width: 12,
+                  height: 12,
                 ),
                 onTap: () => Navigator.of(context).pop(),
               ),
