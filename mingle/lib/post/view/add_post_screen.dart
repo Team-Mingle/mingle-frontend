@@ -485,7 +485,7 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
                                 fontWeight: FontWeight.w600,
                                 color: isAnonymous
                                     ? PRIMARY_COLOR_ORANGE_02
-                                    : Colors.black),
+                                    : GRAYSCALE_GRAY_03),
                           ),
                           const SizedBox(
                             width: 4.0,
@@ -497,7 +497,7 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
                               colorFilter: ColorFilter.mode(
                                   isAnonymous
                                       ? PRIMARY_COLOR_ORANGE_02
-                                      : Colors.black,
+                                      : GRAYSCALE_GRAY_03,
                                   BlendMode.srcIn)),
                         ]),
                       ),

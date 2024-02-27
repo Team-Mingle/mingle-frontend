@@ -374,12 +374,15 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
             backgroundColor: Colors.white,
             surfaceTintColor: Colors.transparent,
             elevation: 0,
-            leading: SizedBox(
-              height: 10.0,
-              width: 10.0,
+            leading: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
               child: InkWell(
-                child: Image.asset(
-                    "assets/img/signup_screen/previous_screen_icon.png"),
+                child: SvgPicture.asset(
+                  'assets/img/common/ic_back.svg',
+                  width: 16,
+                  height: 16,
+                ),
                 onTap: () => Navigator.of(context).pop(),
               ),
             ),
@@ -387,9 +390,11 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
             title: Text(
               widget.boardType,
               style: const TextStyle(
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.w400,
-                  color: GRAYSCALE_GRAY_03),
+                fontSize: 14.0,
+                fontWeight: FontWeight.w400,
+                color: GRAYSCALE_GRAY_03,
+                height: 17 / 14,
+              ),
             ),
             centerTitle: false,
             actions: [

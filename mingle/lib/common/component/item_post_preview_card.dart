@@ -450,7 +450,7 @@ class _GeneralPostPreviewCardState extends ConsumerState<ItemPostPreviewCard> {
                                                       SvgPicture.asset(
                                                         widget.cardType ==
                                                                 CardType.market
-                                                            ? 'assets/img/second_hand_market_screen/heart_icon.svg'
+                                                            ? 'assets/img/second_hand_market_screen/ic_heart_icon.svg'
                                                             : 'assets/img/common/ic_like.svg',
                                                         width: 16,
                                                         height: 16,

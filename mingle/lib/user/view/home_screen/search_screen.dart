@@ -167,7 +167,16 @@ class _SearchScreenState extends ConsumerState<SearchScreen>
             ),
           ),
           body: searchFuture == null
-              ? const Center(child: Text('밍글에 궁금한 것을 물어보세요'))
+              ? const Center(
+                  child: Text(
+                  '밍글에 궁금한 것을 물어보세요',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: GRAYSCALE_GRAY_03,
+                    height: 17 / 14,
+                  ),
+                ))
               : GeneralPostPreviewCard(
                   boardType: "",
                   cardType: CardType.square,

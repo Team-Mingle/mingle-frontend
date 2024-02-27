@@ -67,8 +67,9 @@ class _AnonymousTextfieldState extends State<AnonymousTextfield> {
                 style: TextStyle(
                     fontSize: 12.0,
                     fontWeight: FontWeight.w600,
-                    color:
-                        isAnonymous ? PRIMARY_COLOR_ORANGE_02 : Colors.black),
+                    color: isAnonymous
+                        ? PRIMARY_COLOR_ORANGE_02
+                        : GRAYSCALE_GRAY_03),
               ),
               const SizedBox(
                 width: 4.0,
@@ -77,7 +78,7 @@ class _AnonymousTextfieldState extends State<AnonymousTextfield> {
                   height: 8.0,
                   width: 6.0,
                   colorFilter: ColorFilter.mode(
-                      isAnonymous ? PRIMARY_COLOR_ORANGE_02 : Colors.black,
+                      isAnonymous ? PRIMARY_COLOR_ORANGE_02 : GRAYSCALE_GRAY_03,
                       BlendMode.srcIn))
             ]),
           ),
