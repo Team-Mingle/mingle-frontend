@@ -41,6 +41,8 @@ class MarketLikedScreen extends StatelessWidget {
             "찜한내역",
             style: TextStyle(
               fontSize: 16.0,
+              letterSpacing: -0.02,
+              height: 1.5,
               fontWeight: FontWeight.w400,
               color: Colors.black,
             ),

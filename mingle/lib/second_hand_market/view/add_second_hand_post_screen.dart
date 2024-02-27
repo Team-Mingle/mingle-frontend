@@ -167,6 +167,8 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
                     style: TextStyle(
                         color: GRAYSCALE_GRAY_03,
                         fontSize: 14.0,
+                        letterSpacing: -0.01,
+                        height: 1.4,
                         fontWeight: FontWeight.w400),
                   ),
                   const Spacer(),
@@ -183,6 +185,8 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
                               style: TextStyle(
                                   color: PRIMARY_COLOR_ORANGE_01,
                                   fontSize: 14.0,
+                                  letterSpacing: -0.01,
+                                  height: 1.4,
                                   fontWeight: FontWeight.w400),
                             ),
                     ),
@@ -229,6 +233,7 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
                                           "${imagePreviewFileList.length}/10",
                                           style: const TextStyle(
                                               fontSize: 13.0,
+                                              height: 1.4,
                                               fontWeight: FontWeight.w500,
                                               color: GRAYSCALE_GRAY_04),
                                         )
@@ -284,6 +289,8 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
                           hintText: "제목을 입력하세요*",
                           hintStyle: TextStyle(
                               fontSize: 16.0,
+                              letterSpacing: -0.02,
+                              height: 1.5,
                               color: GRAYSCALE_GRAY_02,
                               fontWeight: FontWeight.w600)),
                     ),
@@ -439,6 +446,8 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
                               hintText: "상품에 대해 설명해 주세요.*",
                               hintStyle: TextStyle(
                                   fontSize: 16.0,
+                                  letterSpacing: -0.02,
+                                  height: 1.5,
                                   color: GRAYSCALE_GRAY_02,
                                   fontWeight: FontWeight.w600),
                             ),
@@ -484,6 +493,8 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
                               hintText: "희망 거래장소/시간대*",
                               hintStyle: TextStyle(
                                   fontSize: 16.0,
+                                  letterSpacing: -0.02,
+                                  height: 1.5,
                                   color: GRAYSCALE_GRAY_02,
                                   fontWeight: FontWeight.w600),
                             ),
@@ -526,6 +537,8 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
                               hintText: "오픈채팅방 링크*",
                               hintStyle: TextStyle(
                                   fontSize: 16.0,
+                                  letterSpacing: -0.02,
+                                  height: 1.5,
                                   color: GRAYSCALE_GRAY_02,
                                   fontWeight: FontWeight.w600),
                             ),
@@ -571,6 +584,8 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
                         "익명",
                         style: TextStyle(
                             fontSize: 12.0,
+                            letterSpacing: -0.005,
+                            height: 1.3,
                             fontWeight: FontWeight.w600,
                             color: isAnonymous
                                 ? PRIMARY_COLOR_ORANGE_02
@@ -608,7 +623,9 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
         hint: Text(
           'Select Item',
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 14.0,
+            letterSpacing: -0.01,
+            height: 1.4,
             color: Theme.of(context).hintColor,
           ),
         ),
@@ -620,7 +637,9 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
                   child: Text(
                     item,
                     style: const TextStyle(
-                      fontSize: 14,
+                      fontSize: 14.0,
+                      letterSpacing: -0.01,
+                      height: 1.4,
                     ),
                   ),
                 ))

@@ -369,10 +369,11 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
                 buttonText,
                 style: const TextStyle(
                   fontFamily: "Pretendard",
-                  fontSize: 14,
+                  fontSize: 14.0,
+                  letterSpacing: -0.01,
+                  height: 1.4,
                   fontWeight: FontWeight.w400,
                   color: GRAYSCALE_GRAY_04,
-                  height: 17 / 14,
                 ),
               ),
             ),
@@ -417,7 +418,11 @@ class startbottomsheet extends StatelessWidget {
                 ),
                 const Text(
                   "시작하기 전에",
-                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                      fontSize: 20.0,
+                      letterSpacing: -0.03,
+                      height: 1.5,
+                      fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(
                   height: 4.0,
@@ -440,6 +445,8 @@ class startbottomsheet extends StatelessWidget {
                       "1.",
                       style: TextStyle(
                           fontSize: 16.0,
+                          letterSpacing: -0.02,
+                          height: 1.5,
                           fontWeight: FontWeight.w600,
                           color: GRAYSCALE_GRAY_03),
                     ),
@@ -453,6 +460,8 @@ class startbottomsheet extends StatelessWidget {
                           "서로 존중을 주고 받아요",
                           style: TextStyle(
                             fontSize: 16.0,
+                            letterSpacing: -0.02,
+                            height: 1.5,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -462,8 +471,9 @@ class startbottomsheet extends StatelessWidget {
                         Text(
                           "서로 비난하지 않고 함께 존중하는 커뮤니티를 만들어가요. ",
                           style: TextStyle(
-                            fontSize: 12.0,
-                          ),
+                              fontSize: 12.0,
+                              letterSpacing: -0.005,
+                              height: 1.3),
                         ),
                       ],
                     ),
@@ -484,6 +494,8 @@ class startbottomsheet extends StatelessWidget {
                       "2.",
                       style: TextStyle(
                           fontSize: 16.0,
+                          letterSpacing: -0.02,
+                          height: 1.5,
                           fontWeight: FontWeight.w600,
                           color: GRAYSCALE_GRAY_03),
                     ),
@@ -497,6 +509,8 @@ class startbottomsheet extends StatelessWidget {
                           "서로 도움을 주고 받아요",
                           style: TextStyle(
                             fontSize: 16.0,
+                            letterSpacing: -0.02,
+                            height: 1.5,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -506,8 +520,9 @@ class startbottomsheet extends StatelessWidget {
                         Text(
                           "궁금한 점들을 질문하고, 내가 줄 수 있는 도움을 나눠봐요.",
                           style: TextStyle(
-                            fontSize: 12.0,
-                          ),
+                              fontSize: 12.0,
+                              letterSpacing: -0.005,
+                              height: 1.3),
                         ),
                       ],
                     ),
@@ -528,6 +543,8 @@ class startbottomsheet extends StatelessWidget {
                       "2.",
                       style: TextStyle(
                           fontSize: 16.0,
+                          letterSpacing: -0.02,
+                          height: 1.5,
                           fontWeight: FontWeight.w600,
                           color: GRAYSCALE_GRAY_03),
                     ),
@@ -541,6 +558,8 @@ class startbottomsheet extends StatelessWidget {
                           "이용규칙을 지켜주세요.",
                           style: TextStyle(
                             fontSize: 16.0,
+                            letterSpacing: -0.02,
+                            height: 1.5,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -550,8 +569,9 @@ class startbottomsheet extends StatelessWidget {
                         Text(
                           "이용규칙을 지키며 더 나은 커뮤니티를 만들어가요.",
                           style: TextStyle(
-                            fontSize: 12.0,
-                          ),
+                              fontSize: 12.0,
+                              letterSpacing: -0.005,
+                              height: 1.3),
                         ),
                       ],
                     ),

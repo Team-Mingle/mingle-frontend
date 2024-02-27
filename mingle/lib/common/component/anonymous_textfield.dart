@@ -66,6 +66,8 @@ class _AnonymousTextfieldState extends State<AnonymousTextfield> {
                 "익명",
                 style: TextStyle(
                     fontSize: 12.0,
+                    letterSpacing: -0.005,
+                    height: 1.3,
                     fontWeight: FontWeight.w600,
                     color: isAnonymous
                         ? PRIMARY_COLOR_ORANGE_02

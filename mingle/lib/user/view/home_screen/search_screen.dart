@@ -138,8 +138,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen>
                         contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
                       ),
                       style: const TextStyle(
-                        fontSize: 14,
-                        height: 13 / 11,
+                        fontSize: 14.0,
+                        letterSpacing: -0.01,
+                        height: 1.4,
                       ),
                     ),
                   ),
@@ -171,10 +172,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen>
                   child: Text(
                   '밍글에 궁금한 것을 물어보세요',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 14.0,
+                    letterSpacing: -0.01,
+                    height: 1.4,
                     fontWeight: FontWeight.w600,
                     color: GRAYSCALE_GRAY_03,
-                    height: 17 / 14,
                   ),
                 ))
               : GeneralPostPreviewCard(

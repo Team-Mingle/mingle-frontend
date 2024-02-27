@@ -136,7 +136,9 @@
 //                                       post['title'] ?? '',
 //                                       style: const TextStyle(
 //                                         fontFamily: "Pretendard",
-//                                         fontSize: 14,
+//                                         fontSize: 14.0,
+//letterSpacing: -0.01,
+//height: 1.4,
 //                                         fontWeight: FontWeight.w400,
 //                                         color: GRAYSCALE_BLACK_GRAY,
 //                                       ),
@@ -366,10 +368,12 @@
 //                           '판매상태 변경',
 //                           style: TextStyle(
 //                             color: Colors.black,
-//                             fontSize: 14,
+//                             fontSize: 14.0,
+//letterSpacing: -0.01,
+//height: 1.4,
 //                             fontFamily: 'Pretendard',
 //                             fontWeight: FontWeight.w500,
-//                             height: 0,
+//                             
 //                           ),
 //                         ),
 //                       ),

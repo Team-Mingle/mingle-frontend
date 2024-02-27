@@ -88,7 +88,9 @@ class _SecondhandPreviewCardState extends ConsumerState<SecondhandPreviewCard> {
                             Text(
                               post.title,
                               style: const TextStyle(
-                                fontSize: 14,
+                                fontSize: 14.0,
+                                letterSpacing: -0.01,
+                                height: 1.4,
                                 fontWeight: FontWeight.w400,
                                 color: GRAYSCALE_BLACK_GRAY,
                               ),
@@ -140,10 +142,11 @@ class _SecondhandPreviewCardState extends ConsumerState<SecondhandPreviewCard> {
                     "더보기",
                     style: TextStyle(
                       fontFamily: "Pretendard",
-                      fontSize: 14,
+                      fontSize: 14.0,
+                      letterSpacing: -0.01,
+                      height: 1.4,
                       fontWeight: FontWeight.w500,
                       color: GRAYSCALE_GRAY_04,
-                      height: 17 / 14,
                     ),
                   ),
                 ],

@@ -44,6 +44,8 @@ class _CommentedPostsScreenState extends ConsumerState<CommentedPostsScreen>
             "내가 댓글 작성한 글",
             style: TextStyle(
                 fontSize: 16.0,
+                letterSpacing: -0.02,
+                height: 1.5,
                 fontWeight: FontWeight.w400,
                 color: Colors.black),
           ),

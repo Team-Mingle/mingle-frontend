@@ -24,7 +24,6 @@ Widget buildTypeIndicator(String categoryType) {
                   fontSize: 11,
                   fontWeight: FontWeight.w400,
                   color: Color(0xff595959),
-                  height: 13 / 11,
                 ),
                 textAlign: TextAlign
                     .center, // Changed to center to align text in the middle of the container
@@ -56,7 +55,6 @@ Widget buildTypeIndicator(String categoryType) {
                   fontSize: 11,
                   fontWeight: FontWeight.w400,
                   color: Color(0xff595959),
-                  height: 13 / 11,
                 ),
                 textAlign: TextAlign
                     .center, // Changed to center to align text in the middle of the container
@@ -88,7 +86,6 @@ Widget buildTypeIndicator(String categoryType) {
                   fontSize: 11,
                   fontWeight: FontWeight.w400,
                   color: Color(0xff595959),
-                  height: 13 / 11,
                 ),
                 textAlign: TextAlign.center,
               ),

@@ -173,12 +173,18 @@ class _EnterVerificationNumberScreenState
                           Text(
                             "인증번호를",
                             style: TextStyle(
-                                fontSize: 24.0, fontWeight: FontWeight.w400),
+                                fontSize: 24.0,
+                                letterSpacing: -0.04,
+                                height: 1.4,
+                                fontWeight: FontWeight.w400),
                           ),
                           Text(
                             "입력해 주세요.",
                             style: TextStyle(
-                                fontSize: 24.0, fontWeight: FontWeight.w400),
+                                fontSize: 24.0,
+                                letterSpacing: -0.04,
+                                height: 1.4,
+                                fontWeight: FontWeight.w400),
                           ),
                           SizedBox(
                             height: 16.0,
@@ -187,6 +193,8 @@ class _EnterVerificationNumberScreenState
                               style: TextStyle(
                                   color: GRAYSCALE_GRAY_03,
                                   fontSize: 14.0,
+                                  letterSpacing: -0.01,
+                                  height: 1.4,
                                   fontWeight: FontWeight.w400))
                         ],
                       ),
@@ -233,6 +241,8 @@ class _EnterVerificationNumberScreenState
                                 style: TextStyle(
                                     color: GRAYSCALE_GRAY_03,
                                     fontSize: 12.0,
+                                    letterSpacing: -0.005,
+                                    height: 1.3,
                                     fontWeight: FontWeight.w400),
                               ),
                               const SizedBox(
@@ -268,6 +278,8 @@ class _EnterVerificationNumberScreenState
                                           ? GRAYSCALE_GRAY_05
                                           : GRAYSCALE_GRAY_02,
                                       fontSize: 12.0,
+                                      letterSpacing: -0.005,
+                                      height: 1.3,
                                       fontWeight: FontWeight.w400),
                                 ),
                                 const ImageIcon(

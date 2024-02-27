@@ -60,10 +60,11 @@ class TabScreen extends StatelessWidget {
                     title,
                     style: const TextStyle(
                       color: Colors.black,
-                      fontSize: 20,
+                      fontSize: 20.0,
+                      letterSpacing: -0.03,
+                      height: 1.5,
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w500,
-                      height: 0,
                     ),
                   ),
                   const SizedBox(
@@ -119,13 +120,17 @@ class TabScreen extends StatelessWidget {
                     horizontal: 20,
                   ),
                   labelStyle: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 14.0,
+                    letterSpacing: -0.01,
+                    height: 1.4,
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w600,
                   ),
                   unselectedLabelColor: GRAYSCALE_GRAY_04,
                   unselectedLabelStyle: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 14.0,
+                    letterSpacing: -0.01,
+                    height: 1.4,
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w400,
                   ),

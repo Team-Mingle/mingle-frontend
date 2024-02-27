@@ -85,8 +85,11 @@ class _TimeTableGridState extends State<TimeTableGrid> {
               child: Center(
                   child: Text(
                 days[index],
-                style:
-                    const TextStyle(fontSize: 12.0, color: GRAYSCALE_GRAY_04),
+                style: const TextStyle(
+                    fontSize: 12.0,
+                    letterSpacing: -0.005,
+                    height: 1.3,
+                    color: GRAYSCALE_GRAY_04),
               )),
             ));
     List<Widget> t = List.generate(
@@ -96,8 +99,11 @@ class _TimeTableGridState extends State<TimeTableGrid> {
               child: Center(
                   child: Text(
                 timeSlots[index],
-                style:
-                    const TextStyle(fontSize: 12.0, color: GRAYSCALE_GRAY_04),
+                style: const TextStyle(
+                    fontSize: 12.0,
+                    letterSpacing: -0.005,
+                    height: 1.3,
+                    color: GRAYSCALE_GRAY_04),
               )),
             ));
     return Column(

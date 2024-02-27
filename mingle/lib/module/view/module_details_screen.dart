@@ -73,7 +73,11 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
           ),
           title: const Text(
             "강의개요",
-            style: TextStyle(fontSize: 16.0, color: Colors.black),
+            style: TextStyle(
+                fontSize: 16.0,
+                letterSpacing: -0.02,
+                height: 1.5,
+                color: Colors.black),
           ),
         ),
         body: SizedBox(

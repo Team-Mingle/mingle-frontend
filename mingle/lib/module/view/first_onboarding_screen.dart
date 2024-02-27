@@ -27,7 +27,11 @@ class FirstOnboardingScreen extends StatelessWidget {
                 offset: -0.5,
                 child: const Text(
                   "이젠 밍글에서 강의평가를 할 수 있어요.",
-                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                      fontSize: 20.0,
+                      letterSpacing: -0.03,
+                      height: 1.5,
+                      fontWeight: FontWeight.w500),
                 ),
               ),
             ),

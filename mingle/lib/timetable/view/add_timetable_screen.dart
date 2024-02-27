@@ -73,6 +73,8 @@ class _AddTimeTableScreenState extends State<AddTimeTableScreen> {
                   style: TextStyle(
                       color: GRAYSCALE_GRAY_03,
                       fontSize: 14.0,
+                      letterSpacing: -0.01,
+                      height: 1.4,
                       fontWeight: FontWeight.w400),
                 ),
                 const Spacer(),
@@ -84,6 +86,8 @@ class _AddTimeTableScreenState extends State<AddTimeTableScreen> {
                       style: TextStyle(
                           color: PRIMARY_COLOR_ORANGE_01,
                           fontSize: 14.0,
+                          letterSpacing: -0.01,
+                          height: 1.4,
                           fontWeight: FontWeight.w400),
                     ),
                   ),

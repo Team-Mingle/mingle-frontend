@@ -162,14 +162,20 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
                       Text(
                         widget.isPasswordReset ? "인증번호를 보낼" : "학교 이메일을",
                         style: const TextStyle(
-                            fontSize: 24.0, fontWeight: FontWeight.w400),
+                            fontSize: 24.0,
+                            letterSpacing: -0.04,
+                            height: 1.4,
+                            fontWeight: FontWeight.w400),
                       ),
                       Text(
                         widget.isPasswordReset
                             ? "학교 이메일을 입력해 주세요."
                             : "입력해 주세요.",
                         style: const TextStyle(
-                            fontSize: 24.0, fontWeight: FontWeight.w400),
+                            fontSize: 24.0,
+                            letterSpacing: -0.04,
+                            height: 1.4,
+                            fontWeight: FontWeight.w400),
                       ),
                       const SizedBox(
                         height: 16.0,
@@ -181,6 +187,8 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
                           style: const TextStyle(
                               color: GRAYSCALE_GRAY_03,
                               fontSize: 14.0,
+                              letterSpacing: -0.01,
+                              height: 1.4,
                               fontWeight: FontWeight.w400)),
                       const SizedBox(
                         height: 40,

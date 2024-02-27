@@ -64,10 +64,11 @@ class NotificationItem extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 14.0,
+                letterSpacing: -0.01,
+                height: 1.4,
                 fontWeight: FontWeight.w400,
                 color: Colors.black,
-                height: 17 / 14,
               ),
             ),
             const SizedBox(

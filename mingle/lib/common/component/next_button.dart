@@ -85,7 +85,10 @@ class NextButton extends ConsumerWidget {
                     Text(
                       buttonName,
                       style: const TextStyle(
-                          fontSize: 14.0, fontWeight: FontWeight.w400),
+                          fontSize: 14.0,
+                          letterSpacing: -0.01,
+                          height: 1.4,
+                          fontWeight: FontWeight.w400),
                     ),
                   ],
                 ),

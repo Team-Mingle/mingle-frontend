@@ -118,8 +118,9 @@ class _SearchScreenState extends ConsumerState<SecondHandMarketSearchScreen>
                     contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
                   ),
                   style: const TextStyle(
-                    fontSize: 14,
-                    height: 13 / 11,
+                    fontSize: 14.0,
+                    letterSpacing: -0.01,
+                    height: 1.4,
                   ),
                 ),
               ),

@@ -38,7 +38,10 @@ class ShareTimetableDialog extends StatelessWidget {
                     const Text(
                       "시간표를 공유하고 친구 되기",
                       style: TextStyle(
-                          fontSize: 16.0, fontWeight: FontWeight.w500),
+                          fontSize: 16.0,
+                          letterSpacing: -0.02,
+                          height: 1.5,
+                          fontWeight: FontWeight.w500),
                     ),
                     const SizedBox(
                       height: 8.0,

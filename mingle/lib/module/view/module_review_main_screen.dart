@@ -38,7 +38,11 @@ class ModuleReviewMainScreen extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               "강의평가",
-              style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w500),
+              style: TextStyle(
+                  fontSize: 24.0,
+                  letterSpacing: -0.04,
+                  height: 1.4,
+                  fontWeight: FontWeight.w500),
             ),
           ),
           const SizedBox(

@@ -73,7 +73,11 @@ class _ChangeNicknameScreenState extends ConsumerState<ChangeNicknameScreen> {
         title: const Text(
           "닉네임 변경",
           style: TextStyle(
-              fontSize: 16.0, fontWeight: FontWeight.w400, color: Colors.black),
+              fontSize: 16.0,
+              letterSpacing: -0.02,
+              height: 1.5,
+              fontWeight: FontWeight.w400,
+              color: Colors.black),
         ),
       ),
       body: SafeArea(
@@ -108,6 +112,8 @@ class _ChangeNicknameScreenState extends ConsumerState<ChangeNicknameScreen> {
               "학교는 변경할 수 없습니다",
               style: TextStyle(
                   fontSize: 12.0,
+                  letterSpacing: -0.005,
+                  height: 1.3,
                   fontWeight: FontWeight.w400,
                   color: GRAYSCALE_GRAY_04),
             ),

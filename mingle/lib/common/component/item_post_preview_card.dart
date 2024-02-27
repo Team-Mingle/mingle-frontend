@@ -294,6 +294,8 @@ class _GeneralPostPreviewCardState extends ConsumerState<ItemPostPreviewCard> {
                                                       style: const TextStyle(
                                                           color: Colors.white,
                                                           fontSize: 16.0,
+                                                          letterSpacing: -0.02,
+                                                          height: 1.5,
                                                           fontWeight:
                                                               FontWeight.w500),
                                                     ),
@@ -324,7 +326,9 @@ class _GeneralPostPreviewCardState extends ConsumerState<ItemPostPreviewCard> {
                                                       style: const TextStyle(
                                                         fontFamily:
                                                             "Pretendard",
-                                                        fontSize: 14,
+                                                        fontSize: 14.0,
+                                                        letterSpacing: -0.01,
+                                                        height: 1.4,
                                                         fontWeight:
                                                             FontWeight.w500,
                                                         color:
@@ -625,10 +629,11 @@ class _GeneralPostPreviewCardState extends ConsumerState<ItemPostPreviewCard> {
                                           '판매상태 변경',
                                           style: TextStyle(
                                             color: Colors.black,
-                                            fontSize: 14,
+                                            fontSize: 14.0,
+                                            letterSpacing: -0.01,
+                                            height: 1.4,
                                             fontFamily: 'Pretendard',
                                             fontWeight: FontWeight.w500,
-                                            height: 0,
                                           ),
                                         ),
                                       ),

@@ -45,7 +45,10 @@ class AppStartScreen extends StatelessWidget {
                         Text(
                           "내 유학생활의 종착지,",
                           style: TextStyle(
-                              fontSize: 14.0, fontWeight: FontWeight.w400),
+                              fontSize: 14.0,
+                              letterSpacing: -0.01,
+                              height: 1.4,
+                              fontWeight: FontWeight.w400),
                         ),
                         SizedBox(
                           height: 12,
@@ -55,6 +58,8 @@ class AppStartScreen extends StatelessWidget {
                           style: TextStyle(
                             fontFamily: "Aggro",
                             fontSize: 24.0,
+                            letterSpacing: -0.04,
+                            height: 1.4,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -99,6 +104,8 @@ class AppStartScreen extends StatelessWidget {
                               decorationColor: PRIMARY_COLOR_ORANGE_01,
                               color: PRIMARY_COLOR_ORANGE_01,
                               fontSize: 14.0,
+                              letterSpacing: -0.01,
+                              height: 1.4,
                               fontWeight: FontWeight.w400),
                         ),
                       )

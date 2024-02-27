@@ -19,11 +19,19 @@ class QuitSuccessStart extends StatelessWidget {
               ),
               const Text(
                 "탈퇴 처리가",
-                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w400),
+                style: TextStyle(
+                    fontSize: 24.0,
+                    letterSpacing: -0.04,
+                    height: 1.4,
+                    fontWeight: FontWeight.w400),
               ),
               const Text(
                 "완료되었어요.",
-                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w400),
+                style: TextStyle(
+                    fontSize: 24.0,
+                    letterSpacing: -0.04,
+                    height: 1.4,
+                    fontWeight: FontWeight.w400),
               ),
               Expanded(child: Container()),
               NextButton(

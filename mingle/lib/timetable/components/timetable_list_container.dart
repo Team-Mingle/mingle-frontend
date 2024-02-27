@@ -40,7 +40,9 @@ class _TimetableListWidgetState extends State<TimetableListWidget> {
                   '시간표 1',
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 16,
+                    fontSize: 16.0,
+                    letterSpacing: -0.02,
+                    height: 1.5,
                     fontWeight: FontWeight.w400,
                   ),
                 ),

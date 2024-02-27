@@ -181,6 +181,8 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
                     style: TextStyle(
                         color: GRAYSCALE_GRAY_03,
                         fontSize: 14.0,
+                        letterSpacing: -0.01,
+                        height: 1.4,
                         fontWeight: FontWeight.w400),
                   ),
                   const Spacer(),
@@ -197,6 +199,8 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
                                     ? PRIMARY_COLOR_ORANGE_01
                                     : GRAYSCALE_GRAY_03,
                                 fontSize: 14.0,
+                                letterSpacing: -0.01,
+                                height: 1.4,
                                 fontWeight: FontWeight.w400),
                           ),
                         ),
@@ -309,6 +313,8 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
                             hintStyle: TextStyle(
                               color: GRAYSCALE_GRAY_02,
                               fontSize: 16.0,
+                              letterSpacing: -0.02,
+                              height: 1.5,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -440,6 +446,8 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
                         "익명",
                         style: TextStyle(
                             fontSize: 12.0,
+                            letterSpacing: -0.005,
+                            height: 1.3,
                             fontWeight: FontWeight.w600,
                             color: widget.isAnonymous
                                 ? PRIMARY_COLOR_ORANGE_02

@@ -32,6 +32,8 @@ class SecondOnboardingScreen extends StatelessWidget {
                         text: "다른 사용자가 작성한 강의평가를 보려면\n",
                         style: TextStyle(
                             fontSize: 20.0,
+                            letterSpacing: -0.03,
+                            height: 1.5,
                             color: Colors.black,
                             fontWeight: FontWeight.w400),
                       ),
@@ -39,17 +41,14 @@ class SecondOnboardingScreen extends StatelessWidget {
                         text: "포인트샵에서 이용권을 구매해야 해요.",
                         style: TextStyle(
                             fontSize: 20.0,
+                            letterSpacing: -0.03,
+                            height: 1.5,
                             color: Colors.black,
                             fontWeight: FontWeight.w500),
                       )
                     ]),
-                  )
-
-                  // const Text(
-                  //   "다른 사용자가 작성한 강의평가를 보려면\n  포인트샵에서 이용권을 구매해야 해요.",
-                  //   style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
-                  // ),
-                  ),
+                  )),
+              // ),
             ),
             const Spacer(),
             Align(
@@ -62,7 +61,11 @@ class SecondOnboardingScreen extends StatelessWidget {
                 offset: 0.5,
                 child: const Text(
                   "포인트는 강의평가를 작성하여 얻을 수 있어요.",
-                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                      fontSize: 16.0,
+                      letterSpacing: -0.02,
+                      height: 1.5,
+                      fontWeight: FontWeight.w500),
                 ),
               ),
             ),

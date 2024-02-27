@@ -49,6 +49,8 @@ class _ModuleReviewCardState extends State<ModuleReviewCard> {
               widget.author,
               style: const TextStyle(
                   fontSize: 12.0,
+letterSpacing: -0.005,
+height: 1.3,
                   fontWeight: FontWeight.w500,
                   color: GRAYSCALE_GRAY_04),
             ),
@@ -63,12 +65,16 @@ class _ModuleReviewCardState extends State<ModuleReviewCard> {
             // Text(
             //   widget.likes.toString(),
             //   style: const TextStyle(
-            //       fontSize: 12.0, color: PRIMARY_COLOR_ORANGE_01),
+            //       fontSize: 12.0,
+//letterSpacing: -0.005,
+//height: 1.3, color: PRIMARY_COLOR_ORANGE_01),
             // ),
             const Spacer(),
             // const Text(
             //   "공감하기",
-            //   style: TextStyle(fontSize: 12.0, color: GRAYSCALE_GRAY_04),
+            //   style: TextStyle(fontSize: 12.0,
+//letterSpacing: -0.005,
+//height: 1.3, color: GRAYSCALE_GRAY_04),
             // )
           ],
         )
@@ -109,7 +115,9 @@ class _ModuleReviewCardState extends State<ModuleReviewCard> {
         ),
         Text(
           satisfactionText,
-          style: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w500),
+          style: const TextStyle(fontSize: 12.0,
+letterSpacing: -0.005,
+height: 1.3, fontWeight: FontWeight.w500),
         )
       ]),
     );

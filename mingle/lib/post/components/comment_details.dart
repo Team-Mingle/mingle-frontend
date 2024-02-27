@@ -77,7 +77,8 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
               text: widget.parentNickname != null
                   ? "@${widget.parentNickname} ${widget.comment.content}"
                   : widget.comment.content,
-              style: const TextStyle(fontSize: 13.0, color: Colors.black),
+              style: const TextStyle(
+                  fontSize: 13.0, height: 1.4, color: Colors.black),
               linkStyle: const TextStyle(color: PRIMARY_COLOR_ORANGE_01),
             ),
           ),
@@ -149,8 +150,9 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
                         ? GRAYSCALE_GRAY_ORANGE_02
                         : GRAYSCALE_GRAY_03,
                     fontSize: 12.0,
+                    letterSpacing: -0.005,
+                    height: 1.3,
                     fontWeight: FontWeight.w400,
-                    height: 15 / 12,
                   ),
                 ),
                 const SizedBox(
@@ -161,8 +163,9 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
                   style: TextStyle(
                     color: GRAYSCALE_GRAY_02,
                     fontSize: 12.0,
+                    letterSpacing: -0.005,
+                    height: 1.3,
                     fontWeight: FontWeight.w400,
-                    height: 15 / 12,
                   ),
                 ),
                 const SizedBox(
@@ -173,8 +176,9 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
                   style: const TextStyle(
                     color: GRAYSCALE_GRAY_03,
                     fontSize: 12.0,
+                    letterSpacing: -0.005,
+                    height: 1.3,
                     fontWeight: FontWeight.w400,
-                    height: 15 / 12,
                   ),
                 ),
                 const SizedBox(
@@ -185,8 +189,9 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
                   style: const TextStyle(
                     color: GRAYSCALE_GRAY_03,
                     fontSize: 12.0,
+                    letterSpacing: -0.005,
+                    height: 1.3,
                     fontWeight: FontWeight.w400,
-                    height: 15 / 12,
                   ),
                 ),
               ],
@@ -243,8 +248,9 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
                     style: const TextStyle(
                       color: GRAYSCALE_GRAY_03,
                       fontSize: 12.0,
+                      letterSpacing: -0.005,
+                      height: 1.3,
                       fontWeight: FontWeight.w400,
-                      height: 15 / 12,
                     ),
                   ),
                 ],

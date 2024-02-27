@@ -27,7 +27,11 @@ class ThirdOnboardingScreen extends StatelessWidget {
                 offset: -0.5,
                 child: const Text(
                   "     강의평가를 참고하여\n완벽한 시간표를 짜 봅시다!",
-                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                      fontSize: 20.0,
+                      letterSpacing: -0.03,
+                      height: 1.5,
+                      fontWeight: FontWeight.w500),
                 ),
               ),
             ),
@@ -53,6 +57,8 @@ class ThirdOnboardingScreen extends StatelessWidget {
                     "시작하기",
                     style: TextStyle(
                         fontSize: 16.0,
+                        letterSpacing: -0.02,
+                        height: 1.5,
                         fontWeight: FontWeight.w500,
                         color: Colors.white),
                   ),

@@ -131,7 +131,10 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                     Text(
                       classModel.moduleCode,
                       style: const TextStyle(
-                          fontSize: 12.0, fontWeight: FontWeight.w600),
+                          fontSize: 12.0,
+                          letterSpacing: -0.005,
+                          height: 1.3,
+                          fontWeight: FontWeight.w600),
                     ),
                     Text(
                       classModel.location,
@@ -172,7 +175,10 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                             child: Text(
                               classModel.moduleCode,
                               style: const TextStyle(
-                                  fontSize: 12.0, fontWeight: FontWeight.w600),
+                                  fontSize: 12.0,
+                                  letterSpacing: -0.005,
+                                  height: 1.3,
+                                  fontWeight: FontWeight.w600),
                             ))
                         : Align(
                             alignment: Alignment.topLeft,
@@ -183,6 +189,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                                     classModel.moduleCode,
                                     style: const TextStyle(
                                         fontSize: 12.0,
+                                        letterSpacing: -0.005,
+                                        height: 1.3,
                                         fontWeight: FontWeight.w600),
                                   ),
                                   Text(
@@ -842,10 +850,11 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                   "시간표 이름",
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 16,
+                    fontSize: 16.0,
+                    letterSpacing: -0.02,
+                    height: 1.5,
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w500,
-                    height: 0,
                   ),
                 ),
                 SizedBox(
@@ -931,7 +940,9 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 16,
+                        fontSize: 16.0,
+                        letterSpacing: -0.02,
+                        height: 1.5,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -1011,7 +1022,9 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                                       "친구 목록",
                                       style: TextStyle(
                                         fontFamily: "Pretendard",
-                                        fontSize: 16,
+                                        fontSize: 16.0,
+                                        letterSpacing: -0.02,
+                                        height: 1.5,
                                         fontWeight: FontWeight.w500,
                                         color: Colors.black,
                                       ),
@@ -1072,7 +1085,9 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                             "강의평가 홈 바로가기",
                             style: TextStyle(
                               fontFamily: "Pretendard",
-                              fontSize: 16,
+                              fontSize: 16.0,
+                              letterSpacing: -0.02,
+                              height: 1.5,
                               fontWeight: FontWeight.w500,
                               color: Colors.black,
                             ),

@@ -289,6 +289,8 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                   widget.boardType,
                   style: const TextStyle(
                       fontSize: 14.0,
+                      letterSpacing: -0.01,
+                      height: 1.4,
                       fontWeight: FontWeight.w400,
                       color: GRAYSCALE_GRAY_03),
                 ),
@@ -323,6 +325,8 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                   widget.boardType,
                   style: const TextStyle(
                       fontSize: 14.0,
+                      letterSpacing: -0.01,
+                      height: 1.4,
                       fontWeight: FontWeight.w400,
                       color: GRAYSCALE_GRAY_03),
                 ),
@@ -391,9 +395,10 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
               widget.boardType,
               style: const TextStyle(
                 fontSize: 14.0,
+                letterSpacing: -0.01,
+                height: 1.4,
                 fontWeight: FontWeight.w400,
                 color: GRAYSCALE_GRAY_03,
-                height: 17 / 14,
               ),
             ),
             centerTitle: false,
@@ -509,7 +514,10 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                           },
                           text: post.content,
                           style: const TextStyle(
-                              fontSize: 14.0, fontWeight: FontWeight.w400),
+                              fontSize: 14.0,
+                              letterSpacing: -0.01,
+                              height: 1.4,
+                              fontWeight: FontWeight.w400),
                         ),
                         Column(
                           children: [

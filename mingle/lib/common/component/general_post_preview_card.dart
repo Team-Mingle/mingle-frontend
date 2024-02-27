@@ -300,7 +300,9 @@ class _GeneralPostPreviewCardState
                                                       style: const TextStyle(
                                                         fontFamily:
                                                             "Pretendard",
-                                                        fontSize: 14,
+                                                        fontSize: 14.0,
+                                                        letterSpacing: -0.01,
+                                                        height: 1.4,
                                                         fontWeight:
                                                             FontWeight.w500,
                                                         color:

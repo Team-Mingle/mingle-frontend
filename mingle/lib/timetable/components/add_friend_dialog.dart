@@ -37,8 +37,11 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
                 children: [
                   const Text(
                     "해당 사용자를 친구로 등록하시려면\n           닉네임을 붙여 주세요.",
-                    style:
-                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                        fontSize: 16.0,
+                        letterSpacing: -0.02,
+                        height: 1.5,
+                        fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(
                     height: 8.0,

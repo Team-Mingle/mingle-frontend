@@ -115,6 +115,8 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 16.0,
+                letterSpacing: -0.02,
+                height: 1.5,
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -127,6 +129,8 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
                   style: TextStyle(
                     color: PRIMARY_COLOR_ORANGE_01,
                     fontSize: 14.0,
+                    letterSpacing: -0.01,
+                    height: 1.4,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -163,7 +167,9 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
                       '강의명*',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 14,
+                        fontSize: 14.0,
+                        letterSpacing: -0.01,
+                        height: 1.4,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -187,7 +193,9 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
                       hintText: "강의명을 입력하세요",
                       hintStyle: const TextStyle(
                         color: GRAYSCALE_GRAY_03,
-                        fontSize: 16,
+                        fontSize: 16.0,
+                        letterSpacing: -0.02,
+                        height: 1.5,
                         fontWeight: FontWeight.w400,
                       ),
                       labelStyle: const TextStyle(
@@ -217,7 +225,9 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
                       '강의 시간*',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 14,
+                        fontSize: 14.0,
+                        letterSpacing: -0.01,
+                        height: 1.4,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -278,7 +288,9 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
                         '추가하기',
                         style: TextStyle(
                           color: PRIMARY_COLOR_ORANGE_02,
-                          fontSize: 14,
+                          fontSize: 14.0,
+                          letterSpacing: -0.01,
+                          height: 1.4,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -299,7 +311,9 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
                       '과목 코드',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 14,
+                        fontSize: 14.0,
+                        letterSpacing: -0.01,
+                        height: 1.4,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -323,7 +337,9 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
                       hintText: "과목 코드를 입력하세요",
                       hintStyle: const TextStyle(
                         color: GRAYSCALE_GRAY_03,
-                        fontSize: 16,
+                        fontSize: 16.0,
+                        letterSpacing: -0.02,
+                        height: 1.5,
                         fontWeight: FontWeight.w400,
                       ),
                       labelStyle: const TextStyle(
@@ -353,7 +369,9 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
                       '강의 장소',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 14,
+                        fontSize: 14.0,
+                        letterSpacing: -0.01,
+                        height: 1.4,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -377,7 +395,9 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
                       hintText: "강의 장소를 입력하세요",
                       hintStyle: const TextStyle(
                         color: GRAYSCALE_GRAY_03,
-                        fontSize: 16,
+                        fontSize: 16.0,
+                        letterSpacing: -0.02,
+                        height: 1.5,
                         fontWeight: FontWeight.w400,
                       ),
                       labelStyle: const TextStyle(
@@ -407,7 +427,9 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
                       '교수명',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 14,
+                        fontSize: 14.0,
+                        letterSpacing: -0.01,
+                        height: 1.4,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -431,7 +453,9 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
                       hintText: "교수명을 입력하세요",
                       hintStyle: const TextStyle(
                         color: GRAYSCALE_GRAY_03,
-                        fontSize: 16,
+                        fontSize: 16.0,
+                        letterSpacing: -0.02,
+                        height: 1.5,
                         fontWeight: FontWeight.w400,
                       ),
                       labelStyle: const TextStyle(

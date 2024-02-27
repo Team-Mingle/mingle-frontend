@@ -33,7 +33,9 @@ class TimetableMoreModalwidget extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 16,
+                  fontSize: 16.0,
+                  letterSpacing: -0.02,
+                  height: 1.5,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -55,7 +57,9 @@ class TimetableMoreModalwidget extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 16,
+                  fontSize: 16.0,
+                  letterSpacing: -0.02,
+                  height: 1.5,
                   fontWeight: FontWeight.w400,
                 ),
               ),

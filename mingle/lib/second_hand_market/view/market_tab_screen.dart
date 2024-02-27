@@ -48,7 +48,9 @@ class MarketTabScreen extends ConsumerWidget {
           '장터',
           style: TextStyle(
             color: GRAYSCALE_BLACK_GRAY,
-            fontSize: 20,
+            fontSize: 20.0,
+            letterSpacing: -0.03,
+            height: 1.5,
             fontWeight: FontWeight.w500,
           ),
         ),

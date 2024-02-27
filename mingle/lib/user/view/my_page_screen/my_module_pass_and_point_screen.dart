@@ -32,7 +32,11 @@ class MyModulePassAndPointScreen extends StatelessWidget {
         ),
         title: const Text(
           "이용권 및 포인트",
-          style: TextStyle(fontSize: 16.0, color: Colors.black),
+          style: TextStyle(
+              fontSize: 16.0,
+              letterSpacing: -0.02,
+              height: 1.5,
+              color: Colors.black),
         ),
       ),
       body: const Column(children: [

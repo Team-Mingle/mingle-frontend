@@ -43,6 +43,8 @@ class _LikedPostsScreenState extends ConsumerState<LikedPostsScreen>
             "좋아요 누른 글",
             style: TextStyle(
                 fontSize: 16.0,
+                letterSpacing: -0.02,
+                height: 1.5,
                 fontWeight: FontWeight.w400,
                 color: Colors.black),
           ),

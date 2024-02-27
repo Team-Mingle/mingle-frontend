@@ -122,7 +122,11 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
         ),
         title: const Text(
           "강의평가 작성",
-          style: TextStyle(fontSize: 16.0, color: Colors.black),
+          style: TextStyle(
+              fontSize: 16.0,
+              letterSpacing: -0.02,
+              height: 1.5,
+              color: Colors.black),
         ),
         actions: [
           Padding(
@@ -155,7 +159,11 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
                     vertical: 16.0, horizontal: 20.0),
                 child: const Text(
                   "강의를 작성하면 100포인트가 적립됩니다.\n허위, 중복, 저작권 침해, 성의없는 내용 등 이용약관에 위반되는 내용\n작성 시 서비스 이용에 제한을 받거나 포인트 적립이 취소될 수 있습니다.",
-                  style: TextStyle(fontSize: 12.0, color: GRAYSCALE_GRAY_04),
+                  style: TextStyle(
+                      fontSize: 12.0,
+                      letterSpacing: -0.005,
+                      height: 1.3,
+                      color: GRAYSCALE_GRAY_04),
                 ),
               ),
               const SizedBox(
@@ -195,6 +203,8 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
                                 style: const TextStyle(
                                     color: GRAYSCALE_GRAY_03,
                                     fontSize: 16.0,
+                                    letterSpacing: -0.02,
+                                    height: 1.5,
                                     overflow: TextOverflow.ellipsis),
                               ),
                             ),
@@ -338,7 +348,10 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
                                     ? semesters[selectedSemesterIndex]
                                     : "수강 년도 및 학기",
                                 style: const TextStyle(
-                                    fontSize: 16.0, color: GRAYSCALE_GRAY_03),
+                                    fontSize: 16.0,
+                                    letterSpacing: -0.02,
+                                    height: 1.5,
+                                    color: GRAYSCALE_GRAY_03),
                               ),
                               const Spacer(),
                               SvgPicture.asset(
@@ -391,6 +404,8 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
                                     satisfactions[(index / 2).round()],
                                     style: TextStyle(
                                         fontSize: 12.0,
+                                        letterSpacing: -0.005,
+                                        height: 1.3,
                                         color: selecetedSatisfactionIndex ==
                                                 (index / 2).round()
                                             ? Colors.white
@@ -426,6 +441,8 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
                             hintText: "강의에 대한 평가를 15자 이상 적어 주세요.",
                             hintStyle: TextStyle(
                                 fontSize: 16.0,
+                                letterSpacing: -0.02,
+                                height: 1.5,
                                 color: GRAYSCALE_GRAY_02,
                                 fontWeight: FontWeight.w600),
                           ),

@@ -33,10 +33,11 @@ class NotificationScreen extends ConsumerWidget {
           "알림",
           style: TextStyle(
             fontFamily: "Pretendard",
-            fontSize: 16,
+            fontSize: 16.0,
+            letterSpacing: -0.02,
+            height: 1.5,
             fontWeight: FontWeight.w400,
             color: Color(0xff000000),
-            height: 19 / 16,
           ),
         ),
       ),
@@ -45,7 +46,7 @@ class NotificationScreen extends ConsumerWidget {
           CupertinoSliverRefreshControl(
             onRefresh: () async {
               await Future.delayed(const Duration(milliseconds: 1000));
-              ref.refresh(notificationProvider); 
+              ref.refresh(notificationProvider);
             },
           ),
           asyncNotification.when(

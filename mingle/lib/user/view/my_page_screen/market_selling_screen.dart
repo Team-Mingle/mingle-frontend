@@ -47,6 +47,8 @@ class MarketSellingScreen extends ConsumerWidget {
           "판매내역",
           style: TextStyle(
             fontSize: 16.0,
+            letterSpacing: -0.02,
+            height: 1.5,
             fontWeight: FontWeight.w400,
             color: Colors.black,
           ),
@@ -71,13 +73,17 @@ class MarketSellingScreen extends ConsumerWidget {
                 horizontal: 20,
               ),
               labelStyle: TextStyle(
-                fontSize: 14,
+                fontSize: 14.0,
+                letterSpacing: -0.01,
+                height: 1.4,
                 fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w600,
               ),
               unselectedLabelColor: GRAYSCALE_GRAY_04,
               unselectedLabelStyle: TextStyle(
-                fontSize: 14,
+                fontSize: 14.0,
+                letterSpacing: -0.01,
+                height: 1.4,
                 fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w400,
               ),

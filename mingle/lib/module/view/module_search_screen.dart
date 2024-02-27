@@ -105,7 +105,10 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
                         child: Text(
                           "최근 검색어 내역이 없습니다.",
                           style: TextStyle(
-                              fontSize: 16.0, color: GRAYSCALE_GRAY_03),
+                              fontSize: 16.0,
+                              letterSpacing: -0.02,
+                              height: 1.5,
+                              color: GRAYSCALE_GRAY_03),
                         ),
                       )
                     ]
@@ -156,7 +159,10 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
                           Text(
                             "일치하는 강의가 없습니다.",
                             style: TextStyle(
-                                fontSize: 16.0, color: GRAYSCALE_GRAY_04),
+                                fontSize: 16.0,
+                                letterSpacing: -0.02,
+                                height: 1.5,
+                                color: GRAYSCALE_GRAY_04),
                           )
                         ],
                       )
@@ -252,8 +258,11 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
             children: [
               Text(
                 course.professor,
-                style:
-                    const TextStyle(fontSize: 12.0, color: GRAYSCALE_GRAY_04),
+                style: const TextStyle(
+                    fontSize: 12.0,
+                    letterSpacing: -0.005,
+                    height: 1.3,
+                    color: GRAYSCALE_GRAY_04),
               ),
               const SizedBox(
                 width: 4.0,
@@ -261,7 +270,11 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
               const Text(
                 //TODO: change to actual timing
                 "화2/수2",
-                style: TextStyle(fontSize: 12.0, color: GRAYSCALE_GRAY_04),
+                style: TextStyle(
+                    fontSize: 12.0,
+                    letterSpacing: -0.005,
+                    height: 1.3,
+                    color: GRAYSCALE_GRAY_04),
               )
             ],
           )

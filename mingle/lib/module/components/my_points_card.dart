@@ -24,7 +24,11 @@ class MyPointsCard extends StatelessWidget {
               ),
               Text(
                 "0p",
-                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                    fontSize: 16.0,
+                    letterSpacing: -0.02,
+                    height: 1.5,
+                    fontWeight: FontWeight.w500),
               )
             ],
           ),

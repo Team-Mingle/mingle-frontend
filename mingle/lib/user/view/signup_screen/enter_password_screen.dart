@@ -156,12 +156,18 @@ class _EnterPasswordScreenState extends ConsumerState<EnterPasswordScreen> {
                           Text(
                             widget.isPasswordReset ? "새로운 비밀번호를" : "비밀번호를",
                             style: const TextStyle(
-                                fontSize: 24.0, fontWeight: FontWeight.w400),
+                                fontSize: 24.0,
+                                letterSpacing: -0.04,
+                                height: 1.4,
+                                fontWeight: FontWeight.w400),
                           ),
                           const Text(
                             "입력해 주세요.",
                             style: TextStyle(
-                                fontSize: 24.0, fontWeight: FontWeight.w400),
+                                fontSize: 24.0,
+                                letterSpacing: -0.04,
+                                height: 1.4,
+                                fontWeight: FontWeight.w400),
                           ),
                         ],
                       ),

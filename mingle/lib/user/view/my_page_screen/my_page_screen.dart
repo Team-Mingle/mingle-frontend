@@ -90,6 +90,8 @@ class MyPageScreen extends ConsumerWidget {
             "마이페이지",
             style: TextStyle(
                 fontSize: 16.0,
+                letterSpacing: -0.02,
+                height: 1.5,
                 fontWeight: FontWeight.w400,
                 color: Colors.black),
           ),
@@ -124,6 +126,8 @@ class MyPageScreen extends ConsumerWidget {
                                 style: const TextStyle(
                                     color: GRAYSCALE_GRAY_04,
                                     fontSize: 14.0,
+                                    letterSpacing: -0.01,
+                                    height: 1.4,
                                     fontWeight: FontWeight.w400),
                               ),
                               const SizedBox(
@@ -282,6 +286,8 @@ class MyPageScreen extends ConsumerWidget {
                             "로그아웃",
                             style: TextStyle(
                                 fontSize: 12.0,
+                                letterSpacing: -0.005,
+                                height: 1.3,
                                 fontWeight: FontWeight.w600,
                                 decoration: TextDecoration.underline,
                                 color: GRAYSCALE_GRAY_04),

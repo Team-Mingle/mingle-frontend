@@ -118,12 +118,18 @@ class _SelectNicknameScreenState extends ConsumerState<SelectNicknameScreen> {
                     Text(
                       "다 왔어요",
                       style: TextStyle(
-                          fontSize: 24.0, fontWeight: FontWeight.w400),
+                          fontSize: 24.0,
+                          letterSpacing: -0.04,
+                          height: 1.4,
+                          fontWeight: FontWeight.w400),
                     ),
                     Text(
                       "닉네임을 지어주세요.",
                       style: TextStyle(
-                          fontSize: 24.0, fontWeight: FontWeight.w400),
+                          fontSize: 24.0,
+                          letterSpacing: -0.04,
+                          height: 1.4,
+                          fontWeight: FontWeight.w400),
                     ),
                     SizedBox(
                       height: 16.0,
@@ -132,6 +138,8 @@ class _SelectNicknameScreenState extends ConsumerState<SelectNicknameScreen> {
                         style: TextStyle(
                             color: GRAYSCALE_GRAY_03,
                             fontSize: 14.0,
+                            letterSpacing: -0.01,
+                            height: 1.4,
                             fontWeight: FontWeight.w400))
                   ],
                 ),

@@ -37,7 +37,9 @@ class _AddNewTimetableWidgetState extends State<AddNewTimetableWidget> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 16,
+                fontSize: 16.0,
+                letterSpacing: -0.02,
+                height: 1.5,
                 fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w500,
               ),

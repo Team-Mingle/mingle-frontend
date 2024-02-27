@@ -38,7 +38,9 @@ class MyTimeTableListScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 16,
+                    fontSize: 16.0,
+                    letterSpacing: -0.02,
+                    height: 1.5,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -51,6 +53,8 @@ class MyTimeTableListScreen extends StatelessWidget {
                       style: TextStyle(
                         color: PRIMARY_COLOR_ORANGE_01,
                         fontSize: 14.0,
+                        letterSpacing: -0.01,
+                        height: 1.4,
                         fontWeight: FontWeight.w400,
                       ),
                     ),

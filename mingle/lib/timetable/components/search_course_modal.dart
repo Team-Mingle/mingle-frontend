@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
+
 class SearchCourseModalWidget extends StatelessWidget {
   const SearchCourseModalWidget({
     super.key,
@@ -68,11 +69,12 @@ class SearchCourseModalWidget extends StatelessWidget {
             '최근 검색어 내역이 없습니다.',
             style: TextStyle(
               color: GRAYSCALE_GRAY_04,
-              fontSize: 14,
+              fontSize: 14.0,
+              letterSpacing: -0.01,
+              height: 1.4,
               fontWeight: FontWeight.w400,
             ),
           ),
-          
         ],
       ),
     );

@@ -116,12 +116,18 @@ class _ServiceAgreementScreenState
                     Text(
                       "밍글 서비스 약관에",
                       style: TextStyle(
-                          fontSize: 24.0, fontWeight: FontWeight.w400),
+                          fontSize: 24.0,
+                          letterSpacing: -0.04,
+                          height: 1.4,
+                          fontWeight: FontWeight.w400),
                     ),
                     Text(
                       "동의해 주세요.",
                       style: TextStyle(
-                          fontSize: 24.0, fontWeight: FontWeight.w400),
+                          fontSize: 24.0,
+                          letterSpacing: -0.04,
+                          height: 1.4,
+                          fontWeight: FontWeight.w400),
                     ),
                   ],
                 ),
@@ -150,7 +156,11 @@ class _ServiceAgreementScreenState
                 ),
                 const Text(
                   "약관 전체동의",
-                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                      fontSize: 16.0,
+                      letterSpacing: -0.02,
+                      height: 1.5,
+                      fontWeight: FontWeight.w600),
                 )
               ],
             ),
@@ -158,7 +168,6 @@ class _ServiceAgreementScreenState
               height: 24,
             ),
             const Divider(
-              height: 0,
               thickness: 1,
               color: GRAYSCALE_GRAY_02,
             ),
@@ -185,7 +194,9 @@ class _ServiceAgreementScreenState
                 ),
                 const Text(
                   "만 14세 이상입니다.",
-                  style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400),
+                  style: TextStyle(
+                      fontSize: 14.0,
+letterSpacing: -0.01, height: 1.4, fontWeight: FontWeight.w400),
                 )
               ],
             ),
@@ -214,6 +225,8 @@ class _ServiceAgreementScreenState
                   text: TextSpan(
                       style: const TextStyle(
                           fontSize: 14.0,
+letterSpacing: -0.01,
+                          height: 1.4,
                           fontWeight: FontWeight.w400,
                           color: Colors.black),
                       children: [
@@ -252,6 +265,8 @@ class _ServiceAgreementScreenState
                                                   "닫기",
                                                   style: TextStyle(
                                                       fontSize: 16.0,
+                                                      letterSpacing: -0.02,
+                                                      height: 1.5,
                                                       color:
                                                           PRIMARY_COLOR_ORANGE_02),
                                                 ),
@@ -265,6 +280,8 @@ class _ServiceAgreementScreenState
                                             "서비스 이용약관",
                                             style: TextStyle(
                                                 fontSize: 20.0,
+                                                letterSpacing: -0.03,
+                                                height: 1.5,
                                                 fontWeight: FontWeight.w500),
                                           ),
                                           const SizedBox(
@@ -306,7 +323,9 @@ class _ServiceAgreementScreenState
                 ),
                 // Text(
                 //   "(필수) 서비스 이용약관 동의",
-                // style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400),
+                // style: TextStyle(fontSize: 14.0,
+//letterSpacing: -0.01,
+// height: 1.4, fontWeight: FontWeight.w400),
                 // )
               ],
             ),
@@ -335,6 +354,8 @@ class _ServiceAgreementScreenState
                   text: TextSpan(
                       style: const TextStyle(
                           fontSize: 14.0,
+letterSpacing: -0.01,
+                          height: 1.4,
                           fontWeight: FontWeight.w400,
                           color: Colors.black),
                       children: [
@@ -373,6 +394,8 @@ class _ServiceAgreementScreenState
                                                   "닫기",
                                                   style: TextStyle(
                                                       fontSize: 16.0,
+                                                      letterSpacing: -0.02,
+                                                      height: 1.5,
                                                       color:
                                                           PRIMARY_COLOR_ORANGE_02),
                                                 ),
@@ -386,6 +409,8 @@ class _ServiceAgreementScreenState
                                             "개인정보 처리방침",
                                             style: TextStyle(
                                                 fontSize: 20.0,
+                                                letterSpacing: -0.03,
+                                                height: 1.5,
                                                 fontWeight: FontWeight.w500),
                                           ),
                                           const SizedBox(

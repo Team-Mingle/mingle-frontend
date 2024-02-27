@@ -30,6 +30,8 @@ class MyModuleReviewsScreen extends StatelessWidget {
                 style: TextStyle(
                     color: GRAYSCALE_GRAY_03,
                     fontSize: 12.0,
+                    letterSpacing: -0.005,
+                    height: 1.3,
                     fontWeight: FontWeight.w400))),
       ),
     );
@@ -83,8 +85,11 @@ class MyModuleReviewsScreen extends StatelessWidget {
             ),
             Text(
               satisfactionText,
-              style:
-                  const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w500),
+              style: const TextStyle(
+                  fontSize: 12.0,
+                  letterSpacing: -0.005,
+                  height: 1.3,
+                  fontWeight: FontWeight.w500),
             )
           ]),
         );
@@ -116,6 +121,8 @@ class MyModuleReviewsScreen extends StatelessWidget {
                 //   author,
                 //   style: const TextStyle(
                 //       fontSize: 12.0,
+//letterSpacing: -0.005,
+                // height: 1.3,
                 //       fontWeight: FontWeight.w500,
                 //       color: GRAYSCALE_GRAY_04),
                 // ),
@@ -131,7 +138,10 @@ class MyModuleReviewsScreen extends StatelessWidget {
                 Text(
                   likes.toString(),
                   style: const TextStyle(
-                      fontSize: 12.0, color: PRIMARY_COLOR_ORANGE_01),
+                      fontSize: 12.0,
+                      letterSpacing: -0.005,
+                      height: 1.3,
+                      color: PRIMARY_COLOR_ORANGE_01),
                 ),
               ],
             )
@@ -163,7 +173,11 @@ class MyModuleReviewsScreen extends StatelessWidget {
         ),
         title: const Text(
           "내가 작성한 강의평",
-          style: TextStyle(fontSize: 16.0, color: Colors.black),
+          style: TextStyle(
+              fontSize: 16.0,
+              letterSpacing: -0.02,
+              height: 1.5,
+              color: Colors.black),
         ),
       ),
       body: SingleChildScrollView(
@@ -176,7 +190,11 @@ class MyModuleReviewsScreen extends StatelessWidget {
                 const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
             child: const Text(
               "강의평은 수정하거나 삭제할 수 없습니다.",
-              style: TextStyle(fontSize: 12.0, color: GRAYSCALE_GRAY_04),
+              style: TextStyle(
+                  fontSize: 12.0,
+                  letterSpacing: -0.005,
+                  height: 1.3,
+                  color: GRAYSCALE_GRAY_04),
             ),
           ),
           ...List.generate(

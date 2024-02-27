@@ -75,6 +75,8 @@ class PointShopScreen extends StatelessWidget {
                                   "강의평가 $validity 이용권",
                                   style: const TextStyle(
                                       fontSize: 16.0,
+                                      letterSpacing: -0.02,
+                                      height: 1.5,
                                       fontWeight: FontWeight.w500),
                                 ),
                                 const SizedBox(
@@ -83,7 +85,10 @@ class PointShopScreen extends StatelessWidget {
                                 Text(
                                   "$validity동안 모든 강의평가를 제한 없이 볼 수 있습니다.",
                                   style: const TextStyle(
-                                      fontSize: 12.0, color: GRAYSCALE_GRAY_04),
+                                      fontSize: 12.0,
+                                      letterSpacing: -0.005,
+                                      height: 1.3,
+                                      color: GRAYSCALE_GRAY_04),
                                 ),
                                 const SizedBox(
                                   height: 8.0,
@@ -109,6 +114,8 @@ class PointShopScreen extends StatelessWidget {
                                 "${pointsOwned}p",
                                 style: const TextStyle(
                                     fontSize: 16.0,
+                                    letterSpacing: -0.02,
+                                    height: 1.5,
                                     fontWeight: FontWeight.w500),
                               )
                             ],
@@ -120,13 +127,19 @@ class PointShopScreen extends StatelessWidget {
                             children: [
                               const Text(
                                 "사용할 포인트",
-                                style: TextStyle(fontSize: 16.0, color: RED),
+                                style: TextStyle(
+                                    fontSize: 16.0,
+                                    letterSpacing: -0.02,
+                                    height: 1.5,
+                                    color: RED),
                               ),
                               const Spacer(),
                               Text(
                                 "-${pointsRequired}p",
                                 style: const TextStyle(
                                     fontSize: 16.0,
+                                    letterSpacing: -0.02,
+                                    height: 1.5,
                                     fontWeight: FontWeight.w500,
                                     color: RED),
                               )
@@ -150,6 +163,8 @@ class PointShopScreen extends StatelessWidget {
                                 "${pointsOwned - pointsRequired}p",
                                 style: const TextStyle(
                                     fontSize: 16.0,
+                                    letterSpacing: -0.02,
+                                    height: 1.5,
                                     fontWeight: FontWeight.w500),
                               )
                             ],
@@ -173,6 +188,8 @@ class PointShopScreen extends StatelessWidget {
                                         "강의평가 작성하기",
                                         style: TextStyle(
                                             fontSize: 12.0,
+                                            letterSpacing: -0.005,
+                                            height: 1.3,
                                             fontWeight: FontWeight.w500,
                                             color: PRIMARY_COLOR_ORANGE_01),
                                       ),
@@ -203,6 +220,8 @@ class PointShopScreen extends StatelessWidget {
                                       "구매하기",
                                       style: TextStyle(
                                           fontSize: 14.0,
+                                          letterSpacing: -0.01,
+                                          height: 1.4,
                                           fontWeight: FontWeight.w400),
                                     ),
                                   ],
@@ -243,15 +262,21 @@ class PointShopScreen extends StatelessWidget {
               Text(
                 "강의평가 $validity 이용권",
                 style: const TextStyle(
-                    fontSize: 16.0, fontWeight: FontWeight.w500),
+                    fontSize: 16.0,
+                    letterSpacing: -0.02,
+                    height: 1.5,
+                    fontWeight: FontWeight.w500),
               ),
               const SizedBox(
                 height: 8.0,
               ),
               Text(
                 "$validity동안 모든 강의평가를 제한 없이 볼 수 있습니다.",
-                style:
-                    const TextStyle(fontSize: 12.0, color: GRAYSCALE_GRAY_04),
+                style: const TextStyle(
+                    fontSize: 12.0,
+                    letterSpacing: -0.005,
+                    height: 1.3,
+                    color: GRAYSCALE_GRAY_04),
               ),
               const SizedBox(
                 height: 8.0,
@@ -314,7 +339,11 @@ class PointShopScreen extends StatelessWidget {
                 ),
                 const Text(
                   "포인트샵",
-                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                      fontSize: 24.0,
+                      letterSpacing: -0.04,
+                      height: 1.4,
+                      fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(
                   height: 16.0,

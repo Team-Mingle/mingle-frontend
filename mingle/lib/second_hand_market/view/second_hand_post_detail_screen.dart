@@ -278,6 +278,8 @@ class _SecondHandPostDetailScreenState
                 "장터",
                 style: TextStyle(
                     fontSize: 14.0,
+                    letterSpacing: -0.01,
+                    height: 1.4,
                     fontWeight: FontWeight.w400,
                     color: GRAYSCALE_GRAY_03),
               ),
@@ -477,7 +479,10 @@ class _SecondHandPostDetailScreenState
                       Text(
                         item.title,
                         style: const TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.w500),
+                            fontSize: 20.0,
+                            letterSpacing: -0.03,
+                            height: 1.5,
+                            fontWeight: FontWeight.w500),
                       ),
                       const SizedBox(
                         height: 8.0,
@@ -485,7 +490,10 @@ class _SecondHandPostDetailScreenState
                       Text(
                         "${item.price.toString()} ${item.currency}",
                         style: const TextStyle(
-                            fontSize: 16.0, fontWeight: FontWeight.w600),
+                            fontSize: 16.0,
+                            letterSpacing: -0.02,
+                            height: 1.5,
+                            fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
@@ -847,6 +855,8 @@ class _SecondHandPostDetailScreenState
                           style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20.0,
+                              letterSpacing: -0.03,
+                              height: 1.5,
                               fontWeight: FontWeight.w600),
                         ),
                       ),

@@ -63,12 +63,18 @@ class _SelectSchoolScreenState extends ConsumerState<SelectSchoolScreen> {
                     const Text(
                       "재학 중인 학교가",
                       style: TextStyle(
-                          fontSize: 24.0, fontWeight: FontWeight.w400),
+                          fontSize: 24.0,
+                          letterSpacing: -0.04,
+                          height: 1.4,
+                          fontWeight: FontWeight.w400),
                     ),
                     Text(
                       widget.isPasswordReset ? "어디신가요?" : "어디에 위치해 있나요?",
                       style: const TextStyle(
-                          fontSize: 24.0, fontWeight: FontWeight.w400),
+                          fontSize: 24.0,
+                          letterSpacing: -0.04,
+                          height: 1.4,
+                          fontWeight: FontWeight.w400),
                     ),
                     const SizedBox(
                       height: 16.0,
@@ -80,6 +86,8 @@ class _SelectSchoolScreenState extends ConsumerState<SelectSchoolScreen> {
                         style: const TextStyle(
                             color: GRAYSCALE_GRAY_03,
                             fontSize: 14.0,
+                            letterSpacing: -0.01,
+                            height: 1.4,
                             fontWeight: FontWeight.w400))
                   ],
                 ),

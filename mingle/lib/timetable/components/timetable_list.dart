@@ -23,7 +23,9 @@ class TimetableList extends StatelessWidget {
                   '2023년 2학기',
                   style: TextStyle(
                     color: GRAYSCALE_GRAY_03,
-                    fontSize: 16,
+                    fontSize: 16.0,
+                    letterSpacing: -0.02,
+                    height: 1.5,
                     fontWeight: FontWeight.w500,
                   ),
                 ),

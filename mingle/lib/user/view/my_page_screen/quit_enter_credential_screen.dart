@@ -95,15 +95,27 @@ class _QuitEnterCredentialScreenState
               ),
               const Text(
                 "안전한 탈퇴를 위해",
-                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w400),
+                style: TextStyle(
+                    fontSize: 24.0,
+                    letterSpacing: -0.04,
+                    height: 1.4,
+                    fontWeight: FontWeight.w400),
               ),
               const Text(
                 "아이디와 비밀번호를",
-                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w400),
+                style: TextStyle(
+                    fontSize: 24.0,
+                    letterSpacing: -0.04,
+                    height: 1.4,
+                    fontWeight: FontWeight.w400),
               ),
               const Text(
                 "입력해 주세요.",
-                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w400),
+                style: TextStyle(
+                    fontSize: 24.0,
+                    letterSpacing: -0.04,
+                    height: 1.4,
+                    fontWeight: FontWeight.w400),
               ),
               const SizedBox(
                 height: 40.0,
