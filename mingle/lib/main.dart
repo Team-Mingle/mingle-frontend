@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -95,12 +96,21 @@ class _AppState extends State<_App> {
     return ProviderScope(
       child: MaterialApp(
           theme: ThemeData(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              fontFamily: 'Pretendard',
-              disabledColor: GRAYSCALE_GRAY_02,
-              bottomSheetTheme: const BottomSheetThemeData(
-                  backgroundColor: Colors.transparent)),
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            fontFamily: 'Pretendard',
+            disabledColor: GRAYSCALE_GRAY_02,
+            bottomSheetTheme:
+                const BottomSheetThemeData(backgroundColor: Colors.transparent),
+            textSelectionTheme: const TextSelectionThemeData(
+              cursorColor: GRAYSCALE_GRAY_04,
+              selectionColor: SECONDARY_COLOR_ORANGE_03,
+              selectionHandleColor: PRIMARY_COLOR_ORANGE_01,
+            ),
+            cupertinoOverrideTheme: const CupertinoThemeData(
+              primaryColor: PRIMARY_COLOR_ORANGE_01,
+            ),
+          ),
           debugShowCheckedModeBanner: false,
           home: const SplashScreen()),
     );
