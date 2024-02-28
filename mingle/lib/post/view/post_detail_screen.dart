@@ -521,6 +521,10 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                               letterSpacing: -0.01,
                               height: 1.4,
                               fontWeight: FontWeight.w400),
+                          linkStyle: const TextStyle(
+                              color: Colors.blue,
+                              decoration: TextDecoration.underline,
+                              decorationColor: Colors.blue),
                         ),
                         Column(
                           children: [

@@ -8,7 +8,7 @@ class UserModel {
   final String hashedEmail;
   final String nickName;
   final String univName;
-  final String country;
+  final String? country;
 
   UserModel({
     required this.memberId,

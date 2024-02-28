@@ -31,6 +31,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
   void checkToken() async {
     final accessToken = await _secureStorage.read(key: ACCESS_TOKEN_KEY);
+    print(accessToken);
+    await Future.delayed(const Duration(seconds: 2));
     final Dio dio = ref.read(dioProvider);
     if (accessToken == null) {
       Navigator.of(context).pushAndRemoveUntil(
@@ -41,6 +43,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     try {
       final resp = await dio.get('https://$baseUrl/auth/verify-login-status',
           options: Options(headers: {'Authorization': 'Bearer $accessToken'}));
+      print(resp);
 
       ref
           .read(currentUserProvider.notifier)
@@ -48,8 +51,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       //FirebaseAnalytics.instance.logLogin(loginMethod: 'login');
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (_) => HomeRootTab()), (route) => false);
-    } catch (e) {
-      print(e);
+    } on DioException catch (e) {
+      // print(e.response?.data['message']);
+      // print(e);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (_) => const AppStartScreen()),
           (route) => false);

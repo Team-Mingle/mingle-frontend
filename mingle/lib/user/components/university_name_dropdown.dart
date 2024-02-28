@@ -33,7 +33,7 @@ class _DropdownListState extends ConsumerState<UniversityNameDropdownList> {
     return FutureBuilder(
         future: ref.watch(authRepositoryProvider).getEmailDomains(
             countryName: ref.watch(currentUserProvider) != null
-                ? ref.watch(currentUserProvider)!.country
+                ? ref.watch(currentUserProvider)!.country!
                 : ref.watch(selectedCountryProvider)),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
