@@ -6,7 +6,7 @@ import 'package:mingle/post/provider/post_provider.dart';
 import 'package:mingle/user/provider/user_provider.dart';
 import 'package:mingle/user/view/home_screen/tab_screen.dart';
 
-class LawnTabScreen extends ConsumerWidget {
+class LawnTabScreen extends ConsumerStatefulWidget {
   final Function(int)? changeTabIndex;
   const LawnTabScreen({
     this.changeTabIndex,
@@ -14,7 +14,12 @@ class LawnTabScreen extends ConsumerWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<LawnTabScreen> createState() => _LawnTabScreenState();
+}
+
+class _LawnTabScreenState extends ConsumerState<LawnTabScreen> {
+  @override
+  Widget build(BuildContext context) {
     String univName = ref.watch(currentUserProvider)!.univName;
     return TabScreen(
       boardType: "UNIV",
@@ -65,4 +70,7 @@ class LawnTabScreen extends ConsumerWidget {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

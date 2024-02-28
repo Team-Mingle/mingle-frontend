@@ -45,8 +45,8 @@ class GeneralPostPreviewCard extends ConsumerStatefulWidget {
       _GeneralPostPreviewCardState();
 }
 
-class _GeneralPostPreviewCardState
-    extends ConsumerState<GeneralPostPreviewCard> {
+class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
+    with AutomaticKeepAliveClientMixin {
   final ScrollController scrollController = ScrollController();
 
   @override
@@ -96,6 +96,7 @@ class _GeneralPostPreviewCardState
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     if (widget.data is CursorPaginationLoading) {
       return Container(
         color: Colors.white,
@@ -420,4 +421,8 @@ class _GeneralPostPreviewCardState
               ])),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

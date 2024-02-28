@@ -42,7 +42,8 @@ class ItemPostPreviewCard extends ConsumerStatefulWidget {
       _GeneralPostPreviewCardState();
 }
 
-class _GeneralPostPreviewCardState extends ConsumerState<ItemPostPreviewCard> {
+class _GeneralPostPreviewCardState extends ConsumerState<ItemPostPreviewCard>
+    with AutomaticKeepAliveClientMixin {
   final ScrollController scrollController = ScrollController();
 
   @override
@@ -105,6 +106,7 @@ class _GeneralPostPreviewCardState extends ConsumerState<ItemPostPreviewCard> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     if (widget.data is CursorPaginationLoading) {
       return const Center(
         child: CircularProgressIndicator(
@@ -668,4 +670,8 @@ class _GeneralPostPreviewCardState extends ConsumerState<ItemPostPreviewCard> {
           ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
