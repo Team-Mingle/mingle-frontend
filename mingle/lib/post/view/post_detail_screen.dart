@@ -154,18 +154,23 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
     // print(addCommentModel.isAnonymous);
 
     final commentRepository = ref.watch(commentRepositoryProvider);
-    await commentRepository.postComment(addCommentModel);
+    final postedComment = await commentRepository.postComment(addCommentModel);
+    final postedCommentId = postedComment['commentId'];
     // setState(() {
     //   commentFuture = ref
     //       .watch(postRepositoryProvider)
     //       .getPostcomments(postId: widget.postId);
     // });
     // widget.refreshList();
-    refreshComments();
+    await refreshComments();
+    await Future.delayed(const Duration(seconds: 1));
+    // print(
+    //     "context is ${GlobalObjectKey(postedCommentId.toString()).currentContext}");
+    // Scrollable.ensureVisible(const GlobalObjectKey("14932").currentContext!);
   }
 
-  void refreshComments() {
-    getComments().then((data) {
+  refreshComments() async {
+    await getComments().then((data) {
       setState(() {
         comments = data;
       });
@@ -408,6 +413,8 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
             centerTitle: false,
             actions: [
               GestureDetector(
+                // onTap: () => Scrollable.ensureVisible(
+                //     const GlobalObjectKey("14932").currentContext!),
                 onTap: post is PostDetailModel
                     ? () => showCupertinoModalPopup<void>(
                           context: context,
@@ -699,6 +706,10 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                                                 )
                                               : Container(),
                                           CommentCard(
+                                              key: GlobalObjectKey(
+                                                  comments![index]
+                                                      .commentId
+                                                      .toString()),
                                               refreshComments: refreshComments,
                                               likeOrUnlikeComment:
                                                   likeOrUnlikeComment,
@@ -794,6 +805,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
             handleSubmit: handleCommentSubmit,
             scrollController: scrollController,
             focusNode: focusNode,
+            isCommentReply: parentCommentId != null && mentionId != null,
           ),
         ],
       ),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -26,19 +28,17 @@ class GeneralPostPreviewCard extends ConsumerStatefulWidget {
   final ProviderFamily<PostModel?, int>? postDetailProvider;
 
   GeneralPostPreviewCard(
-      {
+      {super.key,
       // required this.postList,
       required this.boardType,
       required this.cardType,
-      Key? key,
       required this.data,
       this.notifierProvider,
       this.allNotifierProvider,
       this.postDetailProvider,
       this.emptyMessage = "아직 올라온 게시물이 없어요!"
       // required this.postFuture,
-      })
-      : super(key: key);
+      });
 
   @override
   ConsumerState<GeneralPostPreviewCard> createState() =>
@@ -54,6 +54,9 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
     // TODO: implement initState
     super.initState();
     scrollController.addListener(scrollListener);
+    // scrollController.addListener(() {
+    //   setState(() {});
+    // });
   }
 
   void scrollListener() {
@@ -62,6 +65,7 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
         scrollController.position.maxScrollExtent - 300) {
       widget.notifierProvider!.paginate(fetchMore: true);
     }
+    // setState(() {});
   }
 
   int getMaxLines() {
@@ -141,21 +145,23 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
       data: const CupertinoThemeData(
           primaryColor: PRIMARY_COLOR_ORANGE_02, applyThemeToAll: true),
       child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: widget.cardType == CardType.home
-                ? [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 1,
-                      blurRadius: 4,
-                      offset: const Offset(0, 3), // changes position of shadow
-                    ),
-                  ]
-                : [],
-          ),
-          child: CustomScrollView(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: widget.cardType == CardType.home
+              ? [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 1,
+                    blurRadius: 4,
+                    offset: const Offset(0, 3), // changes position of shadow
+                  ),
+                ]
+              : [],
+        ),
+        child: Stack(
+          children: [
+            CustomScrollView(
               controller: scrollController,
               shrinkWrap: true,
               physics: widget.cardType == CardType.home
@@ -267,28 +273,38 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
                                                   buildTypeIndicator(
                                                       post.categoryType),
                                                   Expanded(
-                                                    child: Text(
-                                                      post.title,
-                                                      style: const TextStyle(
-                                                        fontFamily:
-                                                            "Pretendard",
-                                                        fontSize: 14.0,
-                                                        letterSpacing: -0.01,
-                                                        height: 1.4,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color:
-                                                            GRAYSCALE_BLACK_GRAY,
-                                                      ),
-                                                      textAlign: TextAlign.left,
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          post.title,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontFamily:
+                                                                "Pretendard",
+                                                            fontSize: 14.0,
+                                                            letterSpacing:
+                                                                -0.01,
+                                                            height: 1.4,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color:
+                                                                GRAYSCALE_BLACK_GRAY,
+                                                          ),
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 4.0,
+                                                        ),
+                                                        if (post.fileAttached)
+                                                          SvgPicture.asset(
+                                                              "assets/img/post_screen/has_picture_icon.svg"),
+                                                      ],
                                                     ),
                                                   ),
-                                                  if (post.fileAttached)
-                                                    SvgPicture.asset(
-                                                        "assets/img/post_screen/has_picture_icon.svg"),
                                                 ],
                                               ),
                                               SizedBox(
@@ -418,7 +434,32 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
                         ),
                       ),
                 // ),
-              ])),
+              ],
+            ),
+            // if (scrollController.hasClients && scrollController.offset > 0)
+            //   Positioned(
+            //     bottom: 20.0,
+            //     left: 20.0,
+            //     child: Container(
+            //       decoration: BoxDecoration(
+            //           border: Border.all(color: PRIMARY_COLOR_ORANGE_01),
+            //           borderRadius: BorderRadius.circular(20.0),
+            //           color: Colors.white),
+            //       height: 40.0,
+            //       width: 40.0,
+            //       child: Center(
+            //         child: IconButton(
+            //           icon: const Icon(Icons.arrow_upward),
+            //           onPressed: () => scrollController.animateTo(0,
+            //               duration: const Duration(milliseconds: 500),
+            //               curve: Curves.easeInOut),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+          ],
+        ),
+      ),
     );
   }
 

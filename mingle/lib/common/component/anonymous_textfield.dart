@@ -6,11 +6,13 @@ class AnonymousTextfield extends StatefulWidget {
   final Function handleSubmit;
   final ScrollController scrollController;
   final FocusNode focusNode;
+  final bool isCommentReply;
   const AnonymousTextfield(
       {super.key,
       required this.handleSubmit,
       required this.scrollController,
-      required this.focusNode});
+      required this.focusNode,
+      required this.isCommentReply});
 
   @override
   State<AnonymousTextfield> createState() => _AnonymousTextfieldState();
@@ -143,7 +145,7 @@ class _AnonymousTextfieldState extends State<AnonymousTextfield> {
                   onTap: () {
                     widget.handleSubmit(_controller.text, isAnonymous);
                     _controller.clear();
-                    _scrollDown();
+                    if (!widget.isCommentReply) _scrollDown();
                   },
                 )
         ]),

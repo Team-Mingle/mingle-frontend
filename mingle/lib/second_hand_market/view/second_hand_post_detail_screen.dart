@@ -773,6 +773,7 @@ class _SecondHandPostDetailScreenState
               handleSubmit: handleCommentSubmit,
               scrollController: scrollController,
               focusNode: focusNode,
+              isCommentReply: parentCommentId != null && mentionId != null,
             ),
           ],
         ),
