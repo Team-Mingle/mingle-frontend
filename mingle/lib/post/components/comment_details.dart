@@ -59,56 +59,40 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
     }
 
     return Column(mainAxisSize: MainAxisSize.min, children: [
-      const SizedBox(
-        height: 6.0,
-      ),
       Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
+          const SizedBox(
+            height: 6.0,
+          ),
           Expanded(
-              child: RichText(
-            text: TextSpan(children: [
-              if (widget.parentNickname != null)
-                TextSpan(
-                  text: "@${widget.parentNickname} ",
+            child: RichText(
+              text: TextSpan(children: [
+                if (widget.parentNickname != null)
+                  TextSpan(
+                    text: "@${widget.parentNickname} ",
+                    style: const TextStyle(
+                        fontSize: 13.0,
+                        height: 1.4,
+                        color: PRIMARY_COLOR_ORANGE_01),
+                  ),
+                LinkifySpan(
+                  text: widget.comment.content,
+                  onOpen: (link) async {
+                    if (!await launchUrl(Uri.parse(link.url))) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('링크를 열 수 없습니다.')),
+                      );
+                    }
+                  },
                   style: const TextStyle(
-                      fontSize: 13.0,
-                      height: 1.4,
-                      color: PRIMARY_COLOR_ORANGE_01),
-                ),
-              LinkifySpan(
-                text: widget.comment.content,
-                onOpen: (link) async {
-                  if (!await launchUrl(Uri.parse(link.url))) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('링크를 열 수 없습니다.')),
-                    );
-                  }
-                },
-                style: const TextStyle(
-                    fontSize: 13.0, height: 1.4, color: Colors.black),
-                linkStyle: const TextStyle(
-                    color: Colors.blue, decoration: TextDecoration.underline),
-              )
-            ]),
-          )
-
-              // Linkify(
-              //   onOpen: (link) async {
-              //     if (!await launchUrl(Uri.parse(link.url))) {
-              //       ScaffoldMessenger.of(context).showSnackBar(
-              //         const SnackBar(content: Text('링크를 열 수 없습니다.')),
-              //       );
-              //     }
-              //   },
-              //   text: widget.parentNickname != null
-              //       ? "@${widget.parentNickname} ${widget.comment.content}"
-              //       : widget.comment.content,
-              //   style: const TextStyle(
-              //       fontSize: 13.0, height: 1.4, color: Colors.black),
-              //   // linkStyle: const TextStyle(color: PRIMARY_COLOR_ORANGE_01),
-              // ),
-              ),
+                      fontSize: 13.0, height: 1.4, color: Colors.black),
+                  linkStyle: const TextStyle(
+                      color: Colors.blue, decoration: TextDecoration.underline),
+                )
+              ]),
+            ),
+          ),
           const SizedBox(
             width: 12.0,
           ),

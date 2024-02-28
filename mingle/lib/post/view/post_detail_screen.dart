@@ -69,7 +69,8 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
       blinded: false,
       myPost: false,
       liked: false,
-      scraped: false);
+      scraped: false,
+      reported: false);
 
   final List<CommentModel> fakeComments = List.generate(
       5,

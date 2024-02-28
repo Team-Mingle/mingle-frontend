@@ -9,6 +9,7 @@ class PostDetailModel extends PostModel {
   final List<String> postImgUrl;
   final String status;
   final bool myPost;
+  final bool reported;
   bool liked;
   bool scraped;
 
@@ -31,7 +32,8 @@ class PostDetailModel extends PostModel {
       required super.blinded,
       required this.myPost,
       required this.liked,
-      required this.scraped});
+      required this.scraped,
+      required this.reported});
 
   factory PostDetailModel.fromJson(Map<String, dynamic> json) =>
       _$PostDetailModelFromJson(json);

@@ -315,7 +315,7 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
         },
       ).toList(),
       options: CarouselOptions(
-        height: 160,
+        height: (MediaQuery.of(context).size.width - 32) / 2,
         viewportFraction: 1.0,
         autoPlay: true,
         autoPlayInterval: const Duration(seconds: 4),

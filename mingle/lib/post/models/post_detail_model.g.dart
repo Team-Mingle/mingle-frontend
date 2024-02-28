@@ -29,6 +29,7 @@ PostDetailModel _$PostDetailModelFromJson(Map<String, dynamic> json) =>
       myPost: json['myPost'] as bool,
       liked: json['liked'] as bool,
       scraped: json['scraped'] as bool,
+      reported: json['reported'] as bool,
     );
 
 Map<String, dynamic> _$PostDetailModelToJson(PostDetailModel instance) =>
@@ -50,6 +51,7 @@ Map<String, dynamic> _$PostDetailModelToJson(PostDetailModel instance) =>
       'postImgUrl': instance.postImgUrl,
       'status': instance.status,
       'myPost': instance.myPost,
+      'reported': instance.reported,
       'liked': instance.liked,
       'scraped': instance.scraped,
     };

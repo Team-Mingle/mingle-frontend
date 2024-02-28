@@ -8,6 +8,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/view/splash_screen.dart';
 import 'package:mingle/firebase_options.dart';
+import 'package:mingle/post/view/post_detail_screen.dart';
+import 'package:mingle/user/view/login_screen.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("백그라운드 메시지 처리.. ${message.notification!.body!}");
@@ -16,18 +20,32 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void initializeNotification() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+  const InitializationSettings initializationSettings =
+      InitializationSettings(android: initializationSettingsAndroid);
+
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+    onDidReceiveNotificationResponse: (NotificationResponse response) async {
+      _handleNotificationClick(response);
+    },
+  );
 
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(const AndroidNotificationChannel(
-          'high_importance_channel', 'high_importance_notification',
-          importance: Importance.max));
-
-  await flutterLocalNotificationsPlugin.initialize(const InitializationSettings(
-    android: AndroidInitializationSettings("@mipmap/ic_launcher"),
-  ));
+      ?.createNotificationChannel(
+        const AndroidNotificationChannel(
+          'high_importance_channel',
+          'High Importance Notifications',
+          description: 'Description for high importance channel',
+          importance: Importance.high,
+        ),
+      );
 
   FirebaseMessaging.instance.requestPermission(
     badge: true,
@@ -35,11 +53,47 @@ void initializeNotification() async {
     sound: true,
   );
 
-  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+  FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
     badge: true,
     sound: true,
   );
+
+  // 앱이 종료된 상태에서 알림 클릭 처리
+  FirebaseMessaging.instance.getInitialMessage().then((message) {
+    if (message != null) {
+      print(message.notification!.body!);
+      _handleMessage(message);
+    }
+  });
+
+  // 백그라운드에서 알림 클릭 처리
+  FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    print(message.notification!.body!);
+    _handleMessage(message);
+  });
+}
+
+void _handleNotificationClick(NotificationResponse response) {
+  // final Map<String, dynamic> data = response;
+  // final int postId = int.parse(data['contentId']);
+  // final state = navigatorKey.currentState;
+  // if (state != null) {
+  //   state.push(MaterialPageRoute(
+  //     builder: (_) => PostDetailScreen(
+  //       postId: postId,
+  //       boardType: '게시판 타입', // 게시판 타입에 맞는 값을 넣어주세요.
+  //       refreshList: () {}, // refreshList 함수를 넣어주세요.
+  //     ),
+  //   ));
+  // }
+}
+
+void _handleMessage(RemoteMessage message) {
+  final state = navigatorKey.currentState;
+  if (state != null && message.data['route'] != null) {
+    state.pushNamed(message.data['route']);
+  }
 }
 
 Future<void> main() async {
@@ -95,6 +149,7 @@ class _AppState extends State<_App> {
   Widget build(BuildContext context) {
     return ProviderScope(
       child: MaterialApp(
+          navigatorKey: navigatorKey,
           theme: ThemeData(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
