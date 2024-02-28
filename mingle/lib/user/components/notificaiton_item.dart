@@ -37,6 +37,7 @@ class _NotificationItemState extends ConsumerState<NotificationItem> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.notification.notificationType);
     String imagePath = _getImagePath(widget.notification.contentType);
 
     bool isTradingBoard = widget.notification.boardType == '거래게시판';
@@ -55,13 +56,13 @@ class _NotificationItemState extends ConsumerState<NotificationItem> {
                   MaterialPageRoute(
                     builder: (_) => PostDetailScreen(
                       boardType: widget.notification.boardType,
-                      postId: widget.notification.notificationId,
+                      postId: widget.notification.contentId,
                       refreshList: refreshList,
-                      notifierProvider:
-                          ref.watch(totalFreePostProvider.notifier),
-                      allNotifierProvider:
-                          ref.watch(totalFreePostProvider.notifier),
-                      postDetailProvider: totalFreePostDetailProvider,
+                      // notifierProvider:
+                      //     ref.watch(totalFreePostProvider.notifier),
+                      // allNotifierProvider:
+                      //     ref.watch(totalFreePostProvider.notifier),
+                      // postDetailProvider: totalFreePostDetailProvider,
                     ),
                   ),
                 );
@@ -71,13 +72,13 @@ class _NotificationItemState extends ConsumerState<NotificationItem> {
                   MaterialPageRoute(
                     builder: (_) => PostDetailScreen(
                       boardType: widget.notification.boardType,
-                      postId: widget.notification.notificationId,
+                      postId: widget.notification.contentId,
                       refreshList: refreshList,
-                      notifierProvider:
-                          ref.watch(totalQnAPostProvider.notifier),
-                      allNotifierProvider:
-                          ref.watch(totalQnAPostProvider.notifier),
-                      postDetailProvider: totalQnAPostDetailProvider,
+                      // notifierProvider:
+                      //     ref.watch(totalQnAPostProvider.notifier),
+                      // allNotifierProvider:
+                      //     ref.watch(totalQnAPostProvider.notifier),
+                      // postDetailProvider: totalQnAPostDetailProvider,
                     ),
                   ),
                 );
@@ -87,13 +88,13 @@ class _NotificationItemState extends ConsumerState<NotificationItem> {
                   MaterialPageRoute(
                     builder: (_) => PostDetailScreen(
                       boardType: widget.notification.boardType,
-                      postId: widget.notification.notificationId,
+                      postId: widget.notification.contentId,
                       refreshList: refreshList,
-                      notifierProvider:
-                          ref.watch(totalMinglePostProvider.notifier),
-                      allNotifierProvider:
-                          ref.watch(totalMinglePostProvider.notifier),
-                      postDetailProvider: totalMinglePostDetailProvider,
+                      // notifierProvider:
+                      //     ref.watch(totalMinglePostProvider.notifier),
+                      // allNotifierProvider:
+                      //     ref.watch(totalMinglePostProvider.notifier),
+                      // postDetailProvider: totalMinglePostDetailProvider,
                     ),
                   ),
                 );
@@ -110,13 +111,13 @@ class _NotificationItemState extends ConsumerState<NotificationItem> {
                   MaterialPageRoute(
                     builder: (_) => PostDetailScreen(
                       boardType: widget.notification.boardType,
-                      postId: widget.notification.notificationId,
+                      postId: widget.notification.contentId,
                       refreshList: refreshList,
-                      notifierProvider:
-                          ref.watch(univFreePostProvider.notifier),
-                      allNotifierProvider:
-                          ref.watch(univFreePostProvider.notifier),
-                      postDetailProvider: univFreePostDetailProvider,
+                      // notifierProvider:
+                      //     ref.watch(univFreePostProvider.notifier),
+                      // allNotifierProvider:
+                      //     ref.watch(univFreePostProvider.notifier),
+                      // postDetailProvider: univFreePostDetailProvider,
                     ),
                   ),
                 );
@@ -126,12 +127,12 @@ class _NotificationItemState extends ConsumerState<NotificationItem> {
                   MaterialPageRoute(
                     builder: (_) => PostDetailScreen(
                       boardType: widget.notification.boardType,
-                      postId: widget.notification.notificationId,
+                      postId: widget.notification.contentId,
                       refreshList: refreshList,
-                      notifierProvider: ref.watch(univQnAPostProvider.notifier),
-                      allNotifierProvider:
-                          ref.watch(univQnAPostProvider.notifier),
-                      postDetailProvider: univQnAPostDetailProvider,
+                      // notifierProvider: ref.watch(univQnAPostProvider.notifier),
+                      // allNotifierProvider:
+                      //     ref.watch(univQnAPostProvider.notifier),
+                      // postDetailProvider: univQnAPostDetailProvider,
                     ),
                   ),
                 );
@@ -141,12 +142,12 @@ class _NotificationItemState extends ConsumerState<NotificationItem> {
                   MaterialPageRoute(
                     builder: (_) => PostDetailScreen(
                       boardType: widget.notification.boardType,
-                      postId: widget.notification.notificationId,
+                      postId: widget.notification.contentId,
                       refreshList: refreshList,
-                      notifierProvider: ref.watch(univKsaPostProvider.notifier),
-                      allNotifierProvider:
-                          ref.watch(univKsaPostProvider.notifier),
-                      postDetailProvider: univKsaPostDetailProvider,
+                      // notifierProvider: ref.watch(univKsaPostProvider.notifier),
+                      // allNotifierProvider:
+                      //     ref.watch(univKsaPostProvider.notifier),
+                      // postDetailProvider: univKsaPostDetailProvider,
                     ),
                   ),
                 );

@@ -107,7 +107,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
     if (widget.notifierProvider != null) {
       widget.notifierProvider!.getDetail(postId: widget.postId);
     } else {
-      getPost();
+      // getPost();
     }
 
     getComments().then((data) {
@@ -185,9 +185,9 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
       });
     } else {
       setState(() {
-        postFuture = ref
-            .watch(postRepositoryProvider)
-            .getPostDetails(postId: widget.postId);
+        // postFuture = ref
+        //     .watch(postRepositoryProvider)
+        //     .getPostDetails(postId: widget.postId);
       });
     }
 
@@ -263,10 +263,11 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
 
     if (widget.postDetailProvider == null) {
       return FutureBuilder(
-        future: postFuture,
-        // ref
-        //     .watch(postRepositoryProvider)
-        //     .getPostDetails(postId: widget.postId),
+        future:
+            // postFuture,
+            ref
+                .watch(postRepositoryProvider)
+                .getPostDetails(postId: widget.postId),
         // postDetailFuture(postId),
         builder: (context, AsyncSnapshot<PostDetailModel> snapshot) {
           if (!snapshot.hasData) {
