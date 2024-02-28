@@ -14,7 +14,7 @@ import 'package:mingle/user/model/banner_model.dart';
 import 'package:mingle/user/provider/banner_provider.dart';
 import 'package:mingle/post/provider/post_provider.dart';
 import 'package:mingle/user/provider/is_fresh_login_provider.dart';
-import 'package:mingle/user/view/home_screen/notificaiton_screen.dart';
+import 'package:mingle/user/view/home_screen/notification_screen.dart';
 import 'package:mingle/user/view/home_screen/search_screen.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
 import 'dart:convert';

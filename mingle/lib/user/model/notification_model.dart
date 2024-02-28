@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'notification_model.g.dart'; 
+part 'notification_model.g.dart';
 
 @JsonSerializable()
 class NotificationModel {
@@ -11,7 +11,7 @@ class NotificationModel {
   final String notificationType;
   final String boardType;
   final String categoryType;
-  final bool isRead;
+  bool isRead;
   final String createAt;
 
   NotificationModel({
@@ -26,7 +26,9 @@ class NotificationModel {
     required this.createAt,
   });
 
-  factory NotificationModel.fromJson(Map<String, dynamic> json) => _$NotificationModelFromJson(json);NotificationModel copyWith({bool? isRead}) {
+  factory NotificationModel.fromJson(Map<String, dynamic> json) =>
+      _$NotificationModelFromJson(json);
+  NotificationModel copyWith({bool? isRead}) {
     return NotificationModel(
       notificationId: notificationId,
       contentId: contentId,
@@ -35,7 +37,7 @@ class NotificationModel {
       notificationType: notificationType,
       boardType: boardType,
       categoryType: categoryType,
-      isRead: isRead ?? this.isRead, 
+      isRead: isRead ?? this.isRead,
       createAt: createAt,
     );
   }

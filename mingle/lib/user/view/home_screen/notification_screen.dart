@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
-import 'package:mingle/user/components/notificaiton_item.dart';
+import 'package:mingle/user/components/notification_item.dart';
 import 'package:mingle/user/model/notification_model.dart';
 import 'package:mingle/user/provider/notification_provider.dart';
 
@@ -15,10 +15,10 @@ class NotificationScreen extends ConsumerWidget {
     final asyncNotification = ref.watch(notificationProvider);
 
     return Scaffold(
-      backgroundColor: BACKGROUND_COLOR_GRAY,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        backgroundColor: BACKGROUND_COLOR_GRAY,
+        backgroundColor: Colors.white,
         leading: Padding(
           padding: const EdgeInsets.only(left: 0.0),
           child: InkWell(
@@ -55,8 +55,14 @@ class NotificationScreen extends ConsumerWidget {
               return SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    return NotificationItem(
-                        notification: notificationList[index]);
+                    return Column(
+                      children: [
+                        NotificationItem(notification: notificationList[index]),
+                        const Divider(
+                          color: GRAYSCALE_GRAY_02,
+                        )
+                      ],
+                    );
                   },
                   childCount: notificationList.length,
                 ),

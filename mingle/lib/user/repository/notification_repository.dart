@@ -27,5 +27,5 @@ abstract class NotificationRepository {
   @PATCH('/{notificationId}')
   @Headers({'accessToken': 'true'})
   Future<bool> markNotificationAsRead(
-      @Path('notificationId') String notificationId);
+      {@Path('notificationId') required int notificationId});
 }

@@ -50,7 +50,7 @@ class _NotificationRepository implements NotificationRepository {
   }
 
   @override
-  Future<bool> markNotificationAsRead(String notificationId) async {
+  Future<bool> markNotificationAsRead({required int notificationId}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};

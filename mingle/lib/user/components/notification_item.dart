@@ -8,6 +8,8 @@ import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/user/model/notification_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mingle/user/provider/member_provider.dart';
+import 'package:mingle/user/provider/notification_provider.dart';
+import 'package:mingle/user/repository/notification_repository.dart';
 
 class NotificationItem extends ConsumerStatefulWidget {
   final NotificationModel notification;
@@ -35,6 +37,15 @@ class _NotificationItemState extends ConsumerState<NotificationItem> {
     widget.allNotifierProvider!.paginate(normalRefetch: true);
   }
 
+  void markNotificationAsRead() async {
+    setState(() {
+      widget.notification.isRead = true;
+    });
+    await ref.watch(notificationRepositoryProvider).markNotificationAsRead(
+          notificationId: widget.notification.notificationId,
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     print(widget.notification.notificationType);
@@ -47,6 +58,7 @@ class _NotificationItemState extends ConsumerState<NotificationItem> {
 
     return GestureDetector(
       onTap: () {
+        markNotificationAsRead();
         switch (widget.notification.boardType) {
           case "광장":
             switch (widget.notification.categoryType) {
