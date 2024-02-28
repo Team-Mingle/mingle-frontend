@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -11,6 +13,7 @@ import 'package:mingle/common/const/data.dart';
 import 'package:mingle/common/view/splash_screen.dart';
 import 'package:mingle/dio/dio.dart';
 import 'package:mingle/firebase_options.dart';
+import 'package:mingle/post/models/post_detail_model.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/secure_storage/secure_storage.dart';
 import 'package:mingle/user/model/user_model.dart';
@@ -35,9 +38,11 @@ class _AppState extends ConsumerState<_App> {
   void initState() {
     FirebaseMessaging.instance.requestPermission();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      RemoteNotification? notification = message.notification;
 
-      if (notification != null) {
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+
+      if (notification != null&& android != null) {
         FlutterLocalNotificationsPlugin().show(
           notification.hashCode,
           notification.title,
@@ -67,18 +72,25 @@ class _AppState extends ConsumerState<_App> {
     }
 
     void handleNotificationClick(NotificationResponse response) {
-      // final Map<String, dynamic> data = response;
-      // final int postId = int.parse(data['contentId']);
-      // final state = navigatorKey.currentState;
-      // if (state != null) {
-      //   state.push(MaterialPageRoute(
-      //     builder: (_) => PostDetailScreen(
-      //       postId: postId,
-      //       boardType: '게시판 타입', // 게시판 타입에 맞는 값을 넣어주세요.
-      //       refreshList: () {}, // refreshList 함수를 넣어주세요.
-      //     ),
-      //   ));
-      // }
+      print('onDidReceiveNotificationResponse - payload: ${response.payload}');
+      final payload = response.payload ?? '';
+
+      final parsedJson = jsonDecode(payload);
+      if (!parsedJson.containsKey('contentId')) {
+        return;
+      }
+
+      final int postId = (parsedJson['routeTo'] as int);
+
+      final state = navigatorKey.currentState;
+      if (state != null) {
+        state.push(MaterialPageRoute(
+          builder: (_) => PostDetailScreen(
+            postId: postId,
+            refreshList: () {},
+          ),
+        ));
+      }
     }
 
     void initializeNotification() async {

@@ -25,7 +25,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class PostDetailScreen extends ConsumerStatefulWidget {
   final int postId;
-  final String boardType;
+  final String? boardType;
   final Function refreshList;
   final ProviderFamily<PostModel?, int>? postDetailProvider;
   final PostStateNotifier? notifierProvider;
@@ -34,7 +34,7 @@ class PostDetailScreen extends ConsumerStatefulWidget {
       {super.key,
       required this.postId,
       required this.refreshList,
-      required this.boardType,
+      this.boardType,
       this.postDetailProvider,
       this.notifierProvider,
       this.allNotifierProvider});
@@ -293,7 +293,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                 ),
                 titleSpacing: 0,
                 title: Text(
-                  widget.boardType,
+                  widget.boardType!,
                   style: const TextStyle(
                       fontSize: 14.0,
                       letterSpacing: -0.01,
@@ -329,7 +329,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                 ),
                 titleSpacing: 0,
                 title: Text(
-                  widget.boardType,
+                  widget.boardType!,
                   style: const TextStyle(
                       fontSize: 14.0,
                       letterSpacing: -0.01,
@@ -401,7 +401,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
             ),
             titleSpacing: 0,
             title: Text(
-              widget.boardType,
+              widget.boardType!,
               style: const TextStyle(
                 fontSize: 14.0,
                 letterSpacing: -0.01,
