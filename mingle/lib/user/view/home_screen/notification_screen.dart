@@ -58,8 +58,12 @@ class NotificationScreen extends ConsumerWidget {
                     return Column(
                       children: [
                         NotificationItem(notification: notificationList[index]),
-                        const Divider(
-                          color: GRAYSCALE_GRAY_02,
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Divider(
+                            color: GRAYSCALE_GRAY_02,
+                            height: 0,
+                          ),
                         )
                       ],
                     );
