@@ -6,6 +6,7 @@ import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/second_hand_market/provider/second_hand_market_post_provider.dart';
 import 'package:mingle/second_hand_market/view/add_second_hand_post_screen.dart';
 import 'package:mingle/second_hand_market/view/second_hand_market_search_screen.dart';
+import 'package:mingle/user/view/home_screen/home_root_tab.dart';
 import 'package:mingle/user/view/home_screen/home_tab_screen.dart';
 import 'package:mingle/user/view/home_screen/notification_screen.dart';
 import 'package:mingle/user/view/home_screen/search_screen.dart';
@@ -14,8 +15,10 @@ import 'package:page_transition/page_transition.dart';
 
 class MarketTabScreen extends ConsumerWidget {
   final Function(int)? changeTabIndex;
+  final CustomScrollController controller;
   MarketTabScreen({
     this.changeTabIndex,
+    required this.controller,
     Key? key,
   }) : super(key: key);
 
@@ -109,6 +112,7 @@ class MarketTabScreen extends ConsumerWidget {
       body: Stack(
         children: [
           ItemPostPreviewCard(
+            controller: controller,
             data: ref.watch(secondHandPostProvider),
             notifierProvider: ref.watch(secondHandPostProvider.notifier),
             postDetailProvider: secondHandPostDetailProvider,

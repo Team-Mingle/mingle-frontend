@@ -9,6 +9,26 @@ import 'package:mingle/second_hand_market/view/market_tab_screen.dart';
 import 'package:mingle/post/view/square_tab_screen.dart';
 import 'package:mingle/timetable/view/timetable_tab_screen.dart';
 
+// class HomeTabController {
+//   void Function() scrollUp = () {};
+// }
+
+// class LawnTabController {
+//   void Function() scrollUp = () {};
+// }
+
+// class SquareTabController {
+//   void Function() scrollUp = () {};
+// }
+
+// class MarketTabController {
+//   void Function() scrollUp = () {};
+// }
+
+class CustomScrollController {
+  void Function() scrollUp = () {};
+}
+
 class HomeRootTab extends StatefulWidget {
   bool isFromLogin;
   HomeRootTab({
@@ -46,11 +66,22 @@ class _HomeRootTabState extends State<HomeRootTab> {
     //'시간표',
     '장터',
   ];
+  final List<CustomScrollController> _controllers = [
+    CustomScrollController(),
+    CustomScrollController(),
+    CustomScrollController(),
+    //CustomScrollController(),
+    CustomScrollController(),
+  ];
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (index == _selectedIndex) {
+      _controllers[index].scrollUp();
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   Widget _getSelectedScreen(int selectedIndex) {
@@ -59,6 +90,7 @@ class _HomeRootTabState extends State<HomeRootTab> {
         // Navigator.of(context)
         //     .push(MaterialPageRoute(builder: (_) => const HomeTabScreen()));
         return HomeTabScreen(
+          controller: _controllers[0],
           setIsFromLogin: setIsFromLogin,
           changeTabIndex: (int index) {
             _onItemTapped(index);
@@ -66,12 +98,14 @@ class _HomeRootTabState extends State<HomeRootTab> {
         );
       case 1:
         return SquareTabScreen(
+          controller: _controllers[1],
           changeTabIndex: (int index) {
             _onItemTapped(index);
           },
         );
       case 2:
         return LawnTabScreen(
+          controller: _controllers[2],
           changeTabIndex: (int index) {
             _onItemTapped(index);
           },
@@ -80,12 +114,14 @@ class _HomeRootTabState extends State<HomeRootTab> {
       //   return const ModuleReviewMainScreen();
       case 3:
         return MarketTabScreen(
+          controller: _controllers[3],
           changeTabIndex: (int index) {
             _onItemTapped(index);
           },
         );
       default:
         return HomeTabScreen(
+          controller: _controllers[0],
           changeTabIndex: (int index) {
             _onItemTapped(index);
           },

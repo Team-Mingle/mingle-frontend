@@ -11,6 +11,7 @@ import 'package:mingle/second_hand_market/model/second_hand_market_post_model.da
 import 'package:mingle/second_hand_market/provider/second_hand_market_post_provider.dart';
 import 'package:mingle/second_hand_market/repository/second_hand_market_post_repository.dart';
 import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.dart';
+import 'package:mingle/user/view/home_screen/home_root_tab.dart';
 
 enum CardType { home, square, lawn, market, selling }
 
@@ -18,15 +19,18 @@ class ItemPostPreviewCard extends ConsumerStatefulWidget {
   // final List<Map<String, String>> postList;
 
   // final Future<List<PostModel>> postFuture;
+  final CustomScrollController? controller;
   String emptyMessage;
   final CursorPaginationBase data;
   final CardType cardType;
   final SecondHandPostStateNotifier? notifierProvider;
   final ProviderFamily<SecondHandMarketPostModel?, int>? postDetailProvider;
+
   // final dynamic notifierProvider;
   // final dynamic postDetailProvider;
 
   ItemPostPreviewCard({
+    this.controller,
     // required this.postList,
     required this.cardType,
     Key? key,
@@ -51,6 +55,9 @@ class _GeneralPostPreviewCardState extends ConsumerState<ItemPostPreviewCard>
     // TODO: implement initState
     super.initState();
     scrollController.addListener(scrollListener);
+    if (widget.controller != null) {
+      widget.controller!.scrollUp = scrollUp;
+    }
   }
 
   void scrollListener() {
@@ -88,6 +95,13 @@ class _GeneralPostPreviewCardState extends ConsumerState<ItemPostPreviewCard>
 
   void refreshList() {
     widget.notifierProvider!.paginate();
+  }
+
+  void scrollUp() {
+    if (scrollController.hasClients && scrollController.offset > 0) {
+      scrollController.animateTo(0,
+          duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+    }
   }
 
   Widget buildDivider(double height) {

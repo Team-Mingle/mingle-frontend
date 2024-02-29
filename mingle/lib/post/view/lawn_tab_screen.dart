@@ -4,13 +4,16 @@ import 'package:mingle/common/component/general_post_preview_card.dart';
 // import 'package:mingle/common/component/post_preview_card.dart';
 import 'package:mingle/post/provider/post_provider.dart';
 import 'package:mingle/user/provider/user_provider.dart';
+import 'package:mingle/user/view/home_screen/home_root_tab.dart';
 import 'package:mingle/user/view/home_screen/tab_screen.dart';
 
 class LawnTabScreen extends ConsumerStatefulWidget {
   final Function(int)? changeTabIndex;
+  final CustomScrollController controller;
   const LawnTabScreen({
     this.changeTabIndex,
     Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -31,6 +34,7 @@ class _LawnTabScreenState extends ConsumerState<LawnTabScreen> {
       tab4: '학생회',
       tabContents: [
         GeneralPostPreviewCard(
+          controller: widget.controller,
           boardType: "잔디밭",
           // postList: dummyPostList,
           data: ref.watch(univAllPostProvider),
@@ -41,6 +45,7 @@ class _LawnTabScreenState extends ConsumerState<LawnTabScreen> {
           cardType: CardType.square,
         ),
         GeneralPostPreviewCard(
+          controller: widget.controller,
           boardType: "잔디밭",
           data: ref.watch(univFreePostProvider),
           // postFuture: paginatePost("FREE", ref),
@@ -50,6 +55,7 @@ class _LawnTabScreenState extends ConsumerState<LawnTabScreen> {
           cardType: CardType.square,
         ),
         GeneralPostPreviewCard(
+          controller: widget.controller,
           boardType: "잔디밭",
           data: ref.watch(univQnAPostProvider),
           // postFuture: paginatePost("QNA", ref),
@@ -59,6 +65,7 @@ class _LawnTabScreenState extends ConsumerState<LawnTabScreen> {
           cardType: CardType.square,
         ),
         GeneralPostPreviewCard(
+          controller: widget.controller,
           boardType: "잔디밭",
           data: ref.watch(univKsaPostProvider),
           // postFuture: paginatePost("KSA", ref),

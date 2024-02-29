@@ -12,6 +12,7 @@ import 'package:mingle/post/models/post_model.dart';
 import 'package:mingle/post/provider/post_provider.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.dart';
+import 'package:mingle/user/view/home_screen/home_root_tab.dart';
 
 enum CardType { home, square, lawn }
 
@@ -19,6 +20,7 @@ class GeneralPostPreviewCard extends ConsumerStatefulWidget {
   // final List<Map<String, String>> postList;
 
   // final Future<List<PostModel>> postFuture;
+  String? categoryType;
   String emptyMessage;
   final String boardType;
   final CursorPaginationBase data;
@@ -26,19 +28,21 @@ class GeneralPostPreviewCard extends ConsumerStatefulWidget {
   final dynamic notifierProvider;
   final dynamic allNotifierProvider;
   final ProviderFamily<PostModel?, int>? postDetailProvider;
-
-  GeneralPostPreviewCard(
-      {super.key,
-      // required this.postList,
-      required this.boardType,
-      required this.cardType,
-      required this.data,
-      this.notifierProvider,
-      this.allNotifierProvider,
-      this.postDetailProvider,
-      this.emptyMessage = "아직 올라온 게시물이 없어요!"
-      // required this.postFuture,
-      });
+  final CustomScrollController? controller;
+  GeneralPostPreviewCard({
+    super.key,
+    // required this.postList,
+    required this.boardType,
+    required this.cardType,
+    required this.data,
+    this.notifierProvider,
+    this.allNotifierProvider,
+    this.postDetailProvider,
+    this.emptyMessage = "아직 올라온 게시물이 없어요!",
+    this.controller,
+    this.categoryType,
+    // required this.postFuture,
+  });
 
   @override
   ConsumerState<GeneralPostPreviewCard> createState() =>
@@ -54,6 +58,9 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
     // TODO: implement initState
     super.initState();
     scrollController.addListener(scrollListener);
+    if (widget.controller != null) {
+      widget.controller!.scrollUp = scrollUp;
+    }
     // scrollController.addListener(() {
     //   setState(() {});
     // });
@@ -65,7 +72,7 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
         scrollController.position.maxScrollExtent - 300) {
       widget.notifierProvider!.paginate(fetchMore: true);
     }
-    // setState(() {});
+    setState(() {});
   }
 
   int getMaxLines() {
@@ -98,9 +105,25 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
     );
   }
 
+  void scrollUp() {
+    print(widget.categoryType);
+    print("going upppp??");
+    print(scrollController.hasClients);
+    // print(scrollController.offset);
+    if (scrollController.hasClients) {
+      print("lets goooo");
+      scrollController.animateTo(0,
+          duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    if (widget.controller != null) {
+      widget.controller!.scrollUp = scrollUp;
+    }
+    // print(scrollController.offset);
     if (widget.data is CursorPaginationLoading) {
       return Container(
         color: Colors.white,
@@ -258,6 +281,7 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 16),
                                     child: Row(
+                                      mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start, // 사진 위쪽 정렬
                                       children: [
@@ -274,37 +298,36 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
                                                   buildTypeIndicator(
                                                       post.categoryType),
                                                   Expanded(
-                                                    child: Row(
-                                                      children: [
-                                                        Text(
-                                                          post.title,
-                                                          style:
-                                                              const TextStyle(
-                                                            fontFamily:
-                                                                "Pretendard",
-                                                            fontSize: 14.0,
-                                                            letterSpacing:
-                                                                -0.01,
-                                                            height: 1.4,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            color:
-                                                                GRAYSCALE_BLACK_GRAY,
-                                                          ),
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                        ),
-                                                        const SizedBox(
-                                                          width: 4.0,
-                                                        ),
-                                                        if (post.fileAttached)
-                                                          SvgPicture.asset(
-                                                              "assets/img/post_screen/has_picture_icon.svg"),
-                                                      ],
+                                                    child: Text(
+                                                      post.title,
+                                                      style: const TextStyle(
+                                                        fontFamily:
+                                                            "Pretendard",
+                                                        fontSize: 14.0,
+                                                        letterSpacing: -0.01,
+                                                        height: 1.4,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color:
+                                                            GRAYSCALE_BLACK_GRAY,
+                                                      ),
+                                                      textAlign: TextAlign.left,
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                     ),
+                                                  ),
+                                                  Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: [
+                                                      const SizedBox(
+                                                        width: 4.0,
+                                                      ),
+                                                      if (post.fileAttached)
+                                                        SvgPicture.asset(
+                                                            "assets/img/post_screen/has_picture_icon.svg"),
+                                                    ],
                                                   ),
                                                 ],
                                               ),
@@ -451,9 +474,9 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
             //       child: Center(
             //         child: IconButton(
             //           icon: const Icon(Icons.arrow_upward),
-            //           onPressed: () => scrollController.animateTo(0,
-            //               duration: const Duration(milliseconds: 500),
-            //               curve: Curves.easeInOut),
+            // onPressed: () => scrollController.animateTo(0,
+            //     duration: const Duration(milliseconds: 500),
+            //     curve: Curves.easeInOut),
             //         ),
             //       ),
             //     ),

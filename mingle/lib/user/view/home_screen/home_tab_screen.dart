@@ -14,6 +14,7 @@ import 'package:mingle/user/model/banner_model.dart';
 import 'package:mingle/user/provider/banner_provider.dart';
 import 'package:mingle/post/provider/post_provider.dart';
 import 'package:mingle/user/provider/is_fresh_login_provider.dart';
+import 'package:mingle/user/view/home_screen/home_root_tab.dart';
 import 'package:mingle/user/view/home_screen/notification_screen.dart';
 import 'package:mingle/user/view/home_screen/search_screen.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
@@ -27,11 +28,13 @@ class HomeTabScreen extends ConsumerStatefulWidget {
   bool isFromLogin;
   Function? setIsFromLogin;
   final Function(int)? changeTabIndex;
+  final CustomScrollController controller;
   HomeTabScreen({
     Key? key,
     this.isFromLogin = false,
     this.setIsFromLogin,
     this.changeTabIndex,
+    required this.controller,
   }) : super(key: key);
 
   @override
