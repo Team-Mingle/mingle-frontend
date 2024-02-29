@@ -42,6 +42,7 @@ class HomeTabScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
+  final ScrollController scrollController = ScrollController();
   int _current = 0;
   final CarouselController _controller = CarouselController();
   late final Future<List<BannerModel>> _bannerProvider;
@@ -61,9 +62,20 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
       univRecent = ref.read(univRecentPostProvider);
       bestPost = ref.read(bestPostProvider);
     });
-
+    widget.controller.scrollUp = scrollUp;
     _bannerProvider = ref.read(bannerProvider.future);
     super.initState();
+  }
+
+  void scrollUp() {
+    print("going upppp??");
+    print(scrollController.hasClients);
+    // print(scrollController.offset);
+    if (scrollController.hasClients) {
+      print("lets goooo");
+      scrollController.animateTo(0,
+          duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+    }
   }
 
   void showModal() async {
@@ -161,6 +173,7 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
       ),
       // 스크롤 뷰
       body: CustomScrollView(
+        controller: scrollController,
         physics: const BouncingScrollPhysics(
             parent: AlwaysScrollableScrollPhysics()),
         slivers: [
