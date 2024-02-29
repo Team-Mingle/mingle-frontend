@@ -122,7 +122,8 @@ class _GeneralPostPreviewCardState extends ConsumerState<ItemPostPreviewCard>
           shrinkWrap: true,
           physics: widget.cardType == CardType.home
               ? const NeverScrollableScrollPhysics()
-              : const AlwaysScrollableScrollPhysics(),
+              : const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
 
           // physics: const NeverScrollableScrollPhysics(),
           slivers: [
@@ -160,7 +161,8 @@ class _GeneralPostPreviewCardState extends ConsumerState<ItemPostPreviewCard>
               shrinkWrap: true,
               physics: widget.cardType == CardType.home
                   ? const NeverScrollableScrollPhysics()
-                  : const AlwaysScrollableScrollPhysics(),
+                  : const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
 
               // physics: const NeverScrollableScrollPhysics(),
               slivers: [

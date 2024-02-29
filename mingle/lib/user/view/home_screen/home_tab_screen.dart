@@ -158,6 +158,8 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
       ),
       // 스크롤 뷰
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics()),
         slivers: [
           CupertinoSliverRefreshControl(
             onRefresh: () async {

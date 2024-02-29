@@ -452,287 +452,305 @@ class _SecondHandPostDetailScreenState
                 )
               ],
             ),
-            body: CustomScrollView(controller: scrollController, slivers: [
-              SliverList(
-                  delegate: SliverChildListDelegate([
-                Padding(
-                  padding: _contentPadding,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 8.0,
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        height: 320.0,
-                        child: Stack(
-                          children: [
-                            sliderWidget(item),
-                            sliderIndicator(item),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 24.0,
-                      ),
-                      Text(
-                        item.title,
-                        style: const TextStyle(
-                            fontSize: 20.0,
-                            letterSpacing: -0.03,
-                            height: 1.5,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      const SizedBox(
-                        height: 8.0,
-                      ),
-                      Text(
-                        "${item.price.toString()} ${item.currency}",
-                        style: const TextStyle(
-                            fontSize: 16.0,
-                            letterSpacing: -0.02,
-                            height: 1.5,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ],
+            body: CustomScrollView(
+                physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
+                controller: scrollController,
+                slivers: [
+                  CupertinoSliverRefreshControl(
+                    onRefresh: () async {
+                      await Future.delayed(const Duration(seconds: 1), () {
+                        refreshPost();
+                        refreshComments();
+                      });
+                      //   refreshPost();
+                      //   refreshComments();
+                    },
                   ),
-                ),
-                _contentDivider,
-                Padding(
-                  padding: _contentPadding,
-                  child: Text(item.content),
-                ),
-                _contentDivider,
-                Padding(
-                  padding: _contentPadding,
-                  child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "희망 거래장소/시간대",
-                          style: TextStyle(
-                              color: GRAYSCALE_GRAY_03,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        const SizedBox(
-                          width: 16.0,
-                        ),
-                        Text(item.location)
-                      ]),
-                ),
-                _contentDivider,
-                Padding(
-                  padding: _contentPadding.copyWith(bottom: 8.0),
-                  child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "오픈채팅방 링크",
-                          style: TextStyle(
-                              color: GRAYSCALE_GRAY_03,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        const SizedBox(
-                          width: 16.0,
-                        ),
-                        Expanded(
-                          child: InkWell(
-                              onTap: () async {
-                                final Uri url = Uri.parse(item.chatUrl);
-
-                                if (!await launchUrl(url)) {
-                                  throw Exception('Could not launch $url');
-                                }
-                              },
-                              child: Text(
-                                item.chatUrl,
-                                style: const TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    overflow: TextOverflow.ellipsis),
-                              )),
-                        )
-                      ]),
-                ),
-                const Divider(
-                  height: 16.0,
-                  thickness: 0.0,
-                ),
-                Padding(
-                  padding: _contentPadding.copyWith(bottom: 8.0),
-                  child: Row(
-                    children: [
-                      Text(
-                        item.nickname,
-                        style: const TextStyle(
-                            color: GRAYSCALE_GRAY_04, fontSize: 12.0),
-                      ),
-                      const SizedBox(
-                        width: 4.0,
-                      ),
-                      const Text(
-                        "•",
-                        style:
-                            TextStyle(color: GRAYSCALE_GRAY_02, fontSize: 12.0),
-                      ),
-                      const SizedBox(
-                        width: 4.0,
-                      ),
-                      Text(
-                        PostModel.convertUTCtoLocal(item.createdAt),
-                        style: const TextStyle(
-                            color: GRAYSCALE_GRAY_03, fontSize: 12.0),
-                      ),
-                      const SizedBox(
-                        width: 6.0,
-                      ),
-                      const Text(
-                        "조회",
-                        style:
-                            TextStyle(color: GRAYSCALE_GRAY_03, fontSize: 12.0),
-                      ),
-                      const SizedBox(
-                        width: 2.0,
-                      ),
-                      Text(
-                        item is SecondHandMarketPostDetailModel
-                            ? item.viewCount.toString()
-                            : "",
-                        style: const TextStyle(
-                            color: GRAYSCALE_GRAY_03, fontSize: 12.0),
-                      )
-                    ],
-                  ),
-                ),
-                Column(
-                  children: [
-                    const Divider(
-                      thickness: 1.0,
-                      height: 0.0,
-                      color: GRAYSCALE_GRAY_01,
-                    ),
-                    SecondHandMarketPostLikeAndCommentNumbersCard(
-                        post: item, likeOrUnlikePost: likeOrUnlikePost),
-                    const Divider(
-                      height: 0.0,
-                      thickness: 2.0,
-                      color: GRAYSCALE_GRAY_01,
-                    ),
-                    Container(
-                      color: GRAYSCALE_GRAY_01_5,
-                      // height: 56.0,
-                      child: const Padding(
-                        padding: EdgeInsets.only(left: 10.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              height: 12.0,
-                            ),
-                            Row(
+                  SliverList(
+                      delegate: SliverChildListDelegate([
+                    Padding(
+                      padding: _contentPadding,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 8.0,
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: 320.0,
+                            child: Stack(
                               children: [
-                                Text(
-                                  "•",
-                                  style: TextStyle(
-                                      color: GRAYSCALE_GRAY_03, fontSize: 11.0),
-                                ),
-                                Text("운영규칙을 위반하는 댓글은 삭제될 수 있습니다.",
-                                    style: TextStyle(
-                                        color: GRAYSCALE_GRAY_03,
-                                        fontSize: 11.0))
+                                sliderWidget(item),
+                                sliderIndicator(item),
                               ],
                             ),
-                            Row(
-                              children: [
-                                Text(
-                                  "•",
-                                  style: TextStyle(
-                                      color: GRAYSCALE_GRAY_03, fontSize: 11.0),
-                                ),
-                                Text("악의적인 글 혹은 댓글은 오른쪽 상단 버튼을 통해 신고가 가능합니다.",
-                                    style: TextStyle(
-                                        color: GRAYSCALE_GRAY_03,
-                                        fontSize: 11.0))
-                              ],
-                            ),
-                            SizedBox(
-                              height: 16.0,
-                            ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(
+                            height: 24.0,
+                          ),
+                          Text(
+                            item.title,
+                            style: const TextStyle(
+                                fontSize: 20.0,
+                                letterSpacing: -0.03,
+                                height: 1.5,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          const SizedBox(
+                            height: 8.0,
+                          ),
+                          Text(
+                            "${item.price.toString()} ${item.currency}",
+                            style: const TextStyle(
+                                fontSize: 16.0,
+                                letterSpacing: -0.02,
+                                height: 1.5,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(
-                      height: 20.0,
+                    _contentDivider,
+                    Padding(
+                      padding: _contentPadding,
+                      child: Text(item.content),
                     ),
-                    comments == null
-                        ? const CircularProgressIndicator()
-                        : Column(children: [
-                            ...List.generate(
-                              comments!.length,
-                              (index) => Column(
-                                children: [
-                                  index > 0
-                                      ? const Divider(
-                                          height: 24.0,
-                                          thickness: 0.0,
-                                        )
-                                      : Container(),
-                                  CommentCard(
-                                      refreshComments: refreshComments,
-                                      likeOrUnlikeComment: likeOrUnlikeComment,
-                                      comment: comments![index],
-                                      setParentAndMentionId:
-                                          setParentCommentIdAndMentionId)
-                                ],
-                              ),
+                    _contentDivider,
+                    Padding(
+                      padding: _contentPadding,
+                      child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "희망 거래장소/시간대",
+                              style: TextStyle(
+                                  color: GRAYSCALE_GRAY_03,
+                                  fontWeight: FontWeight.w600),
                             ),
                             const SizedBox(
-                              height: 20.0,
+                              width: 16.0,
+                            ),
+                            Text(item.location)
+                          ]),
+                    ),
+                    _contentDivider,
+                    Padding(
+                      padding: _contentPadding.copyWith(bottom: 8.0),
+                      child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "오픈채팅방 링크",
+                              style: TextStyle(
+                                  color: GRAYSCALE_GRAY_03,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(
+                              width: 16.0,
+                            ),
+                            Expanded(
+                              child: InkWell(
+                                  onTap: () async {
+                                    final Uri url = Uri.parse(item.chatUrl);
+
+                                    if (!await launchUrl(url)) {
+                                      throw Exception('Could not launch $url');
+                                    }
+                                  },
+                                  child: Text(
+                                    item.chatUrl,
+                                    style: const TextStyle(
+                                        decoration: TextDecoration.underline,
+                                        overflow: TextOverflow.ellipsis),
+                                  )),
                             )
-                          ])
-                    // FutureBuilder(
-                    //     future: commentFuture,
-                    //     builder:
-                    //         (context, AsyncSnapshot<List<CommentModel>> snapshot) {
-                    //       if (!snapshot.hasData) {
-                    //   return Skeletonizer(
-                    //       ignoreContainers: false,
-                    //       child: Column(
-                    //         children: List.generate(
-                    //             fakeComments.length,
-                    //             (index) => CommentCard(
-                    //                 comment: fakeComments[index],
-                    //                 setParentAndMentionId: () {},
-                    //                 likeOrUnlikeComment: () {})),
-                    //       ));
-                    // }
-                    //       List<CommentModel> comments = snapshot.data!;
-                    //       return Column(
-                    //         children: List.generate(
-                    //           comments.length,
-                    //           (index) => Column(
-                    //             children: [
-                    //               index > 0
-                    //                   ? const Divider(
-                    //                       height: 24.0,
-                    //                       thickness: 0.0,
-                    //                     )
-                    //                   : Container(),
-                    //               CommentCard(
-                    //                   likeOrUnlikeComment: likeOrUnlikeComment,
-                    //                   comment: comments[index],
-                    //                   setParentAndMentionId:
-                    //                       setParentCommentIdAndMentionId)
-                    //             ],
-                    //           ),
-                    //         ),
-                    //       );
-                    //     })
-                  ],
-                )
-              ]))
-            ]),
+                          ]),
+                    ),
+                    const Divider(
+                      height: 16.0,
+                      thickness: 0.0,
+                    ),
+                    Padding(
+                      padding: _contentPadding.copyWith(bottom: 8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            item.nickname,
+                            style: const TextStyle(
+                                color: GRAYSCALE_GRAY_04, fontSize: 12.0),
+                          ),
+                          const SizedBox(
+                            width: 4.0,
+                          ),
+                          const Text(
+                            "•",
+                            style: TextStyle(
+                                color: GRAYSCALE_GRAY_02, fontSize: 12.0),
+                          ),
+                          const SizedBox(
+                            width: 4.0,
+                          ),
+                          Text(
+                            PostModel.convertUTCtoLocal(item.createdAt),
+                            style: const TextStyle(
+                                color: GRAYSCALE_GRAY_03, fontSize: 12.0),
+                          ),
+                          const SizedBox(
+                            width: 6.0,
+                          ),
+                          const Text(
+                            "조회",
+                            style: TextStyle(
+                                color: GRAYSCALE_GRAY_03, fontSize: 12.0),
+                          ),
+                          const SizedBox(
+                            width: 2.0,
+                          ),
+                          Text(
+                            item is SecondHandMarketPostDetailModel
+                                ? item.viewCount.toString()
+                                : "",
+                            style: const TextStyle(
+                                color: GRAYSCALE_GRAY_03, fontSize: 12.0),
+                          )
+                        ],
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        const Divider(
+                          thickness: 1.0,
+                          height: 0.0,
+                          color: GRAYSCALE_GRAY_01,
+                        ),
+                        SecondHandMarketPostLikeAndCommentNumbersCard(
+                            post: item, likeOrUnlikePost: likeOrUnlikePost),
+                        const Divider(
+                          height: 0.0,
+                          thickness: 2.0,
+                          color: GRAYSCALE_GRAY_01,
+                        ),
+                        Container(
+                          color: GRAYSCALE_GRAY_01_5,
+                          // height: 56.0,
+                          child: const Padding(
+                            padding: EdgeInsets.only(left: 10.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  height: 12.0,
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "•",
+                                      style: TextStyle(
+                                          color: GRAYSCALE_GRAY_03,
+                                          fontSize: 11.0),
+                                    ),
+                                    Text("운영규칙을 위반하는 댓글은 삭제될 수 있습니다.",
+                                        style: TextStyle(
+                                            color: GRAYSCALE_GRAY_03,
+                                            fontSize: 11.0))
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "•",
+                                      style: TextStyle(
+                                          color: GRAYSCALE_GRAY_03,
+                                          fontSize: 11.0),
+                                    ),
+                                    Text(
+                                        "악의적인 글 혹은 댓글은 오른쪽 상단 버튼을 통해 신고가 가능합니다.",
+                                        style: TextStyle(
+                                            color: GRAYSCALE_GRAY_03,
+                                            fontSize: 11.0))
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 16.0,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20.0,
+                        ),
+                        comments == null
+                            ? const CircularProgressIndicator()
+                            : Column(children: [
+                                ...List.generate(
+                                  comments!.length,
+                                  (index) => Column(
+                                    children: [
+                                      index > 0
+                                          ? const Divider(
+                                              height: 24.0,
+                                              thickness: 0.0,
+                                            )
+                                          : Container(),
+                                      CommentCard(
+                                          refreshComments: refreshComments,
+                                          likeOrUnlikeComment:
+                                              likeOrUnlikeComment,
+                                          comment: comments![index],
+                                          setParentAndMentionId:
+                                              setParentCommentIdAndMentionId)
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20.0,
+                                )
+                              ])
+                        // FutureBuilder(
+                        //     future: commentFuture,
+                        //     builder:
+                        //         (context, AsyncSnapshot<List<CommentModel>> snapshot) {
+                        //       if (!snapshot.hasData) {
+                        //   return Skeletonizer(
+                        //       ignoreContainers: false,
+                        //       child: Column(
+                        //         children: List.generate(
+                        //             fakeComments.length,
+                        //             (index) => CommentCard(
+                        //                 comment: fakeComments[index],
+                        //                 setParentAndMentionId: () {},
+                        //                 likeOrUnlikeComment: () {})),
+                        //       ));
+                        // }
+                        //       List<CommentModel> comments = snapshot.data!;
+                        //       return Column(
+                        //         children: List.generate(
+                        //           comments.length,
+                        //           (index) => Column(
+                        //             children: [
+                        //               index > 0
+                        //                   ? const Divider(
+                        //                       height: 24.0,
+                        //                       thickness: 0.0,
+                        //                     )
+                        //                   : Container(),
+                        //               CommentCard(
+                        //                   likeOrUnlikeComment: likeOrUnlikeComment,
+                        //                   comment: comments[index],
+                        //                   setParentAndMentionId:
+                        //                       setParentCommentIdAndMentionId)
+                        //             ],
+                        //           ),
+                        //         ),
+                        //       );
+                        //     })
+                      ],
+                    )
+                  ]))
+                ]),
             bottomNavigationBar:
                 Container(height: parentCommentId != null ? 56.0 + 32.0 : 56.0),
           ),

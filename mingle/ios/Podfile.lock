@@ -43,14 +43,14 @@ PODS:
   - Firebase/Messaging (10.20.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 10.20.0)
-  - firebase_analytics (10.8.6):
+  - firebase_analytics (10.8.7):
     - Firebase/Analytics (= 10.20.0)
     - firebase_core
     - Flutter
-  - firebase_core (2.25.4):
+  - firebase_core (2.25.5):
     - Firebase/CoreOnly (= 10.20.0)
     - Flutter
-  - firebase_messaging (14.7.16):
+  - firebase_messaging (14.7.17):
     - Firebase/Messaging (= 10.20.0)
     - firebase_core
     - Flutter
@@ -235,9 +235,9 @@ SPEC CHECKSUMS:
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
   file_picker: 15fd9539e4eb735dc54bae8c0534a7a9511a03de
   Firebase: 10c8cb12fb7ad2ae0c09ffc86cd9c1ab392a0031
-  firebase_analytics: 9c600045bfb4d16dd78593d18f32c99bb77e5001
-  firebase_core: a46c312d8bae4defa3d009b2aa7b5b413aeb394e
-  firebase_messaging: e7062cef946e12f93b42abea96937004f8d914d6
+  firebase_analytics: 2c1c3057d5da3bd3aab819f7e6ee153a4e46c59e
+  firebase_core: c8628c7ce80f79439149549052bff22f6784fbf5
+  firebase_messaging: 6ea1e266713728834610c2bc380084a01b1b555d
   FirebaseAnalytics: a2731bf3670747ce8f65368b118d18aa8e368246
   FirebaseCore: 28045c1560a2600d284b9c45a904fe322dc890b6
   FirebaseCoreInternal: 43c1788eaeee9d1b97caaa751af567ce11010d00
@@ -259,7 +259,7 @@ SPEC CHECKSUMS:
   sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
   Toast: ec33c32b8688982cecc6348adeae667c1b9938da
-  url_launcher_ios: bbd758c6e7f9fd7b5b1d4cde34d2b95fcce5e812
+  url_launcher_ios: 6116280ddcfe98ab8820085d8d76ae7449447586
 
 PODFILE CHECKSUM: ba2c5bce230d4172366b184c5c328c7f9ae987ab
 

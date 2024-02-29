@@ -24,6 +24,16 @@ import 'package:mingle/user/view/login_screen.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    name: "mingle",
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const _App());
+}
+
 class _App extends ConsumerStatefulWidget {
   const _App();
 
@@ -38,11 +48,10 @@ class _AppState extends ConsumerState<_App> {
   void initState() {
     FirebaseMessaging.instance.requestPermission();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
 
-      if (notification != null&& android != null) {
+      if (notification != null && android != null) {
         FlutterLocalNotificationsPlugin().show(
           notification.hashCode,
           notification.title,
@@ -187,17 +196,7 @@ class _AppState extends ConsumerState<_App> {
       });
     }
 
-    Future<void> main() async {
-      WidgetsFlutterBinding.ensureInitialized();
-
-      await Firebase.initializeApp(
-        name: "mingle",
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
-      runApp(const _App());
-      initializeNotification();
-    }
-
+    initializeNotification();
     return ProviderScope(
       child: MaterialApp(
           navigatorKey: navigatorKey,
