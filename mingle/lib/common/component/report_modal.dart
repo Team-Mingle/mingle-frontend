@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/dio/dio.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
+import 'package:mingle/secure_storage/secure_storage.dart';
 
 CupertinoActionSheetAction reportModal(String contentType, int contentId,
     BuildContext context, WidgetRef ref, FToast fToast) {
@@ -72,17 +73,21 @@ CupertinoActionSheetAction reportModal(String contentType, int contentId,
 report(String contentType, String reportType, int contentId, WidgetRef ref,
     FToast fToast) async {
   final dio = ref.watch(dioProvider);
+  final storage = ref.watch(secureStorageProvider);
+  final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
   try {
     final reqBody = {
       "contentType": contentType,
       "contentId": contentId,
       "reportType": reportType,
     };
+
     await dio.post(
       "https://$baseUrl/report",
       options: Options(
         headers: {
           HttpHeaders.contentTypeHeader: "application/json",
+          'Authorization': 'Bearer $accessToken',
         },
       ),
       data: jsonEncode(reqBody),

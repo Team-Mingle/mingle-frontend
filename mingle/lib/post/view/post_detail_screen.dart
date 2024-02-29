@@ -372,6 +372,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
   Widget renderContent(PostModel post) {
     print(PostModel.convertUTCtoLocalPreview(post.createdAt));
     print("post is detail model? ${post is PostDetailModel}");
+    bool reported = post is PostDetailModel && post.reported;
     String createdAtLocal = PostModel.convertUTCtoLocal(post.createdAt);
     String createdDate = createdAtLocal.split(" ")[0];
     String createdTime = createdAtLocal.split(" ")[1];
@@ -507,7 +508,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                           height: 20,
                         ),
                         Text(
-                          post.title,
+                          reported ? "다른 사용자들의 신고로 인해 삭제된 글 입니다." : post.title,
                           style: const TextStyle(
                               fontSize: 18.0, fontWeight: FontWeight.w400),
                         ),
@@ -524,7 +525,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                               );
                             }
                           },
-                          text: post.content,
+                          text: reported ? "" : post.content,
                           style: const TextStyle(
                               fontSize: 14.0,
                               letterSpacing: -0.01,
@@ -664,7 +665,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                       const SizedBox(
                         height: 16.0,
                       ),
-                      comments == null
+                      comments == null && !reported
                           ? FutureBuilder(
                               future: Future.delayed(
                                   const Duration(milliseconds: 200),
