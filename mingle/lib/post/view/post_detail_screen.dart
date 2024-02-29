@@ -662,7 +662,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                         ),
                       ),
                       const SizedBox(
-                        height: 20.0,
+                        height: 16.0,
                       ),
                       comments == null
                           ? FutureBuilder(
