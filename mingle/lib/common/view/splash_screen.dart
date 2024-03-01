@@ -1,11 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/dio/dio.dart';
+import 'package:mingle/firebase_notification.dart';
+import 'package:mingle/main.dart';
+import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/user/model/user_model.dart';
 import 'package:mingle/user/provider/user_provider.dart';
 import 'package:mingle/user/view/app_start_screen.dart';
@@ -22,6 +26,7 @@ class SplashScreen extends ConsumerStatefulWidget {
 
 class _SplashScreenState extends ConsumerState<SplashScreen> {
   final _secureStorage = const FlutterSecureStorage();
+  var messageString = "";
 
   @override
   void initState() {
@@ -64,19 +69,40 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: PRIMARY_COLOR_ORANGE_02,
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-          const SizedBox(
-            height: 324,
-          ),
-          SvgPicture.asset(
-            "assets/img/splash_screen/logo_final.svg",
-            semanticsLabel: 'Mingle Logo',
-          )
-        ]),
-      ),
+      body: StreamBuilder<String>(
+          stream: streamController.stream,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final int postId = int.parse(snapshot.data!);
+              print("postId : $postId");
+              print(postId.runtimeType);
+
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return PostDetailScreen(
+                    postId: postId,
+                    refreshList: () {},
+                  );
+                }));
+              });
+            }
+            return SizedBox(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      height: 324,
+                    ),
+                    SvgPicture.asset(
+                      "assets/img/splash_screen/logo_final.svg",
+                      semanticsLabel: 'Mingle Logo',
+                    )
+                  ]),
+            );
+          }),
     );
   }
 }

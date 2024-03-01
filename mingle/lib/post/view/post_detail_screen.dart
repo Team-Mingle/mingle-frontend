@@ -483,8 +483,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
             ],
           ),
           body: CustomScrollView(
-              physics: const BouncingScrollPhysics(
-                  parent: AlwaysScrollableScrollPhysics()),
+              physics: const AlwaysScrollableScrollPhysics(),
               controller: scrollController,
               slivers: [
                 CupertinoSliverRefreshControl(
