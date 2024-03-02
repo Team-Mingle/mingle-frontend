@@ -408,45 +408,144 @@
 // }
 
 import 'dart:async';
+import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/view/splash_screen.dart';
 import 'package:mingle/firebase_notification.dart';
 import 'package:mingle/firebase_options.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
+import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-//StreamController<String> streamController = StreamController.broadcast();
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
-  // await Firebase.initializeApp();
-  await Firebase.initializeApp(
-    name: "mingle",
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
   print(message.data);
 
   print("Handling a background message: ${message.messageId}");
 }
 
+@pragma('vm:entry-point')
+void backgroundHandler(NotificationResponse details) {
+  // 액션 추가... 파라미터는 details.payload 방식으로 전달
+}
+
+void handleNotificationClick(NotificationResponse details) {
+  print('onDidReceiveNotificationResponse - contentId2: $details');
+
+  final Map<String, dynamic>? payloadData;
+  if (details.payload != null) {
+    payloadData = jsonDecode(details.payload!);
+    print(payloadData);
+  } else {
+    payloadData = null;
+    print("없음");
+  }
+  if (payloadData != null) {
+    String contentType = payloadData['contentType'];
+    int contentId = payloadData['contentId'];
+
+    if (contentType == "POST") {
+      Navigator.of(navigatorKey.currentState!.context).push(MaterialPageRoute(
+        builder: (_) => PostDetailScreen(
+          postId: contentId,
+          refreshList: () {},
+        ),
+      ));
+    } else if (contentType == "ITEM") {
+      Navigator.of(navigatorKey.currentState!.context).push(MaterialPageRoute(
+        builder: (_) => SecondHandPostDetailScreen(
+          itemId: contentId,
+          refreshList: () {},
+        ),
+      ));
+    }
+  }
+}
+
+void initializeNotification() async {
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(const AndroidNotificationChannel(
+          'high_importance_channel', 'high_importance_notification',
+          importance: Importance.max));
+
+  await flutterLocalNotificationsPlugin.initialize(
+    const InitializationSettings(
+      android: AndroidInitializationSettings("@mipmap/ic_launcher"),
+      iOS: DarwinInitializationSettings(),
+    ),
+    onDidReceiveNotificationResponse: (details) {
+      handleNotificationClick(details);
+    },
+    onDidReceiveBackgroundNotificationResponse: backgroundHandler,
+  );
+
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    RemoteNotification? notification = message.notification;
+
+    if (notification != null) {
+      flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+        notification.title,
+        notification.body,
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'high_importance_channel',
+            'high_importance_notification',
+            importance: Importance.max,
+          ),
+          iOS: DarwinNotificationDetails(),
+        ),
+      );
+
+      print("수신자 측 메시지 수신");
+    }
+  });
+
+  RemoteMessage? message = await FirebaseMessaging.instance.getInitialMessage();
+
+  if (message != null) {
+    if (message.data['contentType'] == "POST") {
+      Navigator.of(navigatorKey.currentState!.context).push(MaterialPageRoute(
+          builder: (_) => PostDetailScreen(
+              postId: int.parse(message.data['contentId']),
+              refreshList: () {})));
+    } else if ((message.data['contentType'] == "ITEM")) {
+      Navigator.of(navigatorKey.currentState!.context).push(MaterialPageRoute(
+          builder: (_) => SecondHandPostDetailScreen(
+              itemId: int.parse(message.data['contentId']),
+              refreshList: () {})));
+    }
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // FirebaseMessaging.onBackgroundMessage((message) async {
-  //   print(message);
-  //   print("Handling a background message");
-  // });
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  // FlutterLocalNotification.onBackgroundNotificationResponse();
+  await Firebase.initializeApp(
+    name: "mingle",
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  initializeNotification();
+
   runApp(const _App());
 }
 
@@ -462,16 +561,6 @@ class _AppState extends ConsumerState<_App> {
 
   @override
   void initState() {
-    // FlutterLocalNotification.init();
-    // // 3초 후 권한 요청
-    // Future.delayed(const Duration(seconds: 3),
-    //     FlutterLocalNotification.requestNotificationPermission());
-
-    // //권한 요청?
-    // FirebaseMessaging.instance.requestPermission();
-
-    // FlutterLocalNotification.onBackgroundNotificationResponse();
-    // setupInteractedMessage();
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       if (message.data['contentType'] == "POST") {
         print(context);
@@ -479,30 +568,16 @@ class _AppState extends ConsumerState<_App> {
             builder: (_) => PostDetailScreen(
                 postId: int.parse(message.data['contentId']),
                 refreshList: () {})));
+      } else if ((message.data['contentType'] == "ITEM")) {
+        print(context);
+        Navigator.of(navigatorKey.currentState!.context).push(MaterialPageRoute(
+            builder: (_) => SecondHandPostDetailScreen(
+                itemId: int.parse(message.data['contentId']),
+                refreshList: () {})));
       }
     });
+
     super.initState();
-  }
-
-  Future<void> setupInteractedMessage() async {
-    // Get any messages which caused the application to open from
-    // a terminated state.
-    RemoteMessage? initialMessage =
-        await FirebaseMessaging.instance.getInitialMessage();
-
-    // If the message also contains a data property with a "type" of "chat",
-    // navigate to a chat screen
-    if (initialMessage != null) {
-      _handleMessage(initialMessage);
-    }
-    print("initial message is null");
-    // Also handle any interaction when the app is in the background via a
-    // Stream listener
-    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
-  }
-
-  void _handleMessage(RemoteMessage message) {
-    print(message.data);
   }
 
   @override
