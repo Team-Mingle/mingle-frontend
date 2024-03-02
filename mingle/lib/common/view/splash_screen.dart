@@ -34,15 +34,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     super.initState();
   }
 
-  void checkToken() async {
+  Future<void> checkToken() async {
     final accessToken = await _secureStorage.read(key: ACCESS_TOKEN_KEY);
     print(accessToken);
     await Future.delayed(const Duration(seconds: 2));
     final Dio dio = ref.read(dioProvider);
     if (accessToken == null) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const AppStartScreen()),
-          (route) => false);
+      _navigateToAppStartScreen();
       return;
     }
     try {
@@ -54,55 +52,41 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
           .read(currentUserProvider.notifier)
           .update((state) => UserModel.fromJson(resp.data));
       //FirebaseAnalytics.instance.logLogin(loginMethod: 'login');
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => HomeRootTab()), (route) => false);
+      _navigateToHomeRootTab();
     } on DioException catch (e) {
-      // print(e.response?.data['message']);
-      // print(e);
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const AppStartScreen()),
-          (route) => false);
+      _navigateToAppStartScreen();
     }
   }
+
+  void _navigateToAppStartScreen() {
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const AppStartScreen()),
+        (route) => false);
+  }
+
+  void _navigateToHomeRootTab() {
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => HomeRootTab()), (route) => false);
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: PRIMARY_COLOR_ORANGE_02,
-      body: StreamBuilder<String>(
-          stream: streamController.stream,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final int postId = int.parse(snapshot.data!);
-              print("postId : $postId");
-              print(postId.runtimeType);
-
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) {
-                  return PostDetailScreen(
-                    postId: postId,
-                    refreshList: () {},
-                  );
-                }));
-              });
-            }
-            return SizedBox(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(
-                      height: 324,
-                    ),
-                    SvgPicture.asset(
-                      "assets/img/splash_screen/logo_final.svg",
-                      semanticsLabel: 'Mingle Logo',
-                    )
-                  ]),
-            );
-          }),
-    );
+        backgroundColor: PRIMARY_COLOR_ORANGE_02,
+        body: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+            const SizedBox(
+              height: 324,
+            ),
+            SvgPicture.asset(
+              "assets/img/splash_screen/logo_final.svg",
+              semanticsLabel: 'Mingle Logo',
+            )
+          ]),
+        ));
   }
 }

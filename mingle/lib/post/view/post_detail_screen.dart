@@ -108,7 +108,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
     if (widget.notifierProvider != null) {
       widget.notifierProvider!.getDetail(postId: widget.postId);
     } else {
-      // getPost();
+      getPost();
     }
 
     getComments().then((data) {

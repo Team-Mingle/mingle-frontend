@@ -275,35 +275,6 @@
 // }
 
 // class _secureStorage {}
-import 'dart:async';
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:mingle/common/const/colors.dart';
-import 'package:mingle/common/const/data.dart';
-import 'package:mingle/common/view/splash_screen.dart';
-import 'package:mingle/dio/dio.dart';
-import 'package:mingle/firebase_notification.dart';
-import 'package:mingle/firebase_options.dart';
-import 'package:mingle/post/models/post_detail_model.dart';
-import 'package:mingle/post/view/post_detail_screen.dart';
-import 'package:mingle/secure_storage/secure_storage.dart';
-import 'package:mingle/user/model/user_model.dart';
-import 'package:mingle/user/provider/user_provider.dart';
-import 'package:mingle/user/view/app_start_screen.dart';
-import 'package:mingle/user/view/home_screen/home_root_tab.dart';
-import 'package:mingle/user/view/login_screen.dart';
-
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-StreamController<String> streamController = StreamController.broadcast();
 
 // @pragma('vm:entry-point')
 // Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -436,6 +407,20 @@ StreamController<String> streamController = StreamController.broadcast();
 //   }
 // }
 
+import 'dart:async';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/view/splash_screen.dart';
+import 'package:mingle/firebase_notification.dart';
+import 'package:mingle/firebase_options.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+//StreamController<String> streamController = StreamController.broadcast();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -443,8 +428,7 @@ void main() async {
     name: "mingle",
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  //FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-  // 백그라운드 알람 처리
+
   FlutterLocalNotification.onBackgroundNotificationResponse();
   runApp(const _App());
 }
@@ -462,28 +446,14 @@ class _AppState extends ConsumerState<_App> {
   @override
   void initState() {
     FlutterLocalNotification.init();
-    // 3초 후 권한 요청
     Future.delayed(const Duration(seconds: 3),
         FlutterLocalNotification.requestNotificationPermission());
-
-    //권한 요청?
-    FirebaseMessaging.instance.requestPermission();
-    FlutterLocalNotification.onBackgroundNotificationResponse();
 
     super.initState();
   }
 
   @override
-  void dispose() {
-    streamController.close();
-
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    //initializeNotification(context);
-
     return ProviderScope(
       child: MaterialApp(
           navigatorKey: navigatorKey,
