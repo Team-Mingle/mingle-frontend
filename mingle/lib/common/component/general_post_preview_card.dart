@@ -164,6 +164,7 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
     }
 
     final postList = widget.data as CursorPagination;
+
     return CupertinoTheme(
       data: const CupertinoThemeData(
           primaryColor: PRIMARY_COLOR_ORANGE_02, applyThemeToAll: true),
@@ -241,7 +242,7 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
                                   );
                             }
                             final post = postList.data[index];
-
+                            final reported = post.status == "REPORTED";
                             return Column(
                               children: [
                                 // 첫번째 줄에만 padding
@@ -280,171 +281,202 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 16),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start, // 사진 위쪽 정렬
-                                      children: [
-                                        Expanded(
-                                          child: Column(
+                                    child: reported
+                                        ? Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 15.0),
+                                            child: Center(
+                                              child: Text(post.title),
+                                            ),
+                                          )
+                                        : Row(
+                                            mainAxisSize: MainAxisSize.min,
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                                CrossAxisAlignment
+                                                    .start, // 사진 위쪽 정렬
                                             children: [
-                                              Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  buildTypeIndicator(
-                                                      post.categoryType),
-                                                  Expanded(
-                                                    child: Text(
-                                                      post.title,
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        buildTypeIndicator(
+                                                            post.categoryType),
+                                                        Expanded(
+                                                          child: Text(
+                                                            post.title,
+                                                            style:
+                                                                const TextStyle(
+                                                              fontFamily:
+                                                                  "Pretendard",
+                                                              fontSize: 14.0,
+                                                              letterSpacing:
+                                                                  -0.01,
+                                                              height: 1.4,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              color:
+                                                                  GRAYSCALE_BLACK_GRAY,
+                                                            ),
+                                                            textAlign:
+                                                                TextAlign.left,
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
+                                                        ),
+                                                        Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          children: [
+                                                            const SizedBox(
+                                                              width: 4.0,
+                                                            ),
+                                                            if (post
+                                                                .fileAttached)
+                                                              SvgPicture.asset(
+                                                                  "assets/img/post_screen/has_picture_icon.svg"),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      height:
+                                                          post.categoryType ==
+                                                                  "FREE"
+                                                              ? 6.0
+                                                              : 2.0,
+                                                    ),
+                                                    Text(
+                                                      post.content,
                                                       style: const TextStyle(
                                                         fontFamily:
                                                             "Pretendard",
-                                                        fontSize: 14.0,
-                                                        letterSpacing: -0.01,
-                                                        height: 1.4,
+                                                        fontSize: 12,
                                                         fontWeight:
                                                             FontWeight.w500,
                                                         color:
-                                                            GRAYSCALE_BLACK_GRAY,
+                                                            GRAYSCALE_GRAY_05,
                                                       ),
                                                       textAlign: TextAlign.left,
-                                                      maxLines: 1,
+                                                      maxLines: getMaxLines(),
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                     ),
-                                                  ),
-                                                  Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    children: [
-                                                      const SizedBox(
-                                                        width: 4.0,
-                                                      ),
-                                                      if (post.fileAttached)
-                                                        SvgPicture.asset(
-                                                            "assets/img/post_screen/has_picture_icon.svg"),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                height:
-                                                    post.categoryType == "FREE"
-                                                        ? 6.0
-                                                        : 2.0,
-                                              ),
-                                              Text(
-                                                post.content,
-                                                style: const TextStyle(
-                                                  fontFamily: "Pretendard",
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: GRAYSCALE_GRAY_05,
+                                                    const SizedBox(
+                                                      height: 6.0,
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            buildRoleIndicator(
+                                                              post.nickname,
+                                                              post.memberRole,
+                                                              11,
+                                                            ),
+                                                            const SizedBox(
+                                                                width: 4.0),
+                                                            SvgPicture.asset(
+                                                              'assets/img/common/ic_dot.svg',
+                                                              width: 2,
+                                                              height: 2,
+                                                            ),
+                                                            const SizedBox(
+                                                                width: 4.0),
+                                                            Text(
+                                                              PostModel
+                                                                  .convertUTCtoLocalPreview(
+                                                                      post.createdAt),
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontFamily:
+                                                                    "Pretendard",
+                                                                fontSize: 11,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                color:
+                                                                    GRAYSCALE_GREY_ORANGE,
+                                                              ),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            SvgPicture.asset(
+                                                              'assets/img/common/ic_like.svg',
+                                                              width: 16,
+                                                              height: 16,
+                                                            ),
+                                                            Text(
+                                                              post.likeCount
+                                                                  .toString(),
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontFamily:
+                                                                    "Pretendard",
+                                                                fontSize: 11,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                color:
+                                                                    GRAYSCALE_GRAY_ORANGE_02,
+                                                              ),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            SvgPicture.asset(
+                                                              'assets/img/common/ic_comment.svg',
+                                                              width: 16,
+                                                              height: 16,
+                                                            ),
+                                                            Text(
+                                                              post.commentCount
+                                                                  .toString(),
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontFamily:
+                                                                    "Pretendard",
+                                                                fontSize: 11,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                color:
+                                                                    GRAYSCALE_GRAY_ORANGE_02,
+                                                              ),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
                                                 ),
-                                                textAlign: TextAlign.left,
-                                                maxLines: getMaxLines(),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              const SizedBox(
-                                                height: 6.0,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      buildRoleIndicator(
-                                                        post.nickname,
-                                                        post.memberRole,
-                                                        11,
-                                                      ),
-                                                      const SizedBox(
-                                                          width: 4.0),
-                                                      SvgPicture.asset(
-                                                        'assets/img/common/ic_dot.svg',
-                                                        width: 2,
-                                                        height: 2,
-                                                      ),
-                                                      const SizedBox(
-                                                          width: 4.0),
-                                                      Text(
-                                                        PostModel
-                                                            .convertUTCtoLocalPreview(
-                                                                post.createdAt),
-                                                        style: const TextStyle(
-                                                          fontFamily:
-                                                              "Pretendard",
-                                                          fontSize: 11,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color:
-                                                              GRAYSCALE_GREY_ORANGE,
-                                                        ),
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      SvgPicture.asset(
-                                                        'assets/img/common/ic_like.svg',
-                                                        width: 16,
-                                                        height: 16,
-                                                      ),
-                                                      Text(
-                                                        post.likeCount
-                                                            .toString(),
-                                                        style: const TextStyle(
-                                                          fontFamily:
-                                                              "Pretendard",
-                                                          fontSize: 11,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color:
-                                                              GRAYSCALE_GRAY_ORANGE_02,
-                                                        ),
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      SvgPicture.asset(
-                                                        'assets/img/common/ic_comment.svg',
-                                                        width: 16,
-                                                        height: 16,
-                                                      ),
-                                                      Text(
-                                                        post.commentCount
-                                                            .toString(),
-                                                        style: const TextStyle(
-                                                          fontFamily:
-                                                              "Pretendard",
-                                                          fontSize: 11,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color:
-                                                              GRAYSCALE_GRAY_ORANGE_02,
-                                                        ),
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
                                               ),
                                             ],
                                           ),
-                                        ),
-                                      ],
-                                    ),
                                   ),
                                 ),
                                 if (index != postList.data.length - 1 ||

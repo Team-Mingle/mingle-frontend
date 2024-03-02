@@ -221,7 +221,7 @@ class _GeneralPostPreviewCardState extends ConsumerState<ItemPostPreviewCard>
                             }
                             SecondHandMarketPostModel post =
                                 postList.data[index];
-
+                            final bool reported = post.status == "신고됨";
                             return Column(
                               children: [
                                 // 첫번째 줄에만 padding
@@ -266,266 +266,318 @@ class _GeneralPostPreviewCardState extends ConsumerState<ItemPostPreviewCard>
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 16),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start, // 사진 위쪽 정렬
-                                      children: [
-                                        if (widget.cardType ==
-                                                CardType.market ||
-                                            widget.cardType == CardType.selling)
-                                          Stack(
-                                            children: [
-                                              Container(
-                                                width: 96, // 이미지의 가로 크기 조절
-                                                height: 96, // 이미지의 세로 크기 조절
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(4),
-                                                  image: DecorationImage(
-                                                    image: NetworkImage(
-                                                      post.imgThumbnailUrl,
-                                                    ),
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                              ),
-                                              ClipRRect(
-                                                borderRadius: BorderRadius.circular(
-                                                    8.0), // 여기서 borderRadius를 설정합니다.
-                                                child: Container(
-                                                  height: 96.0,
-                                                  width: 96.0,
-                                                  color: (post.status ==
-                                                              "예약중" ||
-                                                          post.status == "판매완료")
-                                                      ? Colors.black
-                                                          .withOpacity(0.6)
-                                                      : Colors.transparent,
-                                                  child: Center(
-                                                    child: Text(
-                                                      post.status == "예약중"
-                                                          ? "예약중"
-                                                          : post.status ==
-                                                                  "판매완료"
-                                                              ? "판매완료"
-                                                              : "",
-                                                      style: const TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 16.0,
-                                                          letterSpacing: -0.02,
-                                                          height: 1.5,
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        if (widget.cardType ==
-                                                CardType.market ||
-                                            widget.cardType == CardType.selling)
-                                          const SizedBox(
-                                            width: 16.0,
-                                          ),
-                                        Expanded(
-                                          child: Column(
+                                    child: reported
+                                        ? Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 15.0),
+                                            child: Center(
+                                              child: Text(post.title),
+                                            ),
+                                          )
+                                        : Row(
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                                CrossAxisAlignment
+                                                    .start, // 사진 위쪽 정렬
                                             children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Expanded(
-                                                    child: Text(
-                                                      post.title,
-                                                      style: const TextStyle(
-                                                        fontFamily:
-                                                            "Pretendard",
-                                                        fontSize: 14.0,
-                                                        letterSpacing: -0.01,
-                                                        height: 1.4,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color:
-                                                            GRAYSCALE_BLACK_GRAY,
-                                                      ),
-                                                      textAlign: TextAlign.left,
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ),
-                                                  if (widget.cardType ==
-                                                          CardType.market ||
-                                                      widget.cardType ==
-                                                          CardType.selling)
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          post.isLiked =
-                                                              !post.isLiked;
-                                                        });
-                                                        likeOrUnlikePost(
-                                                            post.id);
-                                                      },
-                                                      child: SvgPicture.asset(
-                                                        widget.cardType ==
-                                                                CardType.market
-                                                            ? (post.isLiked
-                                                                ? 'assets/img/second_hand_market_screen/heart_icon_filled.svg'
-                                                                : 'assets/img/second_hand_market_screen/heart_icon.svg')
-                                                            : widget.cardType ==
-                                                                    CardType
-                                                                        .selling
-                                                                ? 'assets/img/post_screen/triple_dot_icon.svg'
-                                                                : '', // 다른 경우에 대한 처리 (비어있는 문자열로 설정)
-                                                        width: 20,
-                                                        height: 20,
-                                                      ),
-                                                    ),
-                                                  const SizedBox(
-                                                    width: 4.0,
-                                                  )
-                                                ],
-                                              ),
                                               if (widget.cardType ==
                                                       CardType.market ||
                                                   widget.cardType ==
                                                       CardType.selling)
-                                                const SizedBox(height: 6.0),
-                                              Text(
-                                                widget.cardType ==
-                                                        CardType.market
-                                                    ? '${post.price ?? ''} ${post.currency ?? ''}'
-                                                    : post.content ?? '',
-                                                style: const TextStyle(
-                                                  fontFamily: "Pretendard",
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: GRAYSCALE_GRAY_05,
+                                                Stack(
+                                                  children: [
+                                                    Container(
+                                                      width:
+                                                          96, // 이미지의 가로 크기 조절
+                                                      height:
+                                                          96, // 이미지의 세로 크기 조절
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(4),
+                                                        image: DecorationImage(
+                                                          image: NetworkImage(
+                                                            post.imgThumbnailUrl,
+                                                          ),
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8.0), // 여기서 borderRadius를 설정합니다.
+                                                      child: Container(
+                                                        height: 96.0,
+                                                        width: 96.0,
+                                                        color: (post.status ==
+                                                                    "예약중" ||
+                                                                post.status ==
+                                                                    "판매완료")
+                                                            ? Colors.black
+                                                                .withOpacity(
+                                                                    0.6)
+                                                            : Colors
+                                                                .transparent,
+                                                        child: Center(
+                                                          child: Text(
+                                                            post.status == "예약중"
+                                                                ? "예약중"
+                                                                : post.status ==
+                                                                        "판매완료"
+                                                                    ? "판매완료"
+                                                                    : "",
+                                                            style: const TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 16.0,
+                                                                letterSpacing:
+                                                                    -0.02,
+                                                                height: 1.5,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                                textAlign: TextAlign.left,
-                                                maxLines: getMaxLines(),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              SizedBox(
-                                                height: (widget.cardType ==
+                                              if (widget.cardType ==
+                                                      CardType.market ||
+                                                  widget.cardType ==
+                                                      CardType.selling)
+                                                const SizedBox(
+                                                  width: 16.0,
+                                                ),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Expanded(
+                                                          child: Text(
+                                                            post.title,
+                                                            style:
+                                                                const TextStyle(
+                                                              fontFamily:
+                                                                  "Pretendard",
+                                                              fontSize: 14.0,
+                                                              letterSpacing:
+                                                                  -0.01,
+                                                              height: 1.4,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              color:
+                                                                  GRAYSCALE_BLACK_GRAY,
+                                                            ),
+                                                            textAlign:
+                                                                TextAlign.left,
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
+                                                        ),
+                                                        if (widget.cardType ==
+                                                                CardType
+                                                                    .market ||
+                                                            widget.cardType ==
+                                                                CardType
+                                                                    .selling)
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                              setState(() {
+                                                                post.isLiked =
+                                                                    !post
+                                                                        .isLiked;
+                                                              });
+                                                              likeOrUnlikePost(
+                                                                  post.id);
+                                                            },
+                                                            child: SvgPicture
+                                                                .asset(
+                                                              widget.cardType ==
+                                                                      CardType
+                                                                          .market
+                                                                  ? (post.isLiked
+                                                                      ? 'assets/img/second_hand_market_screen/heart_icon_filled.svg'
+                                                                      : 'assets/img/second_hand_market_screen/heart_icon.svg')
+                                                                  : widget.cardType ==
+                                                                          CardType
+                                                                              .selling
+                                                                      ? 'assets/img/post_screen/triple_dot_icon.svg'
+                                                                      : '', // 다른 경우에 대한 처리 (비어있는 문자열로 설정)
+                                                              width: 20,
+                                                              height: 20,
+                                                            ),
+                                                          ),
+                                                        const SizedBox(
+                                                          width: 4.0,
+                                                        )
+                                                      ],
+                                                    ),
+                                                    if (widget.cardType ==
                                                             CardType.market ||
                                                         widget.cardType ==
                                                             CardType.selling)
-                                                    ? 43.0
-                                                    : 6.0,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                        post.nickname ?? '',
-                                                        style: const TextStyle(
-                                                          fontFamily:
-                                                              "Pretendard",
-                                                          fontSize: 11,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color:
-                                                              GRAYSCALE_GREY_ORANGE,
-                                                        ),
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                      ),
                                                       const SizedBox(
-                                                          width: 4.0),
-                                                      SvgPicture.asset(
-                                                        'assets/img/common/ic_dot.svg',
-                                                        width: 2,
-                                                        height: 2,
+                                                          height: 6.0),
+                                                    Text(
+                                                      widget.cardType ==
+                                                              CardType.market
+                                                          ? '${post.price ?? ''} ${post.currency ?? ''}'
+                                                          : post.content ?? '',
+                                                      style: const TextStyle(
+                                                        fontFamily:
+                                                            "Pretendard",
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color:
+                                                            GRAYSCALE_GRAY_05,
                                                       ),
-                                                      const SizedBox(
-                                                          width: 4.0),
-                                                      Text(
-                                                        PostModel
-                                                            .convertUTCtoLocalPreview(
-                                                                post.createdAt),
-                                                        style: const TextStyle(
-                                                          fontFamily:
-                                                              "Pretendard",
-                                                          fontSize: 11,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color:
-                                                              GRAYSCALE_GREY_ORANGE,
+                                                      textAlign: TextAlign.left,
+                                                      maxLines: getMaxLines(),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                    SizedBox(
+                                                      height: (widget.cardType ==
+                                                                  CardType
+                                                                      .market ||
+                                                              widget.cardType ==
+                                                                  CardType
+                                                                      .selling)
+                                                          ? 43.0
+                                                          : 6.0,
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            Text(
+                                                              post.nickname ??
+                                                                  '',
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontFamily:
+                                                                    "Pretendard",
+                                                                fontSize: 11,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                color:
+                                                                    GRAYSCALE_GREY_ORANGE,
+                                                              ),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                            ),
+                                                            const SizedBox(
+                                                                width: 4.0),
+                                                            SvgPicture.asset(
+                                                              'assets/img/common/ic_dot.svg',
+                                                              width: 2,
+                                                              height: 2,
+                                                            ),
+                                                            const SizedBox(
+                                                                width: 4.0),
+                                                            Text(
+                                                              PostModel
+                                                                  .convertUTCtoLocalPreview(
+                                                                      post.createdAt),
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontFamily:
+                                                                    "Pretendard",
+                                                                fontSize: 11,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                color:
+                                                                    GRAYSCALE_GREY_ORANGE,
+                                                              ),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                            ),
+                                                          ],
                                                         ),
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      SvgPicture.asset(
-                                                        widget.cardType ==
-                                                                CardType.market
-                                                            ? 'assets/img/second_hand_market_screen/ic_heart_icon.svg'
-                                                            : 'assets/img/common/ic_like.svg',
-                                                        width: 16,
-                                                        height: 16,
-                                                      ),
-                                                      Text(
-                                                        post.likeCount
-                                                                .toString() ??
-                                                            '',
-                                                        style: const TextStyle(
-                                                          fontFamily:
-                                                              "Pretendard",
-                                                          fontSize: 11,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color:
-                                                              GRAYSCALE_GRAY_ORANGE_02,
+                                                        Row(
+                                                          children: [
+                                                            SvgPicture.asset(
+                                                              widget.cardType ==
+                                                                      CardType
+                                                                          .market
+                                                                  ? 'assets/img/second_hand_market_screen/ic_heart_icon.svg'
+                                                                  : 'assets/img/common/ic_like.svg',
+                                                              width: 16,
+                                                              height: 16,
+                                                            ),
+                                                            Text(
+                                                              post.likeCount
+                                                                      .toString() ??
+                                                                  '',
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontFamily:
+                                                                    "Pretendard",
+                                                                fontSize: 11,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                color:
+                                                                    GRAYSCALE_GRAY_ORANGE_02,
+                                                              ),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            SvgPicture.asset(
+                                                              'assets/img/common/ic_comment.svg',
+                                                              width: 16,
+                                                              height: 16,
+                                                            ),
+                                                            Text(
+                                                              post.commentCount
+                                                                      .toString() ??
+                                                                  '',
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontFamily:
+                                                                    "Pretendard",
+                                                                fontSize: 11,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                color:
+                                                                    GRAYSCALE_GRAY_ORANGE_02,
+                                                              ),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                            ),
+                                                          ],
                                                         ),
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      SvgPicture.asset(
-                                                        'assets/img/common/ic_comment.svg',
-                                                        width: 16,
-                                                        height: 16,
-                                                      ),
-                                                      Text(
-                                                        post.commentCount
-                                                                .toString() ??
-                                                            '',
-                                                        style: const TextStyle(
-                                                          fontFamily:
-                                                              "Pretendard",
-                                                          fontSize: 11,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color:
-                                                              GRAYSCALE_GRAY_ORANGE_02,
-                                                        ),
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ],
                                           ),
-                                        ),
-                                      ],
-                                    ),
                                   ),
                                 ),
 

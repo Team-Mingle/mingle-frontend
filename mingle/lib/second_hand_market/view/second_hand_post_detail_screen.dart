@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/component/anonymous_textfield.dart';
 import 'package:mingle/common/component/report_modal.dart';
+import 'package:mingle/common/component/reported_component.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/view/image_detail_screen.dart';
 import 'package:mingle/post/components/comment_card.dart';
@@ -254,6 +255,7 @@ class _SecondHandPostDetailScreenState
 
   Widget renderContent(SecondHandMarketPostModel item) {
     String selectedOption = item.status;
+    bool reported = item.status == "신고됨";
     return SafeArea(
       child: Scaffold(
         body: GestureDetector(
@@ -284,516 +286,556 @@ class _SecondHandPostDetailScreenState
                     color: GRAYSCALE_GRAY_03),
               ),
               centerTitle: false,
-              actions: [
-                GestureDetector(
-                  onTap: () => showCupertinoModalPopup<void>(
-                    context: context,
-                    builder: (BuildContext context) => CupertinoActionSheet(
-                        cancelButton: CupertinoActionSheetAction(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('취소하기'),
-                        ),
-                        actions: item is SecondHandMarketPostDetailModel &&
-                                item.isMyPost
-                            ? <CupertinoActionSheetAction>[
-                                CupertinoActionSheetAction(
-                                  onPressed: () {
-                                    deletePost();
-                                    Navigator.pop(context);
-                                  },
-                                  isDestructiveAction: true,
-                                  child: const Text('삭제하기'),
-                                ),
-                                CupertinoActionSheetAction(
+              actions: reported
+                  ? []
+                  : [
+                      GestureDetector(
+                        onTap: () => showCupertinoModalPopup<void>(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              CupertinoActionSheet(
+                                  cancelButton: CupertinoActionSheetAction(
                                     onPressed: () {
-                                      Navigator.of(context).pop();
-
-                                      showModalBottomSheet(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          // 기본 선택 항목
-
-                                          return Container(
-                                            height: 248,
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            decoration: const BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(20),
-                                              ),
-                                            ),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 20.0),
-                                              child: Column(
-                                                children: [
-                                                  const SizedBox(
-                                                    height: 32.0,
-                                                  ),
-                                                  ListTile(
-                                                    title: Center(
-                                                      child: Text(
-                                                        '판매중',
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              selectedOption ==
-                                                                      '판매중'
-                                                                  ? FontWeight
-                                                                      .bold
-                                                                  : FontWeight
-                                                                      .normal,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    onTap: () {
-                                                      Navigator.pop(context);
-                                                      setState(() {
-                                                        selectedOption = '판매중';
-                                                        _isReserved = false;
-                                                      }); // 선택한 항목 설정
-                                                      changeStatus(
-                                                          selectedOption);
-                                                      print("판매중");
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 20.0,
-                                                  ),
-                                                  ListTile(
-                                                    title: Center(
-                                                      child: Text(
-                                                        '예약중',
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              selectedOption ==
-                                                                      '예약중'
-                                                                  ? FontWeight
-                                                                      .bold
-                                                                  : FontWeight
-                                                                      .normal,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    onTap: () {
-                                                      Navigator.pop(context);
-                                                      setState(() {
-                                                        selectedOption = '예약중';
-                                                        _isReserved = true;
-                                                      }); // 선택한 항목 설정
-                                                      changeStatus(
-                                                          selectedOption);
-                                                      print("예약중");
-                                                    },
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 20.0,
-                                                  ),
-                                                  ListTile(
-                                                    title: Center(
-                                                      child: Text(
-                                                        '판매완료',
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              selectedOption ==
-                                                                      '판매완료'
-                                                                  ? FontWeight
-                                                                      .bold
-                                                                  : FontWeight
-                                                                      .normal,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    onTap: () {
-                                                      Navigator.pop(context);
-                                                      setState(() {
-                                                        selectedOption = '판매완료';
-                                                        _isReserved = false;
-                                                      }); // 선택한 항목 설정
-                                                      changeStatus(
-                                                          selectedOption);
-                                                      print("판매완료");
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        backgroundColor: Colors.transparent,
-                                      );
+                                      Navigator.pop(context);
                                     },
-                                    child: const Text("판매상태 변경하기"))
-                              ]
-                            : <CupertinoActionSheetAction>[
-                                reportModal(
-                                    "ITEM", item.id, context, ref, fToast)
-                                // CupertinoActionSheetAction(
-                                //   onPressed: () {
-                                //     Navigator.pop(context);
-                                //   },
-                                //   isDestructiveAction: true,
-                                //   child: const Text('신고하기'),
-                                // ),
-                              ]),
-                  ),
-                  child: SvgPicture.asset(
-                      "assets/img/post_screen/triple_dot_icon.svg"),
-                ),
-                const SizedBox(
-                  width: 18.0,
-                ),
-                const SizedBox(
-                  width: 18.0,
-                )
-              ],
-            ),
-            body: CustomScrollView(
-                physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
-                controller: scrollController,
-                slivers: [
-                  CupertinoSliverRefreshControl(
-                    onRefresh: () async {
-                      await Future.delayed(const Duration(seconds: 1), () {
-                        refreshPost();
-                        refreshComments();
-                      });
-                      //   refreshPost();
-                      //   refreshComments();
-                    },
-                  ),
-                  SliverList(
-                      delegate: SliverChildListDelegate([
-                    Padding(
-                      padding: _contentPadding,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 8.0,
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: 320.0,
-                            child: Stack(
-                              children: [
-                                sliderWidget(item),
-                                sliderIndicator(item),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 24.0,
-                          ),
-                          Text(
-                            item.title,
-                            style: const TextStyle(
-                                fontSize: 20.0,
-                                letterSpacing: -0.03,
-                                height: 1.5,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          const SizedBox(
-                            height: 8.0,
-                          ),
-                          Text(
-                            "${item.price.toString()} ${item.currency}",
-                            style: const TextStyle(
-                                fontSize: 16.0,
-                                letterSpacing: -0.02,
-                                height: 1.5,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ],
-                      ),
-                    ),
-                    _contentDivider,
-                    Padding(
-                      padding: _contentPadding,
-                      child: Text(item.content),
-                    ),
-                    _contentDivider,
-                    Padding(
-                      padding: _contentPadding,
-                      child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "희망 거래장소/시간대",
-                              style: TextStyle(
-                                  color: GRAYSCALE_GRAY_03,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            const SizedBox(
-                              width: 16.0,
-                            ),
-                            Text(item.location)
-                          ]),
-                    ),
-                    _contentDivider,
-                    Padding(
-                      padding: _contentPadding.copyWith(bottom: 8.0),
-                      child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "오픈채팅방 링크",
-                              style: TextStyle(
-                                  color: GRAYSCALE_GRAY_03,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            const SizedBox(
-                              width: 16.0,
-                            ),
-                            Expanded(
-                              child: InkWell(
-                                  onTap: () async {
-                                    final Uri url = Uri.parse(item.chatUrl);
+                                    child: const Text('취소하기'),
+                                  ),
+                                  actions:
+                                      item is SecondHandMarketPostDetailModel &&
+                                              item.isMyPost
+                                          ? <CupertinoActionSheetAction>[
+                                              CupertinoActionSheetAction(
+                                                onPressed: () {
+                                                  deletePost();
+                                                  Navigator.pop(context);
+                                                },
+                                                isDestructiveAction: true,
+                                                child: const Text('삭제하기'),
+                                              ),
+                                              CupertinoActionSheetAction(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
 
-                                    if (!await launchUrl(url)) {
-                                      throw Exception('Could not launch $url');
-                                    }
-                                  },
-                                  child: Text(
-                                    item.chatUrl,
-                                    style: const TextStyle(
-                                        decoration: TextDecoration.underline,
-                                        overflow: TextOverflow.ellipsis),
-                                  )),
-                            )
-                          ]),
-                    ),
-                    const Divider(
-                      height: 16.0,
-                      thickness: 0.0,
-                    ),
-                    Padding(
-                      padding: _contentPadding.copyWith(bottom: 8.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            item.nickname,
-                            style: const TextStyle(
-                                color: GRAYSCALE_GRAY_04, fontSize: 12.0),
-                          ),
-                          const SizedBox(
-                            width: 4.0,
-                          ),
-                          const Text(
-                            "•",
-                            style: TextStyle(
-                                color: GRAYSCALE_GRAY_02, fontSize: 12.0),
-                          ),
-                          const SizedBox(
-                            width: 4.0,
-                          ),
-                          Text(
-                            PostModel.convertUTCtoLocal(item.createdAt),
-                            style: const TextStyle(
-                                color: GRAYSCALE_GRAY_03, fontSize: 12.0),
-                          ),
-                          const SizedBox(
-                            width: 6.0,
-                          ),
-                          const Text(
-                            "조회",
-                            style: TextStyle(
-                                color: GRAYSCALE_GRAY_03, fontSize: 12.0),
-                          ),
-                          const SizedBox(
-                            width: 2.0,
-                          ),
-                          Text(
-                            item is SecondHandMarketPostDetailModel
-                                ? item.viewCount.toString()
-                                : "",
-                            style: const TextStyle(
-                                color: GRAYSCALE_GRAY_03, fontSize: 12.0),
-                          )
-                        ],
+                                                    showModalBottomSheet(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        // 기본 선택 항목
+
+                                                        return Container(
+                                                          height: 248,
+                                                          width: MediaQuery.of(
+                                                                  context)
+                                                              .size
+                                                              .width,
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            color: Colors.white,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .all(
+                                                              Radius.circular(
+                                                                  20),
+                                                            ),
+                                                          ),
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        20.0),
+                                                            child: Column(
+                                                              children: [
+                                                                const SizedBox(
+                                                                  height: 32.0,
+                                                                ),
+                                                                ListTile(
+                                                                  title: Center(
+                                                                    child: Text(
+                                                                      '판매중',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontWeight: selectedOption ==
+                                                                                '판매중'
+                                                                            ? FontWeight.bold
+                                                                            : FontWeight.normal,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  onTap: () {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                    setState(
+                                                                        () {
+                                                                      selectedOption =
+                                                                          '판매중';
+                                                                      _isReserved =
+                                                                          false;
+                                                                    }); // 선택한 항목 설정
+                                                                    changeStatus(
+                                                                        selectedOption);
+                                                                    print(
+                                                                        "판매중");
+                                                                  },
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 20.0,
+                                                                ),
+                                                                ListTile(
+                                                                  title: Center(
+                                                                    child: Text(
+                                                                      '예약중',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontWeight: selectedOption ==
+                                                                                '예약중'
+                                                                            ? FontWeight.bold
+                                                                            : FontWeight.normal,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  onTap: () {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                    setState(
+                                                                        () {
+                                                                      selectedOption =
+                                                                          '예약중';
+                                                                      _isReserved =
+                                                                          true;
+                                                                    }); // 선택한 항목 설정
+                                                                    changeStatus(
+                                                                        selectedOption);
+                                                                    print(
+                                                                        "예약중");
+                                                                  },
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 20.0,
+                                                                ),
+                                                                ListTile(
+                                                                  title: Center(
+                                                                    child: Text(
+                                                                      '판매완료',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontWeight: selectedOption ==
+                                                                                '판매완료'
+                                                                            ? FontWeight.bold
+                                                                            : FontWeight.normal,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  onTap: () {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                    setState(
+                                                                        () {
+                                                                      selectedOption =
+                                                                          '판매완료';
+                                                                      _isReserved =
+                                                                          false;
+                                                                    }); // 선택한 항목 설정
+                                                                    changeStatus(
+                                                                        selectedOption);
+                                                                    print(
+                                                                        "판매완료");
+                                                                  },
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                    );
+                                                  },
+                                                  child:
+                                                      const Text("판매상태 변경하기"))
+                                            ]
+                                          : <CupertinoActionSheetAction>[
+                                              reportModal("ITEM", item.id,
+                                                  context, ref, fToast)
+                                              // CupertinoActionSheetAction(
+                                              //   onPressed: () {
+                                              //     Navigator.pop(context);
+                                              //   },
+                                              //   isDestructiveAction: true,
+                                              //   child: const Text('신고하기'),
+                                              // ),
+                                            ]),
+                        ),
+                        child: SvgPicture.asset(
+                            "assets/img/post_screen/triple_dot_icon.svg"),
                       ),
-                    ),
-                    Column(
-                      children: [
-                        const Divider(
-                          thickness: 1.0,
-                          height: 0.0,
-                          color: GRAYSCALE_GRAY_01,
+                      const SizedBox(
+                        width: 18.0,
+                      ),
+                      const SizedBox(
+                        width: 18.0,
+                      )
+                    ],
+            ),
+            body: reported
+                ? Align(
+                    alignment: Alignment.center,
+                    child: ReportedComponent(
+                        reportedTitle: item.title,
+                        reportedReason: item.content),
+                  )
+                : CustomScrollView(
+                    physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
+                    controller: scrollController,
+                    slivers: [
+                        CupertinoSliverRefreshControl(
+                          onRefresh: () async {
+                            await Future.delayed(const Duration(seconds: 1),
+                                () {
+                              refreshPost();
+                              refreshComments();
+                            });
+                            //   refreshPost();
+                            //   refreshComments();
+                          },
                         ),
-                        SecondHandMarketPostLikeAndCommentNumbersCard(
-                            post: item, likeOrUnlikePost: likeOrUnlikePost),
-                        const Divider(
-                          height: 0.0,
-                          thickness: 2.0,
-                          color: GRAYSCALE_GRAY_01,
-                        ),
-                        Container(
-                          color: GRAYSCALE_GRAY_01_5,
-                          // height: 56.0,
-                          child: const Padding(
-                            padding: EdgeInsets.only(left: 10.0),
+                        SliverList(
+                            delegate: SliverChildListDelegate([
+                          Padding(
+                            padding: _contentPadding,
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(
-                                  height: 12.0,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "•",
-                                      style: TextStyle(
-                                          color: GRAYSCALE_GRAY_03,
-                                          fontSize: 11.0),
-                                    ),
-                                    Text("운영규칙을 위반하는 댓글은 삭제될 수 있습니다.",
-                                        style: TextStyle(
-                                            color: GRAYSCALE_GRAY_03,
-                                            fontSize: 11.0))
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "•",
-                                      style: TextStyle(
-                                          color: GRAYSCALE_GRAY_03,
-                                          fontSize: 11.0),
-                                    ),
-                                    Text(
-                                        "악의적인 글 혹은 댓글은 오른쪽 상단 버튼을 통해 신고가 가능합니다.",
-                                        style: TextStyle(
-                                            color: GRAYSCALE_GRAY_03,
-                                            fontSize: 11.0))
-                                  ],
+                                const SizedBox(
+                                  height: 8.0,
                                 ),
                                 SizedBox(
-                                  height: 16.0,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20.0,
-                        ),
-                        comments == null
-                            ? const CircularProgressIndicator()
-                            : Column(children: [
-                                ...List.generate(
-                                  comments!.length,
-                                  (index) => Column(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 320.0,
+                                  child: Stack(
                                     children: [
-                                      index > 0
-                                          ? const Divider(
-                                              height: 24.0,
-                                              thickness: 0.0,
-                                            )
-                                          : Container(),
-                                      CommentCard(
-                                          refreshComments: refreshComments,
-                                          likeOrUnlikeComment:
-                                              likeOrUnlikeComment,
-                                          comment: comments![index],
-                                          setParentAndMentionId:
-                                              setParentCommentIdAndMentionId)
+                                      sliderWidget(item),
+                                      sliderIndicator(item),
                                     ],
                                   ),
                                 ),
                                 const SizedBox(
-                                  height: 20.0,
+                                  height: 24.0,
+                                ),
+                                Text(
+                                  item.title,
+                                  style: const TextStyle(
+                                      fontSize: 20.0,
+                                      letterSpacing: -0.03,
+                                      height: 1.5,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                const SizedBox(
+                                  height: 8.0,
+                                ),
+                                Text(
+                                  "${item.price.toString()} ${item.currency}",
+                                  style: const TextStyle(
+                                      fontSize: 16.0,
+                                      letterSpacing: -0.02,
+                                      height: 1.5,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ],
+                            ),
+                          ),
+                          _contentDivider,
+                          Padding(
+                            padding: _contentPadding,
+                            child: Text(item.content),
+                          ),
+                          _contentDivider,
+                          Padding(
+                            padding: _contentPadding,
+                            child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "희망 거래장소/시간대",
+                                    style: TextStyle(
+                                        color: GRAYSCALE_GRAY_03,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  const SizedBox(
+                                    width: 16.0,
+                                  ),
+                                  Text(item.location)
+                                ]),
+                          ),
+                          _contentDivider,
+                          Padding(
+                            padding: _contentPadding.copyWith(bottom: 8.0),
+                            child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "오픈채팅방 링크",
+                                    style: TextStyle(
+                                        color: GRAYSCALE_GRAY_03,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  const SizedBox(
+                                    width: 16.0,
+                                  ),
+                                  Expanded(
+                                    child: InkWell(
+                                        onTap: () async {
+                                          final Uri url =
+                                              Uri.parse(item.chatUrl);
+
+                                          if (!await launchUrl(url)) {
+                                            throw Exception(
+                                                'Could not launch $url');
+                                          }
+                                        },
+                                        child: Text(
+                                          item.chatUrl,
+                                          style: const TextStyle(
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              overflow: TextOverflow.ellipsis),
+                                        )),
+                                  )
+                                ]),
+                          ),
+                          const Divider(
+                            height: 16.0,
+                            thickness: 0.0,
+                          ),
+                          Padding(
+                            padding: _contentPadding.copyWith(bottom: 8.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  item.nickname,
+                                  style: const TextStyle(
+                                      color: GRAYSCALE_GRAY_04, fontSize: 12.0),
+                                ),
+                                const SizedBox(
+                                  width: 4.0,
+                                ),
+                                const Text(
+                                  "•",
+                                  style: TextStyle(
+                                      color: GRAYSCALE_GRAY_02, fontSize: 12.0),
+                                ),
+                                const SizedBox(
+                                  width: 4.0,
+                                ),
+                                Text(
+                                  PostModel.convertUTCtoLocal(item.createdAt),
+                                  style: const TextStyle(
+                                      color: GRAYSCALE_GRAY_03, fontSize: 12.0),
+                                ),
+                                const SizedBox(
+                                  width: 6.0,
+                                ),
+                                const Text(
+                                  "조회",
+                                  style: TextStyle(
+                                      color: GRAYSCALE_GRAY_03, fontSize: 12.0),
+                                ),
+                                const SizedBox(
+                                  width: 2.0,
+                                ),
+                                Text(
+                                  item is SecondHandMarketPostDetailModel
+                                      ? item.viewCount.toString()
+                                      : "",
+                                  style: const TextStyle(
+                                      color: GRAYSCALE_GRAY_03, fontSize: 12.0),
                                 )
-                              ])
-                        // FutureBuilder(
-                        //     future: commentFuture,
-                        //     builder:
-                        //         (context, AsyncSnapshot<List<CommentModel>> snapshot) {
-                        //       if (!snapshot.hasData) {
-                        //   return Skeletonizer(
-                        //       ignoreContainers: false,
-                        //       child: Column(
-                        //         children: List.generate(
-                        //             fakeComments.length,
-                        //             (index) => CommentCard(
-                        //                 comment: fakeComments[index],
-                        //                 setParentAndMentionId: () {},
-                        //                 likeOrUnlikeComment: () {})),
-                        //       ));
-                        // }
-                        //       List<CommentModel> comments = snapshot.data!;
-                        //       return Column(
-                        //         children: List.generate(
-                        //           comments.length,
-                        //           (index) => Column(
-                        //             children: [
-                        //               index > 0
-                        //                   ? const Divider(
-                        //                       height: 24.0,
-                        //                       thickness: 0.0,
-                        //                     )
-                        //                   : Container(),
-                        //               CommentCard(
-                        //                   likeOrUnlikeComment: likeOrUnlikeComment,
-                        //                   comment: comments[index],
-                        //                   setParentAndMentionId:
-                        //                       setParentCommentIdAndMentionId)
-                        //             ],
-                        //           ),
-                        //         ),
-                        //       );
-                        //     })
-                      ],
-                    )
-                  ]))
-                ]),
+                              ],
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              const Divider(
+                                thickness: 1.0,
+                                height: 0.0,
+                                color: GRAYSCALE_GRAY_01,
+                              ),
+                              SecondHandMarketPostLikeAndCommentNumbersCard(
+                                  post: item,
+                                  likeOrUnlikePost: likeOrUnlikePost),
+                              const Divider(
+                                height: 0.0,
+                                thickness: 2.0,
+                                color: GRAYSCALE_GRAY_01,
+                              ),
+                              Container(
+                                color: GRAYSCALE_GRAY_01_5,
+                                // height: 56.0,
+                                child: const Padding(
+                                  padding: EdgeInsets.only(left: 10.0),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SizedBox(
+                                        height: 12.0,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "•",
+                                            style: TextStyle(
+                                                color: GRAYSCALE_GRAY_03,
+                                                fontSize: 11.0),
+                                          ),
+                                          Text("운영규칙을 위반하는 댓글은 삭제될 수 있습니다.",
+                                              style: TextStyle(
+                                                  color: GRAYSCALE_GRAY_03,
+                                                  fontSize: 11.0))
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "•",
+                                            style: TextStyle(
+                                                color: GRAYSCALE_GRAY_03,
+                                                fontSize: 11.0),
+                                          ),
+                                          Text(
+                                              "악의적인 글 혹은 댓글은 오른쪽 상단 버튼을 통해 신고가 가능합니다.",
+                                              style: TextStyle(
+                                                  color: GRAYSCALE_GRAY_03,
+                                                  fontSize: 11.0))
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 16.0,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20.0,
+                              ),
+                              comments == null
+                                  ? const CircularProgressIndicator()
+                                  : Column(children: [
+                                      ...List.generate(
+                                        comments!.length,
+                                        (index) => Column(
+                                          children: [
+                                            index > 0
+                                                ? const Divider(
+                                                    height: 24.0,
+                                                    thickness: 0.0,
+                                                  )
+                                                : Container(),
+                                            CommentCard(
+                                                refreshComments:
+                                                    refreshComments,
+                                                likeOrUnlikeComment:
+                                                    likeOrUnlikeComment,
+                                                comment: comments![index],
+                                                setParentAndMentionId:
+                                                    setParentCommentIdAndMentionId)
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 20.0,
+                                      )
+                                    ])
+                              // FutureBuilder(
+                              //     future: commentFuture,
+                              //     builder:
+                              //         (context, AsyncSnapshot<List<CommentModel>> snapshot) {
+                              //       if (!snapshot.hasData) {
+                              //   return Skeletonizer(
+                              //       ignoreContainers: false,
+                              //       child: Column(
+                              //         children: List.generate(
+                              //             fakeComments.length,
+                              //             (index) => CommentCard(
+                              //                 comment: fakeComments[index],
+                              //                 setParentAndMentionId: () {},
+                              //                 likeOrUnlikeComment: () {})),
+                              //       ));
+                              // }
+                              //       List<CommentModel> comments = snapshot.data!;
+                              //       return Column(
+                              //         children: List.generate(
+                              //           comments.length,
+                              //           (index) => Column(
+                              //             children: [
+                              //               index > 0
+                              //                   ? const Divider(
+                              //                       height: 24.0,
+                              //                       thickness: 0.0,
+                              //                     )
+                              //                   : Container(),
+                              //               CommentCard(
+                              //                   likeOrUnlikeComment: likeOrUnlikeComment,
+                              //                   comment: comments[index],
+                              //                   setParentAndMentionId:
+                              //                       setParentCommentIdAndMentionId)
+                              //             ],
+                              //           ),
+                              //         ),
+                              //       );
+                              //     })
+                            ],
+                          )
+                        ]))
+                      ]),
             bottomNavigationBar:
                 Container(height: parentCommentId != null ? 56.0 + 32.0 : 56.0),
           ),
         ),
         bottomSheet: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
-            parentCommentId != null
-                ? Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    color: SECONDARY_COLOR_ORANGE_03,
-                    height: 32.0,
-                    width: double.infinity,
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "대댓글 쓰는 중..",
-                            style: TextStyle(
-                                color: GRAYSCALE_GRAY_04,
-                                fontSize: 11.0,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          const Spacer(),
-                          GestureDetector(
-                            onTap: () =>
-                                setParentCommentIdAndMentionId(null, null),
-                            child: SvgPicture.asset(
-                              "assets/img/post_screen/cross_icon.svg",
-                              height: 11.0,
-                              width: 11.0,
-                            ),
-                          )
-                        ]),
-                  )
-                : Container(),
-            AnonymousTextfield(
-              handleSubmit: handleCommentSubmit,
-              scrollController: scrollController,
-              focusNode: focusNode,
-              isCommentReply: parentCommentId != null && mentionId != null,
-            ),
-          ],
+          children: reported
+              ? []
+              : [
+                  parentCommentId != null
+                      ? Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          color: SECONDARY_COLOR_ORANGE_03,
+                          height: 32.0,
+                          width: double.infinity,
+                          child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  "대댓글 쓰는 중..",
+                                  style: TextStyle(
+                                      color: GRAYSCALE_GRAY_04,
+                                      fontSize: 11.0,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                const Spacer(),
+                                GestureDetector(
+                                  onTap: () => setParentCommentIdAndMentionId(
+                                      null, null),
+                                  child: SvgPicture.asset(
+                                    "assets/img/post_screen/cross_icon.svg",
+                                    height: 11.0,
+                                    width: 11.0,
+                                  ),
+                                )
+                              ]),
+                        )
+                      : Container(),
+                  AnonymousTextfield(
+                    handleSubmit: handleCommentSubmit,
+                    scrollController: scrollController,
+                    focusNode: focusNode,
+                    isCommentReply:
+                        parentCommentId != null && mentionId != null,
+                  ),
+                ],
         ),
       ),
     );

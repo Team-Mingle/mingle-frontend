@@ -13,6 +13,7 @@ class PostModel {
   final String boardType;
   String categoryType;
   final String memberRole;
+  final String status;
   int likeCount;
   int commentCount;
   final int viewCount;
@@ -28,6 +29,7 @@ class PostModel {
     required this.boardType,
     required this.categoryType,
     required this.memberRole,
+    required this.status,
     required this.likeCount,
     required this.commentCount,
     required this.viewCount,

@@ -7,7 +7,6 @@ part 'post_detail_model.g.dart';
 class PostDetailModel extends PostModel {
   int scrapCount;
   final List<String> postImgUrl;
-  final String status;
   final bool myPost;
   bool liked;
   bool scraped;
@@ -20,7 +19,7 @@ class PostDetailModel extends PostModel {
     required super.nickname,
     required super.createdAt,
     required super.memberRole,
-    required this.status,
+    required super.status,
     required super.boardType,
     required super.categoryType,
     required super.likeCount,
