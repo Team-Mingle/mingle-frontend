@@ -407,29 +407,31 @@
 //   }
 // }
 
-import 'dart:async';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mingle/common/const/colors.dart';
-import 'package:mingle/common/view/splash_screen.dart';
-import 'package:mingle/firebase_notification.dart';
-import 'package:mingle/firebase_options.dart';
-
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-//StreamController<String> streamController = StreamController.broadcast();
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  // await Firebase.initializeApp();
   await Firebase.initializeApp(
     name: "mingle",
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  FlutterLocalNotification.onBackgroundNotificationResponse();
+  print(message.data);
+
+  print("Handling a background message: ${message.messageId}");
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // FirebaseMessaging.onBackgroundMessage((message) async {
+  //   print(message);
+  //   print("Handling a background message");
+  // });
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  // FlutterLocalNotification.onBackgroundNotificationResponse();
   runApp(const _App());
 }
 
@@ -445,11 +447,47 @@ class _AppState extends ConsumerState<_App> {
 
   @override
   void initState() {
-    FlutterLocalNotification.init();
-    Future.delayed(const Duration(seconds: 3),
-        FlutterLocalNotification.requestNotificationPermission());
+    // FlutterLocalNotification.init();
+    // // 3초 후 권한 요청
+    // Future.delayed(const Duration(seconds: 3),
+    //     FlutterLocalNotification.requestNotificationPermission());
 
+    // //권한 요청?
+    // FirebaseMessaging.instance.requestPermission();
+
+    // FlutterLocalNotification.onBackgroundNotificationResponse();
+    // setupInteractedMessage();
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      if (message.data['contentType'] == "POST") {
+        print(context);
+        Navigator.of(navigatorKey.currentState!.context).push(MaterialPageRoute(
+            builder: (_) => PostDetailScreen(
+                postId: int.parse(message.data['contentId']),
+                refreshList: () {})));
+      }
+    });
     super.initState();
+  }
+
+  Future<void> setupInteractedMessage() async {
+    // Get any messages which caused the application to open from
+    // a terminated state.
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+
+    // If the message also contains a data property with a "type" of "chat",
+    // navigate to a chat screen
+    if (initialMessage != null) {
+      _handleMessage(initialMessage);
+    }
+    print("initial message is null");
+    // Also handle any interaction when the app is in the background via a
+    // Stream listener
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+  }
+
+  void _handleMessage(RemoteMessage message) {
+    print(message.data);
   }
 
   @override

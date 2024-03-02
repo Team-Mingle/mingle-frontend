@@ -295,7 +295,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                 ),
                 titleSpacing: 0,
                 title: Text(
-                  widget.boardType!,
+                  widget.boardType != null ? widget.boardType! : "",
                   style: const TextStyle(
                       fontSize: 14.0,
                       letterSpacing: -0.01,
@@ -331,7 +331,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                 ),
                 titleSpacing: 0,
                 title: Text(
-                  widget.boardType!,
+                  widget.boardType != null ? widget.boardType! : "",
                   style: const TextStyle(
                       fontSize: 14.0,
                       letterSpacing: -0.01,
@@ -404,7 +404,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
             ),
             titleSpacing: 0,
             title: Text(
-              widget.boardType!,
+              widget.boardType != null ? widget.boardType! : "",
               style: const TextStyle(
                 fontSize: 14.0,
                 letterSpacing: -0.01,

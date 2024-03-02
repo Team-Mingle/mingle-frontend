@@ -9,31 +9,32 @@ class PostDetailModel extends PostModel {
   final List<String> postImgUrl;
   final String status;
   final bool myPost;
-  final bool reported;
   bool liked;
   bool scraped;
+  final bool reported;
 
-  PostDetailModel(
-      {required super.postId,
-      required super.title,
-      required super.content,
-      required super.nickname,
-      required super.createdAt,
-      required super.memberRole,
-      required this.status,
-      required super.boardType,
-      required super.categoryType,
-      required super.likeCount,
-      required super.commentCount,
-      required super.viewCount,
-      required this.scrapCount,
-      required this.postImgUrl,
-      required super.fileAttached,
-      required super.blinded,
-      required this.myPost,
-      required this.liked,
-      required this.scraped,
-      required this.reported});
+  PostDetailModel({
+    required super.postId,
+    required super.title,
+    required super.content,
+    required super.nickname,
+    required super.createdAt,
+    required super.memberRole,
+    required this.status,
+    required super.boardType,
+    required super.categoryType,
+    required super.likeCount,
+    required super.commentCount,
+    required super.viewCount,
+    required this.scrapCount,
+    required this.postImgUrl,
+    required super.fileAttached,
+    required super.blinded,
+    required this.myPost,
+    required this.liked,
+    required this.scraped,
+    required this.reported,
+  });
 
   factory PostDetailModel.fromJson(Map<String, dynamic> json) =>
       _$PostDetailModelFromJson(json);

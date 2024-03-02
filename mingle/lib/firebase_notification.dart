@@ -4,11 +4,11 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mingle/main.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//     FlutterLocalNotificationsPlugin();
 
-class FlutterLocalNotification {
-  FlutterLocalNotification._();
+// class FlutterLocalNotification {
+//   FlutterLocalNotification._();
 
   static init() async {
     // 초기화 설정
@@ -94,16 +94,16 @@ class FlutterLocalNotification {
     }
   }
 
-  static requestNotificationPermission() {
-    flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            IOSFlutterLocalNotificationsPlugin>()
-        ?.requestPermissions(
-          alert: true,
-          badge: true,
-          sound: true,
-        );
-  }
+//   static requestNotificationPermission() {
+//     flutterLocalNotificationsPlugin
+//         .resolvePlatformSpecificImplementation<
+//             IOSFlutterLocalNotificationsPlugin>()
+//         ?.requestPermissions(
+//           alert: true,
+//           badge: true,
+//           sound: true,
+//         );
+//   }
 
   // foreground에서 알림 클릭 처리
   static void onDidReceiveNotificationResponse(
@@ -138,7 +138,7 @@ class FlutterLocalNotification {
       String payload =
           notificationAppLaunchDetails!.notificationResponse?.payload ?? "";
 
-      print("BACKGROUND PAYLOAD: $payload");
+//       print("BACKGROUND PAYLOAD: $payload");
 
       final int postId = int.parse(payload);
 

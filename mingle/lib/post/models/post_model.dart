@@ -19,20 +19,21 @@ class PostModel {
   final bool fileAttached;
   final bool blinded;
 
-  PostModel(
-      {required this.postId,
-      required this.title,
-      required this.content,
-      required this.nickname,
-      required this.createdAt,
-      required this.boardType,
-      required this.categoryType,
-      required this.memberRole,
-      required this.likeCount,
-      required this.commentCount,
-      required this.viewCount,
-      required this.fileAttached,
-      required this.blinded});
+  PostModel({
+    required this.postId,
+    required this.title,
+    required this.content,
+    required this.nickname,
+    required this.createdAt,
+    required this.boardType,
+    required this.categoryType,
+    required this.memberRole,
+    required this.likeCount,
+    required this.commentCount,
+    required this.viewCount,
+    required this.fileAttached,
+    required this.blinded,
+  });
 
   factory PostModel.fromJson(Map<String, dynamic> json) =>
       _$PostModelFromJson(json);

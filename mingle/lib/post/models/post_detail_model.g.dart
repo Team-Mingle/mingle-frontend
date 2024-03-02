@@ -51,7 +51,7 @@ Map<String, dynamic> _$PostDetailModelToJson(PostDetailModel instance) =>
       'postImgUrl': instance.postImgUrl,
       'status': instance.status,
       'myPost': instance.myPost,
-      'reported': instance.reported,
       'liked': instance.liked,
       'scraped': instance.scraped,
+      'reported': instance.reported,
     };
