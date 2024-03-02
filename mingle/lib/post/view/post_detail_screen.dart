@@ -90,6 +90,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
   late Future<List<CommentModel>> commentFuture =
       ref.watch(postRepositoryProvider).getPostcomments(postId: widget.postId);
   late Future<PostDetailModel> postFuture;
+  bool isReported = false;
 
   List<CommentModel>? comments;
   late FToast fToast;
@@ -140,7 +141,8 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
     if (parentId != null && mentId != null) focusNode.requestFocus();
   }
 
-  void handleCommentSubmit(String comment, bool isAnonymous) async {
+  void handleCommentSubmit(
+      String comment, bool isAnonymous, bool isReported) async {
     AddCommentModel addCommentModel = AddCommentModel(
         postId: widget.postId,
         parentCommentId: parentCommentId,
@@ -507,7 +509,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                           height: 20,
                         ),
                         Text(
-                          reported ? "다른 사용자들의 신고로 인해 삭제된 글 입니다." : post.title,
+                          post.title,
                           style: const TextStyle(
                               fontSize: 18.0, fontWeight: FontWeight.w400),
                         ),
@@ -524,7 +526,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                               );
                             }
                           },
-                          text: reported ? "" : post.content,
+                          text: post.content,
                           style: const TextStyle(
                               fontSize: 14.0,
                               letterSpacing: -0.01,
@@ -662,9 +664,9 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                         ),
                       ),
                       const SizedBox(
-                        height: 16.0,
+                        height: 10.0,
                       ),
-                      comments == null && !reported
+                      comments == null
                           ? FutureBuilder(
                               future: Future.delayed(
                                   const Duration(milliseconds: 200),
@@ -686,7 +688,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                           : Column(
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: comments!.isEmpty
+                              children: comments!.isEmpty || reported
                                   ? [
                                       const Center(
                                           child: Text(
@@ -702,7 +704,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                                         children: [
                                           index > 0
                                               ? const Divider(
-                                                  height: 24.0,
+                                                  height: 20.0,
                                                   thickness: 0.0,
                                                 )
                                               : Container(),
@@ -803,6 +805,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                 )
               : Container(),
           AnonymousTextfield(
+            isReported: reported,
             handleSubmit: handleCommentSubmit,
             scrollController: scrollController,
             focusNode: focusNode,

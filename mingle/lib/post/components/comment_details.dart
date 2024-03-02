@@ -66,9 +66,6 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(
-                height: 6.0,
-              ),
               Expanded(
                 child: RichText(
                   text: TextSpan(children: [
@@ -152,7 +149,7 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
             ],
           ),
           const SizedBox(
-            height: 10.0,
+            height: 5.0,
           ),
           Row(
             children: [

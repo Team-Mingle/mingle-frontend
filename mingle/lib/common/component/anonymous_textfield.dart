@@ -7,8 +7,10 @@ class AnonymousTextfield extends StatefulWidget {
   final ScrollController scrollController;
   final FocusNode focusNode;
   final bool isCommentReply;
-  const AnonymousTextfield(
+  bool? isReported;
+  AnonymousTextfield(
       {super.key,
+      this.isReported,
       required this.handleSubmit,
       required this.scrollController,
       required this.focusNode,
@@ -48,7 +50,7 @@ class _AnonymousTextfieldState extends State<AnonymousTextfield> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: 56.0,
+      // height: 56.0,
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.zero,
@@ -90,41 +92,45 @@ class _AnonymousTextfieldState extends State<AnonymousTextfield> {
             width: 12.0,
           ),
           Expanded(
-            child: SizedBox(
-              // width: 144,
-              height: 36.0,
-              child: TextFormField(
-                  focusNode: widget.focusNode,
-                  onChanged: (value) {
-                    setState(() {});
-                  },
-                  controller: _controller,
-                  decoration: InputDecoration(
-                    filled: true,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 5.0),
-                    fillColor: const Color(0xFFE9E7E7),
-                    // hintText: "닉네임 작성",
-                    hintStyle: const TextStyle(
-                        color: Color(0xFFE9E7E7), fontSize: 11.0),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: const BorderSide(
-                        color: Color(0xFFE9E7E7),
+            child: Column(
+              children: [
+                TextFormField(
+                    focusNode: widget.focusNode,
+                    onChanged: (value) {
+                      setState(() {});
+                    },
+                    minLines: 1,
+                    maxLines: 3,
+                    controller: _controller,
+                    decoration: InputDecoration(
+                      filled: true,
+                      isCollapsed: true,
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 5.0, vertical: 6.0),
+                      fillColor: const Color(0xFFE9E7E7),
+                      // hintText: "닉네임 작성",
+                      hintStyle: const TextStyle(
+                          color: Color(0xFFE9E7E7), fontSize: 11.0),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: const BorderSide(
+                          color: Color(0xFFE9E7E7),
+                        ),
                       ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: const BorderSide(
-                        color: Color(0xFFE9E7E7),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: const BorderSide(
+                          color: Color(0xFFE9E7E7),
+                        ),
                       ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: const BorderSide(
-                        color: Color(0xFFE9E7E7),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: const BorderSide(
+                          color: Color(0xFFE9E7E7),
+                        ),
                       ),
-                    ),
-                  )),
+                    )),
+              ],
             ),
           ),
           const SizedBox(
