@@ -7,10 +7,8 @@ class AnonymousTextfield extends StatefulWidget {
   final ScrollController scrollController;
   final FocusNode focusNode;
   final bool isCommentReply;
-  bool? isReported;
-  AnonymousTextfield(
+  const AnonymousTextfield(
       {super.key,
-      this.isReported,
       required this.handleSubmit,
       required this.scrollController,
       required this.focusNode,

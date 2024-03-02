@@ -99,8 +99,7 @@ class _SecondHandPostDetailScreenState
     focusNode.requestFocus();
   }
 
-  void handleCommentSubmit(
-      String comment, bool isAnonymous, bool isReported) async {
+  void handleCommentSubmit(String comment, bool isAnonymous) async {
     AddSecondHandMarketCommentModel addCommentModel =
         AddSecondHandMarketCommentModel(
             itemId: widget.itemId,

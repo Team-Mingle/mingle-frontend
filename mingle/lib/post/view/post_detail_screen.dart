@@ -141,8 +141,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
     if (parentId != null && mentId != null) focusNode.requestFocus();
   }
 
-  void handleCommentSubmit(
-      String comment, bool isAnonymous, bool isReported) async {
+  void handleCommentSubmit(String comment, bool isAnonymous) async {
     AddCommentModel addCommentModel = AddCommentModel(
         postId: widget.postId,
         parentCommentId: parentCommentId,
@@ -805,7 +804,6 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                 )
               : Container(),
           AnonymousTextfield(
-            isReported: reported,
             handleSubmit: handleCommentSubmit,
             scrollController: scrollController,
             focusNode: focusNode,
