@@ -407,6 +407,21 @@
 //   }
 // }
 
+import 'dart:async';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/view/splash_screen.dart';
+import 'package:mingle/firebase_notification.dart';
+import 'package:mingle/firebase_options.dart';
+import 'package:mingle/post/view/post_detail_screen.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+//StreamController<String> streamController = StreamController.broadcast();
+
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
