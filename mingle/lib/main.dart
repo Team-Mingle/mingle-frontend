@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -206,6 +207,8 @@ class _App extends ConsumerStatefulWidget {
 class _AppState extends ConsumerState<_App> {
   var messageString = "";
 
+  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
   @override
   void initState() {
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
@@ -248,6 +251,9 @@ class _AppState extends ConsumerState<_App> {
               primaryColor: PRIMARY_COLOR_ORANGE_01,
             ),
           ),
+          navigatorObservers: [
+            FirebaseAnalyticsObserver(analytics: analytics),
+          ],
           debugShowCheckedModeBanner: false,
           home: const SplashScreen()),
     );
