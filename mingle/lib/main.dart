@@ -20,6 +20,31 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print(message.data);
 
   print("Handling a background message: ${message.messageId}");
+  final contentType = message.data['contentType'];
+  print(contentType);
+  final contentId = message.data['contentId'];
+  print(contentId);
+
+  // contentId와 contentType 사용
+  print('contentId: $contentId');
+  print('contentType: $contentType');
+  if (contentType == "POST") {
+    await Navigator.of(navigatorKey.currentState!.context)
+        .push(MaterialPageRoute(
+      builder: (_) => PostDetailScreen(
+        postId: contentId,
+        refreshList: () {},
+      ),
+    ));
+  } else if (contentType == "ITEM") {
+    await Navigator.of(navigatorKey.currentState!.context)
+        .push(MaterialPageRoute(
+      builder: (_) => SecondHandPostDetailScreen(
+        itemId: contentId,
+        refreshList: () {},
+      ),
+    ));
+  }
 }
 
 @pragma('vm:entry-point')

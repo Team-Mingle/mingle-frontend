@@ -51,10 +51,10 @@ class _NotificationItemState extends ConsumerState<NotificationItem> {
     print(widget.notification.notificationType);
     String imagePath = _getImagePath(widget.notification.contentType);
 
-    bool isTradingBoard = widget.notification.boardType == '거래게시판';
+    bool isTradingBoard = widget.notification.boardType == '장터';
 
     String boardTypeToShow =
-        isTradingBoard ? '거래게시판' : widget.notification.boardType;
+        isTradingBoard ? '장터' : widget.notification.boardType;
 
     return GestureDetector(
       onTap: () {
@@ -278,7 +278,7 @@ class _NotificationItemState extends ConsumerState<NotificationItem> {
     switch (contentType) {
       case 'COMMENT':
         return 'assets/img/common/ic_notification_comment.svg';
-      case 'INTEREST':
+      case 'ITEM':
         return 'assets/img/common/ic_notification_interest.svg';
       case 'POST':
         return 'assets/img/common/ic_notification_like.svg';
