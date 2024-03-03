@@ -38,8 +38,12 @@ class MyPageScreen extends ConsumerWidget {
       "내가 작성한 댓글"
     ];
 
-    String univName = ref.watch(currentUserProvider)!.univName;
-    String nickName = ref.watch(currentUserProvider)!.nickName;
+    String univName = ref.watch(currentUserProvider) == null
+        ? ""
+        : ref.watch(currentUserProvider)!.univName;
+    String nickName = ref.watch(currentUserProvider) == null
+        ? ""
+        : ref.watch(currentUserProvider)!.nickName;
 
     List<String> secondHandMarketTitles = ["판매 내역", "찜한 내역"];
 
@@ -293,6 +297,11 @@ class MyPageScreen extends ConsumerWidget {
                                 color: GRAYSCALE_GRAY_04),
                           ),
                           onTap: () {
+                            Navigator.of(context)
+                                .pushReplacement(MaterialPageRoute(
+                                    builder: (_) => const LoginScreen(
+                                          isFromSplash: false,
+                                        )));
                             FlutterSecureStorage storage =
                                 ref.watch(secureStorageProvider);
                             ref
@@ -305,11 +314,6 @@ class MyPageScreen extends ConsumerWidget {
                                 .update((_) => null);
 
                             storage.deleteAll();
-                            Navigator.of(context)
-                                .pushReplacement(MaterialPageRoute(
-                                    builder: (_) => const LoginScreen(
-                                          isFromSplash: false,
-                                        )));
                           },
                         ),
                       ],

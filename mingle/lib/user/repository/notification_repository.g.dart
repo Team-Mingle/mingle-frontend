@@ -50,13 +50,13 @@ class _NotificationRepository implements NotificationRepository {
   }
 
   @override
-  Future<bool> markNotificationAsRead({required int notificationId}) async {
+  Future<void> markNotificationAsRead({required int notificationId}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<bool>(_setStreamType<bool>(Options(
+    await _dio.fetch<void>(_setStreamType<void>(Options(
       method: 'PATCH',
       headers: _headers,
       extra: _extra,
@@ -72,8 +72,6 @@ class _NotificationRepository implements NotificationRepository {
           _dio.options.baseUrl,
           baseUrl,
         ))));
-    final value = _result.data!;
-    return value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

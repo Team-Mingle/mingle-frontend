@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mingle/common/const/colors.dart';
@@ -41,9 +42,13 @@ class _NotificationItemState extends ConsumerState<NotificationItem> {
     setState(() {
       widget.notification.isRead = true;
     });
-    await ref.watch(notificationRepositoryProvider).markNotificationAsRead(
-          notificationId: widget.notification.notificationId,
-        );
+    try {
+      await ref.watch(notificationRepositoryProvider).markNotificationAsRead(
+            notificationId: widget.notification.notificationId,
+          );
+    } on DioException catch (e) {
+      print(e);
+    }
   }
 
   @override

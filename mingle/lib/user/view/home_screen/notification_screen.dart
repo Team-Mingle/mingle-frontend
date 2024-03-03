@@ -42,6 +42,8 @@ class NotificationScreen extends ConsumerWidget {
         ),
       ),
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics()),
         slivers: <Widget>[
           CupertinoSliverRefreshControl(
             onRefresh: () async {

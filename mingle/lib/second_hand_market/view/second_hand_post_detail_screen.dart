@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/component/anonymous_textfield.dart';
+import 'package:mingle/common/component/dummy_textfield.dart';
 import 'package:mingle/common/component/report_modal.dart';
 import 'package:mingle/common/component/reported_component.dart';
 import 'package:mingle/common/const/colors.dart';
@@ -70,6 +71,7 @@ class _SecondHandPostDetailScreenState
   final ScrollController scrollController = ScrollController();
   final FocusNode focusNode = FocusNode();
   late FToast fToast;
+  final TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
@@ -113,6 +115,10 @@ class _SecondHandPostDetailScreenState
     await commentRepository.addSecondHandMarketPostComment(
         itemId: widget.itemId, commentModel: addCommentModel);
     refreshComments();
+    setState(() {
+      parentCommentId = null;
+      mentionId = null;
+    });
   }
 
   void refreshComments() {
@@ -790,8 +796,15 @@ class _SecondHandPostDetailScreenState
                           )
                         ]))
                       ]),
-            bottomNavigationBar:
-                Container(height: parentCommentId != null ? 56.0 + 32.0 : 56.0),
+            bottomNavigationBar: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(height: parentCommentId != null ? 32.0 : 0),
+                DummyTextfield(
+                  controller: controller,
+                ),
+              ],
+            ),
           ),
         ),
         bottomSheet: Column(
@@ -834,6 +847,7 @@ class _SecondHandPostDetailScreenState
                     focusNode: focusNode,
                     isCommentReply:
                         parentCommentId != null && mentionId != null,
+                    controller: controller,
                   ),
                 ],
         ),

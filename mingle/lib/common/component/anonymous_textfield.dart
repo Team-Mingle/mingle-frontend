@@ -7,12 +7,14 @@ class AnonymousTextfield extends StatefulWidget {
   final ScrollController scrollController;
   final FocusNode focusNode;
   final bool isCommentReply;
+  final TextEditingController controller;
   const AnonymousTextfield(
       {super.key,
       required this.handleSubmit,
       required this.scrollController,
       required this.focusNode,
-      required this.isCommentReply});
+      required this.isCommentReply,
+      required this.controller});
 
   @override
   State<AnonymousTextfield> createState() => _AnonymousTextfieldState();
@@ -20,7 +22,7 @@ class AnonymousTextfield extends StatefulWidget {
 
 class _AnonymousTextfieldState extends State<AnonymousTextfield> {
   bool isAnonymous = true;
-  final TextEditingController _controller = TextEditingController();
+  // final TextEditingController _controller = TextEditingController();
 
 // This is what you're looking for!
   void _scrollDown() {
@@ -41,7 +43,7 @@ class _AnonymousTextfieldState extends State<AnonymousTextfield> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _controller.dispose();
+    widget.controller.dispose();
   }
 
   @override
@@ -99,7 +101,7 @@ class _AnonymousTextfieldState extends State<AnonymousTextfield> {
                     },
                     minLines: 1,
                     maxLines: 3,
-                    controller: _controller,
+                    controller: widget.controller,
                     decoration: InputDecoration(
                       filled: true,
                       isCollapsed: true,
@@ -134,7 +136,7 @@ class _AnonymousTextfieldState extends State<AnonymousTextfield> {
           const SizedBox(
             width: 8.0,
           ),
-          _controller.text.isEmpty
+          widget.controller.text.isEmpty
               ? GestureDetector(
                   child: SvgPicture.asset(
                     "assets/img/post_screen/paper_plane_icon.svg",
@@ -147,8 +149,8 @@ class _AnonymousTextfieldState extends State<AnonymousTextfield> {
                       colorFilter: const ColorFilter.mode(
                           PRIMARY_COLOR_ORANGE_02, BlendMode.srcIn)),
                   onTap: () {
-                    widget.handleSubmit(_controller.text, isAnonymous);
-                    _controller.clear();
+                    widget.handleSubmit(widget.controller.text, isAnonymous);
+                    widget.controller.clear();
                     if (!widget.isCommentReply) _scrollDown();
                   },
                 )
