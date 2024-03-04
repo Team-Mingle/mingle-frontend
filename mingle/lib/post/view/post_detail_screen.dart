@@ -807,15 +807,17 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                       ]),
             bottomNavigationBar:
                 // Container(height: parentCommentId != null ? 56.0 + 32.0 : 56.0),
-                Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(height: parentCommentId != null ? 32.0 : 0),
-                DummyTextfield(
-                  controller: controller,
-                ),
-              ],
-            )),
+                reported
+                    ? Container()
+                    : Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(height: parentCommentId != null ? 32.0 : 0),
+                          DummyTextfield(
+                            controller: controller,
+                          ),
+                        ],
+                      )),
       ),
       bottomSheet: Column(
         mainAxisSize: MainAxisSize.min,

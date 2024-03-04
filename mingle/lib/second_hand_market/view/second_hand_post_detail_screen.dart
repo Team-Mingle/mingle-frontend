@@ -796,15 +796,17 @@ class _SecondHandPostDetailScreenState
                           )
                         ]))
                       ]),
-            bottomNavigationBar: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(height: parentCommentId != null ? 32.0 : 0),
-                DummyTextfield(
-                  controller: controller,
-                ),
-              ],
-            ),
+            bottomNavigationBar: reported
+                ? Container()
+                : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(height: parentCommentId != null ? 32.0 : 0),
+                      DummyTextfield(
+                        controller: controller,
+                      ),
+                    ],
+                  ),
           ),
         ),
         bottomSheet: Column(
