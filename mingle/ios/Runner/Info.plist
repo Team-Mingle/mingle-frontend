@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
@@ -29,11 +31,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>This app requires access to the camera.</string>
+	<string>&quot;밍글&quot;이 사진 또는 동영상을 촬영하여 게시물에 등록하는 기능 사용을 위해 카레라 사용을 허용합니다. </string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app does not require access to the microphone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app requires access to the photo library.</string>
+	<string>&quot;밍글&quot;이 사진 또는 동영상을 게시물에 등록하는 기능 사용을 위해 사진 라이브러리에 접근하도록 허용합니다. </string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
