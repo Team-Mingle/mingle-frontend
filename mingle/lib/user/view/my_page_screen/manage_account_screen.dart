@@ -16,7 +16,7 @@ class ManageAccountScreen extends StatelessWidget {
     List<Widget> manageAccountScreen = [
       const ChangeNicknameScreen(),
       const SelectSchoolScreen(
-        isPassswordReset: true,
+        isPasswordReset: true,
       ),
       const QuitAgreementScreen()
     ];
@@ -38,7 +38,11 @@ class ManageAccountScreen extends StatelessWidget {
         title: const Text(
           "계정 관리",
           style: TextStyle(
-              fontSize: 16.0, fontWeight: FontWeight.w400, color: Colors.black),
+              fontSize: 16.0,
+              letterSpacing: -0.02,
+              height: 1.5,
+              fontWeight: FontWeight.w400,
+              color: Colors.black),
         ),
       ),
       body: Padding(

@@ -1,248 +1,105 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mingle/common/component/post_card.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/const/data.dart';
+import 'package:mingle/common/model/cursor_pagination_model.dart';
+import 'package:mingle/second_hand_market/provider/second_hand_market_post_provider.dart';
+import 'package:mingle/secure_storage/secure_storage.dart';
+import 'package:mingle/user/model/banner_model.dart';
+import 'package:mingle/user/provider/banner_provider.dart';
+import 'package:mingle/post/provider/post_provider.dart';
+import 'package:mingle/user/provider/is_fresh_login_provider.dart';
+import 'package:mingle/user/view/home_screen/home_root_tab.dart';
+import 'package:mingle/user/view/home_screen/notification_screen.dart';
 import 'package:mingle/user/view/home_screen/search_screen.dart';
-import 'package:mingle/post/view/add_post_screen.dart';
-import 'package:mingle/post/view/post_detail_screen.dart';
-import 'package:mingle/second_hand_market/add_second_hand_post_screen.dart';
-import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
+import 'dart:convert';
 
-class HomeTabScreen extends StatefulWidget {
-  const HomeTabScreen({
+import 'package:mingle/user/view/my_page_screen/terms_and_conditions_screen.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class HomeTabScreen extends ConsumerStatefulWidget {
+  bool isFromLogin;
+  Function? setIsFromLogin;
+  final Function(int)? changeTabIndex;
+  final CustomScrollController controller;
+  HomeTabScreen({
     Key? key,
+    this.isFromLogin = false,
+    this.setIsFromLogin,
+    this.changeTabIndex,
+    required this.controller,
   }) : super(key: key);
 
   @override
-  State<HomeTabScreen> createState() => _HomeTabScreenState();
+  ConsumerState<HomeTabScreen> createState() => _HomeTabScreenState();
 }
 
-class _HomeTabScreenState extends State<HomeTabScreen> {
+class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
+  final ScrollController scrollController = ScrollController();
   int _current = 0;
   final CarouselController _controller = CarouselController();
-  List imageList = [
-    "https://cdn.pixabay.com/photo/2014/04/14/20/11/pink-324175_1280.jpg",
-    "https://cdn.pixabay.com/photo/2014/02/27/16/10/flowers-276014_1280.jpg",
-    "https://cdn.pixabay.com/photo/2012/03/01/00/55/flowers-19830_1280.jpg",
-    "https://cdn.pixabay.com/photo/2015/06/19/20/13/sunset-815270_1280.jpg",
-    "https://cdn.pixabay.com/photo/2016/01/08/05/24/sunflower-1127174_1280.jpg",
-  ];
+  late final Future<List<BannerModel>> _bannerProvider;
+  late CursorPaginationBase totalRecent;
+  late CursorPaginationBase univRecent;
+  late CursorPaginationBase bestPost;
+
+  void changeTabIndex(int index) {
+    widget.changeTabIndex?.call(index);
+  }
 
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 0)).then((_) {
-      showModalBottomSheet<void>(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        isScrollControlled: true,
-        context: context,
-        builder: (BuildContext context) {
-          return SizedBox(
-            height: 512.0,
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 22.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 40.0,
-                      ),
-                      const Text(
-                        "시작하기 전에",
-                        style: TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.w500),
-                      ),
-                      const SizedBox(
-                        height: 4.0,
-                      ),
-                      Text(
-                        "더 나은 밍글을 위해 약속하기",
-                        style: TextStyle(
-                            fontSize: 22.0,
-                            fontWeight: FontWeight.w700,
-                            backgroundColor:
-                                PRIMARY_COLOR_ORANGE_02.withOpacity(0.4)),
-                      ),
-                      const SizedBox(
-                        height: 42.0,
-                      ),
-                      const Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "1.",
-                            style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w600,
-                                color: GRAYSCALE_GRAY_03),
-                          ),
-                          SizedBox(
-                            width: 8.0,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "서로 존중을 주고 받아요",
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 8.0,
-                              ),
-                              Text(
-                                "서로 비난하지 않고 함께 존중하는 커뮤니티를 만들어가요. ",
-                                style: TextStyle(
-                                  fontSize: 12.0,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 8.0,
-                      ),
-                      const Divider(
-                        height: 32.0,
-                        thickness: 1.0,
-                        color: GRAYSCALE_GRAY_01,
-                      ),
-                      const Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "2.",
-                            style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w600,
-                                color: GRAYSCALE_GRAY_03),
-                          ),
-                          SizedBox(
-                            width: 8.0,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "서로 도움을 주고 받아요",
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 8.0,
-                              ),
-                              Text(
-                                "궁금한 점들을 질문하고, 내가 줄 수 있는 도움을 나눠봐요.",
-                                style: TextStyle(
-                                  fontSize: 12.0,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 8.0,
-                      ),
-                      const Divider(
-                        height: 32.0,
-                        thickness: 1.0,
-                        color: GRAYSCALE_GRAY_01,
-                      ),
-                      const Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "2.",
-                            style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w600,
-                                color: GRAYSCALE_GRAY_03),
-                          ),
-                          SizedBox(
-                            width: 8.0,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "이용규칙을 지켜주세요.",
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 8.0,
-                              ),
-                              Text(
-                                "이용규칙을 지키며 더 나은 커뮤니티를 만들어가요.",
-                                style: TextStyle(
-                                  fontSize: 12.0,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 4.0,
-                      ),
-                      const Divider(
-                        height: 36.0,
-                        thickness: 1.0,
-                        color: GRAYSCALE_GRAY_01,
-                      ),
-                    ],
-                  ),
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: const Text(
-                    "자세한 운영정책 보러가기",
-                    style: TextStyle(
-                        color: GRAYSCALE_GRAY_04,
-                        fontSize: 11.0,
-                        decoration: TextDecoration.underline),
-                  ),
-                ),
-                const SizedBox(
-                  height: 25.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                  child: InkWell(
-                    onTap: () => Navigator.pop(context),
-                    child: Container(
-                      height: 48.0,
-                      decoration: BoxDecoration(
-                        color: PRIMARY_COLOR_ORANGE_02,
-                        border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: const Center(child: Text("확인했습니다.")),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          );
-        },
-      );
+    showModal();
+    setState(() {
+      totalRecent = ref.read(totalRecentPostProvider);
+      univRecent = ref.read(univRecentPostProvider);
+      bestPost = ref.read(bestPostProvider);
     });
+    widget.controller.scrollUp = scrollUp;
+    _bannerProvider = ref.read(bannerProvider.future);
     super.initState();
+  }
+
+  void scrollUp() {
+    print("going upppp??");
+    print(scrollController.hasClients);
+    // print(scrollController.offset);
+    if (scrollController.hasClients) {
+      print("lets goooo");
+      scrollController.animateTo(0,
+          duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+    }
+  }
+
+  void showModal() async {
+    if (await ref.read(secureStorageProvider).read(key: IS_FRESH_LOGIN_KEY) ==
+        'y') {
+      // widget.setIsFromLogin!();
+
+      Future.delayed(const Duration(seconds: 0)).then((_) {
+        showModalBottomSheet<void>(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          isScrollControlled: true,
+          isDismissible: false,
+          context: context,
+          builder: (BuildContext context) {
+            return startbottomsheet(ref: ref);
+          },
+        ).whenComplete(() => ref
+            .read(secureStorageProvider)
+            .write(key: IS_FRESH_LOGIN_KEY, value: "n"));
+      });
+    }
   }
 
   @override
@@ -253,6 +110,8 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
         preferredSize: const Size.fromHeight(48.0),
         child: AppBar(
           backgroundColor: BACKGROUND_COLOR_GRAY,
+          surfaceTintColor: Colors.transparent,
+
           elevation: 0, // 그림자 제거
           leading: Padding(
             padding: const EdgeInsets.only(left: 8.0),
@@ -281,9 +140,11 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
               ),
               onPressed: () {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SearchScreen()),
-                );
+                    context,
+                    PageTransition(
+                        type: PageTransitionType.bottomToTop,
+                        duration: const Duration(milliseconds: 200),
+                        child: const SearchScreen()));
               },
             ),
             Padding(
@@ -297,92 +158,172 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                     height: 28,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          type: PageTransitionType.bottomToTop,
+                          duration: const Duration(milliseconds: 200),
+                          child: const NotificationScreen()));
+                },
               ),
             ),
           ],
         ),
       ),
       // 스크롤 뷰
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            children: <Widget>[
-              const SizedBox(height: 16.0),
-              Column(
-                children: [
-                  sliderWidget(),
-                  const SizedBox(height: 8.0),
-                  sliderIndicator(),
-                ],
-              ),
-              const SizedBox(height: 32.0),
-              Column(
-                children: [
-                  Column(
-                    children: [
-                      const Row(
-                        children: [
-                          Text(
-                            "소식 바로 보기",
-                            style: TextStyle(
-                              fontFamily: "Pretendard Variable",
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: GRAYSCALE_BLACK,
-                            ),
-                            textAlign: TextAlign.left,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12.0),
-                      Row(
-                        children: [
-                          customButton('학생회', () {
-                            // 첫 번째 버튼의 동작 추가
-                          }),
-                          const SizedBox(width: 10.0),
-                          customButton('밍글 소식', () {
-                            // 두 번째 버튼의 동작 추가
-                          }),
-                        ],
-                      ),
-                    ],
-                  )
-                ],
-              ),
-              const SizedBox(height: 32.0),
-              PostCard(title: '지금 광장에서는'),
-              const SizedBox(height: 40.0),
-              PostCard(title: '지금 잔디밭에서는'),
-              const SizedBox(height: 40.0),
-              PostCard(title: '불타오르는 게시글'),
-              const SizedBox(height: 169),
-            ],
+      body: CustomScrollView(
+        controller: scrollController,
+        physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics()),
+        slivers: [
+          CupertinoSliverRefreshControl(
+            onRefresh: () async {
+              await Future.delayed(const Duration(milliseconds: 1000), () {
+                print('refreshing');
+                ref
+                    .watch(univRecentPostProvider.notifier)
+                    .paginate(normalRefetch: true);
+                ref
+                    .watch(totalRecentPostProvider.notifier)
+                    .paginate(normalRefetch: true);
+                ref
+                    .watch(bestPostProvider.notifier)
+                    .paginate(normalRefetch: true);
+              });
+              // await widget.notifierProvider!.paginate(forceRefetch: true);
+            },
           ),
-        ),
+          SliverList(
+              delegate: SliverChildListDelegate(
+            [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
+                  children: <Widget>[
+                    const SizedBox(height: 16.0),
+                    FutureBuilder<List<BannerModel>>(
+                      future: _bannerProvider,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator(
+                            color: PRIMARY_COLOR_ORANGE_02,
+                          );
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          return Column(children: [
+                            sliderWidget(snapshot.data!),
+                            sliderIndicator(snapshot.data!)
+                          ]);
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 32.0),
+                    // Column(
+                    //   children: [
+                    //     Column(
+                    //       children: [
+                    //         const Row(
+                    //           children: [
+                    //             Text(
+                    //               "소식 바로 보기",
+                    //               style: TextStyle(
+                    //                 fontFamily: "Pretendard",
+                    //                 fontSize: 18,
+                    //                 fontWeight: FontWeight.w500,
+                    //                 color: GRAYSCALE_BLACK,
+                    //               ),
+                    //               textAlign: TextAlign.left,
+                    //             ),
+                    //           ],
+                    //         ),
+                    //         const SizedBox(height: 12.0),
+                    //         Row(
+                    //           children: [
+                    //             customButton('학생회', () {
+                    //               // 첫 번째 버튼의 동작 추가
+                    //             }),
+                    //             const SizedBox(width: 10.0),
+                    //             customButton('밍글 소식', () {
+                    //               // 두 번째 버튼의 동작 추가
+                    //             }),
+                    //           ],
+                    //         ),
+                    //       ],
+                    //     )
+                    //   ],
+                    //  ),
+                    // const SizedBox(height: 32.0),
+                    PostCard(
+                      changeTabIndex: widget.changeTabIndex,
+                      title: '지금 광장에서는',
+                      data: ref.watch(totalRecentPostProvider),
+                      postType: "square",
+                    ),
+                    const SizedBox(height: 54.0),
+                    PostCard(
+                        changeTabIndex: widget.changeTabIndex,
+                        title: '지금 잔디밭에서는',
+                        data: ref.watch(univRecentPostProvider),
+                        postType: "lawn"),
+                    const SizedBox(height: 54.0),
+                    PostCard(
+                        changeTabIndex: widget.changeTabIndex,
+                        title: '불타오르는 게시글',
+                        data: ref.watch(bestPostProvider),
+                        postType: "fire"),
+                    const SizedBox(height: 54.0),
+
+                    PostCard(
+                        changeTabIndex: widget.changeTabIndex,
+                        title: '뭐 살 거 없나?',
+                        data: ref.watch(secondHandPostProvider),
+                        postType: "secondhand"),
+                    const SizedBox(height: 144),
+                  ],
+                ),
+              ),
+            ],
+          ))
+        ],
+        // child:
       ),
     );
   }
 
   // 위젯 분리 필요
-  Widget sliderWidget() {
+  Widget sliderWidget(List<BannerModel> bannerList) {
     return CarouselSlider(
       carouselController: _controller,
-      items: imageList.map(
-        (imgLink) {
+      items: bannerList.map(
+        (banner) {
           return Builder(
-            builder: (context) {
-              return SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: ClipRRect(
-                  borderRadius:
-                      BorderRadius.circular(10.0), // 여기서 borderRadius를 설정합니다.
-                  child: Image(
-                    fit: BoxFit.fill,
-                    image: NetworkImage(
-                      imgLink,
+            builder: (BuildContext context) {
+              return GestureDetector(
+                onTap: () async {
+                  final url = banner.linkUrl;
+                  if (await canLaunchUrl(Uri.parse(url))) {
+                    await launchUrl(Uri.parse(url));
+                  } else {
+                    print('Could not launch $url');
+                  }
+                },
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: CachedNetworkImage(
+                      fit: BoxFit.fill,
+                      imageUrl:
+                          banner.imgUrl, // Use imageUrl instead of NetworkImage
+                      // placeholder: (context, url) =>
+                      //     const CircularProgressIndicator(
+                      //   color: PRIMARY_COLOR_ORANGE_02,
+                      // ),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                     ),
                   ),
                 ),
@@ -392,7 +333,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
         },
       ).toList(),
       options: CarouselOptions(
-        height: 160,
+        height: (MediaQuery.of(context).size.width - 32) / 2,
         viewportFraction: 1.0,
         autoPlay: true,
         autoPlayInterval: const Duration(seconds: 4),
@@ -406,12 +347,12 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
   }
 
   // 위젯 분리 필요
-  Widget sliderIndicator() {
+  Widget sliderIndicator(List<BannerModel> bannerList) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: imageList.asMap().entries.map((entry) {
+        children: bannerList.asMap().entries.map((entry) {
           return GestureDetector(
             onTap: () => _controller.animateToPage(entry.key),
             child: Container(
@@ -451,11 +392,12 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
               child: Text(
                 buttonText,
                 style: const TextStyle(
-                  fontFamily: "Pretendard Variable",
-                  fontSize: 14,
+                  fontFamily: "Pretendard",
+                  fontSize: 14.0,
+                  letterSpacing: -0.01,
+                  height: 1.4,
                   fontWeight: FontWeight.w400,
                   color: GRAYSCALE_GRAY_04,
-                  height: 17 / 14,
                 ),
               ),
             ),
@@ -469,6 +411,243 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class startbottomsheet extends StatelessWidget {
+  const startbottomsheet({
+    super.key,
+    required this.ref,
+  });
+
+  final WidgetRef ref;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 552.0,
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 22.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 40.0,
+                ),
+                const Text(
+                  "시작하기 전에",
+                  style: TextStyle(
+                      fontSize: 20.0,
+                      letterSpacing: -0.03,
+                      height: 1.5,
+                      fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(
+                  height: 4.0,
+                ),
+                Text(
+                  "더 나은 밍글을 위해 약속하기",
+                  style: TextStyle(
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.w700,
+                      backgroundColor:
+                          PRIMARY_COLOR_ORANGE_02.withOpacity(0.4)),
+                ),
+                const SizedBox(
+                  height: 42.0,
+                ),
+                const Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "1.",
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          letterSpacing: -0.02,
+                          height: 1.5,
+                          fontWeight: FontWeight.w600,
+                          color: GRAYSCALE_GRAY_03),
+                    ),
+                    SizedBox(
+                      width: 8.0,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "서로 존중을 주고 받아요",
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            letterSpacing: -0.02,
+                            height: 1.5,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8.0,
+                        ),
+                        Text(
+                          "서로 비난하지 않고 함께 존중하는 커뮤니티를 만들어가요. ",
+                          style: TextStyle(
+                              fontSize: 12.0,
+                              letterSpacing: -0.005,
+                              height: 1.3),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 8.0,
+                ),
+                const Divider(
+                  height: 32.0,
+                  thickness: 1.0,
+                  color: GRAYSCALE_GRAY_01,
+                ),
+                const Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "2.",
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          letterSpacing: -0.02,
+                          height: 1.5,
+                          fontWeight: FontWeight.w600,
+                          color: GRAYSCALE_GRAY_03),
+                    ),
+                    SizedBox(
+                      width: 8.0,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "서로 도움을 주고 받아요",
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            letterSpacing: -0.02,
+                            height: 1.5,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8.0,
+                        ),
+                        Text(
+                          "궁금한 점들을 질문하고, 내가 줄 수 있는 도움을 나눠봐요.",
+                          style: TextStyle(
+                              fontSize: 12.0,
+                              letterSpacing: -0.005,
+                              height: 1.3),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 8.0,
+                ),
+                const Divider(
+                  height: 32.0,
+                  thickness: 1.0,
+                  color: GRAYSCALE_GRAY_01,
+                ),
+                const Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "2.",
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          letterSpacing: -0.02,
+                          height: 1.5,
+                          fontWeight: FontWeight.w600,
+                          color: GRAYSCALE_GRAY_03),
+                    ),
+                    SizedBox(
+                      width: 8.0,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "이용규칙을 지켜주세요.",
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            letterSpacing: -0.02,
+                            height: 1.5,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8.0,
+                        ),
+                        Text(
+                          "이용규칙을 지키며 더 나은 커뮤니티를 만들어가요.",
+                          style: TextStyle(
+                              fontSize: 12.0,
+                              letterSpacing: -0.005,
+                              height: 1.3),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 4.0,
+                ),
+                const Divider(
+                  height: 36.0,
+                  thickness: 1.0,
+                  color: GRAYSCALE_GRAY_01,
+                ),
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => const TermsAndConditionsScreen())),
+            child: const Text(
+              "자세한 운영정책 보러가기",
+              style: TextStyle(
+                  color: GRAYSCALE_GRAY_04,
+                  fontSize: 11.0,
+                  decoration: TextDecoration.underline),
+            ),
+          ),
+          const SizedBox(
+            height: 25.0,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32.0),
+            child: InkWell(
+              onTap: () {
+                ref.read(isFreshLoginProvider.notifier).update((_) => false);
+                Navigator.pop(context);
+              },
+              child: Container(
+                height: 48.0,
+                decoration: BoxDecoration(
+                  color: PRIMARY_COLOR_ORANGE_02,
+                  border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: const Center(child: Text("확인했습니다.")),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 40.0,
+          )
+        ],
       ),
     );
   }

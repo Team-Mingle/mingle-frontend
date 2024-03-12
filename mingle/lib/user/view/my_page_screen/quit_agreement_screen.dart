@@ -53,12 +53,18 @@ class _QuitAgreementScreenState extends State<QuitAgreementScreen> {
                     const Text(
                       "밍글 탈퇴 전",
                       style: TextStyle(
-                          fontSize: 24.0, fontWeight: FontWeight.w400),
+                          fontSize: 24.0,
+                          letterSpacing: -0.04,
+                          height: 1.4,
+                          fontWeight: FontWeight.w400),
                     ),
                     const Text(
                       "확인하세요.",
                       style: TextStyle(
-                          fontSize: 24.0, fontWeight: FontWeight.w400),
+                          fontSize: 24.0,
+                          letterSpacing: -0.04,
+                          height: 1.4,
+                          fontWeight: FontWeight.w400),
                     ),
                     const SizedBox(
                       height: 32.0,
@@ -78,6 +84,8 @@ class _QuitAgreementScreenState extends State<QuitAgreementScreen> {
                           "1.",
                           style: TextStyle(
                               fontSize: 16.0,
+                              letterSpacing: -0.02,
+                              height: 1.5,
                               fontWeight: FontWeight.w600,
                               color: PRIMARY_COLOR_ORANGE_02),
                         ),
@@ -87,7 +95,10 @@ class _QuitAgreementScreenState extends State<QuitAgreementScreen> {
                         Text(
                           "탈퇴하시면 재가입이 불가능합니다.",
                           style: TextStyle(
-                              fontSize: 16.0, fontWeight: FontWeight.w600),
+                              fontSize: 16.0,
+                              letterSpacing: -0.02,
+                              height: 1.5,
+                              fontWeight: FontWeight.w600),
                         )
                       ],
                     ),
@@ -100,6 +111,8 @@ class _QuitAgreementScreenState extends State<QuitAgreementScreen> {
                           "2.",
                           style: TextStyle(
                               fontSize: 16.0,
+                              letterSpacing: -0.02,
+                              height: 1.5,
                               fontWeight: FontWeight.w600,
                               color: PRIMARY_COLOR_ORANGE_02),
                         ),
@@ -109,7 +122,10 @@ class _QuitAgreementScreenState extends State<QuitAgreementScreen> {
                         Text(
                           "작성한 모든 게시글, 댓글이 삭제됩니다.",
                           style: TextStyle(
-                              fontSize: 16.0, fontWeight: FontWeight.w600),
+                              fontSize: 16.0,
+                              letterSpacing: -0.02,
+                              height: 1.5,
+                              fontWeight: FontWeight.w600),
                         )
                       ],
                     )
@@ -147,11 +163,15 @@ class _QuitAgreementScreenState extends State<QuitAgreementScreen> {
                         ),
                 ),
                 const SizedBox(
-                  width: 24.0,
+                  width: 10.0,
                 ),
                 const Text(
                   "안내사항을 모두 확인하였으며,이에 동의합니다.",
-                  style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400),
+                  style: TextStyle(
+                      fontSize: 14.0,
+                      letterSpacing: -0.01,
+                      height: 1.4,
+                      fontWeight: FontWeight.w400),
                 )
               ],
             ),
@@ -160,6 +180,7 @@ class _QuitAgreementScreenState extends State<QuitAgreementScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 32.0),
               child: NextButton(
                   nextScreen: const QuitEnterCredentialScreen(),
+                  checkSelected: selected,
                   buttonName: "다음으로"),
             )
           ],

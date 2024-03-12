@@ -1,20 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mingle/common/component/general_post_preview_card.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/model/cursor_pagination_model.dart';
+import 'package:mingle/post/models/post_model.dart';
+import 'package:mingle/post/provider/post_provider.dart';
+import 'package:mingle/post/repository/post_repository.dart';
+import 'package:collection/collection.dart';
 
-class SearchScreen extends StatefulWidget {
+class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({
     Key? key,
   }) : super(key: key);
 
   @override
-  _SearchScreenState createState() => _SearchScreenState();
+  ConsumerState<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen>
+class _SearchScreenState extends ConsumerState<SearchScreen>
     with SingleTickerProviderStateMixin {
   final TextEditingController _searchController = TextEditingController();
   late TabController _tabController;
+  Future<CursorPagination<PostModel>>? searchFuture;
+  StateNotifierProvider<PostStateNotifier, CursorPaginationBase>?
+      searchPostProvier;
+  ProviderFamily<PostModel?, int>? searchPostDetailProvider;
+// final univRecentPostProvider =
+//     StateNotifierProvider<PostStateNotifier, CursorPaginationBase>((ref) {
+//   final repository = ref.watch(postRepositoryProvider);
+
+//   final notifier = UnivRecentPostStateNotifier(postRepository: repository);
+
+//   return notifier;
+// });
+
+// final bestPostDetailProvider = Provider.family<PostModel?, int>((ref, id) {
+//   final state = ref.watch(bestPostProvider);
+
+//   if (state is! CursorPagination) {
+//     return null;
+//   }
+
+//   return state.data.firstWhereOrNull((e) => e.postId == id);
+// });
 
   @override
   void initState() {
@@ -30,116 +59,134 @@ class _SearchScreenState extends State<SearchScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(48.0),
-        child: AppBar(
-          elevation: 0,
-          backgroundColor: GRAYSCALE_GRAY_01,
-          titleSpacing: 0,
-          leading: Container(
-            margin: const EdgeInsets.only(
-                left: 6.0, top: 4.0, bottom: 4.0, right: 0.0),
-            child: IconButton(
-              icon: Align(
-                alignment: Alignment.center,
-                child: SvgPicture.asset(
-                  'assets/img/home_screen/ic_search_back.svg',
-                  width: 24,
-                  height: 24,
-                ),
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ),
-          title: Padding(
-            padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: GRAYSCALE_GRAY_01_5,
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Center(
-                child: TextField(
-                  controller: _searchController,
-                  decoration: const InputDecoration(
-                    hintText: '검색어를 입력하세요 왤케 아래에 있지...',
-                    hintStyle: TextStyle(
-                      color: GRAYSCALE_GRAY_03,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500,
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(48.0),
+            child: AppBar(
+              surfaceTintColor: Colors.transparent,
+              elevation: 0,
+              backgroundColor: Colors.white,
+              titleSpacing: 0,
+              leading: Container(
+                margin: const EdgeInsets.only(
+                    left: 6.0, top: 4.0, bottom: 4.0, right: 0.0),
+                child: IconButton(
+                  icon: Align(
+                    alignment: Alignment.center,
+                    child: SvgPicture.asset(
+                      'assets/img/post_screen/cross_icon.svg',
+                      width: 24,
+                      height: 24,
                     ),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
                   ),
-                  style: const TextStyle(
-                    fontSize: 14,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+              title: Padding(
+                padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: GRAYSCALE_GRAY_01_5,
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Center(
+                    child: TextField(
+                      onEditingComplete: () {
+                        setState(() {
+                          searchFuture = ref
+                              .watch(postRepositoryProvider)
+                              .search(keyword: _searchController.text);
+                          searchPostProvier = StateNotifierProvider<
+                              PostStateNotifier, CursorPaginationBase>((ref) {
+                            final repository =
+                                ref.watch(postRepositoryProvider);
+
+                            final notifier = PostStateNotifier(
+                                postRepository: repository,
+                                boardType: '',
+                                categoryType: '',
+                                keyword: _searchController.text);
+
+                            return notifier;
+                          });
+                          searchPostDetailProvider =
+                              Provider.family<PostModel?, int>((ref, id) {
+                            final state = ref.watch(searchPostProvier!);
+
+                            if (state is! CursorPagination) {
+                              return null;
+                            }
+
+                            return state.data
+                                .firstWhereOrNull((e) => e.postId == id);
+                          });
+                        });
+                      },
+                      controller: _searchController,
+                      decoration: const InputDecoration(
+                        hintText: '검색어를 입력하세요.',
+                        hintStyle: TextStyle(
+                          color: GRAYSCALE_GRAY_03,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
+                      ),
+                      style: const TextStyle(
+                        fontSize: 14.0,
+                        letterSpacing: -0.01,
+                        height: 1.4,
+                      ),
+                    ),
                   ),
                 ),
               ),
+              actions: [
+                Container(
+                  margin: const EdgeInsets.only(
+                      left: 0.0, top: 4.0, bottom: 4.0, right: 7.0),
+                  child: IconButton(
+                    icon: Align(
+                      alignment: Alignment.center,
+                      child: SvgPicture.asset(
+                        'assets/img/home_screen/ic_search_delete.svg',
+                        width: 24,
+                        height: 24,
+                      ),
+                    ),
+                    onPressed: () {
+                      _searchController.clear();
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
-          actions: [
-            Container(
-              margin: const EdgeInsets.only(
-                  left: 0.0, top: 4.0, bottom: 4.0, right: 7.0),
-              child: IconButton(
-                icon: Align(
-                  alignment: Alignment.center,
-                  child: SvgPicture.asset(
-                    'assets/img/home_screen/ic_search_delete.svg',
-                    width: 24,
-                    height: 24,
+          body: searchFuture == null
+              ? const Center(
+                  child: Text(
+                  '밍글에 궁금한 것을 물어보세요',
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    letterSpacing: -0.01,
+                    height: 1.4,
+                    fontWeight: FontWeight.w600,
+                    color: GRAYSCALE_GRAY_03,
                   ),
-                ),
-                onPressed: () {
-                  _searchController.clear();
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: Container(
-        color: GRAYSCALE_GRAY_01,
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 12.0,
-            ),
-            PreferredSize(
-              preferredSize: const Size.fromHeight(40.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width / 2,
-                  child: TabBar(
-                    indicatorColor: Colors.orange,
-                    labelColor: Colors.black,
-                    unselectedLabelColor: Colors.black,
-                    controller: _tabController,
-                    tabs: const [
-                      Tab(text: '광장'),
-                      Tab(text: '잔디밭'),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: const [
-                  Center(child: Text('탭 1 콘텐츠')),
-                  Center(child: Text('탭 2 콘텐츠')),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+                ))
+              : GeneralPostPreviewCard(
+                  boardType: "",
+                  cardType: CardType.square,
+                  data: ref.watch(searchPostProvier!),
+                  notifierProvider: ref.watch(searchPostProvier!.notifier),
+                  postDetailProvider: searchPostDetailProvider,
+                )),
     );
   }
 }

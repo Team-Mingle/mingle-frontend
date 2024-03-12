@@ -41,6 +41,8 @@ class MarketLikedScreen extends StatelessWidget {
             "찜한내역",
             style: TextStyle(
               fontSize: 16.0,
+              letterSpacing: -0.02,
+              height: 1.5,
               fontWeight: FontWeight.w400,
               color: Colors.black,
             ),
@@ -48,12 +50,12 @@ class MarketLikedScreen extends StatelessWidget {
         ),
       ),
       body: ListView(
-        children: [
-          PostPreviewCard(
-            postList: dummyPostList,
-            cardType: CardType.market,
-          ),
-          const SizedBox(height: 48.0),
+        children: const [
+          // PostPreviewCard(
+          //   postList: dummyPostList,
+          //   cardType: CardType.market,
+          // ),
+          SizedBox(height: 48.0),
         ],
       ),
     );

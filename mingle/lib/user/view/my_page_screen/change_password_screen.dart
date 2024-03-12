@@ -23,7 +23,11 @@ class ChangePasswordScreen extends StatelessWidget {
         title: const Text(
           "비밀번호 변경",
           style: TextStyle(
-              fontSize: 16.0, fontWeight: FontWeight.w400, color: Colors.black),
+              fontSize: 16.0,
+              letterSpacing: -0.02,
+              height: 1.5,
+              fontWeight: FontWeight.w400,
+              color: Colors.black),
         ),
       ),
     );

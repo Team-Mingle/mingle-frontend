@@ -44,12 +44,18 @@ class PasswordChangeSuccessScreen extends StatelessWidget {
                           Text(
                             "비밀번호 재설정이",
                             style: TextStyle(
-                                fontSize: 24.0, fontWeight: FontWeight.w400),
+                                fontSize: 24.0,
+                                letterSpacing: -0.04,
+                                height: 1.4,
+                                fontWeight: FontWeight.w400),
                           ),
                           Text(
                             "완료되었어요.",
                             style: TextStyle(
-                                fontSize: 24.0, fontWeight: FontWeight.w400),
+                                fontSize: 24.0,
+                                letterSpacing: -0.04,
+                                height: 1.4,
+                                fontWeight: FontWeight.w400),
                           ),
                         ],
                       ),
@@ -64,6 +70,9 @@ class PasswordChangeSuccessScreen extends StatelessWidget {
                     buttonName: "로그인 화면으로",
                     nextScreen: const LoginScreen(),
                     isReplacement: true,
+                  ),
+                  const SizedBox(
+                    height: 40.0,
                   )
                 ]),
           ),

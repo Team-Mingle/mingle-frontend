@@ -1,32 +1,68 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:mingle/common/component/countdown_timer.dart';
-import 'package:mingle/common/component/dropdown_list.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
+import 'package:mingle/dio/dio.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
-import 'package:mingle/user/view/signup_screen/enter_email_screen.dart';
-import 'package:mingle/user/view/signup_screen/provider/country_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/provider/email_extension_selected_provider.dart';
-import 'package:mingle/user/view/signup_screen/provider/school_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/select_nickname_screen.dart';
 
-class ServiceAgreementScreen extends StatefulWidget {
+class ServiceAgreementScreen extends ConsumerStatefulWidget {
   const ServiceAgreementScreen({super.key});
 
   @override
-  State<ServiceAgreementScreen> createState() => _ServiceAgreementScreenState();
+  ConsumerState<ServiceAgreementScreen> createState() =>
+      _ServiceAgreementScreenState();
 }
 
-class _ServiceAgreementScreenState extends State<ServiceAgreementScreen> {
+class _ServiceAgreementScreenState
+    extends ConsumerState<ServiceAgreementScreen> {
   List<bool> selected = [false, false, false, false];
+
+  late String termsAnsConditions;
+  late String privacyPolicy;
+
   @override
   void initState() {
     super.initState();
+    setTermsAnsConditionsAndPrivacyPolicy();
+  }
+
+  void setTermsAnsConditionsAndPrivacyPolicy() async {
+    final dio = Dio();
+    try {
+      final termsAndConditionResp = await dio.get(
+        'https://$baseUrl/auth/terms-and-conditions',
+        options: Options(headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+        }),
+      );
+      if (termsAndConditionResp.statusCode == 200) {
+        setState(() {
+          termsAnsConditions = termsAndConditionResp.data['policy'];
+        });
+      }
+      final privacyPolicyResp = await dio.get(
+        'https://$baseUrl/auth/privacy-policy',
+        options: Options(headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+        }),
+      );
+      if (privacyPolicyResp.statusCode == 200) {
+        setState(() {
+          privacyPolicy = privacyPolicyResp.data['policy'];
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -80,12 +116,18 @@ class _ServiceAgreementScreenState extends State<ServiceAgreementScreen> {
                     Text(
                       "밍글 서비스 약관에",
                       style: TextStyle(
-                          fontSize: 24.0, fontWeight: FontWeight.w400),
+                          fontSize: 24.0,
+                          letterSpacing: -0.04,
+                          height: 1.4,
+                          fontWeight: FontWeight.w400),
                     ),
                     Text(
                       "동의해 주세요.",
                       style: TextStyle(
-                          fontSize: 24.0, fontWeight: FontWeight.w400),
+                          fontSize: 24.0,
+                          letterSpacing: -0.04,
+                          height: 1.4,
+                          fontWeight: FontWeight.w400),
                     ),
                   ],
                 ),
@@ -114,7 +156,11 @@ class _ServiceAgreementScreenState extends State<ServiceAgreementScreen> {
                 ),
                 const Text(
                   "약관 전체동의",
-                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                      fontSize: 16.0,
+                      letterSpacing: -0.02,
+                      height: 1.5,
+                      fontWeight: FontWeight.w600),
                 )
               ],
             ),
@@ -122,7 +168,6 @@ class _ServiceAgreementScreenState extends State<ServiceAgreementScreen> {
               height: 24,
             ),
             const Divider(
-              height: 0,
               thickness: 1,
               color: GRAYSCALE_GRAY_02,
             ),
@@ -149,7 +194,9 @@ class _ServiceAgreementScreenState extends State<ServiceAgreementScreen> {
                 ),
                 const Text(
                   "만 14세 이상입니다.",
-                  style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400),
+                  style: TextStyle(
+                      fontSize: 14.0,
+letterSpacing: -0.01, height: 1.4, fontWeight: FontWeight.w400),
                 )
               ],
             ),
@@ -178,6 +225,8 @@ class _ServiceAgreementScreenState extends State<ServiceAgreementScreen> {
                   text: TextSpan(
                       style: const TextStyle(
                           fontSize: 14.0,
+letterSpacing: -0.01,
+                          height: 1.4,
                           fontWeight: FontWeight.w400,
                           color: Colors.black),
                       children: [
@@ -190,27 +239,77 @@ class _ServiceAgreementScreenState extends State<ServiceAgreementScreen> {
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 showModalBottomSheet<void>(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
                                   isScrollControlled: true,
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return Container(
-                                      height: 786,
-                                      color: Colors.amber,
-                                      child: Center(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: <Widget>[
-                                            const Text('Modal BottomSheet'),
-                                            ElevatedButton(
-                                              child: const Text(
-                                                  'Close BottomSheet'),
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
+                                    return SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height -
+                                              48.0,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.topLeft,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 21.0, left: 24.0),
+                                              child: GestureDetector(
+                                                onTap: () =>
+                                                    Navigator.of(context).pop(),
+                                                child: const Text(
+                                                  "닫기",
+                                                  style: TextStyle(
+                                                      fontSize: 16.0,
+                                                      letterSpacing: -0.02,
+                                                      height: 1.5,
+                                                      color:
+                                                          PRIMARY_COLOR_ORANGE_02),
+                                                ),
+                                              ),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                          const SizedBox(
+                                            height: 6.0,
+                                          ),
+                                          const Text(
+                                            "서비스 이용약관",
+                                            style: TextStyle(
+                                                fontSize: 20.0,
+                                                letterSpacing: -0.03,
+                                                height: 1.5,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          const SizedBox(
+                                            height: 8.0,
+                                          ),
+                                          const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 16.0),
+                                            child: Divider(
+                                              thickness: 1.0,
+                                              height: 32.0,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 16.0),
+                                              child: SingleChildScrollView(
+                                                child: Column(
+                                                  children: [
+                                                    Text(termsAnsConditions)
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        ],
                                       ),
                                     );
                                   },
@@ -224,7 +323,9 @@ class _ServiceAgreementScreenState extends State<ServiceAgreementScreen> {
                 ),
                 // Text(
                 //   "(필수) 서비스 이용약관 동의",
-                // style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400),
+                // style: TextStyle(fontSize: 14.0,
+//letterSpacing: -0.01,
+// height: 1.4, fontWeight: FontWeight.w400),
                 // )
               ],
             ),
@@ -253,6 +354,8 @@ class _ServiceAgreementScreenState extends State<ServiceAgreementScreen> {
                   text: TextSpan(
                       style: const TextStyle(
                           fontSize: 14.0,
+letterSpacing: -0.01,
+                          height: 1.4,
                           fontWeight: FontWeight.w400,
                           color: Colors.black),
                       children: [
@@ -265,27 +368,77 @@ class _ServiceAgreementScreenState extends State<ServiceAgreementScreen> {
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 showModalBottomSheet<void>(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
                                   isScrollControlled: true,
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return Container(
-                                      height: 786,
-                                      color: Colors.amber,
-                                      child: Center(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: <Widget>[
-                                            const Text('Modal BottomSheet'),
-                                            ElevatedButton(
-                                              child: const Text(
-                                                  'Close BottomSheet'),
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
+                                    return SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height -
+                                              48.0,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.topLeft,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 21.0, left: 24.0),
+                                              child: GestureDetector(
+                                                onTap: () =>
+                                                    Navigator.of(context).pop(),
+                                                child: const Text(
+                                                  "닫기",
+                                                  style: TextStyle(
+                                                      fontSize: 16.0,
+                                                      letterSpacing: -0.02,
+                                                      height: 1.5,
+                                                      color:
+                                                          PRIMARY_COLOR_ORANGE_02),
+                                                ),
+                                              ),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                          const SizedBox(
+                                            height: 6.0,
+                                          ),
+                                          const Text(
+                                            "개인정보 처리방침",
+                                            style: TextStyle(
+                                                fontSize: 20.0,
+                                                letterSpacing: -0.03,
+                                                height: 1.5,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          const SizedBox(
+                                            height: 8.0,
+                                          ),
+                                          const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 16.0),
+                                            child: Divider(
+                                              thickness: 1.0,
+                                              height: 32.0,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 16.0),
+                                              child: SingleChildScrollView(
+                                                child: Column(
+                                                  children: [
+                                                    Text(privacyPolicy)
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        ],
                                       ),
                                     );
                                   },
@@ -303,7 +456,10 @@ class _ServiceAgreementScreenState extends State<ServiceAgreementScreen> {
             NextButton(
               nextScreen: const SelectNicknameScreen(),
               buttonName: "다음으로",
-              isSelectedProvider: selectedEmailExtensionProvider,
+              checkSelected: selected[2] && selected[3],
+            ),
+            const SizedBox(
+              height: 40.0,
             )
           ]),
         ),
