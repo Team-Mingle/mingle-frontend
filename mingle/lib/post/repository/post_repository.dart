@@ -92,7 +92,9 @@ abstract class PostRepository {
 
   @GET('/best')
   @Headers({'accessToken': 'true'})
-  Future<CursorPagination<PostModel>> paginateBest();
+  Future<CursorPagination<PostModel>> paginateBest({
+    @Queries() PaginationParams? paginationParams = const PaginationParams(),
+  });
 
   @POST('/scrap/{postId}')
   @Headers({'accessToken': 'true'})
