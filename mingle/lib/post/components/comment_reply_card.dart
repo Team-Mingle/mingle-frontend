@@ -6,7 +6,7 @@ import 'package:mingle/post/components/comment_details.dart';
 import 'package:mingle/post/models/comment_model.dart';
 
 class CommentReplyCard extends StatelessWidget {
-  final CommentModel comment;
+  final CoCommentModel comment;
   final String parentNickname;
   final int parentCommentId;
   final Function setParentAndMentionId;
@@ -20,6 +20,22 @@ class CommentReplyCard extends StatelessWidget {
       required this.setParentAndMentionId,
       required this.likeOrUnlikeComment,
       required this.refreshComments});
+
+  CommentModel coCommentToCommentModel(CoCommentModel coComment) {
+    return CommentModel(
+      commentId: coComment.commentId,
+      nickname: coComment.nickname,
+      content: coComment.content,
+      likeCount: coComment.likeCount,
+      createdAt: coComment.createdAt,
+      liked: coComment.liked,
+      myComment: coComment.myComment,
+      commentFromAuthor: coComment.commentFromAuthor,
+      commentDeleted: coComment.commentDeleted,
+      commentReported: coComment.commentReported,
+      admin: coComment.admin,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +63,11 @@ class CommentReplyCard extends StatelessWidget {
                 padding: const EdgeInsets.only(
                     top: 8.0, bottom: 8.0, left: 14.0, right: 8.0),
                 child: CommentDetails(
-                  parentNickname: parentNickname,
+                  parentNickname: comment.mention,
                   refreshComments: refreshComments,
                   parentCommentId: parentCommentId,
                   setParentAndMentionId: setParentAndMentionId,
-                  comment: comment,
+                  comment: coCommentToCommentModel(comment),
                   likeOrUnlikeComment: likeOrUnlikeComment,
                   // ),
                 ),
