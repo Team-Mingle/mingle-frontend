@@ -204,7 +204,7 @@ class _TimeTableGridState extends State<TimeTableGrid> {
                 border: Border.all(
                   color: GRAYSCALE_GRAY_02,
                   width: 1,
-                  style: BorderStyle.solid,
+                  // style: BorderStyle.solid,
                 ),
               ),
               child: ClipRRect(

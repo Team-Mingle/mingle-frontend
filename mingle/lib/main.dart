@@ -13,6 +13,7 @@ import 'package:mingle/firebase_notification.dart';
 import 'package:mingle/firebase_options.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.dart';
+import 'package:mingle/timetable/view/timetable_tab_screen.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -255,7 +256,11 @@ class _AppState extends ConsumerState<_App> {
             FirebaseAnalyticsObserver(analytics: analytics),
           ],
           debugShowCheckedModeBanner: false,
-          home: const SplashScreen()),
+          home: const TimeTableHomeScreen()
+
+          // const SplashScreen()
+
+          ),
     );
   }
 }
