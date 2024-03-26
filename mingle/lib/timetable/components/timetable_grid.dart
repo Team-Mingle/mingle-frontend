@@ -1,13 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:mingle/common/const/colors.dart';
 
 class TimeTableGrid extends StatefulWidget {
-  final List<Widget> timetable;
-  const TimeTableGrid({
-    super.key,
-    required this.timetable,
-  });
+  final List<List<Widget>> timetable;
+  final List<Widget> addedClasses;
+  const TimeTableGrid(
+      {super.key, required this.timetable, required this.addedClasses});
 
   @override
   State<TimeTableGrid> createState() => _TimeTableGridState();
@@ -121,10 +121,10 @@ class _TimeTableGridState extends State<TimeTableGrid> {
                   borderRadius:
                       BorderRadius.only(topLeft: Radius.circular(8.0)),
                   border: Border(
-                    right: BorderSide(color: GRAYSCALE_GRAY_02, width: 0.0),
+                    // right: BorderSide(color: GRAYSCALE_GRAY_02, width: 0.0),
                     top: BorderSide(color: GRAYSCALE_GRAY_02),
                     left: BorderSide(color: GRAYSCALE_GRAY_02),
-                    bottom: BorderSide(color: GRAYSCALE_GRAY_02, width: 0.0),
+                    // bottom: BorderSide(color: GRAYSCALE_GRAY_02, width: 0.0),
                   ),
                 ),
                 height: 20.0,
@@ -133,7 +133,7 @@ class _TimeTableGridState extends State<TimeTableGrid> {
             ),
             Container(
               height: 20.0,
-              width: 337.0,
+              width: 338.0,
               decoration: const BoxDecoration(
                 color: GRAYSCALE_GRAY_01,
                 borderRadius: BorderRadius.only(topRight: Radius.circular(8.0)),
@@ -141,13 +141,14 @@ class _TimeTableGridState extends State<TimeTableGrid> {
                   right: BorderSide(color: GRAYSCALE_GRAY_02),
                   top: BorderSide(color: GRAYSCALE_GRAY_02),
                   left: BorderSide(color: GRAYSCALE_GRAY_02),
-                  bottom: BorderSide(color: GRAYSCALE_GRAY_02, width: 0.0),
+                  // bottom: BorderSide(color: GRAYSCALE_GRAY_02, width: 0.0),
                 ),
               ),
               child: ClipRRect(
                 borderRadius:
                     const BorderRadius.only(topRight: Radius.circular(8.0)),
                 child: GridView(
+                  physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 7,
                     crossAxisSpacing: 1,
@@ -171,15 +172,18 @@ class _TimeTableGridState extends State<TimeTableGrid> {
                     BorderRadius.only(bottomLeft: Radius.circular(8.0)),
                 color: GRAYSCALE_GRAY_01,
                 border: Border(
-                    bottom: BorderSide(color: GRAYSCALE_GRAY_02),
-                    top: BorderSide(color: GRAYSCALE_GRAY_02),
-                    left: BorderSide(color: GRAYSCALE_GRAY_02),
-                    right: BorderSide(color: GRAYSCALE_GRAY_02, width: 0.0)),
+                  bottom: BorderSide(color: GRAYSCALE_GRAY_02),
+                  top: BorderSide(color: GRAYSCALE_GRAY_02),
+                  left: BorderSide(color: GRAYSCALE_GRAY_02),
+                  // right: BorderSide(color: GRAYSCALE_GRAY_02, width: 0.0)
+                ),
               ),
               child: ClipRRect(
                 borderRadius:
                     const BorderRadius.only(bottomLeft: Radius.circular(8.0)),
                 child: GridView(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
                   physics: const ClampingScrollPhysics(),
                   controller: _timeScroller,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -193,7 +197,7 @@ class _TimeTableGridState extends State<TimeTableGrid> {
               ),
             ),
             Container(
-              width: 337, // 그리드의 전체 너비
+              width: 338, // 그리드의 전체 너비
               height: 436, // 그리드의 전체 높이
               decoration: BoxDecoration(
                 // borderRadius: BorderRadius.circular(8),
@@ -204,24 +208,58 @@ class _TimeTableGridState extends State<TimeTableGrid> {
                 border: Border.all(
                   color: GRAYSCALE_GRAY_02,
                   width: 1,
-                  // style: BorderStyle.solid,
+                  style: BorderStyle.solid,
                 ),
               ),
               child: ClipRRect(
                 borderRadius:
                     const BorderRadius.only(bottomRight: Radius.circular(8.0)),
-                child: GridView(
-                  controller: _tableScroller,
+                child: SingleChildScrollView(
                   physics: const ClampingScrollPhysics(),
-                  // physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 7,
-                    crossAxisSpacing: 1,
-                    mainAxisSpacing: 1,
-                    childAspectRatio: 47 / 60,
-                  ),
-                  children: widget.timetable,
+                  controller: _tableScroller,
+                  child: Stack(children: [
+                    Row(
+                      children: [
+                        ...widget.timetable.map((e) => Column(
+                              children: e,
+                            ))
+                      ],
+                    ),
+                    ...widget.addedClasses
+                    // Positioned(
+                    //     top: 366.0,
+                    //     left: 48.0,
+                    //     child: Container(
+                    //       color: Colors.black,
+                    //       height: 122.0,
+                    //       width: 48.0,
+                    //     ))
+                  ]),
                 ),
+
+                //     Stack(children: [
+                //   GridView(
+                //     controller: _tableScroller,
+                //     physics: const ClampingScrollPhysics(),
+                //     // physics: const NeverScrollableScrollPhysics(),
+                //     gridDelegate:
+                //         const SliverGridDelegateWithFixedCrossAxisCount(
+                //       crossAxisCount: 7,
+                //       crossAxisSpacing: 1,
+                //       mainAxisSpacing: 1,
+                //       childAspectRatio: 47 / 60,
+                //     ),
+                //     children: widget.timetable,
+                //   ),
+                //   Positioned(
+                //       top: 60.0,
+                //       left: 47.0,
+                //       child: Container(
+                //         color: Colors.black,
+                //         height: 120.0,
+                //         width: 47.0,
+                //       ))
+                // ]),
               ),
             ),
           ],

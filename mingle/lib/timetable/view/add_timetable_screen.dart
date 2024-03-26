@@ -103,19 +103,19 @@ class _AddTimeTableScreenState extends State<AddTimeTableScreen> {
             backgroundColor: Colors.white,
             elevation: 0,
           ),
-          body: Center(
+          body: const Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(
+                SizedBox(
                   height: 11.0,
                 ),
-                Hero(
-                  tag: "timetable",
-                  child: TimeTableGrid(
-                    timetable: tt,
-                  ),
-                ),
+                // Hero(
+                //   tag: "timetable",
+                //   child: TimeTableGrid(
+                //     timetable: tt,
+                //   ),
+                // ),
               ],
             ),
           ),
