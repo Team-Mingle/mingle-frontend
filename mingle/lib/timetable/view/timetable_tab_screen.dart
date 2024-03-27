@@ -44,45 +44,45 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   String shareCodeName = "";
 
   List<Color> usedCoursePalette = [];
-  List<ClassModel> addedClasses = [];
+  List<Widget> addedClasses = [];
   // int daysLength = 7;
-  List<Widget> timetable = List.generate(91, (index) {
-    int row = index ~/ 7;
-    int col = index % 7;
-    double height = 60.0;
-    double width = 47.0;
+  // List<Widget> timetable = List.generate(91, (index) {
+  //   int row = index ~/ 7;
+  //   int col = index % 7;
+  //   double height = 60.0;
+  //   double width = 47.0;
 
-    return Container(
-      height: height,
-      width: width,
-      color: Colors.white,
-      child: Text("$row $col"),
-    );
-  });
+  //   return Container(
+  //     height: height,
+  //     width: width,
+  //     color: Colors.white,
+  //     child: Text("$row $col"),
+  //   );
+  // });
 
-  List<List<Widget>> newTimetable = List.generate(7, (col) {
-    return List.generate(
-        13,
-        (row) => Container(
-              // color: Colors.white,
-              height: 61,
-              width: 48,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border(
-                  // bottom: BorderSide(color: GRAYSCALE_GRAY_02),
-                  top: row == 0
-                      ? BorderSide.none
-                      : const BorderSide(color: GRAYSCALE_GRAY_01),
-                  right: col == 6
-                      ? BorderSide.none
-                      : const BorderSide(color: GRAYSCALE_GRAY_01),
-                  // right: BorderSide(color: GRAYSCALE_GRAY_02, width: 0.0)
-                ),
-              ),
-              child: Text("$row $col"),
-            ));
-  });
+  // List<List<Widget>> newTimetable = List.generate(7, (col) {
+  //   return List.generate(
+  //       13,
+  //       (row) => Container(
+  //             // color: Colors.white,
+  //             height: 61,
+  //             width: 48,
+  //             decoration: BoxDecoration(
+  //               color: Colors.white,
+  //               border: Border(
+  //                 // bottom: BorderSide(color: GRAYSCALE_GRAY_02),
+  //                 top: row == 0
+  //                     ? BorderSide.none
+  //                     : const BorderSide(color: GRAYSCALE_GRAY_01),
+  //                 right: col == 6
+  //                     ? BorderSide.none
+  //                     : const BorderSide(color: GRAYSCALE_GRAY_01),
+  //                 // right: BorderSide(color: GRAYSCALE_GRAY_02, width: 0.0)
+  //               ),
+  //             ),
+  //             child: Text("$row $col"),
+  //           ));
+  // });
 
   void MoreButtonModal() {
     Future.delayed(const Duration(milliseconds: 40)).then((_) {
@@ -273,7 +273,11 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   //     }
   //   }
   // }
-  void addClass(ClassModel classModel) {}
+  void addClass(ClassModel classModel) {
+    setState(() {
+      addedClasses.addAll(classModel.generateClases());
+    });
+  }
 
   Future<dynamic> shareOrRegisterModal() => showModalBottomSheet(
         backgroundColor: Colors.transparent,
@@ -827,7 +831,6 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> t = timetable;
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR_GRAY,
       appBar: AppBar(
@@ -905,9 +908,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => AddTimeTableScreen(
-                    timetable: t,
-                    addClass: addClass,
-                  ),
+                      addClass: addClass, addedClasses: addedClasses),
                 ),
               );
             },
@@ -1002,12 +1003,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                     ),
                   if (widget.flag == 0) const SizedBox(height: 284),
                   if (widget.flag == 1) // flag 값이 1인 경우
-                    Hero(
-                      tag: "timetable",
-                      child: TimeTableGrid(
-                        timetable: newTimetable,
-                        addedClasses: const [],
-                      ),
+                    TimeTableGrid(
+                      addedClasses: addedClasses,
                     ),
                   const SizedBox(
                     height: 24.0,

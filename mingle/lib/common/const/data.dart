@@ -10,6 +10,9 @@ const ENCRYPTED_EMAIL_KEY = 'ENCRYPTED_EMAIL';
 const CURRENT_USER_KEY = 'CURRENT_USER';
 const IS_FRESH_LOGIN_KEY = 'IS_FRESH_LOGIN';
 
+const TIMETABLE_GRID_HEIGHT = 61.0;
+const TIMETABLE_GRID_WIDTH = 48.0;
+
 const baseUrl = "api.prod.mingle.community";
 //const baseUrl = "api.develop.mingle.community";
 //  "dev.api.mingle.community";

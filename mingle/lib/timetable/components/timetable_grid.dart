@@ -4,10 +4,8 @@ import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:mingle/common/const/colors.dart';
 
 class TimeTableGrid extends StatefulWidget {
-  final List<List<Widget>> timetable;
   final List<Widget> addedClasses;
-  const TimeTableGrid(
-      {super.key, required this.timetable, required this.addedClasses});
+  const TimeTableGrid({super.key, required this.addedClasses});
 
   @override
   State<TimeTableGrid> createState() => _TimeTableGridState();
@@ -33,6 +31,29 @@ class _TimeTableGridState extends State<TimeTableGrid> {
     '7',
     '8'
   ];
+  List<List<Widget>> timetable = List.generate(7, (col) {
+    return List.generate(
+        13,
+        (row) => Container(
+              // color: Colors.white,
+              height: 61,
+              width: 48,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border(
+                  // bottom: BorderSide(color: GRAYSCALE_GRAY_02),
+                  top: row == 0
+                      ? BorderSide.none
+                      : const BorderSide(color: GRAYSCALE_GRAY_01),
+                  right: col == 6
+                      ? BorderSide.none
+                      : const BorderSide(color: GRAYSCALE_GRAY_01),
+                  // right: BorderSide(color: GRAYSCALE_GRAY_02, width: 0.0)
+                ),
+              ),
+              child: Text("$row $col"),
+            ));
+  });
 
   @override
   void initState() {
@@ -220,7 +241,7 @@ class _TimeTableGridState extends State<TimeTableGrid> {
                   child: Stack(children: [
                     Row(
                       children: [
-                        ...widget.timetable.map((e) => Column(
+                        ...timetable.map((e) => Column(
                               children: e,
                             ))
                       ],
