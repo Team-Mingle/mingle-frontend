@@ -256,11 +256,10 @@ class _AppState extends ConsumerState<_App> {
             FirebaseAnalyticsObserver(analytics: analytics),
           ],
           debugShowCheckedModeBanner: false,
-          home: const TimeTableHomeScreen()
+          home:
+              // const TimeTableHomeScreen()
 
-          // const SplashScreen()
-
-          ),
+              const SplashScreen()),
     );
   }
 }
