@@ -23,7 +23,7 @@ class EnterOfferIdScreen extends ConsumerWidget {
             padding: const EdgeInsets.only(left: 17.0),
             child: IconButton(
               icon: const ImageIcon(
-                AssetImage("assets/img/signup_screen/cross_icon.png"),
+                AssetImage("assets/img/signup_screen/previous_screen_icon.png"),
                 color: GRAYSCALE_BLACK,
               ),
               onPressed: () {

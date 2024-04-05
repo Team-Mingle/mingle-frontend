@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,16 +11,21 @@ import 'package:mingle/common/component/countdown_timer.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
+import 'package:mingle/common/view/splash_screen.dart';
 import 'package:mingle/dio/dio.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
+import 'package:mingle/secure_storage/secure_storage.dart';
 import 'package:mingle/user/view/login_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:mingle/user/view/signup_screen/enter_password_screen.dart';
 import 'package:mingle/user/view/signup_screen/provider/email_extension_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/provider/email_selected_provider.dart';
+import 'package:mingle/user/view/signup_screen/provider/full_email_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/provider/nickname_selected_provider.dart';
+import 'package:mingle/user/view/signup_screen/provider/offer_id_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/provider/password_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/provider/selected_univ_id_provider.dart';
+import 'package:mingle/user/view/signup_screen/provider/uploaded_identification_provider.dart';
 
 class SelectNicknameScreen extends ConsumerStatefulWidget {
   const SelectNicknameScreen({super.key});
@@ -73,8 +79,54 @@ class _SelectNicknameScreenState extends ConsumerState<SelectNicknameScreen> {
         isLoading = false;
       });
       fToast.showToast(
-        child:
-            ToastMessage(message: e.response?.data['message'] ?? "다시 시도해주세요"),
+        child: ToastMessage(
+            message: e.response?.data['message'] ?? generalErrorMsg),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
+    }
+  }
+
+  void validateTempUserForm() async {
+    final dio = ref.watch(dioProvider);
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    await ref
+        .read(secureStorageProvider)
+        .write(key: FCM_TOKEN_KEY, value: fcmToken);
+    final userInfo = {
+      "email": ref.read(selectedFullEmailProvider),
+      "password": ref.read(selectedPasswordProvider),
+      "nickname": ref.read(selectedNicknameProvider),
+      "studentId": ref.read(selectedOfferIdProvider),
+      "fcmToken": fcmToken,
+      "multipartFile": ref.read(uploadedIdentificationProvider)
+    };
+    print(userInfo);
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      // final sendCodeResp =
+      await dio.post(
+        'https://$baseUrl/auth-temporary-sign-up',
+        options: Options(headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+        }),
+        data: jsonEncode(userInfo),
+      );
+      // print(sendCodeResp);
+      setState(() {
+        isLoading = false;
+      });
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (_) => const SplashScreen()));
+    } on DioException catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      fToast.showToast(
+        child: ToastMessage(
+            message: e.response?.data['message'] ?? generalErrorMsg),
         gravity: ToastGravity.CENTER,
         toastDuration: const Duration(seconds: 2),
       );
@@ -83,6 +135,8 @@ class _SelectNicknameScreenState extends ConsumerState<SelectNicknameScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isTempLogin = ref.read(selectedOfferIdProvider) != "" &&
+        ref.read(uploadedIdentificationProvider) != null;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -174,7 +228,7 @@ class _SelectNicknameScreenState extends ConsumerState<SelectNicknameScreen> {
               child: Container(),
             ),
             NextButton(
-              validators: [validateForm],
+              validators: [isTempLogin ? validateTempUserForm : validateForm],
               buttonName: "다음으로",
               isReplacement: true,
               isSelectedProvider: [selectedNicknameProvider],
