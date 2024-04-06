@@ -31,20 +31,27 @@ jobs:
       - name: Build Gradle
         working-directory: ./mingle/android
         run: |
-          echo keyPassword=${{ secrets.KEY_PASSWORD }} > ./key.properties
-          echo storePassword=${{ secrets.STORE_PASSWORD }} >> ./key.properties
-          echo keyAlias=${{ secrets.KEY_ALIAS }} >> ./key.properties
-          echo storeFile=${{ secrets.STORE_FILE }} >> ./key.properties
-          touch ./keystore.jks
-          echo "${{ secrets.KEY_STORE }}" | base64 --decode > ./keystore.jks
-          cd ../
-          flutter build apk --release
+          touch ./build/app/outputs/flutter-apk/app-release.apk
           ls build/app/outputs/flutter-apk
+      # echo keyPassword=${{ secrets.KEY_PASSWORD }} > ./key.properties
+      # echo storePassword=${{ secrets.STORE_PASSWORD }} >> ./key.properties
+      # echo keyAlias=${{ secrets.KEY_ALIAS }} >> ./key.properties
+      # echo storeFile=${{ secrets.STORE_FILE }} >> ./key.properties
+      # touch ./keystore.jks
+      # echo "${{ secrets.KEY_STORE }}" | base64 --decode > ./keystore.jks
+      # cd ../
+      # flutter build apk --release
+      # ls build/app/outputs/flutter-apk
+
+      - name: Check APK file
+        run: |
+          ls ./mingle/android/build/app/outputs/flutter-apk
 
       #   /// Finds and pushes the apk file
       #   /// from the workflow directory to Firebase App distribution.
       - name: Upload artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
+
         with:
           #   /// We'll be setting these up later in the tutorial.
           appId: ${{secrets.APP_ID}}
