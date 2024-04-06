@@ -28,22 +28,22 @@ jobs:
           channel: "stable"
 
       #   /// Builds Apk
-      - name: Build Gradle
-        working-directory: ./mingle/android
-        run: |
-          echo keyPassword=${{ secrets.KEY_PASSWORD }} > ./key.properties
-          echo storePassword=${{ secrets.STORE_PASSWORD }} >> ./key.properties
-          echo keyAlias=${{ secrets.KEY_ALIAS }} >> ./key.properties
-          echo storeFile=${{ secrets.STORE_FILE }} >> ./key.properties
-          touch ./keystore.jks
-          echo "${{ secrets.KEY_STORE }}" | base64 --decode > ./keystore.jks
-          cd ../
-          flutter build apk --release
-          ls build/app/outputs/flutter-apk
+      #   - name: Build Gradle
+      #     working-directory: ./mingle/android
+      #     run: |
+      #       echo keyPassword=${{ secrets.KEY_PASSWORD }} > ./key.properties
+      #       echo storePassword=${{ secrets.STORE_PASSWORD }} >> ./key.properties
+      #       echo keyAlias=${{ secrets.KEY_ALIAS }} >> ./key.properties
+      #       echo storeFile=${{ secrets.STORE_FILE }} >> ./key.properties
+      #       touch ./keystore.jks
+      #       echo "${{ secrets.KEY_STORE }}" | base64 --decode > ./keystore.jks
+      #       cd ../
+      #       flutter build apk --release
+      #       ls build/app/outputs/flutter-apk
 
       - name: Build IOS
         working-directory: ./mingle
-        run: flutter build ipa --export-method ad-hoc
+        run: flutter build ipa
 
       #   /// Finds and pushes the apk file
       #   /// from the workflow directory to Firebase App distribution.
