@@ -5,6 +5,7 @@ import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:mingle/user/view/signup_screen/provider/offer_id_selected_provider.dart';
+import 'package:mingle/user/view/signup_screen/upload_identification_screen.dart';
 
 class EnterOfferIdScreen extends ConsumerWidget {
   const EnterOfferIdScreen({super.key});
@@ -127,8 +128,10 @@ class EnterOfferIdScreen extends ConsumerWidget {
               ),
               const Spacer(),
               NextButton(
-                  buttonName: "다음으로",
-                  isSelectedProvider: [selectedOfferIdProvider]),
+                buttonName: "다음으로",
+                isSelectedProvider: [selectedOfferIdProvider],
+                nextScreen: const UploadIdentificationScreen(),
+              ),
               const SizedBox(
                 height: 40.0,
               )

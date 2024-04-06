@@ -93,13 +93,14 @@ class _SelectNicknameScreenState extends ConsumerState<SelectNicknameScreen> {
     await ref
         .read(secureStorageProvider)
         .write(key: FCM_TOKEN_KEY, value: fcmToken);
+    final file = ref.read(uploadedIdentificationProvider)!;
     final userInfo = {
       "email": ref.read(selectedFullEmailProvider),
       "password": ref.read(selectedPasswordProvider),
       "nickname": ref.read(selectedNicknameProvider),
       "studentId": ref.read(selectedOfferIdProvider),
       "fcmToken": fcmToken,
-      "multipartFile": ref.read(uploadedIdentificationProvider)
+      "multipartFile": [await MultipartFile.fromFile(file.path)],
     };
     print(userInfo);
     try {
@@ -108,11 +109,11 @@ class _SelectNicknameScreenState extends ConsumerState<SelectNicknameScreen> {
       });
       // final sendCodeResp =
       await dio.post(
-        'https://$baseUrl/auth-temporary-sign-up',
+        'https://$baseUrl/auth/temporary-sign-up',
         options: Options(headers: {
-          HttpHeaders.contentTypeHeader: "application/json",
+          HttpHeaders.contentTypeHeader: 'multipart/form-data',
         }),
-        data: jsonEncode(userInfo),
+        data: FormData.fromMap(userInfo),
       );
       // print(sendCodeResp);
       setState(() {
@@ -121,12 +122,15 @@ class _SelectNicknameScreenState extends ConsumerState<SelectNicknameScreen> {
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (_) => const SplashScreen()));
     } on DioException catch (e) {
+      print(e.response?.data);
       setState(() {
         isLoading = false;
       });
       fToast.showToast(
-        child: ToastMessage(
-            message: e.response?.data['message'] ?? generalErrorMsg),
+        child: const ToastMessage(
+            message:
+                // e.response?.data['message'] ??
+                generalErrorMsg),
         gravity: ToastGravity.CENTER,
         toastDuration: const Duration(seconds: 2),
       );
@@ -228,6 +232,7 @@ class _SelectNicknameScreenState extends ConsumerState<SelectNicknameScreen> {
               child: Container(),
             ),
             NextButton(
+              isLoading: isLoading,
               validators: [isTempLogin ? validateTempUserForm : validateForm],
               buttonName: "다음으로",
               isReplacement: true,

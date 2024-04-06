@@ -259,7 +259,7 @@ class _AppState extends ConsumerState<_App> {
             FirebaseAnalyticsObserver(analytics: analytics),
           ],
           debugShowCheckedModeBanner: false,
-          home: const EnterFreeDomainEmailScreen()
+          home: const EnterOfferIdScreen()
           // const TimeTableHomeScreen()
 
           // const SplashScreen()

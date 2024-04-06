@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
+import 'package:mingle/user/view/signup_screen/enter_free_domain_email_screen.dart';
 import 'package:mingle/user/view/signup_screen/provider/uploaded_identification_provider.dart';
 
 class UploadIdentificationScreen extends ConsumerStatefulWidget {
@@ -182,8 +183,10 @@ class _UploadIdentificationScreenState
               ),
               const Spacer(),
               NextButton(
-                  buttonName: "다음으로",
-                  isSelectedProvider: [uploadedIdentificationProvider]),
+                buttonName: "다음으로",
+                isSelectedProvider: [uploadedIdentificationProvider],
+                nextScreen: const EnterFreeDomainEmailScreen(),
+              ),
               const SizedBox(
                 height: 40.0,
               )
