@@ -43,7 +43,7 @@ jobs:
 
       - name: Build IOS
         working-directory: ./mingle
-        run: flutter build ipa
+        run: flutter build ipa --release
 
       #   /// Finds and pushes the apk file
       #   /// from the workflow directory to Firebase App distribution.
