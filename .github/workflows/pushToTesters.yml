@@ -35,7 +35,9 @@ jobs:
           echo storePassword=${{ secrets.STORE_PASSWORD }} >> ./android/key.properties
           echo keyAlias=${{ secrets.KEY_ALIAS }} >> ./android/key.properties
           echo storeFile=${{ secrets.STORE_FILE }} >> ./android/key.properties
-      - run: echo "${{ secrets.KEY_STORE }}" | base64 --decode > ./android/keystore.jks
+      - run: |
+          echo "" > ./android/keystore.jks
+          echo "${{ secrets.KEY_STORE }}" | base64 --decode > ./android/keystore.jks
       - run: flutter build apk --release
       - run: ls build/app/outputs/flutter-apk
 
