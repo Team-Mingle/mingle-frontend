@@ -95,6 +95,7 @@ class _SelectNicknameScreenState extends ConsumerState<SelectNicknameScreen> {
         .write(key: FCM_TOKEN_KEY, value: fcmToken);
     final file = ref.read(uploadedIdentificationProvider)!;
     final userInfo = {
+      "univId": ref.read(selectedUnivIdProvider),
       "email": ref.read(selectedFullEmailProvider),
       "password": ref.read(selectedPasswordProvider),
       "nickname": ref.read(selectedNicknameProvider),
