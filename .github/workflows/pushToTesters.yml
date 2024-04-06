@@ -31,10 +31,10 @@ jobs:
       - name: Build Gradle
         working-directory: ./mingle
         run: |
-          echo keyPassword=${{ secrets.KEY_PASSWORD }} > ${{env.PROPERTIES_PATH}}
-          echo storePassword=${{ secrets.STORE_PASSWORD }} >> ${{env.PROPERTIES_PATH}}
-          echo keyAlias=${{ secrets.KEY_ALIAS }} >> ${{env.PROPERTIES_PATH}}
-          echo storeFile=${{ secrets.STORE_FILE }} >> ${{env.PROPERTIES_PATH}}
+          echo keyPassword=${{ secrets.KEY_PASSWORD }} > ./android/key.properties
+          echo storePassword=${{ secrets.STORE_PASSWORD }} > ./android/key.properties
+          echo keyAlias=${{ secrets.KEY_ALIAS }} > ./android/key.properties
+          echo storeFile=${{ secrets.STORE_FILE }} > ./android/key.properties
       - run: echo "${{ secrets.KEY_STORE }}" | base64 --decode > android/app/release-keystore.jks
       - run: flutter build apk --release
       - run: ls build/app/outputs/flutter-apk
