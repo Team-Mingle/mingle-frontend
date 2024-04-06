@@ -31,7 +31,7 @@ jobs:
       - name: Build Gradle
         working-directory: ./mingle/android
         run: |
-          touch ./build/app/outputs/flutter-apk/app-release.apk
+          touch build/app/outputs/flutter-apk/app-release.apk
           ls build/app/outputs/flutter-apk
       # echo keyPassword=${{ secrets.KEY_PASSWORD }} > ./key.properties
       # echo storePassword=${{ secrets.STORE_PASSWORD }} >> ./key.properties
@@ -45,7 +45,7 @@ jobs:
 
       - name: Check APK file
         run: |
-          ls ./mingle/android/build/app/outputs/flutter-apk
+          ls mingle/android/build/app/outputs/flutter-apk
 
       #   /// Finds and pushes the apk file
       #   /// from the workflow directory to Firebase App distribution.
