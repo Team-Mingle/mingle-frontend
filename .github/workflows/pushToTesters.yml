@@ -29,6 +29,7 @@ jobs:
 
       #   /// Builds Apk
       - name: Build Gradle
+        working-directory: ./mingle
         run: flutter build apk --release
       - run: ls build/app/outputs/flutter-apk
 
