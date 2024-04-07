@@ -49,19 +49,17 @@ jobs:
           flutter-version: "2.10.1"
 
       # Install your project's dependencies
-      - run: flutter pub get
+
+      #   - run: flutter pub get
 
       # Build and sign the ipa using a single flutter command
       - name: Building IPA
-        run: flutter build ipa --release --export-options-plist=./mingle/build/ios/ipa/ExportOptions.plist
+        working-directory: ./mingle
+        run: |
+          flutter pub get
+          flutter build ipa --release --export-options-plist=./build/ios/ipa/ExportOptions.plist
 
       # Collect the file and upload as artifact
-      - name: collect ipa artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: release-ipa
-          # Path to the release files
-          path: build/ios/ipa/*.ipa
 
       # Important! Cleanup: remove the certificate and provisioning profile from the runner!
       - name: Clean up keychain and provisioning profile
