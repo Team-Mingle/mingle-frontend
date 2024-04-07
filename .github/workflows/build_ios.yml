@@ -57,7 +57,7 @@ jobs:
         working-directory: ./mingle
         run: |
           flutter pub get
-          flutter build ipa --release --export-options-plist=./ios/Runner/ExportOptions.plist
+          flutter build ipa --release --export-options-plist=./ios/Runner/ExportOptions.plist -allowProvisioningUpdates
 
       # Collect the file and upload as artifact
 
