@@ -71,6 +71,7 @@ jobs:
       # Release job, upload the ipa to Firebase App Distribution
 
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Upload IOS artifact to Firebase App Distribution
