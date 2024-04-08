@@ -60,6 +60,12 @@ jobs:
           flutter build ipa --release --export-options-plist=./ios/Runner/ExportOptions.plist
 
       # Collect the file and upload as artifact
+      - name: collect ipa artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-ipa
+          # Path to the release files
+          path: ./build/ios/ipa/*.ipa
 
       # Important! Cleanup: remove the certificate and provisioning profile from the runner!
       - name: Clean up keychain and provisioning profile
@@ -74,6 +80,14 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      # Fetch uploaded ipa file from build job
+
+      - uses: actions/checkout@v2
+      - name: Get release-ipa from artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: release-ipa
+
       - name: Upload IOS ipa to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
 
