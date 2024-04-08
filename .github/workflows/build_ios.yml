@@ -74,7 +74,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Upload IOS artifact to Firebase App Distribution
+      - name: Upload IOS ipa to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
 
         with:
