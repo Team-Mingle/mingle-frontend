@@ -69,6 +69,10 @@ jobs:
           rm ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision
 
       # Release job, upload the ipa to Firebase App Distribution
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
       - name: Upload IOS artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
 
