@@ -93,7 +93,7 @@ jobs:
 
         with:
           #   /// We'll be setting these up later in the tutorial.
-          appId: ${{secrets.APP_ID}}
+          appId: ${{secrets.IOS_APP_ID}}
 
           #   /// We'll be setting these up later in the tutorial.
           serviceCredentialsFileContent: ${{secrets.CREDENTIAL_FILE_CONTENT}}
