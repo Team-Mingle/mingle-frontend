@@ -1,0 +1,59 @@
+name: "[DEV] Build and Publish ANDROID"
+
+# /// These are the events which will trigger the automation process/
+on:
+  pull_request:
+    branches:
+      - test_distribution
+  push:
+    branches:
+      - test_distribution
+
+# /// These are the jobs that will be run when an event is triggered.
+jobs:
+  #   /// Name of this particular job.
+  build_and_deploy:
+    # /// Platform
+    runs-on: ubuntu-latest
+
+    # /// Setup the platform and the required dependencies
+    # /// Example - Java and Flutter
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: "12.x"
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: "stable"
+
+        # /// Builds Apk
+      - name: Build Gradle
+        working-directory: ./mingle/android
+        run: |
+          echo keyPassword=${{ secrets.KEY_PASSWORD }} > ./key.properties
+          echo storePassword=${{ secrets.STORE_PASSWORD }} >> ./key.properties
+          echo keyAlias=${{ secrets.KEY_ALIAS }} >> ./key.properties
+          echo storeFile=${{ secrets.STORE_FILE }} >> ./key.properties
+          touch ./keystore.jks
+          echo "${{ secrets.KEY_STORE }}" | base64 --decode > ./keystore.jks
+          cd ../
+          flutter build apk --release
+          ls build/app/outputs/flutter-apk
+
+      #   /// Finds and pushes the apk file
+      #   /// from the workflow directory to Firebase App distribution.
+      - name: Upload Android artifact to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+
+        with:
+          #   /// We'll be setting these up later in the tutorial.
+          appId: ${{secrets.APP_ID}}
+
+          #   /// We'll be setting these up later in the tutorial.
+          serviceCredentialsFileContent: ${{secrets.CREDENTIAL_FILE_CONTENT}}
+
+          #   /// This is the name of the group of tester,
+          #   /// to whom the apk will be distributed.
+          groups: dev-tester
+          file: ./mingle/build/app/outputs/flutter-apk/app-release.apk
