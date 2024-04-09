@@ -12,6 +12,7 @@ import 'package:mingle/post/models/post_model.dart';
 import 'package:mingle/post/provider/post_provider.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.dart';
+import 'package:mingle/user/provider/user_provider.dart';
 import 'package:mingle/user/view/home_screen/home_root_tab.dart';
 
 enum CardType { home, square, lawn }
@@ -120,6 +121,7 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    bool isChina = ref.watch(currentUserProvider)!.country == "CHINA";
     if (widget.controller != null) {
       widget.controller!.scrollUp = scrollUp;
     }
@@ -308,7 +310,8 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
                                                               .start,
                                                       children: [
                                                         buildTypeIndicator(
-                                                            post.categoryType),
+                                                            post.categoryType,
+                                                            isChina),
                                                         Expanded(
                                                           child: Text(
                                                             post.title,

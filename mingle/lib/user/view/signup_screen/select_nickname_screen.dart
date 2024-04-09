@@ -18,6 +18,7 @@ import 'package:mingle/secure_storage/secure_storage.dart';
 import 'package:mingle/user/view/login_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:mingle/user/view/signup_screen/enter_password_screen.dart';
+import 'package:mingle/user/view/signup_screen/finish_temp_signup_screen.dart';
 import 'package:mingle/user/view/signup_screen/provider/email_extension_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/provider/email_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/provider/full_email_selected_provider.dart';
@@ -120,8 +121,8 @@ class _SelectNicknameScreenState extends ConsumerState<SelectNicknameScreen> {
       setState(() {
         isLoading = false;
       });
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (_) => const SplashScreen()));
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const FinishTempSinupScreen()));
     } on DioException catch (e) {
       print(e.response?.data);
       setState(() {

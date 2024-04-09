@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/user/view/app_start_screen.dart';
@@ -70,6 +71,12 @@ class _FinishTempSinupScreenState extends ConsumerState<FinishTempSinupScreen> {
                     letterSpacing: -0.32,
                     color: GRAYSCALE_GRAY_04),
               ),
+              const SizedBox(
+                height: 150.0,
+              ),
+              Center(
+                  child: SvgPicture.asset(
+                      "assets/img/signup_screen/welcome_icon.svg")),
               const Spacer(),
               NextButton(
                 nextScreen: const AppStartScreen(),

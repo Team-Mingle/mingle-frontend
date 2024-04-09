@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
 
-Widget buildTypeIndicator(String categoryType) {
+Widget buildTypeIndicator(String categoryType, bool isChina) {
   switch (categoryType) {
     case "MINGLE":
       return Row(
@@ -13,14 +13,14 @@ Widget buildTypeIndicator(String categoryType) {
               shape: BoxShape.rectangle,
               borderRadius: BorderRadius.all(Radius.circular(8)),
             ),
-            child: const Padding(
-              padding: EdgeInsets.symmetric(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 8,
                 vertical: 4,
               ),
               child: Text(
-                "밍글소식",
-                style: TextStyle(
+                isChina ? "총학생회" : "밍글소식",
+                style: const TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w400,
                   color: Color(0xff595959),
