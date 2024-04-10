@@ -100,5 +100,5 @@ jobs:
 
           #   /// This is the name of the group of tester,
           #   /// to whom the apk will be distributed.
-          groups: dev-tester
+          groups: QA-iOS
           file: ./mingle.ipa
