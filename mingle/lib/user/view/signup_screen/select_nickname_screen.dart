@@ -129,10 +129,8 @@ class _SelectNicknameScreenState extends ConsumerState<SelectNicknameScreen> {
         isLoading = false;
       });
       fToast.showToast(
-        child: const ToastMessage(
-            message:
-                // e.response?.data['message'] ??
-                generalErrorMsg),
+        child: ToastMessage(
+            message: e.response?.data['message'] ?? generalErrorMsg),
         gravity: ToastGravity.CENTER,
         toastDuration: const Duration(seconds: 2),
       );
