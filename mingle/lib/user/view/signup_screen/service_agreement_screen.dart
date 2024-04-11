@@ -196,7 +196,9 @@ class _ServiceAgreementScreenState
                   "만 14세 이상입니다.",
                   style: TextStyle(
                       fontSize: 14.0,
-letterSpacing: -0.01, height: 1.4, fontWeight: FontWeight.w400),
+                      letterSpacing: -0.01,
+                      height: 1.4,
+                      fontWeight: FontWeight.w400),
                 )
               ],
             ),
@@ -225,7 +227,7 @@ letterSpacing: -0.01, height: 1.4, fontWeight: FontWeight.w400),
                   text: TextSpan(
                       style: const TextStyle(
                           fontSize: 14.0,
-letterSpacing: -0.01,
+                          letterSpacing: -0.01,
                           height: 1.4,
                           fontWeight: FontWeight.w400,
                           color: Colors.black),
@@ -239,6 +241,7 @@ letterSpacing: -0.01,
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 showModalBottomSheet<void>(
+                                  backgroundColor: Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
@@ -354,7 +357,7 @@ letterSpacing: -0.01,
                   text: TextSpan(
                       style: const TextStyle(
                           fontSize: 14.0,
-letterSpacing: -0.01,
+                          letterSpacing: -0.01,
                           height: 1.4,
                           fontWeight: FontWeight.w400,
                           color: Colors.black),
@@ -368,6 +371,7 @@ letterSpacing: -0.01,
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 showModalBottomSheet<void>(
+                                  backgroundColor: Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
