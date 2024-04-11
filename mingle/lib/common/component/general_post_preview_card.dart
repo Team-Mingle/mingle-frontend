@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mingle/common/component/reported_component.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
 import 'package:mingle/post/components/indicator_widget.dart';
@@ -244,7 +245,8 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
                                   );
                             }
                             final post = postList.data[index];
-                            final reported = post.status == "REPORTED";
+                            final reported = post.status == "REPORTED" ||
+                                post.status == "DELETED";
                             return Column(
                               children: [
                                 // 첫번째 줄에만 padding

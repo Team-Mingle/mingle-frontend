@@ -17,6 +17,7 @@ import 'package:mingle/timetable/view/timetable_tab_screen.dart';
 import 'package:mingle/user/view/signup_screen/enter_free_domain_email_screen.dart';
 import 'package:mingle/user/view/signup_screen/enter_offer_id_screen.dart';
 import 'package:mingle/user/view/signup_screen/finish_temp_signup_screen.dart';
+import 'package:mingle/user/view/signup_screen/service_agreement_screen.dart';
 import 'package:mingle/user/view/signup_screen/upload_identification_screen.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -260,12 +261,12 @@ class _AppState extends ConsumerState<_App> {
           FirebaseAnalyticsObserver(analytics: analytics),
         ],
         debugShowCheckedModeBanner: false,
-        home:
-            //  const EnterOfferIdScreen()
-            // const FinishTempSinupScreen(),
-            // const TimeTableHomeScreen()
+        home: const SplashScreen(),
+        //  const EnterOfferIdScreen()
+        // const FinishTempSinupScreen(),
+        // const TimeTableHomeScreen()
 
-            const SplashScreen(),
+        // const ServiceAgreementScreen(),
       ),
     );
   }

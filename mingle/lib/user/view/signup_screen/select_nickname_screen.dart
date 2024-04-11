@@ -73,8 +73,8 @@ class _SelectNicknameScreenState extends ConsumerState<SelectNicknameScreen> {
       setState(() {
         isLoading = false;
       });
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (_) => const LoginScreen()));
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const LoginScreen()));
     } on DioException catch (e) {
       setState(() {
         isLoading = false;
@@ -121,7 +121,7 @@ class _SelectNicknameScreenState extends ConsumerState<SelectNicknameScreen> {
       setState(() {
         isLoading = false;
       });
-      Navigator.of(context).push(
+      Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const FinishTempSinupScreen()));
     } on DioException catch (e) {
       print(e.response?.data);
