@@ -52,35 +52,40 @@ class NotificationScreen extends ConsumerWidget {
             },
           ),
           asyncNotification.when(
-            data: (notifications) {
-              final List<NotificationModel> notificationList = notifications;
-              return SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return Column(
-                      children: [
-                        NotificationItem(notification: notificationList[index]),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Divider(
-                            color: GRAYSCALE_GRAY_02,
-                            height: 0,
-                          ),
-                        )
-                      ],
-                    );
-                  },
-                  childCount: notificationList.length,
-                ),
-              );
-            },
-            loading: () => const SliverToBoxAdapter(
-              child: Center(child: CircularProgressIndicator()),
-            ),
-            error: (error, stack) => SliverToBoxAdapter(
-              child: Center(child: Text('Error: $error')),
-            ),
-          ),
+              data: (notifications) {
+                final List<NotificationModel> notificationList = notifications;
+                return SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return Column(
+                        children: [
+                          NotificationItem(
+                              notification: notificationList[index]),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Divider(
+                              color: GRAYSCALE_GRAY_02,
+                              height: 0,
+                            ),
+                          )
+                        ],
+                      );
+                    },
+                    childCount: notificationList.length,
+                  ),
+                );
+              },
+              loading: () => const SliverToBoxAdapter(
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+              error: (error, stack) => const SliverFillRemaining(
+                    child: Center(child: Text("알림을 불러오는데 실패했습니다.")),
+                  )
+
+              // SliverToBoxAdapter(
+              //   child: Center(child: Text('Error: $error')),
+              // ),
+              ),
         ],
       ),
     );

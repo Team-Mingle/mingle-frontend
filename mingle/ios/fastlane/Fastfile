@@ -1,0 +1,32 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Description of what the lane does"
+  lane :beta do
+    # add actions here: https://docs.fastlane.tools/actions
+    get_certificates           # invokes cert
+    get_provisioning_profile   # invokes sigh
+    build_app
+
+  firebase_app_distribution(
+    app: "1:861115253936:ios:851b606a7d0b75f19aa775",
+    firebase_cli_token: "1//0gWMfrz7FMaFvCgYIARAAGBASNwF-L9IrjWsTQ2GWTWXVd9zp_MVT3U0x8qcuc_iY19j7pk--sSfHvcKPbYqHcMAmX1uESPF__gs",
+    groups: "dev-tester"
+  )
+  end
+end

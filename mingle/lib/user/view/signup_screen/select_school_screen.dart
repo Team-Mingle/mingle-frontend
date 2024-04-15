@@ -10,8 +10,11 @@ import 'package:mingle/user/components/university_domain_dropdown.dart';
 import 'package:mingle/user/components/university_name_dropdown.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:mingle/user/view/signup_screen/enter_email_screen.dart';
+import 'package:mingle/user/view/signup_screen/enter_free_domain_email_screen.dart';
+import 'package:mingle/user/view/signup_screen/enter_offer_id_screen.dart';
 import 'package:mingle/user/view/signup_screen/provider/country_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/provider/school_selected_provider.dart';
+import 'package:mingle/user/view/signup_screen/provider/selected_university_domain_provider.dart';
 
 class SelectSchoolScreen extends ConsumerStatefulWidget {
   final bool isPasswordReset;
@@ -41,6 +44,9 @@ class _SelectSchoolScreenState extends ConsumerState<SelectSchoolScreen> {
               ),
               onPressed: () {
                 ref.read(selectedSchoolProvider.notifier).update((state) => "");
+                ref
+                    .read(selectedUnivDomainProvider.notifier)
+                    .update((state) => []);
                 Navigator.pop(context);
               },
             ),
@@ -116,9 +122,11 @@ class _SelectSchoolScreenState extends ConsumerState<SelectSchoolScreen> {
               child: Container(),
             ),
             NextButton(
-              nextScreen: EnterEmailScreen(
-                isPasswordReset: widget.isPasswordReset,
-              ),
+              nextScreen: ref.watch(selectedUnivDomainProvider).isEmpty
+                  ? const EnterOfferIdScreen()
+                  : EnterEmailScreen(
+                      isPasswordReset: widget.isPasswordReset,
+                    ),
               buttonName: "다음으로",
               isSelectedProvider: [selectedSchoolProvider],
             ),

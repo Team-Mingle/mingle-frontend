@@ -379,7 +379,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
 
   Widget renderContent(PostModel post) {
     print(post.status);
-    bool reported = post.status == "REPORTED";
+    bool reported = post.status == "REPORTED" || post.status == "DELETED";
     print(PostModel.convertUTCtoLocalPreview(post.createdAt));
     print("post is detail model? ${post is PostDetailModel}");
     String createdAtLocal = PostModel.convertUTCtoLocal(post.createdAt);
@@ -500,11 +500,9 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                     ],
             ),
             body: reported
-                ? Align(
-                    alignment: Alignment.center,
-                    child: ReportedComponent(
-                        reportedTitle: post.title,
-                        reportedReason: post.content),
+                ? ReportedComponent(
+                    reportedTitle: post.title,
+                    reportedReason: post.content,
                   )
                 : CustomScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),
@@ -808,7 +806,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
             bottomNavigationBar:
                 // Container(height: parentCommentId != null ? 56.0 + 32.0 : 56.0),
                 reported
-                    ? Container()
+                    ? null
                     : Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [

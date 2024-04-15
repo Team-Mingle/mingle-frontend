@@ -14,6 +14,11 @@ import 'package:mingle/firebase_options.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.dart';
 import 'package:mingle/timetable/view/timetable_tab_screen.dart';
+import 'package:mingle/user/view/signup_screen/enter_free_domain_email_screen.dart';
+import 'package:mingle/user/view/signup_screen/enter_offer_id_screen.dart';
+import 'package:mingle/user/view/signup_screen/finish_temp_signup_screen.dart';
+import 'package:mingle/user/view/signup_screen/service_agreement_screen.dart';
+import 'package:mingle/user/view/signup_screen/upload_identification_screen.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -235,31 +240,34 @@ class _AppState extends ConsumerState<_App> {
   Widget build(BuildContext context) {
     return ProviderScope(
       child: MaterialApp(
-          navigatorKey: navigatorKey,
-          theme: ThemeData(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            fontFamily: 'Pretendard',
-            disabledColor: GRAYSCALE_GRAY_02,
-            bottomSheetTheme:
-                const BottomSheetThemeData(backgroundColor: Colors.transparent),
-            textSelectionTheme: const TextSelectionThemeData(
-              cursorColor: GRAYSCALE_GRAY_04,
-              selectionColor: SECONDARY_COLOR_ORANGE_03,
-              selectionHandleColor: PRIMARY_COLOR_ORANGE_01,
-            ),
-            cupertinoOverrideTheme: const CupertinoThemeData(
-              primaryColor: PRIMARY_COLOR_ORANGE_01,
-            ),
+        navigatorKey: navigatorKey,
+        theme: ThemeData(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          fontFamily: 'Pretendard',
+          disabledColor: GRAYSCALE_GRAY_02,
+          bottomSheetTheme:
+              const BottomSheetThemeData(backgroundColor: Colors.transparent),
+          textSelectionTheme: const TextSelectionThemeData(
+            cursorColor: GRAYSCALE_GRAY_04,
+            selectionColor: SECONDARY_COLOR_ORANGE_03,
+            selectionHandleColor: PRIMARY_COLOR_ORANGE_01,
           ),
-          navigatorObservers: [
-            FirebaseAnalyticsObserver(analytics: analytics),
-          ],
-          debugShowCheckedModeBanner: false,
-          home:
-              // const TimeTableHomeScreen()
+          cupertinoOverrideTheme: const CupertinoThemeData(
+            primaryColor: PRIMARY_COLOR_ORANGE_01,
+          ),
+        ),
+        navigatorObservers: [
+          FirebaseAnalyticsObserver(analytics: analytics),
+        ],
+        debugShowCheckedModeBanner: false,
+        home: const SplashScreen(),
+        //  const EnterOfferIdScreen()
+        // const FinishTempSinupScreen(),
+        // const TimeTableHomeScreen()
 
-              const SplashScreen()),
+        // const ServiceAgreementScreen(),
+      ),
     );
   }
 }

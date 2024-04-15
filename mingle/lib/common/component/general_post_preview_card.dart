@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mingle/common/component/reported_component.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
 import 'package:mingle/post/components/indicator_widget.dart';
@@ -12,6 +13,7 @@ import 'package:mingle/post/models/post_model.dart';
 import 'package:mingle/post/provider/post_provider.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.dart';
+import 'package:mingle/user/provider/user_provider.dart';
 import 'package:mingle/user/view/home_screen/home_root_tab.dart';
 
 enum CardType { home, square, lawn }
@@ -120,6 +122,7 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    bool isChina = ref.watch(currentUserProvider)!.country == "CHINA";
     if (widget.controller != null) {
       widget.controller!.scrollUp = scrollUp;
     }
@@ -242,7 +245,8 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
                                   );
                             }
                             final post = postList.data[index];
-                            final reported = post.status == "REPORTED";
+                            final reported = post.status == "REPORTED" ||
+                                post.status == "DELETED";
                             return Column(
                               children: [
                                 // 첫번째 줄에만 padding
@@ -308,7 +312,8 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
                                                               .start,
                                                       children: [
                                                         buildTypeIndicator(
-                                                            post.categoryType),
+                                                            post.categoryType,
+                                                            isChina),
                                                         Expanded(
                                                           child: Text(
                                                             post.title,

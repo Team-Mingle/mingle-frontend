@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mingle/common/component/general_post_preview_card.dart';
 // import 'package:mingle/common/component/post_preview_card.dart';
 import 'package:mingle/post/provider/post_provider.dart';
+import 'package:mingle/user/provider/user_provider.dart';
 import 'package:mingle/user/view/home_screen/home_root_tab.dart';
 import 'package:mingle/user/view/home_screen/tab_screen.dart';
 
@@ -17,6 +18,7 @@ class SquareTabScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    bool isChina = ref.watch(currentUserProvider)!.country == "CHINA";
     return TabScreen(
       boardType: 'TOTAL',
       title: '광장',
@@ -24,7 +26,7 @@ class SquareTabScreen extends ConsumerWidget {
       tab1: '전체글',
       tab2: '자유',
       tab3: '질문',
-      tab4: '밍글소식',
+      tab4: isChina ? '총학생회' : '밍글소식',
       tabContents: [
         GeneralPostPreviewCard(
           boardType: "광장",
