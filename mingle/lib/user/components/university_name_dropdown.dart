@@ -74,6 +74,7 @@ class _DropdownListState extends ConsumerState<UniversityNameDropdownList> {
                   .toList(),
               value: selectedValue,
               dropdownStyleData: const DropdownStyleData(
+                  maxHeight: 198.0,
                   decoration: BoxDecoration(color: Colors.white)),
               onChanged: (String? value) {
                 if (value != null) {
