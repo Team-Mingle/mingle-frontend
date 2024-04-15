@@ -68,7 +68,10 @@ class PostModel {
   }
 
   static convertUTCtoLocal(String utc) {
-    DateTime dateTime = DateFormat('yy/MM/dd hh:mm').parse(utc, true).toLocal();
+    print(utc);
+    print(DateFormat('yy/MM/dd HH:mm').parse(utc, true));
+    DateTime dateTime = DateFormat('yy/MM/dd HH:mm').parse(utc, true).toLocal();
+    print(dateTime);
     String year = (dateTime.year % 100).toString();
     String month = dateTime.month.toString();
     String date = dateTime.day.toString();

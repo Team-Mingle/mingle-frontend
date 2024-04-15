@@ -18,6 +18,9 @@ import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:mingle/user/view/signup_screen/enter_password_screen.dart';
 import 'package:mingle/user/view/signup_screen/provider/email_extension_selected_provider.dart';
 import 'package:mingle/user/view/signup_screen/provider/email_selected_provider.dart';
+import 'package:mingle/user/view/signup_screen/provider/full_email_selected_provider.dart';
+import 'package:mingle/user/view/signup_screen/provider/offer_id_selected_provider.dart';
+import 'package:mingle/user/view/signup_screen/provider/uploaded_identification_provider.dart';
 import 'package:mingle/user/view/signup_screen/provider/verification_number_entered_provider.dart';
 
 class EnterVerificationNumberScreen extends ConsumerStatefulWidget {
@@ -55,9 +58,12 @@ class _EnterVerificationNumberScreenState
 
   void sendCode() async {
     final Dio dio = Dio();
+    final bool isTempSignUp = ref.read(selectedOfferIdProvider) != "" &&
+        ref.read(uploadedIdentificationProvider) != null;
     final email = {
-      "email":
-          "${ref.read(selectedEmailProvider)}@${ref.read(selectedEmailExtensionProvider)}",
+      "email": isTempSignUp
+          ? ref.read(selectedFullEmailProvider)
+          : "${ref.read(selectedEmailProvider)}@${ref.read(selectedEmailExtensionProvider)}",
     };
     try {
       fToast.showToast(
@@ -86,9 +92,12 @@ class _EnterVerificationNumberScreenState
     //     CountdownTimer(setCountdownComplete: setCountdownComplete);
     final dio = ref.watch(dioProvider);
     void validateForm() async {
+      final bool isTempSignUp = ref.read(selectedOfferIdProvider) != "" &&
+          ref.read(uploadedIdentificationProvider) != null;
       final email = {
-        "email":
-            "${ref.read(selectedEmailProvider)}@${ref.read(selectedEmailExtensionProvider)}",
+        "email": isTempSignUp
+            ? ref.read(selectedFullEmailProvider)
+            : "${ref.read(selectedEmailProvider)}@${ref.read(selectedEmailExtensionProvider)}",
         "code": ref.read(enteredVerificationNumberProvider)
       };
       print(email);

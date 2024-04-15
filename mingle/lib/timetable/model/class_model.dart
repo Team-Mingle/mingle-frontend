@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:mingle/common/const/data.dart';
+
 class ClassModel {
   final List<String> days;
   final List<String> startTimes;
@@ -46,5 +49,52 @@ class ClassModel {
     result.add(hourIndex);
     result.add(minutes);
     return result;
+  }
+
+  double convertStartTimeToOffset(String startTime) {
+    var splitted = startTime.split(":");
+    int hour = int.parse(splitted[0]);
+    int minutes = int.parse(splitted[1]);
+    double offset = (hour - 8 + (minutes / 60)) * TIMETABLE_GRID_HEIGHT;
+    return offset;
+  }
+
+  double calculateHeight(String startTime, String endTime) {
+    var startSplitted = startTime.split(":");
+    int startHour = int.parse(startSplitted[0]);
+    int startMinutes = int.parse(startSplitted[1]);
+    var endSplitted = endTime.split(":");
+    int endHour = int.parse(endSplitted[0]);
+    int endMinutes = int.parse(endSplitted[1]);
+    double height =
+        (endHour + (endMinutes / 60) - startHour - (startMinutes / 60)) *
+            TIMETABLE_GRID_HEIGHT;
+    return height;
+  }
+
+  List<Widget> generateClases() {
+    List<Widget> classes = [];
+    for (int i = 0; i < days.length; i++) {
+      String startTime = startTimes[i];
+      String endTime = endTimes[i];
+      double topOffset = convertStartTimeToOffset(startTime);
+      double leftOffset = convertDayToInt(days[i]) * TIMETABLE_GRID_WIDTH;
+      double height = calculateHeight(startTime, endTime);
+      classes.add(
+        Positioned(
+          top: topOffset,
+          left: leftOffset,
+          child: GestureDetector(
+            child: Container(
+              height: height,
+              width: TIMETABLE_GRID_WIDTH,
+              color: Colors.yellow,
+              child: Text(moduleCode),
+            ),
+          ),
+        ),
+      );
+    }
+    return classes;
   }
 }

@@ -6,7 +6,7 @@ class NextButton extends ConsumerWidget {
   final Widget? nextScreen;
   final String buttonName;
   final Widget? buttonIcon;
-  final List<StateProvider<String>>? isSelectedProvider;
+  final List<StateProvider>? isSelectedProvider;
   final List<Function>? validators;
   bool? checkSelected;
   bool isLoading;
@@ -27,7 +27,8 @@ class NextButton extends ConsumerWidget {
     print(isSelectedProvider == null);
     bool isSelected = isSelectedProvider == null
         ? (checkSelected == null ? true : checkSelected!)
-        : isSelectedProvider!.every((provider) => ref.watch(provider) != "");
+        : isSelectedProvider!.every((provider) =>
+            (ref.watch(provider) != "" && ref.watch(provider) != null));
 
     return isLoading
         ? const Center(

@@ -6,11 +6,11 @@ import 'package:mingle/timetable/model/class_model.dart';
 
 class AddDirectTimeTableScreen extends StatefulWidget {
   final Function addClass;
-  final Function refresh;
+  final Function addClassesAtAddTimeTableScreen;
   const AddDirectTimeTableScreen({
     Key? key,
     required this.addClass,
-    required this.refresh,
+    required this.addClassesAtAddTimeTableScreen,
   }) : super(key: key);
 
   @override
@@ -145,7 +145,7 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
                     location: location,
                     profName: profName);
                 widget.addClass(classModel);
-                widget.refresh();
+                widget.addClassesAtAddTimeTableScreen(classModel);
                 Navigator.pop(context);
               },
             ),

@@ -9,20 +9,14 @@ class ReportedComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return Center(
       child: Column(
         children: [
-          Center(
-            child: Column(
-              children: [
-                Text(reportedTitle),
-                Text(
-                  reportedReason,
-                  style: const TextStyle(color: PRIMARY_COLOR_ORANGE_01),
-                )
-              ],
-            ),
-          ),
+          Text(reportedTitle),
+          Text(
+            reportedReason,
+            style: const TextStyle(color: PRIMARY_COLOR_ORANGE_01),
+          )
         ],
       ),
     );
