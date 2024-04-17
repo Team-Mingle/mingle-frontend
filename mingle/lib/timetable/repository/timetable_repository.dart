@@ -2,7 +2,9 @@ import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/dio/dio.dart';
+import 'package:mingle/timetable/model/timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_model.dart';
+import 'package:mingle/timetable/model/timetable_preview_model.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'timetable_repository.g.dart';
@@ -17,6 +19,10 @@ final timetableRepositoryProvider = Provider((ref) {
 @RestApi()
 abstract class TimetableRepository {
   factory TimetableRepository(Dio dio, {String baseUrl}) = _TimetableRepository;
+
+  @GET("")
+  @Headers({'accessToken': 'true'})
+  Future<TimetableListModel> getTimetables();
 
   @POST('/{timetableId}/course')
   @Headers({'accessToken': 'true'})

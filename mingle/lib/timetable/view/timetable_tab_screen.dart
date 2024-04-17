@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
+import 'package:mingle/module/view/module_review_main_screen.dart';
 import 'package:mingle/timetable/components/add_friend_dialog.dart';
 import 'package:mingle/timetable/components/timetable_list_more_modal.dart';
 import 'package:mingle/timetable/model/class_model.dart';
@@ -834,6 +835,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     return Scaffold(
       backgroundColor: BACKGROUND_COLOR_GRAY,
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         toolbarHeight: 56.0,
         backgroundColor: BACKGROUND_COLOR_GRAY,
         elevation: 0,
@@ -1037,6 +1039,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                           },
                           children: [
                             ExpansionPanel(
+                              backgroundColor: Colors.transparent,
                               headerBuilder:
                                   (BuildContext context, bool isExpanded) {
                                 return const Row(
@@ -1081,12 +1084,12 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                     height: 16.0,
                   ),
                   GestureDetector(
-                    // onTap: () {
-                    //   Navigator.of(context).push(
-                    //     MaterialPageRoute(
-                    //         builder: (_) => const ModuleDetailsScreen()),
-                    //   );
-                    // },
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (_) => const ModuleReviewMainScreen()),
+                      );
+                    },
                     child: Container(
                       width: (MediaQuery.of(context).size.width - 40.0),
                       height: 56,

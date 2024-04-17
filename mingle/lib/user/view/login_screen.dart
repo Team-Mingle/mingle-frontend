@@ -107,8 +107,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
           final storage = ref.read(secureStorageProvider);
           await storage.write(key: REFRESH_TOKEN_KEY, value: refreshToken);
-          await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
-          // await storage.write(key: ACCESS_TOKEN_KEY, value: "mingle-user");
+          // await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
+          await storage.write(key: ACCESS_TOKEN_KEY, value: "mingle-user");
 
           await storage.write(key: ENCRYPTED_EMAIL_KEY, value: encryptedEmail);
           await storage.write(key: FCM_TOKEN_KEY, value: fcmtoken);

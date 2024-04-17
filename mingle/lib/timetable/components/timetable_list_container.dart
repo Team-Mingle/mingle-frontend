@@ -3,9 +3,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/timetable/components/search_course_modal.dart';
 import 'package:mingle/timetable/components/timetable_list_more_modal.dart';
+import 'package:mingle/timetable/model/timetable_preview_model.dart';
 
 class TimetableListWidget extends StatefulWidget {
-  const TimetableListWidget({super.key});
+  TimetablePreviewModel timetablePreviewModel;
+  TimetableListWidget({super.key, required this.timetablePreviewModel});
 
   @override
   State<TimetableListWidget> createState() => _TimetableListWidgetState();
@@ -18,6 +20,7 @@ class _TimetableListWidgetState extends State<TimetableListWidget> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
         ),
+        backgroundColor: Colors.white,
         isScrollControlled: false,
         context: context,
         builder: (BuildContext context) {
@@ -36,9 +39,9 @@ class _TimetableListWidgetState extends State<TimetableListWidget> {
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: Row(
               children: [
-                const Text(
-                  '시간표 1',
-                  style: TextStyle(
+                Text(
+                  widget.timetablePreviewModel.name,
+                  style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16.0,
                     letterSpacing: -0.02,

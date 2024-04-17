@@ -51,7 +51,7 @@ class _TimeTableGridState extends State<TimeTableGrid> {
                   // right: BorderSide(color: GRAYSCALE_GRAY_02, width: 0.0)
                 ),
               ),
-              child: Text("$row $col"),
+              // child: Text("$row $col"),
             ));
   });
 

@@ -1,14 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/timetable/components/add_new_timetable_widget.dart';
 import 'package:mingle/timetable/components/timetable_list.dart';
+import 'package:mingle/timetable/model/timetable_list_model.dart';
+import 'package:mingle/timetable/model/timetable_preview_model.dart';
+import 'package:mingle/timetable/repository/timetable_repository.dart';
 import 'package:mingle/timetable/view/self_add_timetable_screen.dart';
 
-class MyTimeTableListScreen extends StatelessWidget {
+class MyTimeTableListScreen extends ConsumerStatefulWidget {
   const MyTimeTableListScreen({
     Key? key,
   }) : super(key: key);
+
+  @override
+  ConsumerState<MyTimeTableListScreen> createState() =>
+      _MyTimeTableListScreenState();
+}
+
+class _MyTimeTableListScreenState extends ConsumerState<MyTimeTableListScreen> {
+  Map<String, List<TimetablePreviewModel>> timetables = {};
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getTimetables();
+    print(timetables);
+  }
+
+  void getTimetables() async {
+    final result = (await ref.read(timetableRepositoryProvider).getTimetables())
+        .timetablePreviewResponseMap;
+    setState(() {
+      timetables = result;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,24 +104,31 @@ class MyTimeTableListScreen extends StatelessWidget {
             backgroundColor: Colors.white,
             elevation: 0,
           ),
-          body: const SingleChildScrollView(
+          body: SingleChildScrollView(
             child: Center(
               child: Column(
-                children: [
-                  TimetableList(),
-                  SizedBox(
-                    height: 56.0,
+                  children: List.generate(timetables.keys.length, (index) {
+                final String key = timetables.keys.elementAt(index);
+                final List<TimetablePreviewModel> values = timetables[key]!;
+                return TimetableList(
+                    semester: TimetableListModel.convertKeyToSemester(key),
+                    timetables: values);
+              })
+                  // [
+                  //   TimetableList(),
+                  //   SizedBox(
+                  //     height: 56.0,
+                  //   ),
+                  //   TimetableList(),
+                  //   SizedBox(
+                  //     height: 56.0,
+                  //   ),
+                  //   TimetableList(),
+                  //   SizedBox(
+                  //     height: 56.0,
+                  //   ),
+                  // ],
                   ),
-                  TimetableList(),
-                  SizedBox(
-                    height: 56.0,
-                  ),
-                  TimetableList(),
-                  SizedBox(
-                    height: 56.0,
-                  ),
-                ],
-              ),
             ),
           ),
         ),

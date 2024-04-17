@@ -4,9 +4,9 @@ part 'course_time_model.g.dart';
 
 @JsonSerializable()
 class CourseTimeModel {
-  final String? dayOfWeek;
-  final String? startTime;
-  final String? endTime;
+  final String dayOfWeek;
+  final String startTime;
+  final String endTime;
 
   CourseTimeModel(
       {required this.dayOfWeek,

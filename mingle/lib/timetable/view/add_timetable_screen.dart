@@ -48,6 +48,7 @@ class _AddTimeTableScreenState extends State<AddTimeTableScreen> {
       body: SafeArea(
         child: Scaffold(
           appBar: AppBar(
+            surfaceTintColor: Colors.transparent,
             automaticallyImplyLeading: false,
             titleSpacing: 0.0,
             title: Row(
