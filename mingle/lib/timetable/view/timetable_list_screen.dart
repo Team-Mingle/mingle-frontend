@@ -21,6 +21,7 @@ class MyTimeTableListScreen extends ConsumerStatefulWidget {
 
 class _MyTimeTableListScreenState extends ConsumerState<MyTimeTableListScreen> {
   Map<String, List<TimetablePreviewModel>> timetables = {};
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -31,19 +32,26 @@ class _MyTimeTableListScreenState extends ConsumerState<MyTimeTableListScreen> {
   }
 
   void getTimetables() async {
+    setState(() {
+      isLoading = true;
+    });
     final result = (await ref.read(timetableRepositoryProvider).getTimetables())
         .timetablePreviewResponseMap;
     setState(() {
       timetables = result;
+      isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Scaffold(
+          backgroundColor: Colors.white,
           appBar: AppBar(
+            surfaceTintColor: Colors.transparent,
             automaticallyImplyLeading: false,
             titleSpacing: 0.0,
             title: Row(
@@ -104,33 +112,43 @@ class _MyTimeTableListScreenState extends ConsumerState<MyTimeTableListScreen> {
             backgroundColor: Colors.white,
             elevation: 0,
           ),
-          body: SingleChildScrollView(
-            child: Center(
-              child: Column(
-                  children: List.generate(timetables.keys.length, (index) {
-                final String key = timetables.keys.elementAt(index);
-                final List<TimetablePreviewModel> values = timetables[key]!;
-                return TimetableList(
-                    semester: TimetableListModel.convertKeyToSemester(key),
-                    timetables: values);
-              })
-                  // [
-                  //   TimetableList(),
-                  //   SizedBox(
-                  //     height: 56.0,
-                  //   ),
-                  //   TimetableList(),
-                  //   SizedBox(
-                  //     height: 56.0,
-                  //   ),
-                  //   TimetableList(),
-                  //   SizedBox(
-                  //     height: 56.0,
-                  //   ),
-                  // ],
+          body: isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(
+                    color: PRIMARY_COLOR_ORANGE_01,
                   ),
-            ),
-          ),
+                )
+              : SingleChildScrollView(
+                  // physics: const AlwaysScrollableScrollPhysics(),
+                  child: Center(
+                    child: Column(
+                        children:
+                            List.generate(timetables.keys.length, (index) {
+                      final String key = timetables.keys.elementAt(index);
+                      final List<TimetablePreviewModel> values =
+                          timetables[key]!;
+                      return TimetableList(
+                          semester:
+                              TimetableListModel.convertKeyToSemester(key),
+                          timetables: values);
+                    })
+                        // [
+                        //   TimetableList(),
+                        //   SizedBox(
+                        //     height: 56.0,
+                        //   ),
+                        //   TimetableList(),
+                        //   SizedBox(
+                        //     height: 56.0,
+                        //   ),
+                        //   TimetableList(),
+                        //   SizedBox(
+                        //     height: 56.0,
+                        //   ),
+                        // ],
+                        ),
+                  ),
+                ),
         ),
       ),
     );

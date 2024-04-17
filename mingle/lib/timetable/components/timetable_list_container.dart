@@ -24,7 +24,8 @@ class _TimetableListWidgetState extends State<TimetableListWidget> {
         isScrollControlled: false,
         context: context,
         builder: (BuildContext context) {
-          return const TimetableMoreModalwidget();
+          return TimetableMoreModalwidget(
+              timetablePreviewModel: widget.timetablePreviewModel);
         },
       );
     });
@@ -52,11 +53,12 @@ class _TimetableListWidgetState extends State<TimetableListWidget> {
                 const SizedBox(
                   width: 8.0,
                 ),
-                SvgPicture.asset(
-                  'assets/img/timetable_screen/toggle_selected.svg',
-                  width: 24,
-                  height: 24,
-                ),
+                if (widget.timetablePreviewModel.isPinned)
+                  SvgPicture.asset(
+                    'assets/img/timetable_screen/toggle_selected.svg',
+                    width: 24,
+                    height: 24,
+                  ),
                 const Spacer(),
                 GestureDetector(
                   onTap: () {

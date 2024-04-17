@@ -94,7 +94,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
         isScrollControlled: false,
         context: context,
         builder: (BuildContext context) {
-          return const TimetableMoreModalwidget();
+          return Container(); //TODO: fix later
+          // return const TimetableMoreModalwidget();
         },
       );
     });
