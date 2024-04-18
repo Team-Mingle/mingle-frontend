@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/const/data.dart';
 import 'package:mingle/dio/dio.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/post/models/add_post_model.dart';
@@ -104,8 +105,8 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
         isLoading = false;
       });
       fToast.showToast(
-        child:
-            ToastMessage(message: e.response?.data['message'] ?? "다시 시도해주세요"),
+        child: ToastMessage(
+            message: e.response?.data['message'] ?? generalErrorMsg),
         gravity: ToastGravity.CENTER,
         toastDuration: const Duration(seconds: 2),
       );

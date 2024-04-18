@@ -26,6 +26,8 @@ class _AddNewTimetableWidgetState extends State<AddNewTimetableWidget> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      backgroundColor: Colors.white,
+      surfaceTintColor: Colors.transparent,
       child: Padding(
         padding: const EdgeInsets.only(
             top: 32.0, left: 20.0, right: 20.0, bottom: 24.0),

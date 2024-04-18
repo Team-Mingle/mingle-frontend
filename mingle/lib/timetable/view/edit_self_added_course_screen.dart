@@ -1,25 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/const/utils.dart';
+import 'package:mingle/common/model/course_time_model.dart';
+import 'package:mingle/module/model/course_detail_model.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/timetable/components/add_course_time_dropdowns.dart';
 import 'package:mingle/timetable/model/class_model.dart';
 
-class AddDirectTimeTableScreen extends StatefulWidget {
-  final Function addClass;
-  final Function addClassesAtAddTimeTableScreen;
-  const AddDirectTimeTableScreen({
+class EditSelfAddedCourseScreen extends StatefulWidget {
+  final Function? addClass;
+  final Function? addClassesAtAddTimeTableScreen;
+  final CourseModel course;
+  const EditSelfAddedCourseScreen({
     Key? key,
-    required this.addClass,
-    required this.addClassesAtAddTimeTableScreen,
+    this.addClass,
+    this.addClassesAtAddTimeTableScreen,
+    required this.course,
   }) : super(key: key);
 
   @override
-  State<AddDirectTimeTableScreen> createState() =>
-      _AddDirectTimeTableScreenState();
+  State<EditSelfAddedCourseScreen> createState() =>
+      _EditSelfAddedCourseScreenState();
 }
 
-class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
+class _EditSelfAddedCourseScreenState extends State<EditSelfAddedCourseScreen> {
   List<Widget> timeDropdownWidgets = [];
   String moduleName = "";
   List<String> days = [];
@@ -31,17 +36,31 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
 
   @override
   void initState() {
-    timeDropdownWidgets.add(
-      AddTimeDropdownsWidget(
-        index: 0,
+    for (int i = 0; i < widget.course.courseTimeDtoList.length; i++) {
+      CourseTimeModel timeModel = widget.course.courseTimeDtoList[i];
+      String initialDay = "${convertDayToKorDay(timeModel.dayOfWeek!)}요일";
+      String initialStartTime =
+          CourseTimeModel.removeSecondsFromTime(timeModel.startTime!);
+      String initialEndTime =
+          CourseTimeModel.removeSecondsFromTime(timeModel.endTime!);
+      days.add(initialDay);
+      startTimes.add(initialStartTime);
+      endTimes.add(initialEndTime);
+      timeDropdownWidgets.add(AddTimeDropdownsWidget(
         onDayChange: onDayChange,
         onStartTimeChange: onStartTimeChange,
         onEndTimeChange: onEndTimeChange,
-      ),
-    );
-    days.add("");
-    startTimes.add("");
-    endTimes.add("");
+        index: i,
+        initialDay: initialDay,
+        initialStartTime: initialStartTime,
+        initialEndTime: initialEndTime,
+      ));
+    }
+    moduleName = widget.course.name;
+    moduleCode = widget.course.courseCode;
+    // location = widget.course.venue;
+    profName = widget.course.professor;
+
     super.initState();
   }
 
@@ -112,7 +131,7 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
             ),
             const Spacer(),
             const Text(
-              "강의 직접 추가하기",
+              "강의 수정하기",
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 16.0,
@@ -137,8 +156,14 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
                 ),
               ),
               onTap: () {
-                //TODO: fix
-                // CourseModel classModel = CourseModel(id: id, name: name, courseCode: courseCode, professor: professor, courseTimeDtoList: courseTimeDtoList, rgb: rgb)
+                ClassModel classModel = ClassModel(
+                    days: days,
+                    startTimes: startTimes,
+                    endTimes: endTimes,
+                    moduleCode: moduleCode,
+                    moduleName: moduleName,
+                    location: location,
+                    profName: profName);
                 // widget.addClass(classModel);
                 // widget.addClassesAtAddTimeTableScreen(classModel);
                 Navigator.pop(context);
@@ -178,7 +203,8 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                  child: TextField(
+                  child: TextFormField(
+                    initialValue: moduleName,
                     onChanged: (value) {
                       setState(() {
                         moduleName = value;
@@ -322,7 +348,8 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                  child: TextField(
+                  child: TextFormField(
+                    initialValue: moduleCode,
                     onChanged: (value) {
                       setState(() {
                         moduleCode = value;
@@ -438,7 +465,8 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                  child: TextField(
+                  child: TextFormField(
+                    initialValue: profName,
                     onChanged: (value) {
                       setState(() {
                         profName = value;

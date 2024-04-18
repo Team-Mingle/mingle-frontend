@@ -6,13 +6,19 @@ class AddTimeDropdownsWidget extends StatefulWidget {
   final Function onDayChange;
   final Function onStartTimeChange;
   final Function onEndTimeChange;
+  final String? initialDay;
+  final String? initialStartTime;
+  final String? initialEndTime;
   final int index;
   const AddTimeDropdownsWidget(
       {Key? key,
       required this.onDayChange,
       required this.onStartTimeChange,
       required this.onEndTimeChange,
-      required this.index})
+      required this.index,
+      this.initialDay,
+      this.initialStartTime,
+      this.initialEndTime})
       : super(key: key);
 
   @override
@@ -183,6 +189,14 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
   ];
 
   String? selectedItem1, selectedItem2, selectedItem3;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    selectedItem1 = widget.initialDay;
+    selectedItem2 = widget.initialStartTime;
+    selectedItem3 = widget.initialEndTime;
+  }
 
   @override
   Widget build(BuildContext context) {

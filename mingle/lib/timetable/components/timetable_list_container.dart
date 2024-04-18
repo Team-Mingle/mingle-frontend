@@ -6,8 +6,14 @@ import 'package:mingle/timetable/components/timetable_list_more_modal.dart';
 import 'package:mingle/timetable/model/timetable_preview_model.dart';
 
 class TimetableListWidget extends StatefulWidget {
-  TimetablePreviewModel timetablePreviewModel;
-  TimetableListWidget({super.key, required this.timetablePreviewModel});
+  final Function pinTimetable;
+  final List<TimetablePreviewModel> timetables;
+  final TimetablePreviewModel timetablePreviewModel;
+  const TimetableListWidget(
+      {super.key,
+      required this.timetablePreviewModel,
+      required this.timetables,
+      required this.pinTimetable});
 
   @override
   State<TimetableListWidget> createState() => _TimetableListWidgetState();
@@ -25,6 +31,8 @@ class _TimetableListWidgetState extends State<TimetableListWidget> {
         context: context,
         builder: (BuildContext context) {
           return TimetableMoreModalwidget(
+              pinTimetable: widget.pinTimetable,
+              timetables: widget.timetables,
               timetablePreviewModel: widget.timetablePreviewModel);
         },
       );

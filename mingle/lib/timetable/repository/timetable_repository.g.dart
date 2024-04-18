@@ -3,6 +3,21 @@
 part of 'timetable_repository.dart';
 
 // **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+AddClassDto _$AddClassDtoFromJson(Map<String, dynamic> json) => AddClassDto(
+      courseId: json['courseId'] as int,
+      overrideValidation: json['overrideValidation'] as bool? ?? true,
+    );
+
+Map<String, dynamic> _$AddClassDtoToJson(AddClassDto instance) =>
+    <String, dynamic>{
+      'courseId': instance.courseId,
+      'overrideValidation': instance.overrideValidation,
+    };
+
+// **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
 
@@ -55,7 +70,8 @@ class _TimetableRepository implements TimetableRepository {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
-    final _data = addClassDto;
+    final _data = <String, dynamic>{};
+    _data.addAll(addClassDto.toJson());
     final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
       method: 'POST',
       headers: _headers,
@@ -102,7 +118,7 @@ class _TimetableRepository implements TimetableRepository {
   }
 
   @override
-  Future<TimetableModel> getTimeTable({required int timetableId}) async {
+  Future<TimetableModel> getTimetable({required int timetableId}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
@@ -130,7 +146,7 @@ class _TimetableRepository implements TimetableRepository {
   }
 
   @override
-  Future<TimetableModel> deleteCourse({
+  Future<void> deleteCourse({
     required int timetableId,
     required int courseId,
   }) async {
@@ -139,25 +155,22 @@ class _TimetableRepository implements TimetableRepository {
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<TimetableModel>(Options(
+    await _dio.fetch<void>(_setStreamType<void>(Options(
       method: 'DELETE',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '${timetableId}/course/${courseId}',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = TimetableModel.fromJson(_result.data!);
-    return value;
+        .compose(
+          _dio.options,
+          '/${timetableId}/course/${courseId}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

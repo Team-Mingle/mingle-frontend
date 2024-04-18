@@ -7,11 +7,27 @@ import 'package:mingle/timetable/model/timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_preview_model.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 
-class TimetableList extends StatelessWidget {
+class TimetableList extends StatefulWidget {
   final String semester;
   final List<TimetablePreviewModel> timetables;
   const TimetableList(
       {super.key, required this.semester, required this.timetables});
+
+  @override
+  State<TimetableList> createState() => _TimetableListState();
+}
+
+class _TimetableListState extends State<TimetableList> {
+  void pinTimetable(TimetablePreviewModel timetableToBePinned) {
+    setState(() {
+      widget.timetables.firstWhere((timetable) => timetable.isPinned).isPinned =
+          false;
+      widget.timetables
+          .firstWhere((timetable) =>
+              timetable.timetableId == timetableToBePinned.timetableId)
+          .isPinned = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +43,7 @@ class TimetableList extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  semester,
+                  widget.semester,
                   style: const TextStyle(
                     color: GRAYSCALE_GRAY_03,
                     fontSize: 16.0,
@@ -43,9 +59,11 @@ class TimetableList extends StatelessWidget {
             // TimetableListWidget(),
             // TimetableListWidget(),
             ...List.generate(
-                timetables.length,
+                widget.timetables.length,
                 (index) => TimetableListWidget(
-                    timetablePreviewModel: timetables[index]))
+                    pinTimetable: pinTimetable,
+                    timetables: widget.timetables,
+                    timetablePreviewModel: widget.timetables[index]))
           ],
         ),
       ),

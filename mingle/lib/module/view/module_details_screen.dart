@@ -91,6 +91,7 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
                 // postDetailFuture(postId),
                 builder: (context, AsyncSnapshot<CourseDetailModel> snapshot) {
                   if (!snapshot.hasData) {
+                    print(snapshot);
                     return const Center(
                       child: CircularProgressIndicator(),
                     );

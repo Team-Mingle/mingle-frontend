@@ -8,9 +8,9 @@ part of 'course_time_model.dart';
 
 CourseTimeModel _$CourseTimeModelFromJson(Map<String, dynamic> json) =>
     CourseTimeModel(
-      dayOfWeek: json['dayOfWeek'] as String,
-      startTime: json['startTime'] as String,
-      endTime: json['endTime'] as String,
+      dayOfWeek: json['dayOfWeek'] as String?,
+      startTime: json['startTime'] as String?,
+      endTime: json['endTime'] as String?,
     );
 
 Map<String, dynamic> _$CourseTimeModelToJson(CourseTimeModel instance) =>

@@ -1,24 +1,33 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/module/model/course_model.dart';
+import 'package:mingle/module/view/add_module_review_screen.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/module/view/module_review_main_screen.dart';
 import 'package:mingle/timetable/components/add_friend_dialog.dart';
 import 'package:mingle/timetable/components/timetable_list_more_modal.dart';
 import 'package:mingle/timetable/model/class_model.dart';
+import 'package:mingle/module/model/course_model.dart';
+import 'package:mingle/timetable/model/timetable_list_model.dart';
+import 'package:mingle/timetable/model/timetable_model.dart';
+import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
 import 'package:mingle/timetable/repository/friend_repository.dart';
+import 'package:mingle/timetable/repository/timetable_repository.dart';
 import 'package:mingle/timetable/view/add_timetable_screen.dart';
 import 'package:mingle/timetable/components/timetable_grid.dart';
+import 'package:mingle/timetable/view/edit_self_added_course_screen.dart';
 import 'package:mingle/timetable/view/timetable_list_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class TimeTableHomeScreen extends ConsumerStatefulWidget {
-  final int flag = 1;
-
   const TimeTableHomeScreen({
     Key? key,
   }) : super(key: key);
@@ -30,255 +39,307 @@ class TimeTableHomeScreen extends ConsumerStatefulWidget {
 
 class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   bool _isFriendListExpanded = false;
-  // List<Color> availableCoursePalette = [
-  //   const Color(0xFFFBE9EF),
-  //   const Color(0xFFDCF5DA),
-  //   const Color(0xFFFFEBCD),
-  //   const Color(0xFFE1F6F6),
-  //   const Color(0xFFEFDDEF),
-  //   const Color(0xFFD4E2F3),
-  //   const Color(0xFFEBD6CB),
-  //   const Color(0xFFBDD4C7),
-  //   const Color(0xFFCECEE9),
-  //   const Color(0xFFE7EFCE),
-  // ];
   String shareCodeName = "";
-
+  TimetableModel? timetable;
   List<Color> usedCoursePalette = [];
-  List<Widget> addedClasses = [];
-  // int daysLength = 7;
-  // List<Widget> timetable = List.generate(91, (index) {
-  //   int row = index ~/ 7;
-  //   int col = index % 7;
-  //   double height = 60.0;
-  //   double width = 47.0;
+  List<Widget> addedCourses = [];
+  int flag = 1;
 
-  //   return Container(
-  //     height: height,
-  //     width: width,
-  //     color: Colors.white,
-  //     child: Text("$row $col"),
-  //   );
-  // });
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getClasses();
+  }
 
-  // List<List<Widget>> newTimetable = List.generate(7, (col) {
-  //   return List.generate(
-  //       13,
-  //       (row) => Container(
-  //             // color: Colors.white,
-  //             height: 61,
-  //             width: 48,
-  //             decoration: BoxDecoration(
-  //               color: Colors.white,
-  //               border: Border(
-  //                 // bottom: BorderSide(color: GRAYSCALE_GRAY_02),
-  //                 top: row == 0
-  //                     ? BorderSide.none
-  //                     : const BorderSide(color: GRAYSCALE_GRAY_01),
-  //                 right: col == 6
-  //                     ? BorderSide.none
-  //                     : const BorderSide(color: GRAYSCALE_GRAY_01),
-  //                 // right: BorderSide(color: GRAYSCALE_GRAY_02, width: 0.0)
-  //               ),
-  //             ),
-  //             child: Text("$row $col"),
-  //           ));
-  // });
-
-  void MoreButtonModal() {
-    Future.delayed(const Duration(milliseconds: 40)).then((_) {
-      showModalBottomSheet<void>(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        isScrollControlled: false,
-        context: context,
-        builder: (BuildContext context) {
-          return Container(); //TODO: fix later
-          // return const TimetableMoreModalwidget();
-        },
-      );
+  void getClasses() async {
+    if (ref.read(pinnedTimetableIdProvider) == null) {
+      setState(() {
+        flag = 0;
+      });
+      return;
+    }
+    TimetableModel currentTimetable = await ref
+        .read(timetableRepositoryProvider)
+        .getTimetable(timetableId: ref.read(pinnedTimetableIdProvider)!);
+    List<CourseModel> courses = currentTimetable.coursePreviewDtoList;
+    List<Widget> coursesToBeAdded = [];
+    for (CourseModel course in courses) {
+      coursesToBeAdded
+          .addAll(course.generateClasses(() => showCourseDetailModal(course)));
+    }
+    setState(() {
+      timetable = currentTimetable;
+      addedCourses = coursesToBeAdded;
     });
   }
 
-  // void addClass(ClassModel classModel) {
-  //   print(classModel.days);
-  //   print(classModel.startTimes);
-  //   print(classModel.endTimes);
-  //   print(classModel.moduleName);
-  //   print(classModel.moduleCode);
-  //   print(classModel.location);
-  //   print(classModel.profName);
-  //   List<List<int>> startTimesIndex = [];
-  //   List<List<int>> endTimesIndex = [];
-  //   List<int> colIndex = [];
-  //   addedClasses.add(classModel);
-  //   Color currentColor = availableCoursePalette[0];
-  //   usedCoursePalette.add(currentColor);
-  //   availableCoursePalette.removeAt(0);
-  //   for (String startTime in classModel.startTimes) {
-  //     startTimesIndex.add(classModel.convertTimeToIndex(startTime));
-  //   }
-  //   for (String endTime in classModel.endTimes) {
-  //     endTimesIndex.add(classModel.convertTimeToIndex(endTime));
-  //   }
-  //   for (String day in classModel.days) {
-  //     colIndex.add(classModel.convertDayToInt(day));
-  //   }
-  //   //Case 1: start hour and end hour equal
-  //   //Case 2: end hour > start hour
-
-  //   for (int i = 0; i < colIndex.length; i++) {
-  //     List<int> startTimeIndex = startTimesIndex[i];
-  //     List<int> endTimeIndex = endTimesIndex[i];
-  //     int col = colIndex[i];
-  //     int startHour = startTimeIndex[0];
-  //     double startMinutes = startTimeIndex[1].toDouble();
-  //     int endHour = endTimeIndex[0];
-  //     double endMinutes = endTimeIndex[1].toDouble();
-  //     if (startHour == endHour) {
-  //       int index = (startHour * 7) + col;
-  //       List<Widget> newTimetable = timetable;
-  //       newTimetable[index] = SizedBox(
-  //         width: double.infinity,
-  //         height: 60.0,
-  //         child: Column(children: [
-  //           Container(
-  //             height: startMinutes,
-  //             color: Colors.white,
-  //           ),
-  //           Container(
-  //             height: endMinutes - startMinutes,
-  //             width: double.infinity,
-  //             color: currentColor,
-  //             child: Column(
-  //                 crossAxisAlignment: CrossAxisAlignment.start,
-  //                 children: [
-  //                   Text(
-  //                     classModel.moduleCode,
-  //                     style: const TextStyle(
-  //                         fontSize: 12.0,
-  //                         letterSpacing: -0.005,
-  //                         height: 1.3,
-  //                         fontWeight: FontWeight.w600),
-  //                   ),
-  //                   Text(
-  //                     classModel.location,
-  //                     style: const TextStyle(fontSize: 12.0),
-  //                   )
-  //                 ]),
-  //           ),
-  //           Container(
-  //             height: 60 - endMinutes,
-  //             color: Colors.white,
-  //           )
-  //         ]),
-  //       );
-  //       setState(() {
-  //         timetable = newTimetable;
-  //       });
-  //     } else {
-  //       for (int j = startHour;
-  //           j <= (endMinutes > 0 ? endHour : endHour - 1);
-  //           j++) {
-  //         int index = (j * 7) + col;
-  //         if (j == startHour) {
-  //           setState(() {
-  //             timetable[index] = SizedBox(
-  //               width: double.infinity,
-  //               height: 60.0,
-  //               child: Column(children: [
-  //                 Container(
-  //                   height: startMinutes,
-  //                   color: Colors.white,
-  //                 ),
-  //                 Container(
-  //                   height: 60 - startMinutes,
-  //                   color: currentColor,
-  //                   child: startMinutes > 30
-  //                       ? Align(
-  //                           alignment: Alignment.bottomLeft,
-  //                           child: Text(
-  //                             classModel.moduleCode,
-  //                             style: const TextStyle(
-  //                                 fontSize: 12.0,
-  //                                 letterSpacing: -0.005,
-  //                                 height: 1.3,
-  //                                 fontWeight: FontWeight.w600),
-  //                           ))
-  //                       : Align(
-  //                           alignment: Alignment.topLeft,
-  //                           child: Column(
-  //                               crossAxisAlignment: CrossAxisAlignment.start,
-  //                               children: [
-  //                                 Text(
-  //                                   classModel.moduleCode,
-  //                                   style: const TextStyle(
-  //                                       fontSize: 12.0,
-  //                                       letterSpacing: -0.005,
-  //                                       height: 1.3,
-  //                                       fontWeight: FontWeight.w600),
-  //                                 ),
-  //                                 Text(
-  //                                   classModel.location,
-  //                                   style: const TextStyle(fontSize: 12.0),
-  //                                 )
-  //                               ]),
-  //                         ),
-  //                 ),
-  //               ]),
-  //             );
-  //           });
-  //         } else if (j == endHour) {
-  //           setState(() {
-  //             timetable[index] = SizedBox(
-  //               width: double.infinity,
-  //               height: 60.0,
-  //               child: Column(children: [
-  //                 Container(
-  //                   height: endMinutes,
-  //                   color: currentColor,
-  //                   child: endHour == startHour + 1 && startMinutes > 30
-  //                       ? Align(
-  //                           alignment: Alignment.topLeft,
-  //                           child: Text(
-  //                             classModel.location,
-  //                             style: const TextStyle(fontSize: 12.0),
-  //                           ))
-  //                       : Container(),
-  //                 ),
-  //                 Container(
-  //                   height: 60 - endMinutes,
-  //                   color: Colors.white,
-  //                 )
-  //               ]),
-  //             );
-  //           });
-  //         } else {
-  //           setState(() {
-  //             timetable[index] = Container(
-  //               width: double.infinity,
-  //               height: 60.0,
-  //               color: currentColor,
-  //               child: j == startHour + 1 && startMinutes > 30
-  //                   ? Align(
-  //                       alignment: Alignment.topLeft,
-  //                       child: Text(
-  //                         classModel.location,
-  //                         style: const TextStyle(fontSize: 12.0),
-  //                       ))
-  //                   : Container(),
-  //             );
-  //           });
-  //         }
-  //       }
-  //     }
-  //   }
+  // void MoreButtonModal() {
+  //   Future.delayed(const Duration(milliseconds: 40)).then((_) {
+  // showModalBottomSheet<void>(
+  //   shape: RoundedRectangleBorder(
+  //     borderRadius: BorderRadius.circular(20.0),
+  //   ),
+  //   isScrollControlled: false,
+  //   context: context,
+  //   builder: (BuildContext context) {
+  //     return Container(); //TODO: fix later
+  //     // return const TimetableMoreModalwidget();
+  //   },
+  // );
+  //   });
   // }
-  void addClass(ClassModel classModel) {
+
+  void showTimetableSettingModal() {
+    showModalBottomSheet<void>(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      isScrollControlled: false,
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32.0),
+          child: Column(
+            children: [
+              GestureDetector(
+                onTap: () {},
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 14.0),
+                  child: const Text(
+                    "시간표 이름 변경하기",
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 14.0),
+                  child: const Text(
+                    "시간표 삭제하기",
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void showCourseDetailModal(CourseModel currentCourse) {
+    showModalBottomSheet<void>(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      isScrollControlled: false,
+      context: context,
+      builder: (BuildContext context) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(12.0),
+          child: Container(
+            height: 311.0,
+            color: Colors.white,
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  currentCourse.name,
+                  style: const TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: -0.32),
+                ),
+                const SizedBox(
+                  height: 4.0,
+                ),
+                Text(
+                  currentCourse.courseCode,
+                  style: const TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: -0.32),
+                ),
+                const SizedBox(
+                  height: 4.0,
+                ),
+                Text(
+                  "${currentCourse.professor} ${currentCourse.getStartTimes()}",
+                  style: const TextStyle(
+                      color: GRAYSCALE_GRAY_04, letterSpacing: -0.14),
+                ),
+                const Divider(
+                  height: 32.0,
+                  color: GRAYSCALE_GRAY_01_5,
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => ModuleDetailsScreen(
+                        courseId: currentCourse.id,
+                        moduleName: currentCourse.name,
+                      ),
+                    ),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 14.0),
+                    child: Text(
+                      "강의상세/ 강의평 보기",
+                      style: TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (_) => AddModuleReviewScreen(
+                              moduleId: currentCourse.id,
+                              moduleName: currentCourse.name,
+                            )),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 14.0),
+                    child: Text(
+                      "강의평 작성하기",
+                      style: TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    deleteClass(currentCourse);
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 14.0),
+                    child: Text(
+                      "삭제하기",
+                      style: TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void showSelfAddedCourseDetailModal(CourseModel currentCourse) {
+    showModalBottomSheet<void>(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      isScrollControlled: false,
+      context: context,
+      builder: (BuildContext context) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(12.0),
+          child: Container(
+            height: 311.0,
+            color: Colors.white,
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  currentCourse.name,
+                  style: const TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: -0.32),
+                ),
+                const SizedBox(
+                  height: 4.0,
+                ),
+                Text(
+                  currentCourse.courseCode,
+                  style: const TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: -0.32),
+                ),
+                const SizedBox(
+                  height: 4.0,
+                ),
+                Text(
+                  "${currentCourse.professor} ${currentCourse.getStartTimes()}",
+                  style: const TextStyle(
+                      color: GRAYSCALE_GRAY_04, letterSpacing: -0.14),
+                ),
+                const Divider(
+                  height: 32.0,
+                  color: GRAYSCALE_GRAY_01_5,
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => ModuleDetailsScreen(
+                            courseId: currentCourse.id,
+                            moduleName: currentCourse.name,
+                          ))),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 14.0),
+                    child: Text(
+                      "강의 상세보기",
+                      style: TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) =>
+                          EditSelfAddedCourseScreen(course: currentCourse))),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 14.0),
+                    child: Text(
+                      "강의 수정하기",
+                      style: TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    deleteClass(currentCourse);
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 14.0),
+                    child: Text(
+                      "삭제하기",
+                      style: TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void addClass(CourseModel courseModel) {
     setState(() {
-      addedClasses.addAll(classModel.generateClases());
+      addedCourses.addAll(courseModel
+          .generateClasses(() => showCourseDetailModal(courseModel)));
     });
+  }
+
+  void deleteClass(CourseModel courseModel) async {
+    try {
+      await ref.read(timetableRepositoryProvider).deleteCourse(
+          timetableId: ref.watch(pinnedTimetableIdProvider)!,
+          courseId: courseModel.id);
+      getClasses();
+    } on DioException catch (e) {
+      print(e);
+    }
   }
 
   Future<dynamic> shareOrRegisterModal() => showModalBottomSheet(
@@ -860,17 +921,20 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
             ),
           ),
         ),
-        title: const Row(
+        title: Row(
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 8.0,
                 ),
                 Text(
-                  "2022년 2학기",
-                  style: TextStyle(
+                  timetable == null
+                      ? ""
+                      : TimetableListModel.convertKeyToSemester(
+                          timetable!.semester),
+                  style: const TextStyle(
                     color: GRAYSCALE_GRAY_04,
                     fontSize: 12,
                     fontFamily: 'Pretendard',
@@ -878,8 +942,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                   ),
                 ),
                 Text(
-                  "시간표 이름",
-                  style: TextStyle(
+                  timetable == null ? "" : timetable!.name,
+                  style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16.0,
                     letterSpacing: -0.02,
@@ -888,12 +952,12 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                 ),
               ],
             ),
-            Spacer(),
+            const Spacer(),
           ],
         ),
         actions: <Widget>[
@@ -911,7 +975,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => AddTimeTableScreen(
-                      addClass: addClass, addedClasses: addedClasses),
+                      addClass: addClass, addedClasses: addedCourses),
                 ),
               );
             },
@@ -945,7 +1009,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
               ),
             ),
             onPressed: () {
-              MoreButtonModal();
+              // MoreButtonModal();
             },
           ),
         ],
@@ -961,9 +1025,9 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  if (widget.flag == 0) // flag 값이 0인 경우
+                  if (flag == 0) // flag 값이 0인 경우
                     const SizedBox(height: 321),
-                  if (widget.flag == 0)
+                  if (flag == 0)
                     const Text(
                       '아직 시간표를 만들지 않았어요.',
                       textAlign: TextAlign.center,
@@ -975,8 +1039,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                  if (widget.flag == 0) const SizedBox(height: 8),
-                  if (widget.flag == 0)
+                  if (flag == 0) const SizedBox(height: 8),
+                  if (flag == 0)
                     GestureDetector(
                       onTap: () {
                         print('새 시간표 추가하기');
@@ -1004,10 +1068,10 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                         ],
                       ),
                     ),
-                  if (widget.flag == 0) const SizedBox(height: 284),
-                  if (widget.flag == 1) // flag 값이 1인 경우
+                  if (flag == 0) const SizedBox(height: 284),
+                  if (flag == 1) // flag 값이 1인 경우
                     TimeTableGrid(
-                      addedClasses: addedClasses,
+                      addedClasses: addedCourses,
                     ),
                   const SizedBox(
                     height: 24.0,

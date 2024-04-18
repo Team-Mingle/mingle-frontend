@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:mingle/timetable/model/course_preview_model.dart';
+import 'package:mingle/module/model/course_model.dart';
 
 part 'timetable_model.g.dart';
 
@@ -7,12 +7,12 @@ part 'timetable_model.g.dart';
 class TimetableModel {
   final String name;
   final String semester;
-  final List<CoursePreviewModel> coursePreviewResponseList;
+  final List<CourseModel> coursePreviewDtoList;
 
   TimetableModel(
       {required this.name,
       required this.semester,
-      required this.coursePreviewResponseList});
+      required this.coursePreviewDtoList});
 
   factory TimetableModel.fromJson(Map<String, dynamic> json) =>
       _$TimetableModelFromJson(json);

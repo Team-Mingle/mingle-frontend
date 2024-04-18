@@ -6,9 +6,9 @@ part 'timetable_preview_model.g.dart';
 class TimetablePreviewModel {
   final int timetableId;
   final String semester;
-  final String name;
+  String name;
   final int orderNumber;
-  final bool isPinned;
+  bool isPinned;
 
   TimetablePreviewModel({
     required this.timetableId,

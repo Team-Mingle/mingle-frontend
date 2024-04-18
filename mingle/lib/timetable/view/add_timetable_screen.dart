@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/timetable/components/search_course_modal.dart';
 import 'package:mingle/timetable/model/class_model.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
@@ -28,21 +29,24 @@ class _AddTimeTableScreenState extends State<AddTimeTableScreen> {
         isScrollControlled: false,
         context: context,
         builder: (BuildContext context) {
-          return const SearchCourseModalWidget();
+          return SearchCourseModalWidget(
+            addClass: widget.addClass,
+            addClassesAtAddTimeTableScreen: addClassesAtAddTimeTableScreen,
+          );
         },
       );
     });
     super.initState();
   }
 
+  void addClassesAtAddTimeTableScreen(CourseModel courseModel) {
+    setState(() {
+      widget.addedClasses.addAll(courseModel.generateClasses(() {}));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    void addClassesAtAddTimeTableScreen(ClassModel classModel) {
-      setState(() {
-        widget.addedClasses.addAll(classModel.generateClases());
-      });
-    }
-
     // print(t);
     return Scaffold(
       body: SafeArea(

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/dio/dio.dart';
 import 'package:mingle/timetable/model/timetable_list_model.dart';
@@ -38,19 +39,22 @@ abstract class TimetableRepository {
 
   @GET('/{timetableId}')
   @Headers({'accessToken': 'true'})
-  Future<TimetableModel> getTimeTable({
+  Future<TimetableModel> getTimetable({
     @Path() required int timetableId,
   });
 
-  @DELETE('{timetableId}/course/{courseId}')
+  @DELETE('/{timetableId}/course/{courseId}')
   @Headers({'accessToken': 'true'})
-  Future<TimetableModel> deleteCourse(
+  Future<void> deleteCourse(
       {@Path() required int timetableId, @Path() required int courseId});
 }
 
+@JsonSerializable()
 class AddClassDto {
   final int courseId;
   final bool overrideValidation;
 
-  AddClassDto({required this.courseId, required this.overrideValidation});
+  AddClassDto({required this.courseId, this.overrideValidation = true});
+
+  Map<String, dynamic> toJson() => _$AddClassDtoToJson(this);
 }

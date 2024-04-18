@@ -146,6 +146,7 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
               builder: (context,
                   AsyncSnapshot<CursorPagination<CourseModel>> snapshot) {
                 if (!snapshot.hasData) {
+                  print(snapshot);
                   return const Center(child: CircularProgressIndicator());
                 }
                 CursorPagination<CourseModel> courseList = snapshot.data!;
