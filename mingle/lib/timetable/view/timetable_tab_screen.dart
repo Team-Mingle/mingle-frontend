@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mingle/common/component/expanded_section.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
@@ -212,7 +213,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                 GestureDetector(
                   onTap: () {
                     Navigator.of(context).pop();
-                    deleteClass(currentCourse);
+                    // deleteClass(currentCourse);
+                    showDeleteCourseDialog(currentCourse);
                   },
                   child: const Padding(
                     padding: EdgeInsets.symmetric(vertical: 14.0),
@@ -398,105 +400,114 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   Future<dynamic> firstRegisterCodeModal() => showModalBottomSheet(
         backgroundColor: Colors.transparent,
         context: context,
+        isScrollControlled: true,
         builder: (BuildContext context) {
-          return Container(
-            height: 408.0,
-            padding: const EdgeInsets.symmetric(horizontal: 20.0)
-                .copyWith(top: 20.0, bottom: 24.0),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(
-                Radius.circular(20),
-              ),
-            ),
-            child: Stack(
-              children: [
-                Align(
-                    alignment: Alignment.topRight,
-                    child: GestureDetector(
-                      onTap: () => Navigator.of(context).pop(),
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 4.0),
-                        child: SvgPicture.asset(
-                            "assets/img/timetable_screen/close.svg"),
-                      ),
-                    )),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(
-                      height: 4.0,
-                    ),
-                    const Text(
-                      "다른 사용자 코드 등록하기",
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    const SizedBox(
-                      height: 37.0,
-                    ),
-                    Container(
-                      height: 48.0,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12.0,
-                      ),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: GRAYSCALE_GRAY_02),
-                          borderRadius: BorderRadius.circular(8.0)),
-                      child: Center(
-                        child: TextFormField(
-                          onChanged: (nickname) {},
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: "다른 사용자의 코드를 붙여넣으세요.",
-                            hintStyle: TextStyle(
-                                color: GRAYSCALE_GRAY_03, fontSize: 16.0),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 152.0,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        firstShareCodeModal();
-                      },
-                      child: Container(
-                        height: 48.0,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
-                            borderRadius: BorderRadius.circular(8.0)),
-                        child: const Center(
-                          child: Text(
-                            "내 코드 공유할래요",
-                            style: TextStyle(color: PRIMARY_COLOR_ORANGE_02),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 8.0,
-                    ),
-                    GestureDetector(
-                      onTap: () => secondRegisterCodeModal(),
-                      child: Container(
-                        height: 48.0,
-                        decoration: BoxDecoration(
-                            color: PRIMARY_COLOR_ORANGE_02,
-                            border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
-                            borderRadius: BorderRadius.circular(8.0)),
-                        child: const Center(
-                          child: Text(
-                            "다음",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+          return AnimatedPadding(
+            duration: const Duration(milliseconds: 150),
+            curve: Curves.easeOut,
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Container(
+              height: 412.0,
+              padding: const EdgeInsets.symmetric(horizontal: 20.0)
+                  .copyWith(top: 20.0, bottom: 24.0),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(20),
                 ),
-              ],
+              ),
+              child: Stack(
+                children: [
+                  Align(
+                      alignment: Alignment.topRight,
+                      child: GestureDetector(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 4.0),
+                          child: SvgPicture.asset(
+                              "assets/img/timetable_screen/close.svg"),
+                        ),
+                      )),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(
+                        height: 4.0,
+                      ),
+                      const Text(
+                        "다른 사용자 코드 등록하기",
+                        style: TextStyle(fontSize: 16.0),
+                      ),
+                      const SizedBox(
+                        height: 37.0,
+                      ),
+                      Container(
+                        height: 48.0,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12.0,
+                        ),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: GRAYSCALE_GRAY_02),
+                            borderRadius: BorderRadius.circular(8.0)),
+                        child: Center(
+                          child: TextFormField(
+                            onChanged: (nickname) {},
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "다른 사용자의 코드를 붙여넣으세요.",
+                              hintStyle: TextStyle(
+                                  color: GRAYSCALE_GRAY_03, fontSize: 16.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 152.0,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          firstShareCodeModal();
+                        },
+                        child: Container(
+                          height: 48.0,
+                          decoration: BoxDecoration(
+                              border:
+                                  Border.all(color: PRIMARY_COLOR_ORANGE_02),
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: const Center(
+                            child: Text(
+                              "내 코드 공유할래요",
+                              style: TextStyle(color: PRIMARY_COLOR_ORANGE_02),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8.0,
+                      ),
+                      GestureDetector(
+                        onTap: () => secondRegisterCodeModal(),
+                        child: Container(
+                          height: 48.0,
+                          decoration: BoxDecoration(
+                              color: PRIMARY_COLOR_ORANGE_02,
+                              border:
+                                  Border.all(color: PRIMARY_COLOR_ORANGE_02),
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: const Center(
+                            child: Text(
+                              "다음",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         },
@@ -624,122 +635,134 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
       shareCodeName = defaultName;
     });
     return showModalBottomSheet<String>(
+      isScrollControlled: true,
       backgroundColor: Colors.transparent,
       context: context,
       builder: (BuildContext context) {
-        return Container(
-          height: 408.0,
-          padding: const EdgeInsets.symmetric(horizontal: 20.0)
-              .copyWith(top: 20.0, bottom: 24.0),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(
-              Radius.circular(20),
-            ),
-          ),
-          child: Stack(
-            children: [
-              Align(
-                  alignment: Alignment.topRight,
-                  child: GestureDetector(
-                    onTap: () => Navigator.of(context).pop(),
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 4.0),
-                      child: SvgPicture.asset(
-                          "assets/img/timetable_screen/close.svg"),
-                    ),
-                  )),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+        return AnimatedPadding(
+          duration: const Duration(milliseconds: 150),
+          curve: Curves.easeOut,
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Container(
+              height: 415.0,
+              padding: const EdgeInsets.symmetric(horizontal: 20.0)
+                  .copyWith(top: 20.0, bottom: 24.0),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(20),
+                ),
+              ),
+              child: Stack(
                 children: [
-                  const SizedBox(
-                    height: 4.0,
-                  ),
-                  const Text(
-                    "내 코드 공유하기",
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                  const SizedBox(
-                    height: 8.0,
-                  ),
-                  const Text(
-                    "친구에게 보여질 이름을 작성하세요.",
-                    style: TextStyle(color: GRAYSCALE_GRAY_04),
-                  ),
-                  const SizedBox(
-                    height: 12.0,
-                  ),
-                  Container(
-                    height: 48.0,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12.0,
-                    ),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: GRAYSCALE_GRAY_02),
-                        borderRadius: BorderRadius.circular(8.0)),
-                    child: Center(
-                      child: TextFormField(
-                        maxLength: 10,
-                        onChanged: (name) {
-                          setState(() {
-                            shareCodeName = name;
-                          });
+                  Align(
+                      alignment: Alignment.topRight,
+                      child: GestureDetector(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 4.0),
+                          child: SvgPicture.asset(
+                              "assets/img/timetable_screen/close.svg"),
+                        ),
+                      )),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(
+                        height: 4.0,
+                      ),
+                      const Text(
+                        "내 코드 공유하기",
+                        style: TextStyle(fontSize: 16.0),
+                      ),
+                      const SizedBox(
+                        height: 8.0,
+                      ),
+                      const Text(
+                        "친구에게 보여질 이름을 작성하세요.",
+                        style: TextStyle(color: GRAYSCALE_GRAY_04),
+                      ),
+                      const SizedBox(
+                        height: 12.0,
+                      ),
+                      Container(
+                        height: 48.0,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12.0,
+                        ),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: GRAYSCALE_GRAY_02),
+                            borderRadius: BorderRadius.circular(8.0)),
+                        child: Center(
+                          child: TextFormField(
+                            maxLength: 10,
+                            onChanged: (name) {
+                              setState(() {
+                                shareCodeName = name;
+                              });
+                            },
+                            initialValue: defaultName,
+                            decoration: InputDecoration(
+                              counterText: "",
+                              border: InputBorder.none,
+                              suffix: Text("${shareCodeName.length}/10"),
+                              hintText: "이름 입력",
+                              hintStyle: const TextStyle(
+                                  color: GRAYSCALE_GRAY_03, fontSize: 16.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 152.0,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          firstRegisterCodeModal();
                         },
-                        initialValue: defaultName,
-                        decoration: InputDecoration(
-                          counterText: "",
-                          border: InputBorder.none,
-                          suffix: Text("${shareCodeName.length}/10"),
-                          hintText: "이름 입력",
-                          hintStyle: const TextStyle(
-                              color: GRAYSCALE_GRAY_03, fontSize: 16.0),
+                        child: Container(
+                          height: 48.0,
+                          decoration: BoxDecoration(
+                              border:
+                                  Border.all(color: PRIMARY_COLOR_ORANGE_02),
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: const Center(
+                            child: Text(
+                              "다른 사용자 코드 등록할래요",
+                              style: TextStyle(color: PRIMARY_COLOR_ORANGE_02),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 152.0,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      firstRegisterCodeModal();
-                    },
-                    child: Container(
-                      height: 48.0,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
-                          borderRadius: BorderRadius.circular(8.0)),
-                      child: const Center(
-                        child: Text(
-                          "다른 사용자 코드 등록할래요",
-                          style: TextStyle(color: PRIMARY_COLOR_ORANGE_02),
+                      const SizedBox(
+                        height: 8.0,
+                      ),
+                      GestureDetector(
+                        onTap: () => secondShareCodeModal(),
+                        child: Container(
+                          height: 48.0,
+                          decoration: BoxDecoration(
+                              color: PRIMARY_COLOR_ORANGE_02,
+                              border:
+                                  Border.all(color: PRIMARY_COLOR_ORANGE_02),
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: const Center(
+                            child: Text(
+                              "다음",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8.0,
-                  ),
-                  GestureDetector(
-                    onTap: () => secondShareCodeModal(),
-                    child: Container(
-                      height: 48.0,
-                      decoration: BoxDecoration(
-                          color: PRIMARY_COLOR_ORANGE_02,
-                          border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
-                          borderRadius: BorderRadius.circular(8.0)),
-                      child: const Center(
-                        child: Text(
-                          "다음",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
+                    ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         );
       },
@@ -895,6 +918,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: BACKGROUND_COLOR_GRAY,
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
@@ -1076,74 +1100,45 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                   const SizedBox(
                     height: 24.0,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _isFriendListExpanded = !_isFriendListExpanded;
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 12),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: GRAYSCALE_GRAY_02,
-                            width: 1,
-                          ),
-                        ),
-                        child: ExpansionPanelList(
-                          elevation: 0,
-                          expansionCallback: (int panelIndex, bool isExpanded) {
-                            setState(() {
-                              _isFriendListExpanded = !_isFriendListExpanded;
-                            });
-                          },
-                          children: [
-                            ExpansionPanel(
-                              backgroundColor: Colors.transparent,
-                              headerBuilder:
-                                  (BuildContext context, bool isExpanded) {
-                                return const Row(
-                                  children: [
-                                    Text(
-                                      "친구 목록",
-                                      style: TextStyle(
-                                        fontFamily: "Pretendard",
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isFriendListExpanded = !_isFriendListExpanded;
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12.0),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: GRAYSCALE_GRAY_02),
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  const Text(
+                                    "친구 목록",
+                                    style: TextStyle(
                                         fontSize: 16.0,
-                                        letterSpacing: -0.02,
-                                        height: 1.5,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.black,
-                                      ),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ],
-                                );
-                              },
-                              body: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 16.0,
-                                  horizontal: 14.5,
-                                ),
-                                child: const Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("Friend 1"),
-                                    Text("Friend 2"),
-                                    Text("Friend 3"),
-                                  ],
-                                ),
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  const Spacer(),
+                                  SvgPicture.asset(_isFriendListExpanded
+                                      ? "assets/img/module_review_screen/up_tick_icon.svg"
+                                      : "assets/img/module_review_screen/down_tick_icon.svg")
+                                ],
                               ),
-                              isExpanded: _isFriendListExpanded,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                              ExpandedSection(
+                                  expand: _isFriendListExpanded,
+                                  child: Container(
+                                    height: 50.0,
+                                  )),
+                            ],
+                          ),
+                        )),
                   ),
                   const SizedBox(
                     height: 16.0,
@@ -1198,6 +1193,91 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  void showDeleteCourseDialog(CourseModel currentCourse) {
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        insetPadding: EdgeInsets.zero,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0)),
+              // width: 343,
+              padding: const EdgeInsets.only(
+                  top: 32.0, left: 32.0, right: 32.0, bottom: 24.0),
+              child: Column(
+                children: [
+                  const Text(
+                    "선택한 강의를 삭제하시겠습니까?",
+                    style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: -0.32),
+                  ),
+                  const SizedBox(
+                    height: 41.0,
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          deleteClass(currentCourse);
+                        },
+                        child: Container(
+                          height: 40.0,
+                          width: 120.0,
+                          decoration: BoxDecoration(
+                              color: GRAYSCALE_GRAY_01,
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: const Center(
+                            child: Text(
+                              "삭제하기",
+                              style: TextStyle(
+                                  color: GRAYSCALE_GRAY_04,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 8.0,
+                      ),
+                      GestureDetector(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: Container(
+                          height: 40.0,
+                          width: 120.0,
+                          decoration: BoxDecoration(
+                              color: PRIMARY_COLOR_ORANGE_02,
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: const Center(
+                            child: Text(
+                              "취소하기",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

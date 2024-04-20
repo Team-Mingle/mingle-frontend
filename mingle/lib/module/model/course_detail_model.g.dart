@@ -20,7 +20,7 @@ CourseDetailModel _$CourseDetailModelFromJson(Map<String, dynamic> json) =>
       subclass: json['subclass'] as String?,
       memo: json['memo'] as String?,
       prerequisite: json['prerequisite'] as String?,
-      rgb: json['rgb'] as String,
+      rgb: json['rgb'] as String?,
     );
 
 Map<String, dynamic> _$CourseDetailModelToJson(CourseDetailModel instance) =>

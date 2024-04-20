@@ -15,7 +15,7 @@ class CourseModel {
   final String professor;
   final String? subclass;
   final List<CourseTimeModel> courseTimeDtoList;
-  final String rgb;
+  final String? rgb;
 
   CourseModel(
       {required this.id,
@@ -25,7 +25,7 @@ class CourseModel {
       required this.professor,
       this.subclass,
       required this.courseTimeDtoList,
-      required this.rgb});
+      this.rgb});
 
   factory CourseModel.fromJson(Map<String, dynamic> json) =>
       _$CourseModelFromJson(json);
@@ -91,7 +91,7 @@ class CourseModel {
   }
 
   Color convertRGBtoColor() {
-    List<String> rgbList = rgb.split(",");
+    List<String> rgbList = rgb!.split(",");
     int r = int.parse(rgbList[0]);
     int g = int.parse(rgbList[1]);
     int b = int.parse(rgbList[2]);
