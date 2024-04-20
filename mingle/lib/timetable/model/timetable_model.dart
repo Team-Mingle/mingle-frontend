@@ -5,7 +5,7 @@ part 'timetable_model.g.dart';
 
 @JsonSerializable()
 class TimetableModel {
-  final String name;
+  String name;
   final String semester;
   final List<CourseModel> coursePreviewDtoList;
 

@@ -4,6 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/dio/dio.dart';
 import 'package:mingle/timetable/model/code_model.dart';
+import 'package:mingle/timetable/model/friend_model.dart';
 import 'package:mingle/timetable/model/timetable_model.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -24,6 +25,10 @@ abstract class FriendRepository {
   @Headers({'accessToken': 'true'})
   Future<dynamic> addFriend(@Body() AddFriendDto addFriendDto);
 
+  @GET("")
+  @Headers({'accessToken': 'true'})
+  Future<List<FriendModel>> getFriends();
+
   @POST('/code')
   @Headers({'accessToken': 'true'})
   Future<CodeModel> generateCode(@Body() GenerateCodeDto generateCodeDto);
@@ -31,6 +36,10 @@ abstract class FriendRepository {
   @GET('/display-name')
   @Headers({'accessToken': 'true'})
   Future<String> getDefaultName();
+
+  @DELETE('/{friendId}')
+  @Headers({'accessToken': 'true'})
+  Future<void> deleteFriend({@Path() required int friendId});
 
   // @POST('/{timetableId}/course')
   // @Headers({'accessToken': 'true'})

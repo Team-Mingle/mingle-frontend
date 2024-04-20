@@ -50,6 +50,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   String friendDisplayName = "";
   String myDisplayName = "";
   bool isLoading = false;
+  String newTimetableName = "";
   late FToast fToast;
 
   @override
@@ -79,8 +80,31 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     }
     setState(() {
       timetable = currentTimetable;
+      newTimetableName = currentTimetable.name;
       addedCourses = coursesToBeAdded;
     });
+  }
+
+  void changeTimetabelName() async {
+    try {
+      if (newTimetableName == timetable!.name) {
+        return;
+      }
+      await ref.watch(timetableRepositoryProvider).changeTimetableName(
+          timetableId: ref.read(pinnedTimetableIdProvider)!,
+          changeTimetableNameDto:
+              ChangeTimetableNameDto(name: newTimetableName));
+      setState(() {
+        timetable!.name = newTimetableName;
+      });
+    } on DioException catch (e) {
+      fToast.showToast(
+        child: ToastMessage(
+            message: e.response?.data['message'] ?? generalErrorMsg),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
+    }
   }
 
   void addFriend() async {
@@ -124,44 +148,56 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   //   });
   // }
 
-  void showTimetableSettingModal() {
-    showModalBottomSheet<void>(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      isScrollControlled: false,
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32.0),
-          child: Column(
-            children: [
-              GestureDetector(
-                onTap: () {},
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 14.0),
-                  child: const Text(
-                    "시간표 이름 변경하기",
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                ),
+  void showTimetableSettingModal() => showModalBottomSheet<void>(
+        // shape: RoundedRectangleBorder(
+        //   borderRadius: BorderRadius.circular(12.0),
+        // ),
+        isScrollControlled: false,
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (BuildContext context) {
+          return Container(
+            height: 176,
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(12.0),
               ),
-              GestureDetector(
-                onTap: () {},
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 14.0),
-                  child: const Text(
-                    "시간표 삭제하기",
-                    style: TextStyle(fontSize: 16.0),
+            ),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    showChangeTimetableNameDialog();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 14.0),
+                    child: const Text(
+                      "시간표 이름 변경하기",
+                      style: TextStyle(fontSize: 16.0),
+                    ),
                   ),
                 ),
-              )
-            ],
-          ),
-        );
-      },
-    );
-  }
+                GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 14.0),
+                    child: const Text(
+                      "시간표 삭제하기",
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          );
+        },
+      );
 
   void showCourseDetailModal(CourseModel currentCourse) {
     showModalBottomSheet<void>(
@@ -884,7 +920,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                                   ClipboardData(text: code)); // TODO: 코드로 바꾸기
                               Fluttertoast.showToast(
                                   backgroundColor: GRAYSCALE_GRAY_04,
-                                  msg: "링크가 복사되었습니다.",
+                                  msg: "코드가 복사되었습니다.",
                                   toastLength: Toast.LENGTH_LONG,
                                   gravity: ToastGravity.CENTER,
                                   timeInSecForIosWeb: 1,
@@ -1081,9 +1117,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                 height: 24,
               ),
             ),
-            onPressed: () {
-              // MoreButtonModal();
-            },
+            onPressed: showTimetableSettingModal,
           ),
         ],
       ),
@@ -1314,6 +1348,128 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                           child: const Center(
                             child: Text(
                               "취소하기",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void showChangeTimetableNameDialog() {
+    setState(() {
+      newTimetableName = timetable!.name;
+    });
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        insetPadding: EdgeInsets.zero,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0)),
+              // width: 343,
+              padding: const EdgeInsets.only(
+                  top: 32.0, left: 32.0, right: 32.0, bottom: 24.0),
+              child: Column(
+                children: [
+                  const Text(
+                    "시간표 이름 변경하기",
+                    style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: -0.32),
+                  ),
+                  const SizedBox(
+                    height: 16.0,
+                  ),
+                  Container(
+                    height: 48.0,
+                    width: 279.0,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12.0,
+                    ),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: GRAYSCALE_GRAY_02),
+                        borderRadius: BorderRadius.circular(8.0)),
+                    child: Center(
+                      child: TextFormField(
+                        initialValue: timetable!.name,
+                        maxLength: 10,
+                        onChanged: (name) {
+                          setState(() {
+                            newTimetableName = name;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          counterText: "",
+                          border: InputBorder.none,
+                          suffix: Text("${newTimetableName.length}/10"),
+                          hintText: "새 시간표 이름을 작성하세요.",
+                          hintStyle: const TextStyle(
+                              color: GRAYSCALE_GRAY_03, fontSize: 16.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 16.0,
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(
+                          height: 40.0,
+                          width: 120.0,
+                          decoration: BoxDecoration(
+                              color: GRAYSCALE_GRAY_01,
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: const Center(
+                            child: Text(
+                              "취소하기",
+                              style: TextStyle(
+                                  color: GRAYSCALE_GRAY_04,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 8.0,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          changeTimetabelName();
+                        },
+                        child: Container(
+                          height: 40.0,
+                          width: 120.0,
+                          decoration: BoxDecoration(
+                              color: PRIMARY_COLOR_ORANGE_02,
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: const Center(
+                            child: Text(
+                              "변경하기",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w500),

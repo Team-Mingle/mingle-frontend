@@ -17,6 +17,18 @@ Map<String, dynamic> _$AddClassDtoToJson(AddClassDto instance) =>
       'overrideValidation': instance.overrideValidation,
     };
 
+ChangeTimetableNameDto _$ChangeTimetableNameDtoFromJson(
+        Map<String, dynamic> json) =>
+    ChangeTimetableNameDto(
+      name: json['name'] as String,
+    );
+
+Map<String, dynamic> _$ChangeTimetableNameDtoToJson(
+        ChangeTimetableNameDto instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+    };
+
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
@@ -107,6 +119,35 @@ class _TimetableRepository implements TimetableRepository {
         .compose(
           _dio.options,
           '/${timetableId}/pin',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
+  Future<void> changeTimetableName({
+    required int timetableId,
+    required ChangeTimetableNameDto changeTimetableNameDto,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(changeTimetableNameDto.toJson());
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'PATCH',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/${timetableId}/name',
           queryParameters: queryParameters,
           data: _data,
         )
