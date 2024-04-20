@@ -6,6 +6,17 @@ part of 'friend_repository.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+AddFriendDto _$AddFriendDtoFromJson(Map<String, dynamic> json) => AddFriendDto(
+      friendCode: json['friendCode'] as String,
+      myDisplayName: json['myDisplayName'] as String,
+    );
+
+Map<String, dynamic> _$AddFriendDtoToJson(AddFriendDto instance) =>
+    <String, dynamic>{
+      'friendCode': instance.friendCode,
+      'myDisplayName': instance.myDisplayName,
+    };
+
 GenerateCodeDto _$GenerateCodeDtoFromJson(Map<String, dynamic> json) =>
     GenerateCodeDto(
       myDisplayName: json['myDisplayName'] as String,
@@ -38,7 +49,8 @@ class _FriendRepository implements FriendRepository {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
-    final _data = addFriendDto;
+    final _data = <String, dynamic>{};
+    _data.addAll(addFriendDto.toJson());
     final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
       method: 'POST',
       headers: _headers,

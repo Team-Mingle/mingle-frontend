@@ -8,6 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/component/expanded_section.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/const/data.dart';
+import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
@@ -40,17 +42,23 @@ class TimeTableHomeScreen extends ConsumerStatefulWidget {
 
 class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   bool _isFriendListExpanded = false;
-  String shareCodeName = "";
   TimetableModel? timetable;
   List<Color> usedCoursePalette = [];
   List<Widget> addedCourses = [];
   int flag = 1;
+  String friendCode = "";
+  String friendDisplayName = "";
+  String myDisplayName = "";
+  bool isLoading = false;
+  late FToast fToast;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getClasses();
+    fToast = FToast();
+    fToast.init(context);
   }
 
   void getClasses() async {
@@ -73,6 +81,31 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
       timetable = currentTimetable;
       addedCourses = coursesToBeAdded;
     });
+  }
+
+  void addFriend() async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      await ref.watch(friendRepositoryProvider).addFriend(
+          AddFriendDto(friendCode: friendCode, myDisplayName: myDisplayName));
+      setState(() {
+        isLoading = false;
+      });
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+    } on DioException catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      fToast.showToast(
+        child: ToastMessage(
+            message: e.response?.data['message'] ?? generalErrorMsg),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
+    }
   }
 
   // void MoreButtonModal() {
@@ -452,7 +485,11 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                             borderRadius: BorderRadius.circular(8.0)),
                         child: Center(
                           child: TextFormField(
-                            onChanged: (nickname) {},
+                            onChanged: (code) {
+                              setState(() {
+                                friendCode = code;
+                              });
+                            },
                             decoration: const InputDecoration(
                               border: InputBorder.none,
                               hintText: "다른 사용자의 코드를 붙여넣으세요.",
@@ -518,7 +555,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
         context: context,
         builder: (BuildContext context) {
           return Container(
-            height: 408.0,
+            height: 415.0,
             padding: const EdgeInsets.symmetric(horizontal: 20.0)
                 .copyWith(top: 20.0, bottom: 24.0),
             decoration: const BoxDecoration(
@@ -569,10 +606,14 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                           borderRadius: BorderRadius.circular(8.0)),
                       child: Center(
                         child: TextFormField(
-                          onChanged: (nickname) {},
+                          onChanged: (name) {
+                            setState(() {
+                              friendDisplayName = name;
+                            });
+                          },
                           decoration: const InputDecoration(
                             border: InputBorder.none,
-                            hintText: "다른 사용자의 코드를 붙여넣으세요.",
+                            hintText: "이름 입력",
                             hintStyle: TextStyle(
                                 color: GRAYSCALE_GRAY_03, fontSize: 16.0),
                           ),
@@ -604,22 +645,27 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                     const SizedBox(
                       height: 8.0,
                     ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        height: 48.0,
-                        decoration: BoxDecoration(
+                    isLoading
+                        ? const CircularProgressIndicator(
                             color: PRIMARY_COLOR_ORANGE_02,
-                            border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
-                            borderRadius: BorderRadius.circular(8.0)),
-                        child: const Center(
-                          child: Text(
-                            "친구 추가 마치기",
-                            style: TextStyle(color: Colors.white),
+                          )
+                        : GestureDetector(
+                            onTap: addFriend,
+                            child: Container(
+                              height: 48.0,
+                              decoration: BoxDecoration(
+                                  color: PRIMARY_COLOR_ORANGE_02,
+                                  border: Border.all(
+                                      color: PRIMARY_COLOR_ORANGE_02),
+                                  borderRadius: BorderRadius.circular(8.0)),
+                              child: const Center(
+                                child: Text(
+                                  "친구 추가 마치기",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ],
@@ -632,7 +678,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     String defaultName =
         await ref.watch(friendRepositoryProvider).getDefaultName();
     setState(() {
-      shareCodeName = defaultName;
+      myDisplayName = defaultName;
     });
     return showModalBottomSheet<String>(
       isScrollControlled: true,
@@ -701,14 +747,14 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                             maxLength: 10,
                             onChanged: (name) {
                               setState(() {
-                                shareCodeName = name;
+                                myDisplayName = name;
                               });
                             },
                             initialValue: defaultName,
                             decoration: InputDecoration(
                               counterText: "",
                               border: InputBorder.none,
-                              suffix: Text("${shareCodeName.length}/10"),
+                              suffix: Text("${myDisplayName.length}/10"),
                               hintText: "이름 입력",
                               hintStyle: const TextStyle(
                                   color: GRAYSCALE_GRAY_03, fontSize: 16.0),
@@ -772,14 +818,14 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   Future<dynamic> secondShareCodeModal() async {
     String code = (await ref
             .watch(friendRepositoryProvider)
-            .generateCode(GenerateCodeDto(myDisplayName: shareCodeName)))
+            .generateCode(GenerateCodeDto(myDisplayName: myDisplayName)))
         .code;
     return showModalBottomSheet(
       backgroundColor: Colors.transparent,
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: 408.0,
+          height: 418.0,
           padding: const EdgeInsets.symmetric(horizontal: 20.0)
               .copyWith(top: 20.0, bottom: 24.0),
           decoration: const BoxDecoration(
@@ -834,8 +880,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                           const Spacer(),
                           GestureDetector(
                             onTap: () async {
-                              await Clipboard.setData(const ClipboardData(
-                                  text: "your text")); // TODO: 코드로 바꾸기
+                              await Clipboard.setData(
+                                  ClipboardData(text: code)); // TODO: 코드로 바꾸기
                               Fluttertoast.showToast(
                                   backgroundColor: GRAYSCALE_GRAY_04,
                                   msg: "링크가 복사되었습니다.",
@@ -891,7 +937,10 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                     height: 8.0,
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                    },
                     child: Container(
                       height: 48.0,
                       decoration: BoxDecoration(

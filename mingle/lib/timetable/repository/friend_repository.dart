@@ -56,11 +56,14 @@ abstract class FriendRepository {
   //     {@Path() required int timetableId, @Path() required int courseId});
 }
 
+@JsonSerializable()
 class AddFriendDto {
   String friendCode;
   String myDisplayName;
 
   AddFriendDto({required this.friendCode, required this.myDisplayName});
+
+  Map<String, dynamic> toJson() => _$AddFriendDtoToJson(this);
 }
 
 @JsonSerializable()
