@@ -8,7 +8,7 @@ part of 'timetable_repository.dart';
 
 AddClassDto _$AddClassDtoFromJson(Map<String, dynamic> json) => AddClassDto(
       courseId: json['courseId'] as int,
-      overrideValidation: json['overrideValidation'] as bool? ?? true,
+      overrideValidation: json['overrideValidation'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$AddClassDtoToJson(AddClassDto instance) =>
@@ -183,6 +183,35 @@ class _TimetableRepository implements TimetableRepository {
               baseUrl,
             ))));
     final value = TimetableModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<FriendTimetableListModel> getFriendTimetables(
+      {required int friendId}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<FriendTimetableListModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/friend/${friendId}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = FriendTimetableListModel.fromJson(_result.data!);
     return value;
   }
 

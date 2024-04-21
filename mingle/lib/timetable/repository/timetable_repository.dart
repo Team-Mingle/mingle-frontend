@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/dio/dio.dart';
+import 'package:mingle/timetable/model/friend_timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_model.dart';
 import 'package:mingle/timetable/model/timetable_preview_model.dart';
@@ -50,6 +51,12 @@ abstract class TimetableRepository {
     @Path() required int timetableId,
   });
 
+  @GET('/friend/{friendId}')
+  @Headers({'accessToken': 'true'})
+  Future<FriendTimetableListModel> getFriendTimetables({
+    @Path() required int friendId,
+  });
+
   @DELETE('/{timetableId}/course/{courseId}')
   @Headers({'accessToken': 'true'})
   Future<void> deleteCourse(
@@ -61,7 +68,7 @@ class AddClassDto {
   final int courseId;
   final bool overrideValidation;
 
-  AddClassDto({required this.courseId, this.overrideValidation = true});
+  AddClassDto({required this.courseId, this.overrideValidation = false});
 
   Map<String, dynamic> toJson() => _$AddClassDtoToJson(this);
 }

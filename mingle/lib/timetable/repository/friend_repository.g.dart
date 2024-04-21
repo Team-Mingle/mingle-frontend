@@ -72,14 +72,14 @@ class _FriendRepository implements FriendRepository {
   }
 
   @override
-  Future<List<FriendModel>> getFriends() async {
+  Future<FriendListModel> getFriends() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
-        .fetch<List<dynamic>>(_setStreamType<List<FriendModel>>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<FriendListModel>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -95,9 +95,7 @@ class _FriendRepository implements FriendRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    var value = _result.data!
-        .map((dynamic i) => FriendModel.fromJson(i as Map<String, dynamic>))
-        .toList();
+    final value = FriendListModel.fromJson(_result.data!);
     return value;
   }
 

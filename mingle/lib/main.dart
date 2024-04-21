@@ -13,6 +13,7 @@ import 'package:mingle/firebase_notification.dart';
 import 'package:mingle/firebase_options.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.dart';
+import 'package:mingle/timetable/view/friend_timetable_screen.dart';
 import 'package:mingle/timetable/view/timetable_tab_screen.dart';
 import 'package:mingle/user/view/signup_screen/enter_free_domain_email_screen.dart';
 import 'package:mingle/user/view/signup_screen/enter_offer_id_screen.dart';
@@ -266,7 +267,9 @@ class _AppState extends ConsumerState<_App> {
               //  const EnterOfferIdScreen()
               // const FinishTempSinupScreen(),
               const TimeTableHomeScreen()
-
+          //     const FriendTimetableScreen(
+          //   friendId: 1,
+          // ),
           // const ServiceAgreementScreen(),
           ),
     );

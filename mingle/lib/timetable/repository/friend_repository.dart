@@ -4,6 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/dio/dio.dart';
 import 'package:mingle/timetable/model/code_model.dart';
+import 'package:mingle/timetable/model/friend_list_model.dart';
 import 'package:mingle/timetable/model/friend_model.dart';
 import 'package:mingle/timetable/model/timetable_model.dart';
 import 'package:retrofit/retrofit.dart';
@@ -27,7 +28,7 @@ abstract class FriendRepository {
 
   @GET("")
   @Headers({'accessToken': 'true'})
-  Future<List<FriendModel>> getFriends();
+  Future<FriendListModel> getFriends();
 
   @POST('/code')
   @Headers({'accessToken': 'true'})

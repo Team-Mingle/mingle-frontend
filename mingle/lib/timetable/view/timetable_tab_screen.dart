@@ -3,6 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -18,6 +19,7 @@ import 'package:mingle/timetable/components/add_friend_dialog.dart';
 import 'package:mingle/timetable/components/timetable_list_more_modal.dart';
 import 'package:mingle/timetable/model/class_model.dart';
 import 'package:mingle/module/model/course_model.dart';
+import 'package:mingle/timetable/model/friend_model.dart';
 import 'package:mingle/timetable/model/timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_model.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
@@ -26,6 +28,7 @@ import 'package:mingle/timetable/repository/timetable_repository.dart';
 import 'package:mingle/timetable/view/add_timetable_screen.dart';
 import 'package:mingle/timetable/components/timetable_grid.dart';
 import 'package:mingle/timetable/view/edit_self_added_course_screen.dart';
+import 'package:mingle/timetable/view/friend_timetable_screen.dart';
 import 'package:mingle/timetable/view/timetable_list_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -51,6 +54,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   String myDisplayName = "";
   bool isLoading = false;
   String newTimetableName = "";
+  List<FriendModel> friendList = [];
   late FToast fToast;
 
   @override
@@ -58,6 +62,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     // TODO: implement initState
     super.initState();
     getClasses();
+    getFriends();
     fToast = FToast();
     fToast.init(context);
   }
@@ -83,6 +88,18 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
       newTimetableName = currentTimetable.name;
       addedCourses = coursesToBeAdded;
     });
+  }
+
+  void getFriends() async {
+    try {
+      List<FriendModel> friends =
+          (await ref.read(friendRepositoryProvider).getFriends()).friendList;
+      setState(() {
+        friendList = friends;
+      });
+    } on DioException catch (e) {
+      print(e);
+    }
   }
 
   void changeTimetabelName() async {
@@ -132,26 +149,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     }
   }
 
-  // void MoreButtonModal() {
-  //   Future.delayed(const Duration(milliseconds: 40)).then((_) {
-  // showModalBottomSheet<void>(
-  //   shape: RoundedRectangleBorder(
-  //     borderRadius: BorderRadius.circular(20.0),
-  //   ),
-  //   isScrollControlled: false,
-  //   context: context,
-  //   builder: (BuildContext context) {
-  //     return Container(); //TODO: fix later
-  //     // return const TimetableMoreModalwidget();
-  //   },
-  // );
-  //   });
-  // }
-
   void showTimetableSettingModal() => showModalBottomSheet<void>(
-        // shape: RoundedRectangleBorder(
-        //   borderRadius: BorderRadius.circular(12.0),
-        // ),
         isScrollControlled: false,
         context: context,
         backgroundColor: Colors.transparent,
@@ -1216,8 +1214,64 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                               ),
                               ExpandedSection(
                                   expand: _isFriendListExpanded,
-                                  child: Container(
-                                    height: 50.0,
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(
+                                          height: 16.0,
+                                        ),
+                                        if (friendList.isEmpty)
+                                          const Text(
+                                            "아직 추가된 친구가 없네요!\n친구를 추가하면 시간표를 공유할 수 있어요.",
+                                            style: TextStyle(
+                                                color: GRAYSCALE_GRAY_04,
+                                                letterSpacing: -0.14),
+                                          ),
+                                        ...List.generate(
+                                          friendList.length,
+                                          (index) => GestureDetector(
+                                            onTap: () => Navigator.of(context)
+                                                .push(MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        FriendTimetableScreen(
+                                                            friendId: friendList[
+                                                                    index]
+                                                                .friendId))),
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 14.5),
+                                              child: Text(
+                                                friendList[index].friendName,
+                                                style: const TextStyle(
+                                                    fontSize: 16.0,
+                                                    letterSpacing: -0.32),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 17.0,
+                                        ),
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: GestureDetector(
+                                            onTap: shareOrRegisterModal,
+                                            child: const Text(
+                                              "친구 추가하기",
+                                              style: TextStyle(
+                                                  fontSize: 12.0,
+                                                  fontWeight: FontWeight.w500,
+                                                  color:
+                                                      PRIMARY_COLOR_ORANGE_01),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   )),
                             ],
                           ),
@@ -1226,48 +1280,40 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                   const SizedBox(
                     height: 16.0,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: GestureDetector(
+                      onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
                             builder: (_) => const ModuleReviewMainScreen()),
-                      );
-                    },
-                    child: Container(
-                      width: (MediaQuery.of(context).size.width - 40.0),
-                      height: 56,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                            color: GRAYSCALE_GRAY_02,
-                            width: 1), // Add this line for the border
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "강의평가 홈 바로가기",
-                            style: TextStyle(
-                              fontFamily: "Pretendard",
-                              fontSize: 16.0,
-                              letterSpacing: -0.02,
-                              height: 1.5,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 12.0),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: GRAYSCALE_GRAY_02),
+                            borderRadius: BorderRadius.circular(8.0)),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                const Text(
+                                  "강의평가 홈 바로가기",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                const Spacer(),
+                                SvgPicture.asset(
+                                  'assets/img/timetable_screen/link.svg',
+                                  width: 24,
+                                  height: 24,
+                                )
+                              ],
                             ),
-                            textAlign: TextAlign.left,
-                          ),
-                          SvgPicture.asset(
-                            'assets/img/timetable_screen/link.svg',
-                            width: 24,
-                            height: 24,
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
