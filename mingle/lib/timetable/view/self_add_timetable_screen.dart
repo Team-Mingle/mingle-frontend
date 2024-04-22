@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
@@ -86,67 +87,116 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         automaticallyImplyLeading: false,
         titleSpacing: 0.0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const SizedBox(width: 8.0),
-            InkWell(
-              child: SizedBox(
-                width: 40.0,
-                height: 48.0,
-                child: Align(
-                  alignment: Alignment.center,
-                  child: SvgPicture.asset(
-                    'assets/img/post_screen/cross_icon.svg',
-                    width: 24,
-                    height: 24,
-                  ),
-                ),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-              },
+        leading: GestureDetector(
+          child: Align(
+            alignment: Alignment.center,
+            child: SvgPicture.asset(
+              'assets/img/post_screen/cross_icon.svg',
+              width: 24,
+              height: 24,
             ),
-            const Spacer(),
-            const Text(
-              "강의 직접 추가하기",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 16.0,
-                letterSpacing: -0.02,
-                height: 1.5,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            const Spacer(),
-            InkWell(
-              child: const Padding(
-                padding: EdgeInsets.only(right: 20.0),
-                child: Text(
-                  "완료하기",
-                  style: TextStyle(
-                    color: PRIMARY_COLOR_ORANGE_01,
-                    fontSize: 14.0,
-                    letterSpacing: -0.01,
-                    height: 1.4,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ),
-              onTap: () {
-                //TODO: fix
-                // CourseModel classModel = CourseModel(id: id, name: name, courseCode: courseCode, professor: professor, courseTimeDtoList: courseTimeDtoList, rgb: rgb)
-                // widget.addClass(classModel);
-                // widget.addClassesAtAddTimeTableScreen(classModel);
-                Navigator.pop(context);
-              },
-            ),
-          ],
+          ),
+          onTap: () {
+            Navigator.pop(context);
+          },
         ),
-        centerTitle: false,
+        title: const Text(
+          "강의 직접 추가하기",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16.0,
+            letterSpacing: -0.02,
+            height: 1.5,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        actions: [
+          GestureDetector(
+            child: const Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: Text(
+                "완료하기",
+                style: TextStyle(
+                  color: PRIMARY_COLOR_ORANGE_01,
+                  fontSize: 14.0,
+                  letterSpacing: -0.01,
+                  height: 1.4,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+            onTap: () {
+              //TODO: fix
+              // CourseModel classModel = CourseModel(id: id, name: name, courseCode: courseCode, professor: professor, courseTimeDtoList: courseTimeDtoList, rgb: rgb)
+              // widget.addClass(classModel);
+              // widget.addClassesAtAddTimeTableScreen(classModel);
+              Navigator.pop(context);
+            },
+          ),
+        ],
+        // title: Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //   children: [
+        //     const SizedBox(width: 8.0),
+        // InkWell(
+        //   child: SizedBox(
+        //     width: 40.0,
+        //     height: 48.0,
+        //     child: Align(
+        //       alignment: Alignment.center,
+        //       child: SvgPicture.asset(
+        //         'assets/img/post_screen/cross_icon.svg',
+        //         width: 24,
+        //         height: 24,
+        //       ),
+        //     ),
+        //   ),
+        //   onTap: () {
+        //     Navigator.pop(context);
+        //   },
+        // ),
+        //     const Spacer(),
+        // const Text(
+        //   "강의 직접 추가하기",
+        //   style: TextStyle(
+        //     color: Colors.black,
+        //     fontSize: 16.0,
+        //     letterSpacing: -0.02,
+        //     height: 1.5,
+        //     fontWeight: FontWeight.w400,
+        //   ),
+        // ),
+        //     const Spacer(),
+        // InkWell(
+        //   child: const Padding(
+        //     padding: EdgeInsets.only(right: 20.0),
+        //     child: Text(
+        //       "완료하기",
+        //       style: TextStyle(
+        //         color: PRIMARY_COLOR_ORANGE_01,
+        //         fontSize: 14.0,
+        //         letterSpacing: -0.01,
+        //         height: 1.4,
+        //         fontWeight: FontWeight.w400,
+        //       ),
+        //     ),
+        //   ),
+        //   onTap: () {
+        //     //TODO: fix
+        //     // CourseModel classModel = CourseModel(id: id, name: name, courseCode: courseCode, professor: professor, courseTimeDtoList: courseTimeDtoList, rgb: rgb)
+        //     // widget.addClass(classModel);
+        //     // widget.addClassesAtAddTimeTableScreen(classModel);
+        //     Navigator.pop(context);
+        //   },
+        // ),
+        //   ],
+        // ),
+        centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
       ),

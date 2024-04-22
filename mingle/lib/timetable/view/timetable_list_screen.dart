@@ -10,8 +10,10 @@ import 'package:mingle/timetable/repository/timetable_repository.dart';
 import 'package:mingle/timetable/view/self_add_timetable_screen.dart';
 
 class MyTimeTableListScreen extends ConsumerStatefulWidget {
+  final bool isAddTimetable;
   const MyTimeTableListScreen({
     Key? key,
+    this.isAddTimetable = false,
   }) : super(key: key);
 
   @override
@@ -26,9 +28,22 @@ class _MyTimeTableListScreenState extends ConsumerState<MyTimeTableListScreen> {
   @override
   void initState() {
     // TODO: implement initState
+
     super.initState();
     getTimetables();
     print(timetables);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (widget.isAddTimetable) {
+        showDialog(
+          context: context,
+          builder: (_) {
+            return Center(
+              child: AddNewTimetableWidget(refreshTimetableList: getTimetables),
+            );
+          },
+        );
+      }
+    });
   }
 
   void getTimetables() async {
@@ -54,61 +69,110 @@ class _MyTimeTableListScreenState extends ConsumerState<MyTimeTableListScreen> {
             surfaceTintColor: Colors.transparent,
             automaticallyImplyLeading: false,
             titleSpacing: 0.0,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                InkWell(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: SvgPicture.asset(
-                      "assets/img/post_screen/cross_icon.svg",
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
+            leading: Align(
+              alignment: Alignment.center,
+              child: GestureDetector(
+                onTap: () => Navigator.of(context).pop(),
+                child: SvgPicture.asset(
+                  "assets/img/post_screen/cross_icon.svg",
                 ),
-                const Spacer(),
-                const Text(
-                  '시간표 목록',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16.0,
-                    letterSpacing: -0.02,
-                    height: 1.5,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                const Spacer(),
-                InkWell(
-                  child: const Padding(
-                    padding: EdgeInsets.only(right: 16.0),
-                    child: Text(
-                      "시간표 추가",
-                      style: TextStyle(
-                        color: PRIMARY_COLOR_ORANGE_01,
-                        fontSize: 14.0,
-                        letterSpacing: -0.01,
-                        height: 1.4,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (_) {
-                        return const Center(
-                          child: AddNewTimetableWidget(),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ],
+              ),
             ),
-            centerTitle: false, // Set centerTitle to false
+            title: const Text(
+              '시간표 목록',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 16.0,
+                letterSpacing: -0.02,
+                height: 1.5,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            actions: [
+              InkWell(
+                child: const Padding(
+                  padding: EdgeInsets.only(right: 16.0),
+                  child: Text(
+                    "시간표 추가",
+                    style: TextStyle(
+                      color: PRIMARY_COLOR_ORANGE_01,
+                      fontSize: 14.0,
+                      letterSpacing: -0.01,
+                      height: 1.4,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return Center(
+                        child: AddNewTimetableWidget(
+                          refreshTimetableList: getTimetables,
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+            // title: Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            // InkWell(
+            //   child: Padding(
+            //     padding: const EdgeInsets.only(left: 8),
+            //     child: SvgPicture.asset(
+            //       "assets/img/post_screen/cross_icon.svg",
+            //     ),
+            //   ),
+            //   onTap: () {
+            //     Navigator.pop(context);
+            //   },
+            // ),
+            //     const Spacer(),
+            // const Text(
+            //   '시간표 목록',
+            //   textAlign: TextAlign.center,
+            //   style: TextStyle(
+            //     color: Colors.black,
+            //     fontSize: 16.0,
+            //     letterSpacing: -0.02,
+            //     height: 1.5,
+            //     fontWeight: FontWeight.w400,
+            //   ),
+            // ),
+            //     const Spacer(),
+            // InkWell(
+            //   child: const Padding(
+            //     padding: EdgeInsets.only(right: 16.0),
+            //     child: Text(
+            //       "시간표 추가",
+            //       style: TextStyle(
+            //         color: PRIMARY_COLOR_ORANGE_01,
+            //         fontSize: 14.0,
+            //         letterSpacing: -0.01,
+            //         height: 1.4,
+            //         fontWeight: FontWeight.w400,
+            //       ),
+            //     ),
+            //   ),
+            //   onTap: () {
+            //     showDialog(
+            //       context: context,
+            //       builder: (_) {
+            //         return const Center(
+            //           child: AddNewTimetableWidget(),
+            //         );
+            //       },
+            //     );
+            //   },
+            // ),
+            //   ],
+            // ),
+            centerTitle: true,
             backgroundColor: Colors.white,
             elevation: 0,
           ),

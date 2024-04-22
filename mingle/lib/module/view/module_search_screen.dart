@@ -71,7 +71,7 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
                 border: Border.all(color: GRAYSCALE_GRAY_01),
                 borderRadius: BorderRadius.circular(8.0)),
             child: Padding(
-              padding: const EdgeInsets.only(left: 16.0),
+              padding: const EdgeInsets.only(left: 8.0),
               child: TextFormField(
                 autofocus: true,
                 onEditingComplete: () {
@@ -86,9 +86,10 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
                   });
                 },
                 controller: _searchController,
-                textAlignVertical: TextAlignVertical.center,
+                textAlignVertical: TextAlignVertical.top,
                 obscureText: false,
                 decoration: InputDecoration(
+                    contentPadding: EdgeInsets.zero,
                     hintText: "강의명을 입력하세요.",
                     hintStyle: const TextStyle(
                         color: GRAYSCALE_GRAY_03, fontSize: 16.0),
@@ -167,9 +168,13 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
               future: searchFuture,
               builder: (context,
                   AsyncSnapshot<CursorPagination<CourseModel>> snapshot) {
-                if (!snapshot.hasData) {
+                if (!snapshot.hasData ||
+                    snapshot.connectionState != ConnectionState.done) {
                   print(snapshot);
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(
+                      child: CircularProgressIndicator(
+                    color: PRIMARY_COLOR_ORANGE_01,
+                  ));
                 }
                 CursorPagination<CourseModel> courseList = snapshot.data!;
                 List<CourseModel> courses = courseList.data;
@@ -179,13 +184,15 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
                           SizedBox(
                             height: 48.0,
                           ),
-                          Text(
-                            "일치하는 강의가 없습니다.",
-                            style: TextStyle(
-                                fontSize: 16.0,
-                                letterSpacing: -0.02,
-                                height: 1.5,
-                                color: GRAYSCALE_GRAY_04),
+                          Center(
+                            child: Text(
+                              "일치하는 강의가 없습니다.",
+                              style: TextStyle(
+                                  fontSize: 16.0,
+                                  letterSpacing: -0.02,
+                                  height: 1.5,
+                                  color: GRAYSCALE_GRAY_04),
+                            ),
                           )
                         ],
                       )

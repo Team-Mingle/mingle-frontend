@@ -6,6 +6,7 @@ import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/timetable/components/delete_timetable_widget.dart';
 import 'package:mingle/timetable/components/modify_timetable_name_widget.dart';
 import 'package:mingle/timetable/model/timetable_preview_model.dart';
+import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 
 class TimetableMoreModalwidget extends ConsumerStatefulWidget {
@@ -41,6 +42,9 @@ class _TimetableMoreModalwidgetState
       try {
         await ref.read(timetableRepositoryProvider).pinTimetable(
             timetableId: widget.timetablePreviewModel.timetableId);
+        await ref
+            .watch(pinnedTimetableIdProvider.notifier)
+            .fetchPinnedTimetable();
       } on DioException catch (e) {
         fToast.showToast(
           child: const ToastMessage(message: "다시 시도해주세요"),

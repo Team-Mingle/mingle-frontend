@@ -29,6 +29,18 @@ Map<String, dynamic> _$ChangeTimetableNameDtoToJson(
       'name': instance.name,
     };
 
+AddTimetableDto _$AddTimetableDtoFromJson(Map<String, dynamic> json) =>
+    AddTimetableDto(
+      year: json['year'] as int,
+      semester: json['semester'] as int,
+    );
+
+Map<String, dynamic> _$AddTimetableDtoToJson(AddTimetableDto instance) =>
+    <String, dynamic>{
+      'year': instance.year,
+      'semester': instance.semester,
+    };
+
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
@@ -71,6 +83,32 @@ class _TimetableRepository implements TimetableRepository {
             ))));
     final value = TimetableListModel.fromJson(_result.data!);
     return value;
+  }
+
+  @override
+  Future<void> addTimetable({required AddTimetableDto addTimetableDto}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(addTimetableDto.toJson());
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
   }
 
   @override

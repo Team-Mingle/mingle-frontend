@@ -1015,6 +1015,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
       resizeToAvoidBottomInset: true,
       backgroundColor: BACKGROUND_COLOR_GRAY,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         surfaceTintColor: Colors.transparent,
         toolbarHeight: 56.0,
         backgroundColor: BACKGROUND_COLOR_GRAY,
@@ -1142,7 +1143,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   if (flag == 0) // flag 값이 0인 경우
-                    const SizedBox(height: 321),
+                    const SizedBox(height: 200),
                   if (flag == 0)
                     const Text(
                       '아직 시간표를 만들지 않았어요.',
@@ -1159,7 +1160,13 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                   if (flag == 0)
                     GestureDetector(
                       onTap: () {
-                        print('새 시간표 추가하기');
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const MyTimeTableListScreen(
+                              isAddTimetable: true,
+                            ),
+                          ),
+                        );
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -1184,7 +1191,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                         ],
                       ),
                     ),
-                  if (flag == 0) const SizedBox(height: 284),
+                  if (flag == 0) const SizedBox(height: 200),
                   if (flag == 1) // flag 값이 1인 경우
                     TimeTableGrid(
                       addedClasses: addedCourses,
@@ -1258,6 +1265,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                                                                   .friendName,
                                                         ))),
                                             child: Container(
+                                              width: double.infinity,
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       vertical: 14.5),

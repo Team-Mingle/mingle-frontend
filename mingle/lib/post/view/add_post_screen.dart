@@ -134,6 +134,7 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
               body: Scaffold(
                 backgroundColor: Colors.white,
                 appBar: AppBar(
+                  leadingWidth: 24.0,
                   automaticallyImplyLeading: false,
                   surfaceTintColor: Colors.transparent,
                   title: Row(

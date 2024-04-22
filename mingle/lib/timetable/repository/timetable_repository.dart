@@ -28,6 +28,10 @@ abstract class TimetableRepository {
   @Headers({'accessToken': 'true'})
   Future<TimetableListModel> getTimetables();
 
+  @POST("")
+  @Headers({'accessToken': 'true'})
+  Future<void> addTimetable({@Body() required AddTimetableDto addTimetableDto});
+
   @POST('/{timetableId}/course')
   @Headers({'accessToken': 'true'})
   Future<dynamic> addCourse(
@@ -85,4 +89,14 @@ class ChangeTimetableNameDto {
   ChangeTimetableNameDto({required this.name});
 
   Map<String, dynamic> toJson() => _$ChangeTimetableNameDtoToJson(this);
+}
+
+@JsonSerializable()
+class AddTimetableDto {
+  final int year;
+  final int semester;
+
+  AddTimetableDto({required this.year, required this.semester});
+
+  Map<String, dynamic> toJson() => _$AddTimetableDtoToJson(this);
 }
