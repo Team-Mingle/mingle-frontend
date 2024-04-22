@@ -13,6 +13,7 @@ import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
+import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 
 class CoursePreviewCard extends ConsumerStatefulWidget {

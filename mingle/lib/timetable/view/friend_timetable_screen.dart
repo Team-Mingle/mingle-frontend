@@ -1,20 +1,29 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/const/data.dart';
+import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/timetable/components/timetable_grid.dart';
 import 'package:mingle/timetable/model/timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_model.dart';
+import 'package:mingle/timetable/repository/friend_repository.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 
 class FriendTimetableScreen extends ConsumerStatefulWidget {
   final int friendId;
-  const FriendTimetableScreen({super.key, required this.friendId});
+  String friendName;
+  final Function refreshFriendList;
+  FriendTimetableScreen(
+      {super.key,
+      required this.friendId,
+      required this.friendName,
+      required this.refreshFriendList});
 
   @override
   ConsumerState<FriendTimetableScreen> createState() =>
@@ -25,11 +34,26 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
   List<TimetableModel> timetables = [];
   TimetableModel? currentTimetable;
   List<Widget> addedClasses = [];
+  String newFriendName = "";
+  late FToast fToast;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    fToast = FToast();
+    fToast.init(context);
     getTimetables();
+  }
+
+  void deleteFriend() async {
+    try {
+      await ref
+          .read(friendRepositoryProvider)
+          .deleteFriend(friendId: widget.friendId);
+      widget.refreshFriendList();
+    } on DioException catch (e) {
+      print(e);
+    }
   }
 
   void getTimetables() async {
@@ -65,6 +89,28 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
     });
   }
 
+  void changeFriendName() async {
+    try {
+      if (newFriendName == widget.friendName) {
+        return;
+      }
+      // await ref.watch(timetableRepositoryProvider).changeTimetableName(
+      //     timetableId: ref.read(pinnedTimetableIdProvider)!,
+      //     changeTimetableNameDto:
+      //         ChangeTimetableNameDto(name: newTimetableName));
+      setState(() {
+        widget.friendName = newFriendName;
+      });
+    } on DioException catch (e) {
+      fToast.showToast(
+        child: ToastMessage(
+            message: e.response?.data['message'] ?? generalErrorMsg),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,9 +136,9 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
             },
           ),
         ),
-        title: const Text(
-          "닉네임의 시간표",
-          style: TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+        title: Text(
+          "${widget.friendName}의 시간표",
+          style: const TextStyle(fontSize: 16.0, letterSpacing: -0.32),
         ),
         actions: [
           IconButton(
@@ -104,7 +150,7 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
                 height: 24,
               ),
             ),
-            onPressed: () {},
+            onPressed: showFriendTimetableSettingModal,
           ),
         ],
       ),
@@ -188,83 +234,362 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
       isScrollControlled: false,
       context: context,
       builder: (BuildContext context) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(12.0),
-          child: Container(
-            height: 311.0,
-            color: Colors.white,
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12.0),
+              child: Container(
+                height: 311.0,
+                color: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0, vertical: 24.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      currentCourse.name,
+                      style: const TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: -0.32),
+                    ),
+                    const SizedBox(
+                      height: 4.0,
+                    ),
+                    Text(
+                      currentCourse.courseCode,
+                      style: const TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: -0.32),
+                    ),
+                    const SizedBox(
+                      height: 4.0,
+                    ),
+                    Text(
+                      "${currentCourse.professor} ${currentCourse.getStartTimes()}",
+                      style: const TextStyle(
+                          color: GRAYSCALE_GRAY_04, letterSpacing: -0.14),
+                    ),
+                    const Divider(
+                      height: 32.0,
+                      color: GRAYSCALE_GRAY_01_5,
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => ModuleDetailsScreen(
+                            courseId: currentCourse.id,
+                            moduleName: currentCourse.name,
+                          ),
+                        ),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 14.0),
+                        child: Text(
+                          "강의상세/ 강의평 보기",
+                          style:
+                              TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (_) => AddModuleReviewScreen(
+                                  moduleId: currentCourse.id,
+                                  moduleName: currentCourse.name,
+                                )),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 14.0),
+                        child: Text(
+                          "강의평 작성하기",
+                          style:
+                              TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showFriendTimetableSettingModal() => showModalBottomSheet<void>(
+        isScrollControlled: false,
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (BuildContext context) {
+          return Container(
+            height: 176,
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(12.0),
+              ),
+            ),
             padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  currentCourse.name,
-                  style: const TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: -0.32),
-                ),
-                const SizedBox(
-                  height: 4.0,
-                ),
-                Text(
-                  currentCourse.courseCode,
-                  style: const TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: -0.32),
-                ),
-                const SizedBox(
-                  height: 4.0,
-                ),
-                Text(
-                  "${currentCourse.professor} ${currentCourse.getStartTimes()}",
-                  style: const TextStyle(
-                      color: GRAYSCALE_GRAY_04, letterSpacing: -0.14),
-                ),
-                const Divider(
-                  height: 32.0,
-                  color: GRAYSCALE_GRAY_01_5,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    showChangeFriendNameDialog();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 14.0),
+                    child: const Text(
+                      "친구 이름 변경하기",
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                  ),
                 ),
                 GestureDetector(
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => ModuleDetailsScreen(
-                        courseId: currentCourse.id,
-                        moduleName: currentCourse.name,
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    showDeleteFriendDialog();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 14.0),
+                    child: const Text(
+                      "친구 삭제하기",
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          );
+        },
+      );
+
+  void showChangeFriendNameDialog() {
+    setState(() {
+      newFriendName = widget.friendName;
+    });
+    showDialog(
+      context: context,
+      builder: (_) => StatefulBuilder(
+        builder: (context, setState) {
+          return Dialog(
+            insetPadding: EdgeInsets.zero,
+            surfaceTintColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8.0)),
+                  // width: 343,
+                  padding: const EdgeInsets.only(
+                      top: 32.0, left: 32.0, right: 32.0, bottom: 24.0),
+                  child: Column(
+                    children: [
+                      const Text(
+                        "친구 이름 변경하기",
+                        style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: -0.32),
                       ),
-                    ),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 14.0),
-                    child: Text(
-                      "강의상세/ 강의평 보기",
-                      style: TextStyle(fontSize: 16.0, letterSpacing: -0.32),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (_) => AddModuleReviewScreen(
-                              moduleId: currentCourse.id,
-                              moduleName: currentCourse.name,
-                            )),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 14.0),
-                    child: Text(
-                      "강의평 작성하기",
-                      style: TextStyle(fontSize: 16.0, letterSpacing: -0.32),
-                    ),
+                      const SizedBox(
+                        height: 16.0,
+                      ),
+                      Container(
+                        height: 48.0,
+                        width: 279.0,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12.0,
+                        ),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: GRAYSCALE_GRAY_02),
+                            borderRadius: BorderRadius.circular(8.0)),
+                        child: Center(
+                          child: TextFormField(
+                            initialValue: widget.friendName,
+                            maxLength: 10,
+                            onChanged: (name) {
+                              setState(() {
+                                newFriendName = name;
+                              });
+                            },
+                            decoration: InputDecoration(
+                              counterText: "",
+                              border: InputBorder.none,
+                              suffix: Text("${newFriendName.length}/10"),
+                              hintText: "새 친구 이름을 작성하세요.",
+                              hintStyle: const TextStyle(
+                                  color: GRAYSCALE_GRAY_03, fontSize: 16.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 16.0,
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Container(
+                              height: 40.0,
+                              width: 120.0,
+                              decoration: BoxDecoration(
+                                  color: GRAYSCALE_GRAY_01,
+                                  borderRadius: BorderRadius.circular(8.0)),
+                              child: const Center(
+                                child: Text(
+                                  "취소하기",
+                                  style: TextStyle(
+                                      color: GRAYSCALE_GRAY_04,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 8.0,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              changeFriendName();
+                            },
+                            child: Container(
+                              height: 40.0,
+                              width: 120.0,
+                              decoration: BoxDecoration(
+                                  color: PRIMARY_COLOR_ORANGE_02,
+                                  borderRadius: BorderRadius.circular(8.0)),
+                              child: const Center(
+                                child: Text(
+                                  "변경하기",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
                   ),
                 ),
               ],
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
+    );
+  }
+
+  void showDeleteFriendDialog() {
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        insetPadding: EdgeInsets.zero,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0)),
+              // width: 343,
+              padding: const EdgeInsets.only(
+                  top: 32.0, left: 32.0, right: 32.0, bottom: 24.0),
+              child: Column(
+                children: [
+                  const Text(
+                    "친구를 삭제하시겠습니까?",
+                    style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: -0.32),
+                  ),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                  const Text(
+                    "이 작업은 되돌릴 수 없습니다.",
+                    style: TextStyle(
+                        color: GRAYSCALE_GRAY_04, letterSpacing: -0.14),
+                  ),
+                  const SizedBox(
+                    height: 16.0,
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                          deleteFriend();
+                        },
+                        child: Container(
+                          height: 40.0,
+                          width: 120.0,
+                          decoration: BoxDecoration(
+                              color: GRAYSCALE_GRAY_01,
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: const Center(
+                            child: Text(
+                              "삭제하기",
+                              style: TextStyle(
+                                  color: GRAYSCALE_GRAY_04,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 8.0,
+                      ),
+                      GestureDetector(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: Container(
+                          height: 40.0,
+                          width: 120.0,
+                          decoration: BoxDecoration(
+                              color: PRIMARY_COLOR_ORANGE_02,
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: const Center(
+                            child: Text(
+                              "취소하기",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

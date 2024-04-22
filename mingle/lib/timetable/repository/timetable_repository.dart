@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/dio/dio.dart';
+import 'package:mingle/timetable/model/default_timetable_id_model.dart';
 import 'package:mingle/timetable/model/friend_timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_model.dart';
@@ -61,6 +62,10 @@ abstract class TimetableRepository {
   @Headers({'accessToken': 'true'})
   Future<void> deleteCourse(
       {@Path() required int timetableId, @Path() required int courseId});
+
+  @GET('/default')
+  @Headers({'accessToken': 'true'})
+  Future<DefaultTimetableIdModel> getDefaultTimetableId();
 }
 
 @JsonSerializable()

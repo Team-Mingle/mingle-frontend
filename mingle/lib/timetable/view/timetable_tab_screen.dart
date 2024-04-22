@@ -23,6 +23,7 @@ import 'package:mingle/timetable/model/friend_model.dart';
 import 'package:mingle/timetable/model/timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_model.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
+import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
 import 'package:mingle/timetable/repository/friend_repository.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 import 'package:mingle/timetable/view/add_timetable_screen.dart';
@@ -68,6 +69,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   }
 
   void getClasses() async {
+    await ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetable();
     if (ref.read(pinnedTimetableIdProvider) == null) {
       setState(() {
         flag = 0;
@@ -131,6 +133,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     try {
       await ref.watch(friendRepositoryProvider).addFriend(
           AddFriendDto(friendCode: friendCode, myDisplayName: myDisplayName));
+      getFriends();
       setState(() {
         isLoading = false;
       });
@@ -205,95 +208,103 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
       isScrollControlled: false,
       context: context,
       builder: (BuildContext context) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(12.0),
-          child: Container(
-            height: 311.0,
-            color: Colors.white,
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  currentCourse.name,
-                  style: const TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: -0.32),
-                ),
-                const SizedBox(
-                  height: 4.0,
-                ),
-                Text(
-                  currentCourse.courseCode,
-                  style: const TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: -0.32),
-                ),
-                const SizedBox(
-                  height: 4.0,
-                ),
-                Text(
-                  "${currentCourse.professor} ${currentCourse.getStartTimes()}",
-                  style: const TextStyle(
-                      color: GRAYSCALE_GRAY_04, letterSpacing: -0.14),
-                ),
-                const Divider(
-                  height: 32.0,
-                  color: GRAYSCALE_GRAY_01_5,
-                ),
-                GestureDetector(
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => ModuleDetailsScreen(
-                        courseId: currentCourse.id,
-                        moduleName: currentCourse.name,
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12.0),
+              child: Container(
+                // height: 311.0,
+                color: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0, vertical: 24.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      currentCourse.name,
+                      style: const TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: -0.32),
+                    ),
+                    const SizedBox(
+                      height: 4.0,
+                    ),
+                    Text(
+                      currentCourse.courseCode,
+                      style: const TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: -0.32),
+                    ),
+                    const SizedBox(
+                      height: 4.0,
+                    ),
+                    Text(
+                      "${currentCourse.professor} ${currentCourse.getStartTimes()}",
+                      style: const TextStyle(
+                          color: GRAYSCALE_GRAY_04, letterSpacing: -0.14),
+                    ),
+                    const Divider(
+                      height: 32.0,
+                      color: GRAYSCALE_GRAY_01_5,
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => ModuleDetailsScreen(
+                            courseId: currentCourse.id,
+                            moduleName: currentCourse.name,
+                          ),
+                        ),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 14.0),
+                        child: Text(
+                          "강의상세/ 강의평 보기",
+                          style:
+                              TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                        ),
                       ),
                     ),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 14.0),
-                    child: Text(
-                      "강의상세/ 강의평 보기",
-                      style: TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (_) => AddModuleReviewScreen(
+                                  moduleId: currentCourse.id,
+                                  moduleName: currentCourse.name,
+                                )),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 14.0),
+                        child: Text(
+                          "강의평 작성하기",
+                          style:
+                              TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (_) => AddModuleReviewScreen(
-                              moduleId: currentCourse.id,
-                              moduleName: currentCourse.name,
-                            )),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 14.0),
-                    child: Text(
-                      "강의평 작성하기",
-                      style: TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        // deleteClass(currentCourse);
+                        showDeleteCourseDialog(currentCourse);
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 14.0),
+                        child: Text(
+                          "삭제하기",
+                          style:
+                              TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    // deleteClass(currentCourse);
-                    showDeleteCourseDialog(currentCourse);
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 14.0),
-                    child: Text(
-                      "삭제하기",
-                      style: TextStyle(fontSize: 16.0, letterSpacing: -0.32),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
+          ],
         );
       },
     );
@@ -1237,9 +1248,15 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                                                 .push(MaterialPageRoute(
                                                     builder: (_) =>
                                                         FriendTimetableScreen(
-                                                            friendId: friendList[
-                                                                    index]
-                                                                .friendId))),
+                                                          refreshFriendList:
+                                                              getFriends,
+                                                          friendId:
+                                                              friendList[index]
+                                                                  .friendId,
+                                                          friendName:
+                                                              friendList[index]
+                                                                  .friendName,
+                                                        ))),
                                             child: Container(
                                               padding:
                                                   const EdgeInsets.symmetric(
@@ -1418,118 +1435,123 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     });
     showDialog(
       context: context,
-      builder: (_) => Dialog(
-        insetPadding: EdgeInsets.zero,
-        surfaceTintColor: Colors.transparent,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8.0)),
-              // width: 343,
-              padding: const EdgeInsets.only(
-                  top: 32.0, left: 32.0, right: 32.0, bottom: 24.0),
-              child: Column(
-                children: [
-                  const Text(
-                    "시간표 이름 변경하기",
-                    style: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: -0.32),
-                  ),
-                  const SizedBox(
-                    height: 16.0,
-                  ),
-                  Container(
-                    height: 48.0,
-                    width: 279.0,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12.0,
-                    ),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: GRAYSCALE_GRAY_02),
-                        borderRadius: BorderRadius.circular(8.0)),
-                    child: Center(
-                      child: TextFormField(
-                        initialValue: timetable!.name,
-                        maxLength: 10,
-                        onChanged: (name) {
-                          setState(() {
-                            newTimetableName = name;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          counterText: "",
-                          border: InputBorder.none,
-                          suffix: Text("${newTimetableName.length}/10"),
-                          hintText: "새 시간표 이름을 작성하세요.",
-                          hintStyle: const TextStyle(
-                              color: GRAYSCALE_GRAY_03, fontSize: 16.0),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 16.0,
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
+      builder: (_) => StatefulBuilder(
+        builder: (context, setState) {
+          return Dialog(
+            insetPadding: EdgeInsets.zero,
+            surfaceTintColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8.0)),
+                  // width: 343,
+                  padding: const EdgeInsets.only(
+                      top: 32.0, left: 32.0, right: 32.0, bottom: 24.0),
+                  child: Column(
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Container(
-                          height: 40.0,
-                          width: 120.0,
-                          decoration: BoxDecoration(
-                              color: GRAYSCALE_GRAY_01,
-                              borderRadius: BorderRadius.circular(8.0)),
-                          child: const Center(
-                            child: Text(
-                              "취소하기",
-                              style: TextStyle(
-                                  color: GRAYSCALE_GRAY_04,
-                                  fontWeight: FontWeight.w500),
+                      const Text(
+                        "시간표 이름 변경하기",
+                        style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: -0.32),
+                      ),
+                      const SizedBox(
+                        height: 16.0,
+                      ),
+                      Container(
+                        height: 48.0,
+                        width: 279.0,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12.0,
+                        ),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: GRAYSCALE_GRAY_02),
+                            borderRadius: BorderRadius.circular(8.0)),
+                        child: Center(
+                          child: TextFormField(
+                            initialValue: timetable!.name,
+                            maxLength: 10,
+                            onChanged: (name) {
+                              setState(() {
+                                newTimetableName = name;
+                              });
+                            },
+                            decoration: InputDecoration(
+                              counterText: "",
+                              border: InputBorder.none,
+                              suffix: Text("${newTimetableName.length}/10"),
+                              hintText: "새 시간표 이름을 작성하세요.",
+                              hintStyle: const TextStyle(
+                                  color: GRAYSCALE_GRAY_03, fontSize: 16.0),
                             ),
                           ),
                         ),
                       ),
                       const SizedBox(
-                        width: 8.0,
+                        height: 16.0,
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                          changeTimetabelName();
-                        },
-                        child: Container(
-                          height: 40.0,
-                          width: 120.0,
-                          decoration: BoxDecoration(
-                              color: PRIMARY_COLOR_ORANGE_02,
-                              borderRadius: BorderRadius.circular(8.0)),
-                          child: const Center(
-                            child: Text(
-                              "변경하기",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Container(
+                              height: 40.0,
+                              width: 120.0,
+                              decoration: BoxDecoration(
+                                  color: GRAYSCALE_GRAY_01,
+                                  borderRadius: BorderRadius.circular(8.0)),
+                              child: const Center(
+                                child: Text(
+                                  "취소하기",
+                                  style: TextStyle(
+                                      color: GRAYSCALE_GRAY_04,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                          const SizedBox(
+                            width: 8.0,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              changeTimetabelName();
+                            },
+                            child: Container(
+                              height: 40.0,
+                              width: 120.0,
+                              decoration: BoxDecoration(
+                                  color: PRIMARY_COLOR_ORANGE_02,
+                                  borderRadius: BorderRadius.circular(8.0)),
+                              child: const Center(
+                                child: Text(
+                                  "변경하기",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                       )
                     ],
-                  )
-                ],
-              ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

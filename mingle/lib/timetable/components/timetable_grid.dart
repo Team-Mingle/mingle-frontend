@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
+import 'package:mingle/module/model/course_model.dart';
 
 class TimeTableGrid extends StatefulWidget {
   final List<Widget> addedClasses;

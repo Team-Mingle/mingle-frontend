@@ -101,11 +101,11 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
                       child: Text("다시 시도 ㄱㄱ"),
                     );
                   }
-                  CourseDetailModel post = snapshot.data!;
+                  CourseDetailModel course = snapshot.data!;
 
                   return Stack(
                     children: [
-                      renderContent(post),
+                      renderContent(course),
                     ],
                   );
                 },

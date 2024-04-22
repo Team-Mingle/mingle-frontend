@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mingle/common/component/search_history_service.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
 import 'package:mingle/module/model/course_model.dart';
@@ -18,16 +19,27 @@ class ModuleSearchScreen extends ConsumerStatefulWidget {
 }
 
 class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
-  List<String> previousSearch = ["CS3230", "CS3203"];
+  List<String>? previousSearch;
   final TextEditingController _searchController = TextEditingController();
   Future<CursorPagination<CourseModel>>? searchFuture;
   @override
   void initState() {
     super.initState();
+    getSearchHistories();
+  }
+
+  void getSearchHistories() async {
+    List<String>? searchHistory =
+        (await SearchHistoryService.getInstance()).getHistories();
+    setState(() {
+      previousSearch = searchHistory;
+    });
+    print(searchHistory);
   }
 
   @override
   Widget build(BuildContext context) {
+    print(previousSearch);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -63,12 +75,17 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
               child: TextFormField(
                 autofocus: true,
                 onEditingComplete: () {
+                  SearchHistoryService.getInstance().then((service) {
+                    service.addHistory(_searchController.text);
+                  });
+
                   setState(() {
                     searchFuture = ref
                         .watch(courseRepositoryProvider)
                         .search(keyword: _searchController.text);
                   });
                 },
+                controller: _searchController,
                 textAlignVertical: TextAlignVertical.center,
                 obscureText: false,
                 decoration: InputDecoration(
@@ -96,7 +113,7 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
       ),
       body: searchFuture == null
           ? Column(
-              children: previousSearch.isEmpty
+              children: previousSearch == null || previousSearch!.isEmpty
                   ? [
                       const SizedBox(
                         height: 48.0,
@@ -113,7 +130,7 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
                       )
                     ]
                   : List.generate(
-                      previousSearch.length + 1,
+                      previousSearch!.length + 1,
                       (index) => index == 0
                           ? Container(
                               padding: const EdgeInsets.only(
@@ -125,20 +142,25 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
                                 ),
                                 const Spacer(),
                                 GestureDetector(
-                                  child: const Text(
-                                    "전체삭제",
-                                    style: TextStyle(
-                                        color: GRAYSCALE_GRAY_04,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  onTap: () => setState(() {
-                                    previousSearch.clear();
-                                  }),
-                                )
+                                    child: const Text(
+                                      "전체삭제",
+                                      style: TextStyle(
+                                          color: GRAYSCALE_GRAY_04,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    onTap: () {
+                                      SearchHistoryService.getInstance()
+                                          .then((service) {
+                                        service.clearHistories();
+                                      });
+                                      setState(() {
+                                        previousSearch!.clear();
+                                      });
+                                    })
                               ]),
                             )
                           : recentSearchCard(
-                              previousSearch[index - 1], index - 1),
+                              previousSearch![index - 1], index - 1),
                     ),
             )
           : FutureBuilder(
@@ -202,29 +224,49 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
     );
   }
 
-  Widget recentSearchCard(String moduleCode, int index) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
-      child: Row(
-        children: [
-          Text(
-            moduleCode,
-            style: const TextStyle(fontSize: 16.0),
-          ),
-          const Spacer(),
-          const SizedBox(
-            width: 8.0,
-          ),
-          GestureDetector(
-            onTap: () => setState(() {
-              previousSearch.removeAt(index);
-            }),
-            child: SvgPicture.asset(
-                "assets/img/module_review_screen/close_icon.svg",
-                height: 18.0,
-                width: 18.0),
-          )
-        ],
+  Widget recentSearchCard(String history, int index) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _searchController.text = history;
+        });
+        SearchHistoryService.getInstance().then((service) {
+          service.addHistory(_searchController.text);
+        });
+
+        setState(() {
+          searchFuture = ref
+              .watch(courseRepositoryProvider)
+              .search(keyword: _searchController.text);
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
+        child: Row(
+          children: [
+            Text(
+              history,
+              style: const TextStyle(fontSize: 16.0),
+            ),
+            const Spacer(),
+            const SizedBox(
+              width: 8.0,
+            ),
+            GestureDetector(
+              onTap: () {
+                SearchHistoryService.getInstance()
+                    .then((service) => service.removeHistoryAt(index));
+                setState(() {
+                  previousSearch!.removeAt(index);
+                });
+              },
+              child: SvgPicture.asset(
+                  "assets/img/module_review_screen/close_icon.svg",
+                  height: 18.0,
+                  width: 18.0),
+            )
+          ],
+        ),
       ),
     );
   }
