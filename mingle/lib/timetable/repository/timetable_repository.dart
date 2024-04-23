@@ -70,6 +70,10 @@ abstract class TimetableRepository {
   @GET('/default')
   @Headers({'accessToken': 'true'})
   Future<DefaultTimetableIdModel> getDefaultTimetableId();
+
+  @DELETE('/{timetableId}')
+  @Headers({'accessToken': 'true'})
+  Future<void> deleteTimetable({@Path() required int timetableId});
 }
 
 @JsonSerializable()

@@ -10,6 +10,7 @@ import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/timetable/components/timetable_grid.dart';
+import 'package:mingle/timetable/model/friend_timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_model.dart';
 import 'package:mingle/timetable/repository/friend_repository.dart';
@@ -36,12 +37,15 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
   List<Widget> addedClasses = [];
   String newFriendName = "";
   late FToast fToast;
+  bool isLoading = false;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
     fToast = FToast();
     fToast.init(context);
+
     getTimetables();
   }
 
@@ -57,6 +61,9 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
   }
 
   void getTimetables() async {
+    setState(() {
+      isLoading = true;
+    });
     try {
       List<TimetableModel> friendTimetables = (await ref
               .read(timetableRepositoryProvider)
@@ -72,8 +79,12 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
         timetables = friendTimetables;
         currentTimetable =
             friendTimetables.isEmpty ? null : friendTimetables[0];
+        isLoading = false;
       });
     } on DioException catch (e) {
+      setState(() {
+        isLoading = false;
+      });
       print(e);
     }
   }
@@ -114,80 +125,130 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        surfaceTintColor: Colors.transparent,
-        shape: const Border(
-            bottom: BorderSide(color: GRAYSCALE_GRAY_01, width: 1)),
         backgroundColor: Colors.white,
-        titleSpacing: 0.0,
-        elevation: 0,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 0.0),
-          child: IconButton(
-            padding: EdgeInsets.zero,
-            icon: const ImageIcon(
-              AssetImage("assets/img/module_review_screen/back_tick_icon.png"),
-              color: GRAYSCALE_BLACK,
-            ),
-            color: GRAYSCALE_BLACK,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
-        title: Text(
-          "${widget.friendName}의 시간표",
-          style: const TextStyle(fontSize: 16.0, letterSpacing: -0.32),
-        ),
-        actions: [
-          IconButton(
-            icon: Align(
-              alignment: Alignment.center,
-              child: SvgPicture.asset(
-                'assets/img/common/ic_setting.svg',
-                width: 24,
-                height: 24,
+        appBar: AppBar(
+          surfaceTintColor: Colors.transparent,
+          shape: const Border(
+              bottom: BorderSide(color: GRAYSCALE_GRAY_01, width: 1)),
+          backgroundColor: Colors.white,
+          titleSpacing: 0.0,
+          elevation: 0,
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 0.0),
+            child: IconButton(
+              padding: EdgeInsets.zero,
+              icon: const ImageIcon(
+                AssetImage(
+                    "assets/img/module_review_screen/back_tick_icon.png"),
+                color: GRAYSCALE_BLACK,
               ),
+              color: GRAYSCALE_BLACK,
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
-            onPressed: showFriendTimetableSettingModal,
           ),
-        ],
-      ),
-      body: FutureBuilder(
-          future: ref
-              .watch(timetableRepositoryProvider)
-              .getFriendTimetables(friendId: widget.friendId),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(
+          title: Text(
+            "${widget.friendName}의 시간표",
+            style: const TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+          ),
+          actions: [
+            IconButton(
+              icon: Align(
+                alignment: Alignment.center,
+                child: SvgPicture.asset(
+                  'assets/img/common/ic_setting.svg',
+                  width: 24,
+                  height: 24,
+                ),
+              ),
+              onPressed: showFriendTimetableSettingModal,
+            ),
+          ],
+        ),
+        body: isLoading
+            ? const Center(
                 child: CircularProgressIndicator(
                   color: PRIMARY_COLOR_ORANGE_01,
                 ),
-              );
-            }
-            return Column(
-              children: [
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 12.0),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: renderSelectedSemesterWidget(),
+              )
+            : timetables.isEmpty
+                ? const Center(
+                    child: Text(
+                      "친구는 아직 시간표를 만들지 않았어요.",
+                      style: TextStyle(color: GRAYSCALE_GRAY_04),
                     ),
-                  ),
-                ),
-                TimeTableGrid(
-                  isFull: true,
-                  addedClasses: addedClasses,
-                ),
-              ],
-            );
-          }),
-    );
+                  )
+                : Column(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 12.0),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: renderSelectedSemesterWidget(),
+                          ),
+                        ),
+                      ),
+                      TimeTableGrid(
+                        isFull: true,
+                        addedClasses: addedClasses,
+                      ),
+                    ],
+                  )
+        // FutureBuilder(
+        //     future: ref
+        //         .watch(timetableRepositoryProvider)
+        //         .getFriendTimetables(friendId: widget.friendId),
+        //     builder: (context, snapshot) {
+        //       if (!snapshot.hasData) {
+        //         return const Center(
+        //           child: CircularProgressIndicator(
+        //             color: PRIMARY_COLOR_ORANGE_01,
+        //           ),
+        //         );
+        //       }
+
+        //       FriendTimetableListModel friendTimetableListModel =
+        //           snapshot.data as FriendTimetableListModel;
+        //       List<TimetableModel> friendTimetables =
+        //           friendTimetableListModel.friendTimetableDetailList;
+        //           TimetableModel? selectedTimetable =
+        //     friendTimetables.isEmpty ? null : friendTimetables[0];
+        // List<CourseModel> courses = selectedTimetable == null
+        //     ? []
+        //     : selectedTimetable.coursePreviewDtoList;
+        // generateClassWidgets(courses);
+        // setState(() {
+        //   timetables = friendTimetables;
+        //   currentTimetable =
+        //       friendTimetables.isEmpty ? null : friendTimetables[0];
+        // });
+        // return Column(
+        //   children: [
+        //     Container(
+        //       width: double.infinity,
+        //       padding: const EdgeInsets.symmetric(
+        //           horizontal: 16.0, vertical: 12.0),
+        //       child: SingleChildScrollView(
+        //         scrollDirection: Axis.horizontal,
+        //         child: Row(
+        //           mainAxisAlignment: MainAxisAlignment.start,
+        //           children: renderSelectedSemesterWidget(),
+        //         ),
+        //       ),
+        //     ),
+        //     TimeTableGrid(
+        //       isFull: true,
+        //       addedClasses: addedClasses,
+        //     ),
+        //   ],
+        // );
+        //     }),
+        );
   }
 
   List<Widget> renderSelectedSemesterWidget() {

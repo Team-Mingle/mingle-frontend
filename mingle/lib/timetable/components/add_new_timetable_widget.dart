@@ -8,6 +8,7 @@ import 'package:mingle/common/component/character_count_textfield.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
+import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 
 class AddNewTimetableWidget extends ConsumerStatefulWidget {
@@ -30,7 +31,7 @@ class _AddNewTimetableWidgetState extends ConsumerState<AddNewTimetableWidget> {
   ];
 
   String? selectedSemester = "2023년 2학기";
-  String timetableName = "";
+  // String timetableName = "";
   late FToast fToast;
 
   @override
@@ -48,6 +49,7 @@ class _AddNewTimetableWidgetState extends ConsumerState<AddNewTimetableWidget> {
 
       await ref.watch(timetableRepositoryProvider).addTimetable(
           addTimetableDto: AddTimetableDto(year: year, semester: semester));
+      ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetable();
       widget.refreshTimetableList();
     } on DioException catch (e) {
       fToast.showToast(
@@ -135,37 +137,37 @@ class _AddNewTimetableWidgetState extends ConsumerState<AddNewTimetableWidget> {
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 8.0,
-              ),
-              Container(
-                height: 48.0,
-                width: 295.0,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12.0,
-                ),
-                decoration: BoxDecoration(
-                    border: Border.all(color: GRAYSCALE_GRAY_02),
-                    borderRadius: BorderRadius.circular(8.0)),
-                child: Center(
-                  child: TextFormField(
-                    maxLength: 10,
-                    onChanged: (name) {
-                      setState(() {
-                        timetableName = name;
-                      });
-                    },
-                    decoration: InputDecoration(
-                      counterText: "",
-                      border: InputBorder.none,
-                      suffix: Text("${timetableName.length}/10"),
-                      hintText: "새 시간표 이름을 작성하세요.",
-                      hintStyle: const TextStyle(
-                          color: GRAYSCALE_GRAY_03, fontSize: 16.0),
-                    ),
-                  ),
-                ),
-              ),
+              // const SizedBox(
+              //   height: 8.0,
+              // ),
+              // Container(
+              //   height: 48.0,
+              //   width: 295.0,
+              //   padding: const EdgeInsets.symmetric(
+              //     horizontal: 12.0,
+              //   ),
+              //   decoration: BoxDecoration(
+              //       border: Border.all(color: GRAYSCALE_GRAY_02),
+              //       borderRadius: BorderRadius.circular(8.0)),
+              //   child: Center(
+              //     child: TextFormField(
+              //       maxLength: 10,
+              //       onChanged: (name) {
+              //         setState(() {
+              //           timetableName = name;
+              //         });
+              //       },
+              //       decoration: InputDecoration(
+              //         counterText: "",
+              //         border: InputBorder.none,
+              //         suffix: Text("${timetableName.length}/10"),
+              //         hintText: "새 시간표 이름을 작성하세요.",
+              //         hintStyle: const TextStyle(
+              //             color: GRAYSCALE_GRAY_03, fontSize: 16.0),
+              //       ),
+              //     ),
+              //   ),
+              // ),
               const SizedBox(
                 height: 16.0,
               ),

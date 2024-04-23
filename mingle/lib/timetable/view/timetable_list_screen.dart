@@ -3,25 +3,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/timetable/components/add_new_timetable_widget.dart';
-import 'package:mingle/timetable/components/timetable_list.dart';
+import 'package:mingle/timetable/components/timetable_list_container.dart';
 import 'package:mingle/timetable/model/timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_preview_model.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 import 'package:mingle/timetable/view/self_add_timetable_screen.dart';
 
-class MyTimeTableListScreen extends ConsumerStatefulWidget {
+class TimeTableListScreen extends ConsumerStatefulWidget {
   final bool isAddTimetable;
-  const MyTimeTableListScreen({
+  final Function changeTimetableName;
+  final Function deleteTimetable;
+  const TimeTableListScreen({
     Key? key,
     this.isAddTimetable = false,
+    required this.changeTimetableName,
+    required this.deleteTimetable,
   }) : super(key: key);
 
   @override
-  ConsumerState<MyTimeTableListScreen> createState() =>
+  ConsumerState<TimeTableListScreen> createState() =>
       _MyTimeTableListScreenState();
 }
 
-class _MyTimeTableListScreenState extends ConsumerState<MyTimeTableListScreen> {
+class _MyTimeTableListScreenState extends ConsumerState<TimeTableListScreen> {
   Map<String, List<TimetablePreviewModel>> timetables = {};
   bool isLoading = false;
 
@@ -46,16 +50,30 @@ class _MyTimeTableListScreenState extends ConsumerState<MyTimeTableListScreen> {
     });
   }
 
+  void pinTimetable(List<TimetablePreviewModel> timetableList,
+      TimetablePreviewModel timetableToBePinned) {
+    setState(() {
+      timetableList.firstWhere((timetable) => timetable.isPinned).isPinned =
+          false;
+      timetableList
+          .firstWhere((timetable) =>
+              timetable.timetableId == timetableToBePinned.timetableId)
+          .isPinned = true;
+    });
+  }
+
   void getTimetables() async {
     setState(() {
       isLoading = true;
     });
     final result = (await ref.read(timetableRepositoryProvider).getTimetables())
         .timetablePreviewResponseMap;
-    setState(() {
-      timetables = result;
-      isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        timetables = result;
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -118,60 +136,6 @@ class _MyTimeTableListScreenState extends ConsumerState<MyTimeTableListScreen> {
                 },
               ),
             ],
-            // title: Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            // InkWell(
-            //   child: Padding(
-            //     padding: const EdgeInsets.only(left: 8),
-            //     child: SvgPicture.asset(
-            //       "assets/img/post_screen/cross_icon.svg",
-            //     ),
-            //   ),
-            //   onTap: () {
-            //     Navigator.pop(context);
-            //   },
-            // ),
-            //     const Spacer(),
-            // const Text(
-            //   '시간표 목록',
-            //   textAlign: TextAlign.center,
-            //   style: TextStyle(
-            //     color: Colors.black,
-            //     fontSize: 16.0,
-            //     letterSpacing: -0.02,
-            //     height: 1.5,
-            //     fontWeight: FontWeight.w400,
-            //   ),
-            // ),
-            //     const Spacer(),
-            // InkWell(
-            //   child: const Padding(
-            //     padding: EdgeInsets.only(right: 16.0),
-            //     child: Text(
-            //       "시간표 추가",
-            //       style: TextStyle(
-            //         color: PRIMARY_COLOR_ORANGE_01,
-            //         fontSize: 14.0,
-            //         letterSpacing: -0.01,
-            //         height: 1.4,
-            //         fontWeight: FontWeight.w400,
-            //       ),
-            //     ),
-            //   ),
-            //   onTap: () {
-            //     showDialog(
-            //       context: context,
-            //       builder: (_) {
-            //         return const Center(
-            //           child: AddNewTimetableWidget(),
-            //         );
-            //       },
-            //     );
-            //   },
-            // ),
-            //   ],
-            // ),
             centerTitle: true,
             backgroundColor: Colors.white,
             elevation: 0,
@@ -191,10 +155,53 @@ class _MyTimeTableListScreenState extends ConsumerState<MyTimeTableListScreen> {
                       final String key = timetables.keys.elementAt(index);
                       final List<TimetablePreviewModel> values =
                           timetables[key]!;
-                      return TimetableList(
-                          semester:
-                              TimetableListModel.convertKeyToSemester(key),
-                          timetables: values);
+                      return Container(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 32),
+                              Row(
+                                children: [
+                                  Text(
+                                    TimetableListModel.convertKeyToSemester(
+                                        key),
+                                    style: const TextStyle(
+                                      color: GRAYSCALE_GRAY_03,
+                                      fontSize: 16.0,
+                                      letterSpacing: -0.02,
+                                      height: 1.5,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              ...List.generate(
+                                  values.length,
+                                  (index) => TimetableListWidget(
+                                      changeTimetableName:
+                                          (String newTimetableName) {
+                                        setState(() {
+                                          values[index].name = newTimetableName;
+                                        });
+                                        widget.changeTimetableName(
+                                            newTimetableName);
+                                      },
+                                      deleteTimetable: widget.deleteTimetable,
+                                      pinTimetable: (TimetablePreviewModel
+                                              timetableToBePinned) =>
+                                          pinTimetable(
+                                              values, timetableToBePinned),
+                                      timetables: values,
+                                      timetablePreviewModel: values[index]))
+                            ],
+                          ),
+                        ),
+                      );
                     })
                         // [
                         //   TimetableList(),

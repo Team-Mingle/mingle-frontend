@@ -16,7 +16,6 @@ import 'package:mingle/module/view/add_module_review_screen.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/module/view/module_review_main_screen.dart';
 import 'package:mingle/timetable/components/add_friend_dialog.dart';
-import 'package:mingle/timetable/components/timetable_list_more_modal.dart';
 import 'package:mingle/timetable/model/class_model.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/timetable/model/friend_model.dart';
@@ -104,7 +103,21 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     }
   }
 
-  void changeTimetabelName() async {
+  void deleteTimetable(int timetableId) async {
+    try {
+      await ref
+          .watch(timetableRepositoryProvider)
+          .deleteTimetable(timetableId: timetableId);
+    } on DioException catch (e) {
+      fToast.showToast(
+        child: const ToastMessage(message: generalErrorMsg),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
+    }
+  }
+
+  void changeTimetableName(String newTimetableName) async {
     try {
       if (newTimetableName == timetable!.name) {
         return;
@@ -406,8 +419,10 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
 
   void addClass(CourseModel courseModel) {
     setState(() {
-      addedCourses.addAll(courseModel
-          .generateClasses(() => showCourseDetailModal(courseModel)));
+      addedCourses.addAll(courseModel.generateClasses(() {
+        print("tapped");
+        showCourseDetailModal(courseModel);
+      }));
     });
   }
 
@@ -1011,6 +1026,15 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // print(ref.watch(pinnedTimetableIdProvider));
+    // getClasses();
+
+    ref.listen(pinnedTimetableIdProvider, (prev, next) {
+      if (prev != next) {
+        getClasses();
+      }
+      /* do something, for example, call the method doSomething */
+    });
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: BACKGROUND_COLOR_GRAY,
@@ -1027,7 +1051,10 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                    builder: (_) => const MyTimeTableListScreen()),
+                    builder: (_) => TimeTableListScreen(
+                          deleteTimetable: deleteTimetable,
+                          changeTimetableName: changeTimetableName,
+                        )),
               );
             },
             child: Align(
@@ -1162,7 +1189,9 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => const MyTimeTableListScreen(
+                            builder: (_) => TimeTableListScreen(
+                              deleteTimetable: deleteTimetable,
+                              changeTimetableName: changeTimetableName,
                               isAddTimetable: true,
                             ),
                           ),
@@ -1533,7 +1562,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                           GestureDetector(
                             onTap: () {
                               Navigator.of(context).pop();
-                              changeTimetabelName();
+                              changeTimetableName(newTimetableName);
                             },
                             child: Container(
                               height: 40.0,
