@@ -82,7 +82,8 @@ class MarketTabScreen extends ConsumerWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SearchScreen()),
+                MaterialPageRoute(
+                    builder: (context) => const SecondHandMarketSearchScreen()),
               );
             },
           ),

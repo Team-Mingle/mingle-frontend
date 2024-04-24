@@ -118,7 +118,9 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
     bool canSubmit =
         title.isNotEmpty && content.isNotEmpty && categoryType.isNotEmpty;
 
-    List<CategoryModel> categories = ref.watch(postCategoryProvider);
+    List<String> categories = widget.boardType == "TOTAL"
+        ? ref.watch(totalPostCategoryProvider).categoryNames
+        : ref.watch(univPostCategoryProvider).categoryNames;
     return PopScope(
       canPop: false,
       child: GestureDetector(
@@ -239,29 +241,30 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
                                               2 * categories.length - 1,
                                               (index) {
                                             if (index % 2 == 0) {
-                                              CategoryModel currentModel =
+                                              String currentCategory =
                                                   categories[index ~/ 2];
-                                              String currentName = currentModel
-                                                  .convertName(currentModel
-                                                      .categoryName);
+                                              String currentName =
+                                                  CategoryModel.convertName(
+                                                      currentCategory);
+
                                               return ListTile(
                                                 title: Center(
                                                   child: Text(
                                                     currentName,
                                                     style: TextStyle(
-                                                      fontWeight: categoryType ==
-                                                              currentModel
-                                                                  .categoryName
-                                                          ? FontWeight.bold
-                                                          : FontWeight.normal,
+                                                      fontWeight:
+                                                          categoryType ==
+                                                                  currentName
+                                                              ? FontWeight.bold
+                                                              : FontWeight
+                                                                  .normal,
                                                     ),
                                                   ),
                                                 ),
                                                 onTap: () {
                                                   Navigator.pop(context);
                                                   setState(() {
-                                                    categoryType = currentModel
-                                                        .categoryName;
+                                                    categoryType = currentName;
                                                     categoryName =
                                                         currentName; // 선택한 항목 설정
                                                   });

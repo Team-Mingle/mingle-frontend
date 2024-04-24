@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mingle/common/const/data.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
 import 'package:mingle/common/model/pagination_params.dart';
 import 'package:mingle/post/models/category_model.dart';
@@ -80,12 +81,20 @@ final univKsaPostProvider =
   return notifier;
 });
 
-final postCategoryProvider =
-    StateNotifierProvider<PostCategoryStateNotifier, List<CategoryModel>>(
-        (ref) {
+final totalPostCategoryProvider =
+    StateNotifierProvider<TotalPostCategoryStateNotifier, CategoryModel>((ref) {
   final repository = ref.watch(postRepositoryProvider);
 
-  final notifier = PostCategoryStateNotifier(postRepository: repository);
+  final notifier = TotalPostCategoryStateNotifier(postRepository: repository);
+
+  return notifier;
+});
+
+final univPostCategoryProvider =
+    StateNotifierProvider<UnivPostCategoryStateNotifier, CategoryModel>((ref) {
+  final repository = ref.watch(postRepositoryProvider);
+
+  final notifier = UnivPostCategoryStateNotifier(postRepository: repository);
 
   return notifier;
 });
@@ -552,15 +561,26 @@ class BestPostStateNotifier extends PostStateNotifier {
             categoryType: 'best');
 }
 
-class PostCategoryStateNotifier extends StateNotifier<List<CategoryModel>> {
+class PostCategoryStateNotifier extends StateNotifier<CategoryModel> {
   final PostRepository postRepository;
 
-  PostCategoryStateNotifier({required this.postRepository}) : super([]) {
-    fetchCategories();
-  }
-  fetchCategories() async {
-    final resp = await postRepository.fetchCategories();
+  PostCategoryStateNotifier({required this.postRepository})
+      : super(CategoryModel(categoryNames: []));
+  fetchCategories(String boardType) async {
+    final resp = await postRepository.fetchCategories(boardType: boardType);
 
     state = resp;
+  }
+}
+
+class TotalPostCategoryStateNotifier extends PostCategoryStateNotifier {
+  TotalPostCategoryStateNotifier({required super.postRepository}) : super() {
+    fetchCategories("TOTAL");
+  }
+}
+
+class UnivPostCategoryStateNotifier extends PostCategoryStateNotifier {
+  UnivPostCategoryStateNotifier({required super.postRepository}) : super() {
+    fetchCategories("UNIV");
   }
 }

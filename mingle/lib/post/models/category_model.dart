@@ -4,14 +4,14 @@ part 'category_model.g.dart';
 
 @JsonSerializable()
 class CategoryModel {
-  final String categoryName;
+  final List<String> categoryNames;
 
-  CategoryModel({required this.categoryName});
+  CategoryModel({required this.categoryNames});
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) =>
       _$CategoryModelFromJson(json);
 
-  String convertName(String name) {
+  static String convertName(String name) {
     switch (name) {
       case "FREE":
         return "자유";
