@@ -108,6 +108,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
       await ref
           .watch(timetableRepositoryProvider)
           .deleteTimetable(timetableId: timetableId);
+      ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetable();
     } on DioException catch (e) {
       fToast.showToast(
         child: const ToastMessage(message: generalErrorMsg),

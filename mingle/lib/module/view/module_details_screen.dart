@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/component/expanded_section.dart';
@@ -49,116 +50,155 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        shape: const Border(
+            bottom: BorderSide(color: GRAYSCALE_GRAY_01, width: 1)),
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          shape: const Border(
-              bottom: BorderSide(color: GRAYSCALE_GRAY_01, width: 1)),
-          backgroundColor: Colors.white,
-          titleSpacing: 0.0,
-          elevation: 0,
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 0.0),
-            child: IconButton(
-              padding: EdgeInsets.zero,
-              icon: const ImageIcon(
-                AssetImage(
-                    "assets/img/module_review_screen/back_tick_icon.png"),
-                color: GRAYSCALE_BLACK,
-              ),
+        titleSpacing: 0.0,
+        elevation: 0,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 0.0),
+          child: IconButton(
+            padding: EdgeInsets.zero,
+            icon: const ImageIcon(
+              AssetImage("assets/img/module_review_screen/back_tick_icon.png"),
               color: GRAYSCALE_BLACK,
-              onPressed: () {
-                Navigator.pop(context);
-              },
             ),
-          ),
-          title: const Text(
-            "강의개요",
-            style: TextStyle(
-                fontSize: 16.0,
-                letterSpacing: -0.02,
-                height: 1.5,
-                color: Colors.black),
+            color: GRAYSCALE_BLACK,
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
         ),
-        body: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: Stack(
-            children: [
-              FutureBuilder(
-                future: ref
-                    .watch(courseRepositoryProvider)
-                    .getCourseDetails(courseId: widget.courseId),
-                // postDetailFuture(postId),
-                builder: (context, AsyncSnapshot<CourseDetailModel> snapshot) {
-                  if (!snapshot.hasData) {
-                    print(snapshot);
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  if (snapshot.hasError) {
-                    return const Center(
-                      child: Text("다시 시도 ㄱㄱ"),
-                    );
-                  }
-                  CourseDetailModel course = snapshot.data!;
-
-                  return Stack(
-                    children: [
-                      renderContent(course),
-                    ],
+        title: const Text(
+          "강의개요",
+          style: TextStyle(
+              fontSize: 16.0,
+              letterSpacing: -0.02,
+              height: 1.5,
+              color: Colors.black),
+        ),
+      ),
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: Stack(
+          children: [
+            FutureBuilder(
+              future: ref
+                  .watch(courseRepositoryProvider)
+                  .getCourseDetails(courseId: widget.courseId),
+              // postDetailFuture(postId),
+              builder: (context, AsyncSnapshot<CourseDetailModel> snapshot) {
+                if (!snapshot.hasData) {
+                  print(snapshot);
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: PRIMARY_COLOR_ORANGE_01,
+                    ),
                   );
-                },
-              ),
-              Positioned(
-                right: 16.0,
-                bottom: 16.0,
-                // child: ExpandableFab(
-                //   distance: 112,
-                //   children: [
-                //     ActionButton(
-                //       onPressed: () => print("hi"),
-                //       //  () => Navigator.of(context).push(
-                //       //     MaterialPageRoute(
-                //       //         builder: (_) => const AddModuleReviewScreen())),
-                //       child: Container(
-                //         padding: const EdgeInsets.all(16.0),
-                //         decoration: BoxDecoration(
-                //             color: Colors.white,
-                //             border: Border.all(color: GRAYSCALE_GRAY_02),
-                //             borderRadius: BorderRadius.circular(8.0)),
-                //         child: const Text("강의평 작성하기"),
-                //       ),
-                //     ),
-                //     // ActionButton(
-                //     //   onPressed: () {},
-                //     //   icon: const Icon(Icons.insert_photo),
-                //     // ),
-                //     // ActionButton(
-                //     //   onPressed: () {},
-                //     //   icon: const Icon(Icons.videocam),
-                //     // ),
-                //   ],
-                // ),
+                }
+                if (snapshot.hasError) {
+                  return const Center(
+                    child: Text("다시 시도 ㄱㄱ"),
+                  );
+                }
+                CourseDetailModel course = snapshot.data!;
 
-                child: FloatingActionButton(
-                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => AddModuleReviewScreen(
-                            moduleId: widget.courseId,
-                            moduleName: widget.moduleName,
-                          ))),
-                  backgroundColor: PRIMARY_COLOR_ORANGE_02,
-                  child: const Icon(
-                    Icons.add,
-                    size: 36,
-                  ),
-                ),
-              ),
-            ],
+                return Stack(
+                  children: [
+                    renderContent(course),
+                  ],
+                );
+              },
+            ),
+            // Positioned(
+            //   right: 16.0,
+            //   bottom: 16.0,
+            // child: ExpandableFab(
+            //   distance: 112,
+            //   children: [
+            //     ActionButton(
+            //       onPressed: () => print("0"),
+            //       icon: const Icon(Icons.format_size),
+            //     ),
+            //     ActionButton(
+            //       onPressed: () => print("1"),
+            //       icon: const Icon(Icons.insert_photo),
+            //     ),
+            //     ActionButton(
+            //       onPressed: () => print("2"),
+            //       icon: const Icon(Icons.videocam),
+            //     ),
+            //   ],
+            // ),
+            // ),
+            // Positioned(
+            //   right: 16.0,
+            //   bottom: 16.0,
+            //   child: ExpandableFab(
+            //     distance: 112,
+            //     children: [
+            //       ActionButton(
+            //         onPressed: () => print("hi"),
+            //         //  () => Navigator.of(context).push(
+            //         //     MaterialPageRoute(
+            //         //         builder: (_) => const AddModuleReviewScreen())),
+            //         child: Container(
+            //           padding: const EdgeInsets.all(16.0),
+            //           decoration: BoxDecoration(
+            //               color: Colors.white,
+            //               border: Border.all(color: GRAYSCALE_GRAY_02),
+            //               borderRadius: BorderRadius.circular(8.0)),
+            //           child: const Text("강의평 작성하기"),
+            //         ),
+            //       ),
+            //       // ActionButton(
+            //       //   onPressed: () {},
+            //       //   icon: const Icon(Icons.insert_photo),
+            //       // ),
+            //       // ActionButton(
+            //       //   onPressed: () {},
+            //       //   icon: const Icon(Icons.videocam),
+            //       // ),
+            //     ],
+            //   ),
+
+            //   // child: FloatingActionButton(
+            //   //   onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+            //   //       builder: (_) => AddModuleReviewScreen(
+            //   //             moduleId: widget.courseId,
+            //   //             moduleName: widget.moduleName,
+            //   //           ))),
+            //   //   backgroundColor: PRIMARY_COLOR_ORANGE_02,
+            //   //   child: const Icon(
+            //   //     Icons.add,
+            //   //     size: 36,
+            //   //   ),
+            //   // ),
+            // ),
+          ],
+        ),
+      ),
+      floatingActionButton: ExpandableFab(
+        distance: 112,
+        children: [
+          ActionButton(
+            onPressed: () => print("0"),
+            icon: const Icon(Icons.format_size),
           ),
-        )
-        // renderContent(),
-        );
+          ActionButton(
+            onPressed: () => print("1"),
+            icon: const Icon(Icons.insert_photo),
+          ),
+          ActionButton(
+            onPressed: () => print("2"),
+            icon: const Icon(Icons.videocam),
+          ),
+        ],
+      ),
+      // renderContent(),
+    );
   }
 
   Widget renderContent(CourseDetailModel courseDetailModel) {
@@ -524,7 +564,6 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
   }
 }
 
-@immutable
 class ExpandableFab extends StatefulWidget {
   const ExpandableFab({
     super.key,
@@ -582,14 +621,16 @@ class _ExpandableFabState extends State<ExpandableFab>
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.bottomRight,
-      clipBehavior: Clip.none,
-      children: [
-        _buildTapToCloseFab(),
-        ..._buildExpandingActionButtons(),
-        _buildTapToOpenFab(),
-      ],
+    return SizedBox.expand(
+      child: Stack(
+        alignment: Alignment.bottomRight,
+        clipBehavior: Clip.none,
+        children: [
+          _buildTapToCloseFab(),
+          ..._buildExpandingActionButtons(),
+          _buildTapToOpenFab(),
+        ],
+      ),
     );
   }
 
@@ -599,17 +640,16 @@ class _ExpandableFabState extends State<ExpandableFab>
       height: 56,
       child: Center(
         child: Material(
-          color: Colors.white,
           shape: const CircleBorder(),
           clipBehavior: Clip.antiAlias,
-          elevation: 4,
+          elevation: 1,
           child: InkWell(
             onTap: _toggle,
-            child: const Padding(
-              padding: EdgeInsets.all(16),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
               child: Icon(
                 Icons.close,
-                color: Colors.black,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           ),
@@ -642,23 +682,37 @@ class _ExpandableFabState extends State<ExpandableFab>
       ignoring: _open,
       child: AnimatedContainer(
         transformAlignment: Alignment.center,
-        // transform: Matrix4.diagonal3Values(
-        //   _open ? 0.7 : 1.0,
-        //   _open ? 0.7 : 1.0,
-        //   1.0,
-        // ),
+        transform: Matrix4.diagonal3Values(
+          _open ? 0.7 : 1.0,
+          _open ? 0.7 : 1.0,
+          1.0,
+        ),
         duration: const Duration(milliseconds: 250),
         curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
         child: AnimatedOpacity(
           opacity: _open ? 0.0 : 1.0,
           curve: const Interval(0.25, 1.0, curve: Curves.easeInOut),
           duration: const Duration(milliseconds: 250),
-          child: FloatingActionButton(
-            onPressed: _toggle,
-            backgroundColor: PRIMARY_COLOR_ORANGE_02,
-            child: const Icon(
-              Icons.add,
-              size: 36,
+          child: GestureDetector(
+            onTap: _toggle,
+            child: const SizedBox(
+              width: 56,
+              height: 56,
+              child: Center(
+                child: Material(
+                  color: PRIMARY_COLOR_ORANGE_02,
+                  shape: CircleBorder(),
+                  clipBehavior: Clip.antiAlias,
+                  elevation: 1,
+                  child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
         ),
@@ -686,13 +740,18 @@ class _ExpandingActionButton extends StatelessWidget {
     return AnimatedBuilder(
       animation: progress,
       builder: (context, child) {
+        final offset = Offset.fromDirection(
+          directionInDegrees * (math.pi / 180.0),
+          progress.value * maxDistance,
+        );
         return Positioned(
-            right: 16.0,
-            bottom: 72.0,
-            child: Transform.scale(
-              scale: progress.value,
-              child: child,
-            ));
+          right: 4.0 + offset.dx,
+          bottom: 4.0 + offset.dy,
+          child: Transform.rotate(
+            angle: (1.0 - progress.value) * math.pi / 2,
+            child: child!,
+          ),
+        );
       },
       child: FadeTransition(
         opacity: progress,
@@ -706,16 +765,48 @@ class _ExpandingActionButton extends StatelessWidget {
 class ActionButton extends StatelessWidget {
   const ActionButton({
     super.key,
-    required this.onPressed,
-    required this.child,
+    this.onPressed,
+    required this.icon,
   });
 
-  final VoidCallback onPressed;
-  final Widget child;
+  final VoidCallback? onPressed;
+  final Widget icon;
 
   @override
   Widget build(BuildContext context) {
-    // return IconButton(onPressed: onPressed, icon: const Icon(Icons.abc));
-    return Material(child: GestureDetector(onTap: onPressed, child: child));
+    final theme = Theme.of(context);
+    return Material(
+      shape: const CircleBorder(),
+      clipBehavior: Clip.antiAlias,
+      color: theme.colorScheme.secondary,
+      elevation: 4,
+      child: IconButton(
+        onPressed: onPressed,
+        icon: icon,
+        color: theme.colorScheme.onSecondary,
+      ),
+    );
+  }
+}
+
+@immutable
+class FakeItem extends StatelessWidget {
+  const FakeItem({
+    super.key,
+    required this.isBig,
+  });
+
+  final bool isBig;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+      height: isBig ? 128 : 36,
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        color: Colors.grey.shade300,
+      ),
+    );
   }
 }

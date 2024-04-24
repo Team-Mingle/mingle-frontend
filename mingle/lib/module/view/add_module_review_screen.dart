@@ -340,7 +340,8 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
                         padding: EdgeInsets.zero,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 11.0, vertical: 15.0),
+                            horizontal: 11.0,
+                          ),
                           child: Row(
                             children: [
                               Text(

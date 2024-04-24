@@ -12,8 +12,12 @@ import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 
 class AddNewTimetableWidget extends ConsumerStatefulWidget {
+  final Function addTimetable;
   final Function refreshTimetableList;
-  const AddNewTimetableWidget({super.key, required this.refreshTimetableList});
+  const AddNewTimetableWidget(
+      {super.key,
+      required this.refreshTimetableList,
+      required this.addTimetable});
 
   @override
   ConsumerState<AddNewTimetableWidget> createState() =>
@@ -40,24 +44,6 @@ class _AddNewTimetableWidgetState extends ConsumerState<AddNewTimetableWidget> {
     super.initState();
     fToast = FToast();
     fToast.init(context);
-  }
-
-  void addTimetable() async {
-    try {
-      final year = int.parse(selectedSemester!.substring(0, 4));
-      final semester = int.parse(selectedSemester!.substring(6, 7));
-
-      await ref.watch(timetableRepositoryProvider).addTimetable(
-          addTimetableDto: AddTimetableDto(year: year, semester: semester));
-      ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetable();
-      widget.refreshTimetableList();
-    } on DioException catch (e) {
-      fToast.showToast(
-        child: const ToastMessage(message: generalErrorMsg),
-        gravity: ToastGravity.CENTER,
-        toastDuration: const Duration(seconds: 2),
-      );
-    }
   }
 
   @override
@@ -200,7 +186,7 @@ class _AddNewTimetableWidgetState extends ConsumerState<AddNewTimetableWidget> {
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).pop();
-                      addTimetable();
+                      widget.addTimetable(selectedSemester!);
                       // changeTimetabelName();
                     },
                     child: Container(

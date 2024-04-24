@@ -1,11 +1,16 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/const/data.dart';
+import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/timetable/components/add_new_timetable_widget.dart';
 import 'package:mingle/timetable/components/timetable_list_container.dart';
 import 'package:mingle/timetable/model/timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_preview_model.dart';
+import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 import 'package:mingle/timetable/view/self_add_timetable_screen.dart';
 
@@ -28,12 +33,18 @@ class TimeTableListScreen extends ConsumerStatefulWidget {
 class _MyTimeTableListScreenState extends ConsumerState<TimeTableListScreen> {
   Map<String, List<TimetablePreviewModel>> timetables = {};
   bool isLoading = false;
+  late FToast fToast;
 
   @override
   void initState() {
     // TODO: implement initState
 
     super.initState();
+    fToast = FToast();
+    fToast.init(context);
+    setState(() {
+      isLoading = true;
+    });
     getTimetables();
     print(timetables);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -42,12 +53,32 @@ class _MyTimeTableListScreenState extends ConsumerState<TimeTableListScreen> {
           context: context,
           builder: (_) {
             return Center(
-              child: AddNewTimetableWidget(refreshTimetableList: getTimetables),
+              child: AddNewTimetableWidget(
+                  refreshTimetableList: getTimetables,
+                  addTimetable: addTimetable),
             );
           },
         );
       }
     });
+  }
+
+  void addTimetable(String selectedSemester) async {
+    try {
+      final year = int.parse(selectedSemester.substring(0, 4));
+      final semester = int.parse(selectedSemester.substring(6, 7));
+
+      await ref.watch(timetableRepositoryProvider).addTimetable(
+          addTimetableDto: AddTimetableDto(year: year, semester: semester));
+      ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetable();
+      getTimetables();
+    } on DioException catch (e) {
+      fToast.showToast(
+        child: const ToastMessage(message: generalErrorMsg),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
+    }
   }
 
   void pinTimetable(List<TimetablePreviewModel> timetableList,
@@ -63,9 +94,6 @@ class _MyTimeTableListScreenState extends ConsumerState<TimeTableListScreen> {
   }
 
   void getTimetables() async {
-    setState(() {
-      isLoading = true;
-    });
     final result = (await ref.read(timetableRepositoryProvider).getTimetables())
         .timetablePreviewResponseMap;
     if (mounted) {
@@ -128,6 +156,7 @@ class _MyTimeTableListScreenState extends ConsumerState<TimeTableListScreen> {
                     builder: (_) {
                       return Center(
                         child: AddNewTimetableWidget(
+                          addTimetable: addTimetable,
                           refreshTimetableList: getTimetables,
                         ),
                       );
@@ -191,7 +220,14 @@ class _MyTimeTableListScreenState extends ConsumerState<TimeTableListScreen> {
                                         widget.changeTimetableName(
                                             newTimetableName);
                                       },
-                                      deleteTimetable: widget.deleteTimetable,
+                                      deleteTimetable: (int timetableId) async {
+                                        setState(() {
+                                          values.removeAt(index);
+                                        });
+                                        await widget
+                                            .deleteTimetable(timetableId);
+                                        getTimetables();
+                                      },
                                       pinTimetable: (TimetablePreviewModel
                                               timetableToBePinned) =>
                                           pinTimetable(

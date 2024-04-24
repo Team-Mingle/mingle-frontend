@@ -86,7 +86,10 @@ class _TimetableListWidgetState extends ConsumerState<TimetableListWidget> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => showDeleteTimetableDialog(),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    showDeleteTimetableDialog();
+                  },
                   child: const SizedBox(
                     height: 56.0,
                     child: Padding(
