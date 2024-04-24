@@ -28,8 +28,8 @@ class CustomInterceptor extends Interceptor {
       options.headers.remove('accessToken');
       final token = await storage.read(key: ACCESS_TOKEN_KEY);
       print(token);
-      // options.headers.addAll({'authorization': 'Bearer $token'});
-      options.headers.addAll({'authorization': 'Bearer mingle-admin'});
+      options.headers.addAll({'authorization': 'Bearer $token'});
+      // options.headers.addAll({'authorization': 'Bearer mingle-admin'});
     }
     super.onRequest(options, handler);
   }

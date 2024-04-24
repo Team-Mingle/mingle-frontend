@@ -243,6 +243,7 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
                                             if (index % 2 == 0) {
                                               String currentCategory =
                                                   categories[index ~/ 2];
+                                              print(currentCategory);
                                               String currentName =
                                                   CategoryModel.convertName(
                                                       currentCategory);
@@ -252,19 +253,18 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
                                                   child: Text(
                                                     currentName,
                                                     style: TextStyle(
-                                                      fontWeight:
-                                                          categoryType ==
-                                                                  currentName
-                                                              ? FontWeight.bold
-                                                              : FontWeight
-                                                                  .normal,
+                                                      fontWeight: categoryType ==
+                                                              currentCategory
+                                                          ? FontWeight.bold
+                                                          : FontWeight.normal,
                                                     ),
                                                   ),
                                                 ),
                                                 onTap: () {
                                                   Navigator.pop(context);
                                                   setState(() {
-                                                    categoryType = currentName;
+                                                    categoryType =
+                                                        currentCategory;
                                                     categoryName =
                                                         currentName; // 선택한 항목 설정
                                                   });

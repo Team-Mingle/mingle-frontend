@@ -28,12 +28,12 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
   String title = "";
   bool isAnonymous = true;
   bool isSelling = true;
-  String currencyType = "hkd";
+  String currencyType = "krw";
   String content = "";
   String price = "";
   String location = "";
   String chatUrl = "";
-  List<String> currencies = ["hkd", "krw", "sgd", "rmb"];
+  List<String> currencies = ["krw", "hkd", "sgd", "rmb"];
   bool isLoading = false;
   @override
   void initState() {
