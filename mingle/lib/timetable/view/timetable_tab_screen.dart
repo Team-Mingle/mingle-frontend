@@ -144,6 +144,17 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     setState(() {
       isLoading = true;
     });
+    if (myDisplayName.isEmpty) {
+      fToast.showToast(
+        child: const ToastMessage(message: "이름을 입력해주세요."),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
+      setState(() {
+        isLoading = false;
+      });
+      return;
+    }
     try {
       await ref.watch(friendRepositoryProvider).addFriend(
           AddFriendDto(friendCode: friendCode, myDisplayName: myDisplayName));
@@ -265,14 +276,17 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                       color: GRAYSCALE_GRAY_01_5,
                     ),
                     GestureDetector(
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => ModuleDetailsScreen(
-                            courseId: currentCourse.id,
-                            moduleName: currentCourse.name,
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => ModuleDetailsScreen(
+                              courseId: currentCourse.id,
+                              moduleName: currentCourse.name,
+                            ),
                           ),
-                        ),
-                      ),
+                        );
+                      },
                       child: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 14.0),
                         child: Text(
@@ -283,13 +297,17 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
                             builder: (_) => AddModuleReviewScreen(
-                                  moduleId: currentCourse.id,
-                                  moduleName: currentCourse.name,
-                                )),
-                      ),
+                              moduleId: currentCourse.id,
+                              moduleName: currentCourse.name,
+                            ),
+                          ),
+                        );
+                      },
                       child: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 14.0),
                         child: Text(

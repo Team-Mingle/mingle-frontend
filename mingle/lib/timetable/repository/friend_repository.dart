@@ -26,6 +26,12 @@ abstract class FriendRepository {
   @Headers({'accessToken': 'true'})
   Future<dynamic> addFriend(@Body() AddFriendDto addFriendDto);
 
+  @PATCH('/{friendId}')
+  @Headers({'accessToken': 'true'})
+  Future<void> changeFriendName(
+      {@Path() required int friendId,
+      @Body() required ChangeFriendNameDto changeFriendNameDto});
+
   @GET("")
   @Headers({'accessToken': 'true'})
   Future<FriendListModel> getFriends();
@@ -83,4 +89,13 @@ class GenerateCodeDto {
   GenerateCodeDto({required this.myDisplayName});
 
   Map<String, dynamic> toJson() => _$GenerateCodeDtoToJson(this);
+}
+
+@JsonSerializable()
+class ChangeFriendNameDto {
+  final String friendName;
+
+  ChangeFriendNameDto({required this.friendName});
+
+  Map<String, dynamic> toJson() => _$ChangeFriendNameDtoToJson(this);
 }

@@ -105,10 +105,14 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
       if (newFriendName == widget.friendName) {
         return;
       }
+      await ref.watch(friendRepositoryProvider).changeFriendName(
+          friendId: widget.friendId,
+          changeFriendNameDto: ChangeFriendNameDto(friendName: newFriendName));
       // await ref.watch(timetableRepositoryProvider).changeTimetableName(
       //     timetableId: ref.read(pinnedTimetableIdProvider)!,
       //     changeTimetableNameDto:
       //         ChangeTimetableNameDto(name: newTimetableName));
+      widget.refreshFriendList();
       setState(() {
         widget.friendName = newFriendName;
       });

@@ -1,10 +1,16 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'dart:math' as math;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/component/expanded_section.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/const/data.dart';
 import 'package:mingle/module/components/module_review_card.dart';
+import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/module/model/course_detail_model.dart';
 import 'package:mingle/module/model/course_evaluation_model.dart';
 import 'package:mingle/module/model/course_model.dart';
@@ -12,6 +18,8 @@ import 'package:mingle/module/repository/course_evaluation_repository.dart';
 import 'package:mingle/module/repository/course_repository.dart';
 import 'package:mingle/module/util/module_satisfaction_enum.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
+import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
+import 'package:mingle/timetable/repository/timetable_repository.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
 class ModuleDetailsScreen extends ConsumerStatefulWidget {
@@ -46,6 +54,50 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
     moduleSatisfaction.satisfied
   ];
   List<int> likes = [8, 8, 4, 8];
+  late FToast fToast;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fToast = FToast();
+    fToast.init(context);
+  }
+
+  void navigateToAddModuleReview() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => AddModuleReviewScreen(
+          moduleId: widget.courseId,
+          moduleName: widget.moduleName,
+        ),
+      ),
+    );
+  }
+
+  void addModuleToTimetable() async {
+    int? pinnedTimetableId = ref.watch(pinnedTimetableIdProvider);
+    if (pinnedTimetableId == null) {
+      fToast.showToast(
+        child: const ToastMessage(message: "시간표를 먼저 추가해주세요"),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
+    }
+    try {
+      await ref.watch(timetableRepositoryProvider).addCourse(
+          timetableId: pinnedTimetableId!,
+          addClassDto: AddClassDto(courseId: widget.courseId));
+    } on DioException catch (e) {
+      print(e);
+      fToast.showToast(
+        child: ToastMessage(
+            message: e.response?.data['message'] ?? generalErrorMsg),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,90 +164,13 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
                 );
               },
             ),
-            // Positioned(
-            //   right: 16.0,
-            //   bottom: 16.0,
-            // child: ExpandableFab(
-            //   distance: 112,
-            //   children: [
-            //     ActionButton(
-            //       onPressed: () => print("0"),
-            //       icon: const Icon(Icons.format_size),
-            //     ),
-            //     ActionButton(
-            //       onPressed: () => print("1"),
-            //       icon: const Icon(Icons.insert_photo),
-            //     ),
-            //     ActionButton(
-            //       onPressed: () => print("2"),
-            //       icon: const Icon(Icons.videocam),
-            //     ),
-            //   ],
-            // ),
-            // ),
-            // Positioned(
-            //   right: 16.0,
-            //   bottom: 16.0,
-            //   child: ExpandableFab(
-            //     distance: 112,
-            //     children: [
-            //       ActionButton(
-            //         onPressed: () => print("hi"),
-            //         //  () => Navigator.of(context).push(
-            //         //     MaterialPageRoute(
-            //         //         builder: (_) => const AddModuleReviewScreen())),
-            //         child: Container(
-            //           padding: const EdgeInsets.all(16.0),
-            //           decoration: BoxDecoration(
-            //               color: Colors.white,
-            //               border: Border.all(color: GRAYSCALE_GRAY_02),
-            //               borderRadius: BorderRadius.circular(8.0)),
-            //           child: const Text("강의평 작성하기"),
-            //         ),
-            //       ),
-            //       // ActionButton(
-            //       //   onPressed: () {},
-            //       //   icon: const Icon(Icons.insert_photo),
-            //       // ),
-            //       // ActionButton(
-            //       //   onPressed: () {},
-            //       //   icon: const Icon(Icons.videocam),
-            //       // ),
-            //     ],
-            //   ),
-
-            //   // child: FloatingActionButton(
-            //   //   onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-            //   //       builder: (_) => AddModuleReviewScreen(
-            //   //             moduleId: widget.courseId,
-            //   //             moduleName: widget.moduleName,
-            //   //           ))),
-            //   //   backgroundColor: PRIMARY_COLOR_ORANGE_02,
-            //   //   child: const Icon(
-            //   //     Icons.add,
-            //   //     size: 36,
-            //   //   ),
-            //   // ),
-            // ),
           ],
         ),
       ),
       floatingActionButton: ExpandableFab(
         distance: 112,
-        children: [
-          ActionButton(
-            onPressed: () => print("0"),
-            icon: const Icon(Icons.format_size),
-          ),
-          ActionButton(
-            onPressed: () => print("1"),
-            icon: const Icon(Icons.insert_photo),
-          ),
-          ActionButton(
-            onPressed: () => print("2"),
-            icon: const Icon(Icons.videocam),
-          ),
-        ],
+        navigateToAddModuleReview: navigateToAddModuleReview,
+        addModuleToTimetable: addModuleToTimetable,
       ),
       // renderContent(),
     );
@@ -569,12 +544,14 @@ class ExpandableFab extends StatefulWidget {
     super.key,
     this.initialOpen,
     required this.distance,
-    required this.children,
+    required this.addModuleToTimetable,
+    required this.navigateToAddModuleReview,
   });
 
   final bool? initialOpen;
   final double distance;
-  final List<Widget> children;
+  final Function addModuleToTimetable;
+  final Function navigateToAddModuleReview;
 
   @override
   State<ExpandableFab> createState() => _ExpandableFabState();
@@ -660,20 +637,18 @@ class _ExpandableFabState extends State<ExpandableFab>
 
   List<Widget> _buildExpandingActionButtons() {
     final children = <Widget>[];
-    final count = widget.children.length;
-    final step = 90.0 / (count - 1);
-    for (var i = 0, angleInDegrees = 0.0;
-        i < count;
-        i++, angleInDegrees += step) {
-      children.add(
-        _ExpandingActionButton(
-          directionInDegrees: angleInDegrees,
-          maxDistance: widget.distance,
-          progress: _expandAnimation,
-          child: widget.children[i],
-        ),
-      );
-    }
+
+    children.add(
+      _ExpandingActionButton(
+        toggle: _toggle,
+        directionInDegrees: 90,
+        maxDistance: 60,
+        progress: _expandAnimation,
+        addModuleToTimetable: widget.addModuleToTimetable,
+        navigateToAddModuleReview: widget.navigateToAddModuleReview,
+      ),
+    );
+
     return children;
   }
 
@@ -724,16 +699,20 @@ class _ExpandableFabState extends State<ExpandableFab>
 @immutable
 class _ExpandingActionButton extends StatelessWidget {
   const _ExpandingActionButton({
+    required this.toggle,
     required this.directionInDegrees,
     required this.maxDistance,
     required this.progress,
-    required this.child,
+    required this.addModuleToTimetable,
+    required this.navigateToAddModuleReview,
   });
 
   final double directionInDegrees;
   final double maxDistance;
   final Animation<double> progress;
-  final Widget child;
+  final Function toggle;
+  final Function addModuleToTimetable;
+  final Function navigateToAddModuleReview;
 
   @override
   Widget build(BuildContext context) {
@@ -747,65 +726,50 @@ class _ExpandingActionButton extends StatelessWidget {
         return Positioned(
           right: 4.0 + offset.dx,
           bottom: 4.0 + offset.dy,
-          child: Transform.rotate(
-            angle: (1.0 - progress.value) * math.pi / 2,
+          child: Transform.translate(
+            offset: Offset(progress.value, 0),
+            // angle: (1.0 - progress.value) * math.pi / 2,
             child: child!,
           ),
         );
       },
       child: FadeTransition(
         opacity: progress,
-        child: child,
-      ),
-    );
-  }
-}
-
-@immutable
-class ActionButton extends StatelessWidget {
-  const ActionButton({
-    super.key,
-    this.onPressed,
-    required this.icon,
-  });
-
-  final VoidCallback? onPressed;
-  final Widget icon;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Material(
-      shape: const CircleBorder(),
-      clipBehavior: Clip.antiAlias,
-      color: theme.colorScheme.secondary,
-      elevation: 4,
-      child: IconButton(
-        onPressed: onPressed,
-        icon: icon,
-        color: theme.colorScheme.onSecondary,
-      ),
-    );
-  }
-}
-
-@immutable
-class FakeItem extends StatelessWidget {
-  const FakeItem({
-    super.key,
-    required this.isBig,
-  });
-
-  final bool isBig;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-      height: isBig ? 128 : 36,
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
-        color: Colors.grey.shade300,
+        child: Container(
+          decoration: BoxDecoration(
+              border: Border.all(color: GRAYSCALE_GRAY_03),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8.0)),
+          padding: const EdgeInsets.all(16.0),
+          child: Column(children: [
+            GestureDetector(
+              onTap: () {
+                toggle();
+                addModuleToTimetable();
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 11.5),
+                child: const Text(
+                  "시간표에 추가하기",
+                  style: TextStyle(letterSpacing: -0.14),
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                toggle();
+                navigateToAddModuleReview();
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 11.5),
+                child: const Text(
+                  "강의평 작성하기",
+                  style: TextStyle(letterSpacing: -0.14),
+                ),
+              ),
+            ),
+          ]),
+        ),
       ),
     );
   }

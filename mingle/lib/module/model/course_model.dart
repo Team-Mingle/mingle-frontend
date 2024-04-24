@@ -101,7 +101,8 @@ class CourseModel {
   String getStartTimes() {
     List<String> result = [];
     for (CourseTimeModel time in courseTimeDtoList) {
-      result.add("${convertDayToKorDay(time.dayOfWeek!)} ${time.startTime}");
+      result.add(
+          "${convertDayToKorDay(time.dayOfWeek!)} ${CourseTimeModel.removeSecondsFromTime(time.startTime!)}");
     }
     return result.join("/");
   }

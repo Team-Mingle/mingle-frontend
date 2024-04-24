@@ -27,6 +27,17 @@ Map<String, dynamic> _$GenerateCodeDtoToJson(GenerateCodeDto instance) =>
       'myDisplayName': instance.myDisplayName,
     };
 
+ChangeFriendNameDto _$ChangeFriendNameDtoFromJson(Map<String, dynamic> json) =>
+    ChangeFriendNameDto(
+      friendName: json['friendName'] as String,
+    );
+
+Map<String, dynamic> _$ChangeFriendNameDtoToJson(
+        ChangeFriendNameDto instance) =>
+    <String, dynamic>{
+      'friendName': instance.friendName,
+    };
+
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
@@ -69,6 +80,35 @@ class _FriendRepository implements FriendRepository {
         ))));
     final value = _result.data;
     return value;
+  }
+
+  @override
+  Future<void> changeFriendName({
+    required int friendId,
+    required ChangeFriendNameDto changeFriendNameDto,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(changeFriendNameDto.toJson());
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'PATCH',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/${friendId}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
   }
 
   @override
