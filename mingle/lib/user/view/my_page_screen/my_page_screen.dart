@@ -307,8 +307,8 @@ class MyPageScreen extends ConsumerWidget {
                             ref
                                 .watch(isFreshLoginProvider.notifier)
                                 .update((_) => true);
-                            // storage.delete(key: ACCESS_TOKEN_KEY);
-                            // storage.delete(key: REFRESH_TOKEN_KEY);
+                            storage.delete(key: ACCESS_TOKEN_KEY);
+                            storage.delete(key: REFRESH_TOKEN_KEY);
                             ref
                                 .watch(currentUserProvider.notifier)
                                 .update((_) => null);

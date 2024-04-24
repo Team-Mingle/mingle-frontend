@@ -152,7 +152,7 @@ class _UploadIdentificationScreenState
                     child: RichText(
                       text: const TextSpan(
                         style: TextStyle(
-                            color: Colors.black, letterSpacing: -0.28),
+                            color: Colors.black, letterSpacing: -0.38),
                         children: [
                           TextSpan(
                             text: "Offer Letter를 통한 학생 인증은 ",
@@ -161,8 +161,12 @@ class _UploadIdentificationScreenState
                               text: "*신입생 가입 기간",
                               style: TextStyle(fontWeight: FontWeight.w700)),
                           TextSpan(
-                            text: "에만 가능해요. 그 외의 기간에 가입할 경우, 학번을 통해 인증해 주세요.",
-                          )
+                            text: "에만 가능해요. 그 외의 기간에 가입할 경우, ",
+                          ),
+                          TextSpan(
+                              text: "학생증을 통해 인증",
+                              style: TextStyle(fontWeight: FontWeight.w700)),
+                          TextSpan(text: "해 주세요.")
                         ],
                       ),
                     ),

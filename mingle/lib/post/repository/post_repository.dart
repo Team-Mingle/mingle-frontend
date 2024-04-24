@@ -58,9 +58,9 @@ abstract class PostRepository {
   @Headers({'accessToken': 'true'})
   Future<dynamic> likeOrUnlikePost({@Path() required int postId});
 
-  @GET('/category')
+  @GET('/category/{boardType}')
   @Headers({'accessToken': 'true'})
-  Future<List<CategoryModel>> fetchCategories();
+  Future<CategoryModel> fetchCategories({@Path() required String boardType});
 
   @GET('/search')
   @Headers({'accessToken': 'true'})

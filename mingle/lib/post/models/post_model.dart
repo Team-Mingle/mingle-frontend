@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -44,15 +45,23 @@ class PostModel {
     DateTime dateTime = DateFormat('yy/MM/dd hh:mm').parse(utc, true).toLocal();
     DateTime now = DateFormat('yyyy-MM-dd hh:mm:ss')
         .parse(DateTime.now().toString(), false);
-    int yearDiff = now.year - dateTime.year;
-    int monthDiff = yearDiff > 0
-        ? (12 + now.month - dateTime.month)
-        : (now.month - dateTime.month);
-    int dayDiff = now.day - dateTime.day;
-    int hourDiff = now.hour - dateTime.hour;
-    int minutesDiff = now.minute - dateTime.minute;
+    Duration difference = now.difference(dateTime);
+    int daysInMonth = DateUtils.getDaysInMonth(dateTime.year, dateTime.month);
+    int yearDiff = difference.inDays ~/ 365;
+    int dayDiff = difference.inDays % daysInMonth;
+    int monthDiff = difference.inDays ~/ daysInMonth;
+    int hourDiff = difference.inHours % 24;
+    int minutesDiff = difference.inMinutes % 60;
 
-    if (yearDiff > 0 && monthDiff >= 12) {
+    // int yearDiff = now.year - dateTime.year;
+    // int monthDiff = yearDiff > 0
+    //     ? (12 + now.month - dateTime.month)
+    //     : (now.month - dateTime.month);
+    // int dayDiff = now.day - dateTime.day;
+    // int hourDiff = now.hour - dateTime.hour;
+    // int minutesDiff = now.minute - dateTime.minute;
+
+    if (yearDiff > 0) {
       return '$yearDiff년 전';
     } else if (monthDiff > 0) {
       return '$monthDiff달 전';

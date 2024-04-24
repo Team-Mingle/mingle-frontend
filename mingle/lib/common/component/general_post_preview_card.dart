@@ -122,7 +122,8 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    bool isChina = ref.watch(currentUserProvider)!.country == "CHINA";
+    bool isChina = ref.watch(currentUserProvider) != null &&
+        ref.watch(currentUserProvider)!.country == "CHINA";
     if (widget.controller != null) {
       widget.controller!.scrollUp = scrollUp;
     }

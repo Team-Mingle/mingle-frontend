@@ -47,6 +47,7 @@ class _SearchScreenState extends ConsumerState<SecondHandMarketSearchScreen>
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(48.0),
         child: AppBar(
+          surfaceTintColor: Colors.transparent,
           elevation: 0,
           backgroundColor: Colors.white,
           titleSpacing: 0,

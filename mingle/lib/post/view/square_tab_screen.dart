@@ -18,7 +18,8 @@ class SquareTabScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool isChina = ref.watch(currentUserProvider)!.country == "CHINA";
+    bool isChina = ref.watch(currentUserProvider) != null &&
+        ref.watch(currentUserProvider)!.country == "CHINA";
     return TabScreen(
       boardType: 'TOTAL',
       title: '광장',

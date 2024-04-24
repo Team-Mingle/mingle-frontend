@@ -33,7 +33,7 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
   String price = "";
   String location = "";
   String chatUrl = "";
-  List<String> currencies = ["hkd", "krw", "sgd"];
+  List<String> currencies = ["hkd", "krw", "sgd", "rmb"];
   bool isLoading = false;
   @override
   void initState() {
@@ -378,7 +378,7 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
                   ),
                   Stack(children: [
                     Container(
-                      height: !isSelling ? 64.0 : 0.0,
+                      height: !isSelling ? 72.0 : 0.0,
                       width: MediaQuery.of(context).size.width,
                       color: GRAYSCALE_GRAY_01_5,
                     ),
@@ -630,7 +630,8 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
           ),
         ),
         dropdownStyleData: const DropdownStyleData(
-            padding: EdgeInsets.symmetric(vertical: 8.0)),
+            padding: EdgeInsets.symmetric(vertical: 8.0),
+            decoration: BoxDecoration(color: Colors.white)),
         items: currencies
             .map((String item) => DropdownMenuItem<String>(
                   value: item,

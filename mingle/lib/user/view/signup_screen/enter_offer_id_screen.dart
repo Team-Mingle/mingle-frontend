@@ -28,6 +28,9 @@ class EnterOfferIdScreen extends ConsumerWidget {
                 color: GRAYSCALE_BLACK,
               ),
               onPressed: () {
+                ref
+                    .read(selectedOfferIdProvider.notifier)
+                    .update((state) => "");
                 Navigator.pop(context);
               },
             ),
@@ -100,7 +103,7 @@ class EnterOfferIdScreen extends ConsumerWidget {
               ),
               RichText(
                 text: const TextSpan(
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: Colors.black, letterSpacing: -0.28),
                   children: [
                     TextSpan(
                       text: "Offer Letter를 통한 학생 인증은 ",
@@ -109,8 +112,12 @@ class EnterOfferIdScreen extends ConsumerWidget {
                         text: "*신입생 가입 기간",
                         style: TextStyle(fontWeight: FontWeight.w700)),
                     TextSpan(
-                      text: "에만 \n가능해요. 그 외의 기간에 가입할 경우, 학번을 통해 인증해 \n주세요.",
-                    )
+                      text: "에만 가능해요. 그 외의 기간에 가입할 경우, ",
+                    ),
+                    TextSpan(
+                        text: "학번을 통해 인증",
+                        style: TextStyle(fontWeight: FontWeight.w700)),
+                    TextSpan(text: "해 주세요.")
                   ],
                 ),
               ),

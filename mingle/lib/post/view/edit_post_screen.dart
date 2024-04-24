@@ -147,7 +147,9 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
         widget.content.isNotEmpty &&
         widget.categoryType.isNotEmpty;
 
-    List<CategoryModel> categories = ref.watch(postCategoryProvider);
+    List<String> categories = widget.boardType == "TOTAL"
+        ? ref.watch(totalPostCategoryProvider).categoryNames
+        : ref.watch(univPostCategoryProvider).categoryNames;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -256,11 +258,12 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
                                       ...List.generate(
                                           2 * categories.length - 1, (index) {
                                         if (index % 2 == 0) {
-                                          CategoryModel currentModel =
+                                          String currentCategory =
                                               categories[index ~/ 2];
                                           String currentName =
-                                              currentModel.convertName(
-                                                  currentModel.categoryName);
+                                              CategoryModel.convertName(
+                                                  currentCategory);
+
                                           return ListTile(
                                             title: Center(
                                               child: Text(
@@ -278,7 +281,7 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
                                               Navigator.pop(context);
                                               setState(() {
                                                 widget.categoryType =
-                                                    currentModel.categoryName;
+                                                    currentCategory;
                                                 widget.categoryName =
                                                     currentName; // 선택한 항목 설정
                                               });
