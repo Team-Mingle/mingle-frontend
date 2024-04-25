@@ -84,7 +84,7 @@ final univKsaPostProvider =
 final totalPostCategoryProvider =
     StateNotifierProvider<TotalPostCategoryStateNotifier, CategoryModel>((ref) {
   final repository = ref.watch(postRepositoryProvider);
-
+  print("rebuilding post category");
   final notifier = TotalPostCategoryStateNotifier(postRepository: repository);
 
   return notifier;

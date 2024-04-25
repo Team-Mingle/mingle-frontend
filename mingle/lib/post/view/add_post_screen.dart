@@ -117,7 +117,8 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
   Widget build(BuildContext context) {
     bool canSubmit =
         title.isNotEmpty && content.isNotEmpty && categoryType.isNotEmpty;
-
+    // ref.watch(totalPostCategoryProvider.notifier).fetchCategories("TOTAL");
+    // ref.watch(totalPostCategoryProvider.notifier).fetchCategories("UNIV");
     List<String> categories = widget.boardType == "TOTAL"
         ? ref.watch(totalPostCategoryProvider).categoryNames
         : ref.watch(univPostCategoryProvider).categoryNames;

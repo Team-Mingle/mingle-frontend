@@ -104,8 +104,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             univName: univName,
             country: country,
           );
-
-          final storage = ref.read(secureStorageProvider);
+          final storage = ref
+              .read(secureStorageProvider.notifier)
+              .update((state) => const FlutterSecureStorage());
           await storage.write(key: REFRESH_TOKEN_KEY, value: refreshToken);
           await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
           // await storage.write(key: ACCESS_TOKEN_KEY, value: "mingle-user");
@@ -302,4 +303,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       ),
     );
   }
+  // void initializeProviders() {
+  //   ref.read(total)
+  // }
 }
