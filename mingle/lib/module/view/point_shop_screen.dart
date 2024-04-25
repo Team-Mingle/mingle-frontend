@@ -4,6 +4,7 @@ import 'package:mingle/common/component/expanded_section.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/module/components/my_points_card.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
+import 'package:mingle/module/view/freshman_upload_identification_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
 class PointShopScreen extends StatefulWidget {
@@ -435,7 +436,10 @@ class _PointShopScreenState extends State<PointShopScreen> {
                                       Align(
                                         alignment: Alignment.center,
                                         child: GestureDetector(
-                                          onTap: () {},
+                                          onTap: () => Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      const FreshmanUploadIdentificationScreen())),
                                           child: const Text(
                                             "새내기 인증하고 이용권 받기",
                                             style: TextStyle(
