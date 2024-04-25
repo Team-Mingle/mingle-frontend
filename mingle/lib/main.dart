@@ -11,6 +11,7 @@ import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/view/splash_screen.dart';
 import 'package:mingle/firebase_notification.dart';
 import 'package:mingle/firebase_options.dart';
+import 'package:mingle/module/view/point_shop_screen.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.dart';
 import 'package:mingle/timetable/view/friend_timetable_screen.dart';
@@ -266,7 +267,8 @@ class _AppState extends ConsumerState<_App> {
               // const SplashScreen(),
               //  const EnterOfferIdScreen()
               // const FinishTempSinupScreen(),
-              const TimeTableHomeScreen()
+              // const TimeTableHomeScreen()
+              const PointShopScreen()
           //     const FriendTimetableScreen(
           //   friendId: 1,
           // ),

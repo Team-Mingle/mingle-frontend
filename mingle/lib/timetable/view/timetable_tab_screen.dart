@@ -1250,105 +1250,104 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _isFriendListExpanded = !_isFriendListExpanded;
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12.0),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: GRAYSCALE_GRAY_02),
-                              borderRadius: BorderRadius.circular(8.0)),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  const Text(
-                                    "친구 목록",
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  const Spacer(),
-                                  SvgPicture.asset(_isFriendListExpanded
-                                      ? "assets/img/module_review_screen/up_tick_icon.svg"
-                                      : "assets/img/module_review_screen/down_tick_icon.svg")
-                                ],
-                              ),
-                              ExpandedSection(
-                                  expand: _isFriendListExpanded,
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const SizedBox(
-                                          height: 16.0,
+                      onTap: () {
+                        setState(() {
+                          _isFriendListExpanded = !_isFriendListExpanded;
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 12.0),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: GRAYSCALE_GRAY_02),
+                            borderRadius: BorderRadius.circular(8.0)),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                const Text(
+                                  "친구 목록",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                const Spacer(),
+                                SvgPicture.asset(_isFriendListExpanded
+                                    ? "assets/img/module_review_screen/up_tick_icon.svg"
+                                    : "assets/img/module_review_screen/down_tick_icon.svg")
+                              ],
+                            ),
+                            ExpandedSection(
+                                expand: _isFriendListExpanded,
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(
+                                        height: 16.0,
+                                      ),
+                                      if (friendList.isEmpty)
+                                        const Text(
+                                          "아직 추가된 친구가 없네요!\n친구를 추가하면 시간표를 공유할 수 있어요.",
+                                          style: TextStyle(
+                                              color: GRAYSCALE_GRAY_04,
+                                              letterSpacing: -0.14),
                                         ),
-                                        if (friendList.isEmpty)
-                                          const Text(
-                                            "아직 추가된 친구가 없네요!\n친구를 추가하면 시간표를 공유할 수 있어요.",
+                                      ...List.generate(
+                                        friendList.length,
+                                        (index) => GestureDetector(
+                                          onTap: () => Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      FriendTimetableScreen(
+                                                        refreshFriendList:
+                                                            getFriends,
+                                                        friendId:
+                                                            friendList[index]
+                                                                .friendId,
+                                                        friendName:
+                                                            friendList[index]
+                                                                .friendName,
+                                                      ))),
+                                          child: Container(
+                                            width: double.infinity,
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 14.5),
+                                            child: Text(
+                                              friendList[index].friendName,
+                                              style: const TextStyle(
+                                                  fontSize: 16.0,
+                                                  letterSpacing: -0.32),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 17.0,
+                                      ),
+                                      Align(
+                                        alignment: Alignment.center,
+                                        child: GestureDetector(
+                                          onTap: shareOrRegisterModal,
+                                          child: const Text(
+                                            "친구 추가하기",
                                             style: TextStyle(
-                                                color: GRAYSCALE_GRAY_04,
-                                                letterSpacing: -0.14),
-                                          ),
-                                        ...List.generate(
-                                          friendList.length,
-                                          (index) => GestureDetector(
-                                            onTap: () => Navigator.of(context)
-                                                .push(MaterialPageRoute(
-                                                    builder: (_) =>
-                                                        FriendTimetableScreen(
-                                                          refreshFriendList:
-                                                              getFriends,
-                                                          friendId:
-                                                              friendList[index]
-                                                                  .friendId,
-                                                          friendName:
-                                                              friendList[index]
-                                                                  .friendName,
-                                                        ))),
-                                            child: Container(
-                                              width: double.infinity,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 14.5),
-                                              child: Text(
-                                                friendList[index].friendName,
-                                                style: const TextStyle(
-                                                    fontSize: 16.0,
-                                                    letterSpacing: -0.32),
-                                              ),
-                                            ),
+                                                fontSize: 12.0,
+                                                fontWeight: FontWeight.w500,
+                                                color: PRIMARY_COLOR_ORANGE_01),
                                           ),
                                         ),
-                                        const SizedBox(
-                                          height: 17.0,
-                                        ),
-                                        Align(
-                                          alignment: Alignment.center,
-                                          child: GestureDetector(
-                                            onTap: shareOrRegisterModal,
-                                            child: const Text(
-                                              "친구 추가하기",
-                                              style: TextStyle(
-                                                  fontSize: 12.0,
-                                                  fontWeight: FontWeight.w500,
-                                                  color:
-                                                      PRIMARY_COLOR_ORANGE_01),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )),
-                            ],
-                          ),
-                        )),
+                                      )
+                                    ],
+                                  ),
+                                )),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                   const SizedBox(
                     height: 16.0,

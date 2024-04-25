@@ -1,23 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mingle/common/component/expanded_section.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/module/components/my_points_card.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
-class PointShopScreen extends StatelessWidget {
+class PointShopScreen extends StatefulWidget {
   const PointShopScreen({super.key});
 
+  @override
+  State<PointShopScreen> createState() => _PointShopScreenState();
+}
+
+class _PointShopScreenState extends State<PointShopScreen> {
+  bool isExpanded = false;
   @override
   Widget build(BuildContext context) {
     int pointsOwned = 800;
     Future bottomSheet(String validity, int pointsRequired) =>
         showModalBottomSheet(
+          isScrollControlled: true,
           context: context,
           builder: (BuildContext context) {
             bool isPurchasable = pointsOwned >= pointsRequired;
             return Container(
-              height: 480.0,
+              height: 505.0,
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.all(
@@ -63,8 +71,15 @@ class PointShopScreen extends StatelessWidget {
                           Container(
                             width: double.infinity,
                             decoration: BoxDecoration(
+                              color: Colors.white,
                               border: Border.all(color: GRAYSCALE_GRAY_01_5),
                               borderRadius: BorderRadius.circular(8.0),
+                              boxShadow: const [
+                                BoxShadow(
+                                    color: Color.fromRGBO(0, 0, 0, 0.2),
+                                    offset: Offset(-1, -2),
+                                    blurRadius: 10.0)
+                              ],
                             ),
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 16.0, vertical: 24.0),
@@ -170,7 +185,7 @@ class PointShopScreen extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(
-                            height: 11.5,
+                            height: 60.0,
                           ),
                           !isPurchasable
                               ? Row(
@@ -249,8 +264,8 @@ class PointShopScreen extends StatelessWidget {
             border: Border.all(color: Colors.transparent),
             boxShadow: const [
               BoxShadow(
-                  color: Color.fromRGBO(0, 0, 0, 0.06),
-                  offset: Offset(1, 1),
+                  color: Color.fromRGBO(0, 0, 0, 0.2),
+                  offset: Offset(-1, -2),
                   blurRadius: 10.0)
             ],
             borderRadius: BorderRadius.circular(8.0)),
@@ -311,7 +326,9 @@ class PointShopScreen extends StatelessWidget {
     }
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
         elevation: 0,
         leading: Padding(
@@ -327,48 +344,126 @@ class PointShopScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          DefaultPadding(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  width: double.infinity,
-                  height: 87.0,
-                ),
-                const Text(
-                  "포인트샵",
-                  style: TextStyle(
-                      fontSize: 24.0,
-                      letterSpacing: -0.04,
-                      height: 1.4,
-                      fontWeight: FontWeight.w500),
-                ),
-                const SizedBox(
-                  height: 16.0,
-                ),
-                const Text(
-                  "강의평가를 작성하여 얻은 포인트로 다른 사용자가 쓴\n    강의평가를 조회하는 이용권을 구매할 수 있어요.",
-                  style: TextStyle(color: GRAYSCALE_GRAY_03),
-                ),
-                const SizedBox(
-                  height: 56.0,
-                ),
-                modulePassCard("30일", 300),
-                const SizedBox(
-                  height: 14.0,
-                ),
-                modulePassCard("1년", 1000)
-              ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            DefaultPadding(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    width: double.infinity,
+                    height: 87.0,
+                  ),
+                  const Text(
+                    "포인트샵",
+                    style: TextStyle(
+                        fontSize: 24.0,
+                        letterSpacing: -0.04,
+                        height: 1.4,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(
+                    height: 16.0,
+                  ),
+                  const Text(
+                    "강의평가를 작성하여 얻은 포인트로 다른 사용자가 쓴\n    강의평가를 조회하는 이용권을 구매할 수 있어요.",
+                    style: TextStyle(color: GRAYSCALE_GRAY_03),
+                  ),
+                  const SizedBox(
+                    height: 56.0,
+                  ),
+                  modulePassCard("30일", 300),
+                  const SizedBox(
+                    height: 14.0,
+                  ),
+                  modulePassCard("1년", 1000),
+                  const SizedBox(
+                    height: 14.0,
+                  ),
+                  GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isExpanded = !isExpanded;
+                        });
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 12.0),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: GRAYSCALE_GRAY_02),
+                            borderRadius: BorderRadius.circular(8.0)),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                const Text(
+                                  "새내기이신가요?",
+                                  style: TextStyle(
+                                      fontSize: 12.0,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                const Spacer(),
+                                SvgPicture.asset(isExpanded
+                                    ? "assets/img/module_review_screen/up_tick_icon.svg"
+                                    : "assets/img/module_review_screen/down_tick_icon.svg")
+                              ],
+                            ),
+                            ExpandedSection(
+                                expand: isExpanded,
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(
+                                        height: 16.0,
+                                      ),
+                                      const Text(
+                                        "새내기 첫학기의 경우, 강의평가를 남길 수 없으므로 1학기 무제한 이용권을 지급해 드립니다. 합격증 업로드를 통해 새내기를 인증하고 강의평가를 볼 수 있습니다.",
+                                        style: TextStyle(
+                                            fontSize: 12.0,
+                                            color: GRAYSCALE_GRAY_04_5,
+                                            letterSpacing: -0.06),
+                                      ),
+                                      const SizedBox(
+                                        height: 17.0,
+                                      ),
+                                      Align(
+                                        alignment: Alignment.center,
+                                        child: GestureDetector(
+                                          onTap: () {},
+                                          child: const Text(
+                                            "새내기 인증하고 이용권 받기",
+                                            style: TextStyle(
+                                                fontSize: 12.0,
+                                                fontWeight: FontWeight.w500,
+                                                color: PRIMARY_COLOR_ORANGE_01),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )),
+                          ],
+                        ),
+                      )),
+                ],
+              ),
             ),
-          ),
-          const Divider(
-            height: 64.0,
-            color: GRAYSCALE_GRAY_01,
-          ),
-          const DefaultPadding(child: MyPointsCard())
-        ],
+            const Divider(
+              height: 64.0,
+              color: GRAYSCALE_GRAY_01,
+            ),
+            const DefaultPadding(child: MyPointsCard()),
+            const SizedBox(
+              height: 106.0,
+            )
+          ],
+        ),
       ),
     );
   }
