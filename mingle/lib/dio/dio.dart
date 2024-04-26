@@ -11,6 +11,7 @@ import 'package:mingle/secure_storage/secure_storage.dart';
 final dioProvider = Provider((ref) {
   final dio = Dio();
   final storage = ref.watch(secureStorageProvider);
+  print("rebuilding dio");
   dio.interceptors.add(CustomInterceptor(storage: storage));
   return dio;
 });

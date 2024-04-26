@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart' hide Headers;
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mingle/common/const/data.dart';
@@ -16,6 +17,7 @@ import 'package:retrofit/retrofit.dart';
 part 'post_repository.g.dart';
 
 final postRepositoryProvider = Provider((ref) {
+  print("rebuilding post repo provider");
   final dio = ref.watch(dioProvider);
   final postRepository = PostRepository(dio, baseUrl: "https://$baseUrl/post");
   return postRepository;
