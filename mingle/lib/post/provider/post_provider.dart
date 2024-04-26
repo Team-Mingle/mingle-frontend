@@ -94,6 +94,10 @@ final univPostCategoryProvider =
     StateNotifierProvider<UnivPostCategoryStateNotifier, CategoryModel>((ref) {
   final repository = ref.watch(postRepositoryProvider);
 
+  ref.listen(postRepositoryProvider, (previous, next) {
+    print("rebuilding here");
+  });
+
   final notifier = UnivPostCategoryStateNotifier(postRepository: repository);
 
   return notifier;

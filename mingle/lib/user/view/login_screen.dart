@@ -11,6 +11,8 @@ import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/common/view/splash_screen.dart';
 import 'package:mingle/dio/dio.dart';
+import 'package:mingle/post/repository/post_repository.dart';
+import 'package:mingle/second_hand_market/repository/second_hand_market_post_repository.dart';
 import 'package:mingle/secure_storage/secure_storage.dart';
 import 'package:mingle/user/model/user_model.dart';
 import 'package:mingle/user/provider/is_fresh_login_provider.dart';
@@ -104,9 +106,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             univName: univName,
             country: country,
           );
-          final storage = ref
-              .read(secureStorageProvider.notifier)
-              .update((state) => const FlutterSecureStorage());
+
+          final storage = ref.read(secureStorageProvider);
+
           await storage.write(key: REFRESH_TOKEN_KEY, value: refreshToken);
           await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
           // await storage.write(key: ACCESS_TOKEN_KEY, value: "mingle-user");
@@ -115,6 +117,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           await storage.write(key: FCM_TOKEN_KEY, value: fcmtoken);
           await storage.write(key: IS_FRESH_LOGIN_KEY, value: "y");
           ref.read(currentUserProvider.notifier).update((state) => user);
+          ref.refresh(dioProvider);
+          // ref.refresh(postRepositoryProvider);
+          // ref.refresh(secondHandPostRepositoryProvider);
           // final r = await dio.post('https://$baseUrl/auth/refresh-token',
           //     options: Options(headers: {
           //       'X-Refresh-Token': refreshToken,
