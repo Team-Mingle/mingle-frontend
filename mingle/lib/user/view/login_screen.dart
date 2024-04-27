@@ -116,6 +116,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           await storage.write(key: ENCRYPTED_EMAIL_KEY, value: encryptedEmail);
           await storage.write(key: FCM_TOKEN_KEY, value: fcmtoken);
           await storage.write(key: IS_FRESH_LOGIN_KEY, value: "y");
+          await storage.write(key: IS_FRESH_ONBOARDING_KEY, value: "y");
           ref.read(currentUserProvider.notifier).update((state) => user);
           ref.refresh(dioProvider);
           // ref.refresh(postRepositoryProvider);

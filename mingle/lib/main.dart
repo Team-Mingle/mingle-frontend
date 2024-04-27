@@ -11,8 +11,12 @@ import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/view/splash_screen.dart';
 import 'package:mingle/firebase_notification.dart';
 import 'package:mingle/firebase_options.dart';
+import 'package:mingle/module/view/first_onboarding_screen.dart';
+import 'package:mingle/module/view/module_review_main_screen.dart';
+import 'package:mingle/point_shop/view/point_shop_screen.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.dart';
+import 'package:mingle/timetable/view/friend_timetable_screen.dart';
 import 'package:mingle/timetable/view/timetable_tab_screen.dart';
 import 'package:mingle/user/provider/user_provider.dart';
 import 'package:mingle/user/view/signup_screen/enter_free_domain_email_screen.dart';
@@ -262,11 +266,17 @@ class _AppState extends ConsumerState<_App> {
           FirebaseAnalyticsObserver(analytics: analytics),
         ],
         debugShowCheckedModeBanner: false,
-        home: const SplashScreen(),
+        home:
+            // const ModuleReviewMainScreen()
+            const SplashScreen(),
         //  const EnterOfferIdScreen()
         // const FinishTempSinupScreen(),
         // const TimeTableHomeScreen()
-
+        // const FirstOnboardingScreen()
+        // const PointShopScreen()
+        //     const FriendTimetableScreen(
+        //   friendId: 1,
+        // ),
         // const ServiceAgreementScreen(),
       ),
     );

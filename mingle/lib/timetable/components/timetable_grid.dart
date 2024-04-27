@@ -2,10 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/const/data.dart';
+import 'package:mingle/module/model/course_model.dart';
 
 class TimeTableGrid extends StatefulWidget {
   final List<Widget> addedClasses;
-  const TimeTableGrid({super.key, required this.addedClasses});
+  final bool isFull;
+  const TimeTableGrid(
+      {super.key, required this.addedClasses, this.isFull = false});
 
   @override
   State<TimeTableGrid> createState() => _TimeTableGridState();
@@ -51,7 +55,7 @@ class _TimeTableGridState extends State<TimeTableGrid> {
                   // right: BorderSide(color: GRAYSCALE_GRAY_02, width: 0.0)
                 ),
               ),
-              child: Text("$row $col"),
+              // child: Text("$row $col"),
             ));
   });
 
@@ -186,7 +190,9 @@ class _TimeTableGridState extends State<TimeTableGrid> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              height: 436.0,
+              height: widget.isFull
+                  ? TIMETABLE_TOTAL_HEIGHT + 100
+                  : TIMETABLE_TOTAL_HEIGHT,
               width: 22.0,
               decoration: const BoxDecoration(
                 borderRadius:
@@ -219,7 +225,9 @@ class _TimeTableGridState extends State<TimeTableGrid> {
             ),
             Container(
               width: 338, // 그리드의 전체 너비
-              height: 436, // 그리드의 전체 높이
+              height: widget.isFull
+                  ? TIMETABLE_TOTAL_HEIGHT + 100
+                  : TIMETABLE_TOTAL_HEIGHT, // 그리드의 전체 높이
               decoration: BoxDecoration(
                 // borderRadius: BorderRadius.circular(8),
                 // borderRadius: BorderRadius.circular(8.0),

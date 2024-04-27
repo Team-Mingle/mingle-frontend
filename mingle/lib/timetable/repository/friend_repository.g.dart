@@ -6,6 +6,17 @@ part of 'friend_repository.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+AddFriendDto _$AddFriendDtoFromJson(Map<String, dynamic> json) => AddFriendDto(
+      friendCode: json['friendCode'] as String,
+      myDisplayName: json['myDisplayName'] as String,
+    );
+
+Map<String, dynamic> _$AddFriendDtoToJson(AddFriendDto instance) =>
+    <String, dynamic>{
+      'friendCode': instance.friendCode,
+      'myDisplayName': instance.myDisplayName,
+    };
+
 GenerateCodeDto _$GenerateCodeDtoFromJson(Map<String, dynamic> json) =>
     GenerateCodeDto(
       myDisplayName: json['myDisplayName'] as String,
@@ -14,6 +25,17 @@ GenerateCodeDto _$GenerateCodeDtoFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$GenerateCodeDtoToJson(GenerateCodeDto instance) =>
     <String, dynamic>{
       'myDisplayName': instance.myDisplayName,
+    };
+
+ChangeFriendNameDto _$ChangeFriendNameDtoFromJson(Map<String, dynamic> json) =>
+    ChangeFriendNameDto(
+      friendName: json['friendName'] as String,
+    );
+
+Map<String, dynamic> _$ChangeFriendNameDtoToJson(
+        ChangeFriendNameDto instance) =>
+    <String, dynamic>{
+      'friendName': instance.friendName,
     };
 
 // **************************************************************************
@@ -38,7 +60,8 @@ class _FriendRepository implements FriendRepository {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
-    final _data = addFriendDto;
+    final _data = <String, dynamic>{};
+    _data.addAll(addFriendDto.toJson());
     final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
       method: 'POST',
       headers: _headers,
@@ -56,6 +79,63 @@ class _FriendRepository implements FriendRepository {
           baseUrl,
         ))));
     final value = _result.data;
+    return value;
+  }
+
+  @override
+  Future<void> changeFriendName({
+    required int friendId,
+    required ChangeFriendNameDto changeFriendNameDto,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(changeFriendNameDto.toJson());
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'PATCH',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/${friendId}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
+  Future<FriendListModel> getFriends() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<FriendListModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = FriendListModel.fromJson(_result.data!);
     return value;
   }
 
@@ -113,6 +193,31 @@ class _FriendRepository implements FriendRepository {
         ))));
     final value = _result.data!;
     return value;
+  }
+
+  @override
+  Future<void> deleteFriend({required int friendId}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'DELETE',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/${friendId}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

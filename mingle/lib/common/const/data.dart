@@ -9,9 +9,13 @@ const REFRESH_TOKEN_KEY = 'REFRESH_TOKEN';
 const ENCRYPTED_EMAIL_KEY = 'ENCRYPTED_EMAIL';
 const CURRENT_USER_KEY = 'CURRENT_USER';
 const IS_FRESH_LOGIN_KEY = 'IS_FRESH_LOGIN';
+const IS_FRESH_ONBOARDING_KEY = "IS_FRESH_ONBOARDING_KEY";
 
 const TIMETABLE_GRID_HEIGHT = 61.0;
 const TIMETABLE_GRID_WIDTH = 48.0;
+const TIMETABLE_TOTAL_HEIGHT = 436.0;
+
+const HISTORY_KEY = "_histories";
 
 // const baseUrl = "api.prod.mingle.community";
 const baseUrl = "api.develop.mingle.community";

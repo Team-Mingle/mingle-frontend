@@ -11,6 +11,7 @@ import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/module/model/course_detail_model.dart';
 import 'package:mingle/module/repository/course_evaluation_repository.dart';
 import 'package:mingle/module/view/module_search_screen.dart';
+import 'package:mingle/point_shop/provider/remaining_points_provider.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
 class AddModuleReviewScreen extends ConsumerStatefulWidget {
@@ -34,6 +35,7 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
   int? moduleId;
   int? year;
   int? semester;
+  bool isLoading = false;
   final FocusNode focusNode = FocusNode();
   late FToast fToast;
   @override
@@ -52,7 +54,7 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
     });
   }
 
-  void addModuleReview(WidgetRef ref) async {
+  void addModuleReview() async {
     try {
       String? message;
       if (moduleId == null || moduleName == null) {
@@ -72,6 +74,9 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
         );
         return;
       }
+      setState(() {
+        isLoading = true;
+      });
       AddCourseEvaluationDto addCourseEvaluationDto = AddCourseEvaluationDto(
           courseId: moduleId!,
           year: year!,
@@ -81,8 +86,20 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
       final resp = await ref
           .watch(courseEvalutationRepositoryProvider)
           .addCourseEvaluation(addCourseEvaluationDto: addCourseEvaluationDto);
+      ref.watch(remainingPointsProvider.notifier).fetchRemainingPoints();
+      setState(() {
+        isLoading = false;
+      });
+      fToast.showToast(
+        child: const ToastMessage(message: "강의평을 등록하여 100p가 적립되었어요."),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
       Navigator.pop(context);
     } on DioException catch (e) {
+      setState(() {
+        isLoading = false;
+      });
       fToast.showToast(
         child: ToastMessage(message: e.response?.data['message']),
         gravity: ToastGravity.CENTER,
@@ -116,7 +133,7 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
             ),
             color: GRAYSCALE_BLACK,
             onPressed: () {
-              Navigator.pop(context);
+              showQuitAddModuleReviewScreenDialog();
             },
           ),
         ),
@@ -132,17 +149,21 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 23.0),
             child: Center(
-              child: GestureDetector(
-                onTap: () {
-                  addModuleReview(ref);
-                },
-                child: const Text(
-                  "게시하기",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: PRIMARY_COLOR_ORANGE_01),
-                ),
-              ),
+              child: isLoading
+                  ? const CircularProgressIndicator(
+                      color: PRIMARY_COLOR_ORANGE_01,
+                    )
+                  : GestureDetector(
+                      onTap: () {
+                        addModuleReview();
+                      },
+                      child: const Text(
+                        "게시하기",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: PRIMARY_COLOR_ORANGE_01),
+                      ),
+                    ),
             ),
           )
         ],
@@ -340,7 +361,8 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
                         padding: EdgeInsets.zero,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 11.0, vertical: 15.0),
+                            horizontal: 11.0,
+                          ),
                           child: Row(
                             children: [
                               Text(
@@ -465,6 +487,99 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  void showQuitAddModuleReviewScreenDialog() {
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        insetPadding: EdgeInsets.zero,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0)),
+              // width: 343,
+              padding: const EdgeInsets.only(
+                  top: 32.0, left: 32.0, right: 32.0, bottom: 24.0),
+              child: Column(
+                children: [
+                  const Text(
+                    "작성을 취소하시겠습니까?",
+                    style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: -0.32),
+                  ),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                  const Text(
+                    "이 작업은 되돌릴 수 없습니다.",
+                    style: TextStyle(
+                        color: GRAYSCALE_GRAY_04, letterSpacing: -0.14),
+                  ),
+                  const SizedBox(
+                    height: 16.0,
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(
+                          height: 40.0,
+                          width: 120.0,
+                          decoration: BoxDecoration(
+                              color: GRAYSCALE_GRAY_01,
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: const Center(
+                            child: Text(
+                              "작성 취소하기",
+                              style: TextStyle(
+                                  color: GRAYSCALE_GRAY_04,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 8.0,
+                      ),
+                      GestureDetector(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: Container(
+                          height: 40.0,
+                          width: 120.0,
+                          decoration: BoxDecoration(
+                              color: PRIMARY_COLOR_ORANGE_02,
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: const Center(
+                            child: Text(
+                              "마저 작성하기",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

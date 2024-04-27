@@ -16,7 +16,7 @@ class ViewingPassCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-          border: Border.all(color: GRAYSCALE_GRAY_01_5),
+          border: Border.all(color: GRAYSCALE_GRAY_01),
           borderRadius: BorderRadius.circular(8.0)),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(

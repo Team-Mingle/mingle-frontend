@@ -20,7 +20,8 @@ class CourseDetailModel extends CourseModel {
       required super.professor,
       required super.subclass,
       required this.memo,
-      required this.prerequisite});
+      required this.prerequisite,
+      required super.rgb});
 
   factory CourseDetailModel.fromJson(Map<String, dynamic> json) =>
       _$CourseDetailModelFromJson(json);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mingle/common/component/search_history_service.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
 import 'package:mingle/module/model/course_model.dart';
@@ -18,16 +19,27 @@ class ModuleSearchScreen extends ConsumerStatefulWidget {
 }
 
 class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
-  List<String> previousSearch = ["CS3230", "CS3203"];
+  List<String>? previousSearch;
   final TextEditingController _searchController = TextEditingController();
   Future<CursorPagination<CourseModel>>? searchFuture;
   @override
   void initState() {
     super.initState();
+    getSearchHistories();
+  }
+
+  void getSearchHistories() async {
+    List<String>? searchHistory =
+        (await SearchHistoryService.getInstance()).getHistories();
+    setState(() {
+      previousSearch = searchHistory;
+    });
+    print(searchHistory);
   }
 
   @override
   Widget build(BuildContext context) {
+    print(previousSearch);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -59,19 +71,25 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
                 border: Border.all(color: GRAYSCALE_GRAY_01),
                 borderRadius: BorderRadius.circular(8.0)),
             child: Padding(
-              padding: const EdgeInsets.only(left: 16.0),
+              padding: const EdgeInsets.only(left: 8.0),
               child: TextFormField(
                 autofocus: true,
                 onEditingComplete: () {
+                  SearchHistoryService.getInstance().then((service) {
+                    service.addHistory(_searchController.text);
+                  });
+
                   setState(() {
                     searchFuture = ref
                         .watch(courseRepositoryProvider)
                         .search(keyword: _searchController.text);
                   });
                 },
-                textAlignVertical: TextAlignVertical.center,
+                controller: _searchController,
+                textAlignVertical: TextAlignVertical.top,
                 obscureText: false,
                 decoration: InputDecoration(
+                    contentPadding: EdgeInsets.zero,
                     hintText: "강의명을 입력하세요.",
                     hintStyle: const TextStyle(
                         color: GRAYSCALE_GRAY_03, fontSize: 16.0),
@@ -96,7 +114,7 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
       ),
       body: searchFuture == null
           ? Column(
-              children: previousSearch.isEmpty
+              children: previousSearch == null || previousSearch!.isEmpty
                   ? [
                       const SizedBox(
                         height: 48.0,
@@ -113,7 +131,7 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
                       )
                     ]
                   : List.generate(
-                      previousSearch.length + 1,
+                      previousSearch!.length + 1,
                       (index) => index == 0
                           ? Container(
                               padding: const EdgeInsets.only(
@@ -125,28 +143,38 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
                                 ),
                                 const Spacer(),
                                 GestureDetector(
-                                  child: const Text(
-                                    "전체삭제",
-                                    style: TextStyle(
-                                        color: GRAYSCALE_GRAY_04,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  onTap: () => setState(() {
-                                    previousSearch.clear();
-                                  }),
-                                )
+                                    child: const Text(
+                                      "전체삭제",
+                                      style: TextStyle(
+                                          color: GRAYSCALE_GRAY_04,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    onTap: () {
+                                      SearchHistoryService.getInstance()
+                                          .then((service) {
+                                        service.clearHistories();
+                                      });
+                                      setState(() {
+                                        previousSearch!.clear();
+                                      });
+                                    })
                               ]),
                             )
                           : recentSearchCard(
-                              previousSearch[index - 1], index - 1),
+                              previousSearch![index - 1], index - 1),
                     ),
             )
           : FutureBuilder(
               future: searchFuture,
               builder: (context,
                   AsyncSnapshot<CursorPagination<CourseModel>> snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
+                if (!snapshot.hasData ||
+                    snapshot.connectionState != ConnectionState.done) {
+                  print(snapshot);
+                  return const Center(
+                      child: CircularProgressIndicator(
+                    color: PRIMARY_COLOR_ORANGE_01,
+                  ));
                 }
                 CursorPagination<CourseModel> courseList = snapshot.data!;
                 List<CourseModel> courses = courseList.data;
@@ -156,13 +184,15 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
                           SizedBox(
                             height: 48.0,
                           ),
-                          Text(
-                            "일치하는 강의가 없습니다.",
-                            style: TextStyle(
-                                fontSize: 16.0,
-                                letterSpacing: -0.02,
-                                height: 1.5,
-                                color: GRAYSCALE_GRAY_04),
+                          Center(
+                            child: Text(
+                              "일치하는 강의가 없습니다.",
+                              style: TextStyle(
+                                  fontSize: 16.0,
+                                  letterSpacing: -0.02,
+                                  height: 1.5,
+                                  color: GRAYSCALE_GRAY_04),
+                            ),
                           )
                         ],
                       )
@@ -201,29 +231,49 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
     );
   }
 
-  Widget recentSearchCard(String moduleCode, int index) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
-      child: Row(
-        children: [
-          Text(
-            moduleCode,
-            style: const TextStyle(fontSize: 16.0),
-          ),
-          const Spacer(),
-          const SizedBox(
-            width: 8.0,
-          ),
-          GestureDetector(
-            onTap: () => setState(() {
-              previousSearch.removeAt(index);
-            }),
-            child: SvgPicture.asset(
-                "assets/img/module_review_screen/close_icon.svg",
-                height: 18.0,
-                width: 18.0),
-          )
-        ],
+  Widget recentSearchCard(String history, int index) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _searchController.text = history;
+        });
+        SearchHistoryService.getInstance().then((service) {
+          service.addHistory(_searchController.text);
+        });
+
+        setState(() {
+          searchFuture = ref
+              .watch(courseRepositoryProvider)
+              .search(keyword: _searchController.text);
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
+        child: Row(
+          children: [
+            Text(
+              history,
+              style: const TextStyle(fontSize: 16.0),
+            ),
+            const Spacer(),
+            const SizedBox(
+              width: 8.0,
+            ),
+            GestureDetector(
+              onTap: () {
+                SearchHistoryService.getInstance()
+                    .then((service) => service.removeHistoryAt(index));
+                setState(() {
+                  previousSearch!.removeAt(index);
+                });
+              },
+              child: SvgPicture.asset(
+                  "assets/img/module_review_screen/close_icon.svg",
+                  height: 18.0,
+                  width: 18.0),
+            )
+          ],
+        ),
       ),
     );
   }

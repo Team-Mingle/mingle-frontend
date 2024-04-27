@@ -4,6 +4,8 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/dio/dio.dart';
 import 'package:mingle/timetable/model/code_model.dart';
+import 'package:mingle/timetable/model/friend_list_model.dart';
+import 'package:mingle/timetable/model/friend_model.dart';
 import 'package:mingle/timetable/model/timetable_model.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -24,6 +26,16 @@ abstract class FriendRepository {
   @Headers({'accessToken': 'true'})
   Future<dynamic> addFriend(@Body() AddFriendDto addFriendDto);
 
+  @PATCH('/{friendId}')
+  @Headers({'accessToken': 'true'})
+  Future<void> changeFriendName(
+      {@Path() required int friendId,
+      @Body() required ChangeFriendNameDto changeFriendNameDto});
+
+  @GET("")
+  @Headers({'accessToken': 'true'})
+  Future<FriendListModel> getFriends();
+
   @POST('/code')
   @Headers({'accessToken': 'true'})
   Future<CodeModel> generateCode(@Body() GenerateCodeDto generateCodeDto);
@@ -31,6 +43,10 @@ abstract class FriendRepository {
   @GET('/display-name')
   @Headers({'accessToken': 'true'})
   Future<String> getDefaultName();
+
+  @DELETE('/{friendId}')
+  @Headers({'accessToken': 'true'})
+  Future<void> deleteFriend({@Path() required int friendId});
 
   // @POST('/{timetableId}/course')
   // @Headers({'accessToken': 'true'})
@@ -56,11 +72,14 @@ abstract class FriendRepository {
   //     {@Path() required int timetableId, @Path() required int courseId});
 }
 
+@JsonSerializable()
 class AddFriendDto {
   String friendCode;
   String myDisplayName;
 
   AddFriendDto({required this.friendCode, required this.myDisplayName});
+
+  Map<String, dynamic> toJson() => _$AddFriendDtoToJson(this);
 }
 
 @JsonSerializable()
@@ -70,4 +89,13 @@ class GenerateCodeDto {
   GenerateCodeDto({required this.myDisplayName});
 
   Map<String, dynamic> toJson() => _$GenerateCodeDtoToJson(this);
+}
+
+@JsonSerializable()
+class ChangeFriendNameDto {
+  final String friendName;
+
+  ChangeFriendNameDto({required this.friendName});
+
+  Map<String, dynamic> toJson() => _$ChangeFriendNameDtoToJson(this);
 }

@@ -31,9 +31,11 @@ class CustomScrollController {
 
 class HomeRootTab extends StatefulWidget {
   bool isFromLogin;
+  int index;
   HomeRootTab({
     Key? key,
     this.isFromLogin = false,
+    this.index = 0,
   }) : super(key: key);
 
   @override
@@ -47,7 +49,7 @@ class _HomeRootTabState extends State<HomeRootTab> {
     'assets/img/root_screen/ic_home_unselected.svg',
     'assets/img/root_screen/ic_square_unselected.svg',
     'assets/img/root_screen/ic_lawn_unselected.svg',
-    //'assets/img/root_screen/ic_timetable_unselected.svg',
+    'assets/img/root_screen/ic_timetable_unselected.svg',
     'assets/img/root_screen/ic_market_unselected.svg',
   ];
 
@@ -55,7 +57,7 @@ class _HomeRootTabState extends State<HomeRootTab> {
     'assets/img/root_screen/ic_home_selected.svg',
     'assets/img/root_screen/ic_square_selected.svg',
     'assets/img/root_screen/ic_lawn_selected.svg',
-    //'assets/img/root_screen/ic_timetable_selected.svg',
+    'assets/img/root_screen/ic_timetable_selected.svg',
     'assets/img/root_screen/ic_market_selected.svg',
   ];
 
@@ -63,7 +65,7 @@ class _HomeRootTabState extends State<HomeRootTab> {
     '홈',
     '광장',
     '잔디밭',
-    //'시간표',
+    '시간표',
     '장터',
   ];
   final List<CustomScrollController> _controllers = [
@@ -73,6 +75,15 @@ class _HomeRootTabState extends State<HomeRootTab> {
     //CustomScrollController(),
     CustomScrollController(),
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      _selectedIndex = widget.index;
+    });
+  }
 
   void _onItemTapped(int index) {
     if (index == _selectedIndex) {
@@ -113,12 +124,15 @@ class _HomeRootTabState extends State<HomeRootTab> {
       // case 3:
       //   return const ModuleReviewMainScreen();
       case 3:
+        return const TimeTableHomeScreen();
+      case 4:
         return MarketTabScreen(
           controller: _controllers[3],
           changeTabIndex: (int index) {
             _onItemTapped(index);
           },
         );
+
       default:
         return HomeTabScreen(
           controller: _controllers[0],
