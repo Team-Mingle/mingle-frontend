@@ -237,7 +237,10 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    deleteTimetable(ref.read(pinnedTimetableIdProvider)!);
+                  },
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 14.0),
                     child: const Text(
@@ -1153,25 +1156,26 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
             ],
           ),
           actions: <Widget>[
-            IconButton(
-              icon: Align(
-                alignment: Alignment.center,
-                child: SvgPicture.asset(
-                  'assets/img/common/ic_add.svg',
-                  width: 24,
-                  height: 24,
-                ),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddTimeTableScreen(
-                        addClass: addClass, addedClasses: addedCourses),
+            if (timetable != null)
+              IconButton(
+                icon: Align(
+                  alignment: Alignment.center,
+                  child: SvgPicture.asset(
+                    'assets/img/common/ic_add.svg',
+                    width: 24,
+                    height: 24,
                   ),
-                );
-              },
-            ),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddTimeTableScreen(
+                          addClass: addClass, addedClasses: addedCourses),
+                    ),
+                  );
+                },
+              ),
             IconButton(
                 icon: Align(
                   alignment: Alignment.center,
@@ -1191,17 +1195,18 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                 // );
 
                 ),
-            IconButton(
-              icon: Align(
-                alignment: Alignment.center,
-                child: SvgPicture.asset(
-                  'assets/img/common/ic_setting.svg',
-                  width: 24,
-                  height: 24,
+            if (timetable != null)
+              IconButton(
+                icon: Align(
+                  alignment: Alignment.center,
+                  child: SvgPicture.asset(
+                    'assets/img/common/ic_setting.svg',
+                    width: 24,
+                    height: 24,
+                  ),
                 ),
+                onPressed: showTimetableSettingModal,
               ),
-              onPressed: showTimetableSettingModal,
-            ),
           ],
         ),
         body: Center(
