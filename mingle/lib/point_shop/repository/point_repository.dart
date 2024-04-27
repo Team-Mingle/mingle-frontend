@@ -11,11 +11,11 @@ import 'package:retrofit/retrofit.dart';
 
 part 'point_repository.g.dart';
 
-final courseEvalutationRepositoryProvider = Provider((ref) {
+final pointRepositoryProvider = Provider((ref) {
   final dio = ref.watch(dioProvider);
-  final courseEvaluationRepository =
+  final pointRepository =
       PointRepository(dio, baseUrl: "https://$baseUrl/point");
-  return courseEvaluationRepository;
+  return pointRepository;
 });
 
 @RestApi()

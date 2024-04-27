@@ -1,15 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/module/provider/freshman_identification_upload_provider.dart';
 import 'package:mingle/point_shop/view/point_shop_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
-class FreshmanVerificationSuccessScreen extends StatelessWidget {
+class FreshmanVerificationSuccessScreen extends ConsumerWidget {
   const FreshmanVerificationSuccessScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -26,8 +28,10 @@ class FreshmanVerificationSuccessScreen extends StatelessWidget {
                   color: GRAYSCALE_BLACK,
                 ),
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => const PointShopScreen()));
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                  // Navigator.of(context).push(MaterialPageRoute(
+                  //     builder: (_) => const PointShopScreen()));
                 },
               ),
             ),
@@ -63,7 +67,16 @@ class FreshmanVerificationSuccessScreen extends StatelessWidget {
                 const Spacer(),
                 NextButton(
                   buttonName: "포인트샵으로",
-                  nextScreen: const PointShopScreen(),
+                  validators: [
+                    () {
+                      ref
+                          .read(freshmanIdentificationUploadProvider.notifier)
+                          .update((state) => null);
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                    }
+                  ],
+                  // nextScreen: const PointShopScreen(),
                 ),
                 const SizedBox(
                   height: 40.0,

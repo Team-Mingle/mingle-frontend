@@ -10,11 +10,11 @@ import 'package:retrofit/retrofit.dart';
 
 part 'point_shop_repository.g.dart';
 
-final courseEvalutationRepositoryProvider = Provider((ref) {
+final pointShopRepositoryProvider = Provider((ref) {
   final dio = ref.watch(dioProvider);
-  final courseEvaluationRepository =
+  final pointShopRepository =
       PointShopRepository(dio, baseUrl: "https://$baseUrl/coupon");
-  return courseEvaluationRepository;
+  return pointShopRepository;
 });
 
 @RestApi()

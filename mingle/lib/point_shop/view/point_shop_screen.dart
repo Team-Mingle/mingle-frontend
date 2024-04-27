@@ -1,30 +1,89 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/component/expanded_section.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/const/data.dart';
 import 'package:mingle/module/components/my_points_card.dart';
+import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
+import 'package:mingle/point_shop/model/shop_coupon_list_model.dart';
+import 'package:mingle/point_shop/model/shop_coupon_model.dart';
+import 'package:mingle/point_shop/provider/remaining_points_provider.dart';
+import 'package:mingle/point_shop/repository/point_shop_repository.dart';
 import 'package:mingle/point_shop/view/freshman_upload_identification_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
-class PointShopScreen extends StatefulWidget {
+class PointShopScreen extends ConsumerStatefulWidget {
   const PointShopScreen({super.key});
 
   @override
-  State<PointShopScreen> createState() => _PointShopScreenState();
+  ConsumerState<PointShopScreen> createState() => _PointShopScreenState();
 }
 
-class _PointShopScreenState extends State<PointShopScreen> {
+class _PointShopScreenState extends ConsumerState<PointShopScreen> {
   bool isExpanded = false;
+  int pointsOwned = 0;
+  List<ShopCouponModel> shopCouponList = [];
+  late FToast fToast;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchPoints();
+    fetchShopCouponList();
+    fToast = FToast();
+    fToast.init(context);
+  }
+
+  void fetchPoints() {
+    setState(() {
+      pointsOwned = ref.read(remainingPointsProvider);
+    });
+  }
+
+  void purchaseCoupon(ShopCouponModel shopCouponModel) async {
+    try {
+      ref.watch(pointShopRepositoryProvider).createCoupon(
+          createCouponDto:
+              CreateCouponDto(couponProductId: shopCouponModel.id));
+    } on DioException catch (e) {
+      print(e);
+      fToast.showToast(
+          child: const ToastMessage(message: generalErrorMsg),
+          gravity: ToastGravity.CENTER,
+          toastDuration: const Duration(seconds: 2));
+    }
+  }
+
+  void fetchShopCouponList() async {
+    try {
+      final shopCouponListModel =
+          await ref.read(pointShopRepositoryProvider).getShopCouponList();
+      setState(() {
+        shopCouponList = shopCouponListModel.couponProductResponse;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    int pointsOwned = 800;
-    Future bottomSheet(String validity, int pointsRequired) =>
-        showModalBottomSheet(
+    ref.listen(remainingPointsProvider, (prev, next) {
+      if (prev != next) {
+        fetchPoints();
+      }
+      /* do something, for example, call the method doSomething */
+    });
+    Future bottomSheet(ShopCouponModel shopCouponModel) => showModalBottomSheet(
           isScrollControlled: true,
           context: context,
           builder: (BuildContext context) {
-            bool isPurchasable = pointsOwned >= pointsRequired;
+            bool isPurchasable = pointsOwned >= shopCouponModel.cost;
             return Container(
               height: 505.0,
               decoration: const BoxDecoration(
@@ -88,7 +147,8 @@ class _PointShopScreenState extends State<PointShopScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "강의평가 $validity 이용권",
+                                  shopCouponModel.name,
+                                  // "강의평가 $validity 이용권",
                                   style: const TextStyle(
                                       fontSize: 16.0,
                                       letterSpacing: -0.02,
@@ -99,7 +159,8 @@ class _PointShopScreenState extends State<PointShopScreen> {
                                   height: 8.0,
                                 ),
                                 Text(
-                                  "$validity동안 모든 강의평가를 제한 없이 볼 수 있습니다.",
+                                  shopCouponModel.description,
+                                  // "$validity동안 모든 강의평가를 제한 없이 볼 수 있습니다.",
                                   style: const TextStyle(
                                       fontSize: 12.0,
                                       letterSpacing: -0.005,
@@ -110,7 +171,7 @@ class _PointShopScreenState extends State<PointShopScreen> {
                                   height: 8.0,
                                 ),
                                 Text(
-                                  "${pointsRequired}p",
+                                  "${shopCouponModel.cost}p",
                                   style: const TextStyle(fontSize: 16.0),
                                 )
                               ],
@@ -151,7 +212,7 @@ class _PointShopScreenState extends State<PointShopScreen> {
                               ),
                               const Spacer(),
                               Text(
-                                "-${pointsRequired}p",
+                                "-${shopCouponModel.cost}p",
                                 style: const TextStyle(
                                     fontSize: 16.0,
                                     letterSpacing: -0.02,
@@ -176,7 +237,7 @@ class _PointShopScreenState extends State<PointShopScreen> {
                               ),
                               const Spacer(),
                               Text(
-                                "${pointsOwned - pointsRequired}p",
+                                "${pointsOwned - shopCouponModel.cost}p",
                                 style: const TextStyle(
                                     fontSize: 16.0,
                                     letterSpacing: -0.02,
@@ -186,7 +247,7 @@ class _PointShopScreenState extends State<PointShopScreen> {
                             ],
                           ),
                           const SizedBox(
-                            height: 60.0,
+                            height: 11.5,
                           ),
                           !isPurchasable
                               ? Row(
@@ -215,7 +276,10 @@ class _PointShopScreenState extends State<PointShopScreen> {
                               : Container(),
                           const Spacer(),
                           InkWell(
-                            onTap: () => Navigator.of(context).pop(),
+                            onTap: () {
+                              purchaseCoupon(shopCouponModel);
+                              Navigator.of(context).pop();
+                            },
                             child: Container(
                               // width: 296,
                               height: 48,
@@ -228,7 +292,7 @@ class _PointShopScreenState extends State<PointShopScreen> {
                                   color: isPurchasable
                                       ? PRIMARY_COLOR_ORANGE_02
                                       : GRAYSCALE_GRAY_02),
-                              child: const Center(
+                              child: Center(
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -238,6 +302,9 @@ class _PointShopScreenState extends State<PointShopScreen> {
                                           fontSize: 14.0,
                                           letterSpacing: -0.01,
                                           height: 1.4,
+                                          color: isPurchasable
+                                              ? Colors.white
+                                              : GRAYSCALE_GRAY_03,
                                           fontWeight: FontWeight.w400),
                                     ),
                                   ],
@@ -258,7 +325,7 @@ class _PointShopScreenState extends State<PointShopScreen> {
           },
           backgroundColor: Colors.transparent,
         );
-    Widget modulePassCard(String validity, int pointsRequired) {
+    Widget modulePassCard(ShopCouponModel shopCouponModel) {
       return Container(
         decoration: BoxDecoration(
             color: Colors.white,
@@ -276,7 +343,9 @@ class _PointShopScreenState extends State<PointShopScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "강의평가 $validity 이용권",
+                shopCouponModel.name
+                // "강의평가 $validity 이용권"
+                ,
                 style: const TextStyle(
                     fontSize: 16.0,
                     letterSpacing: -0.02,
@@ -287,7 +356,8 @@ class _PointShopScreenState extends State<PointShopScreen> {
                 height: 8.0,
               ),
               Text(
-                "$validity동안 모든 강의평가를 제한 없이 볼 수 있습니다.",
+                // "$validity동안 모든 강의평가를 제한 없이 볼 수 있습니다.",
+                shopCouponModel.description,
                 style: const TextStyle(
                     fontSize: 12.0,
                     letterSpacing: -0.005,
@@ -298,7 +368,7 @@ class _PointShopScreenState extends State<PointShopScreen> {
                 height: 8.0,
               ),
               Text(
-                "${pointsRequired}p",
+                "${shopCouponModel.cost}p",
                 style: const TextStyle(fontSize: 16.0),
               )
             ],
@@ -315,7 +385,7 @@ class _PointShopScreenState extends State<PointShopScreen> {
             ),
           ),
           GestureDetector(
-            onTap: () => bottomSheet(validity, pointsRequired),
+            onTap: () => bottomSheet(shopCouponModel),
             child: const Text(
               "구매",
               style: TextStyle(
@@ -374,11 +444,16 @@ class _PointShopScreenState extends State<PointShopScreen> {
                   const SizedBox(
                     height: 56.0,
                   ),
-                  modulePassCard("30일", 300),
-                  const SizedBox(
-                    height: 14.0,
-                  ),
-                  modulePassCard("1년", 1000),
+                  ...shopCouponList.map((shopCoupon) => Padding(
+                        padding: const EdgeInsets.only(bottom: 14.0),
+                        child: modulePassCard(shopCoupon),
+                      )),
+
+                  // modulePassCard("30일", 300),
+                  // const SizedBox(
+                  //   height: 14.0,
+                  // ),
+                  // modulePassCard("1년", 1000),
                   const SizedBox(
                     height: 14.0,
                   ),

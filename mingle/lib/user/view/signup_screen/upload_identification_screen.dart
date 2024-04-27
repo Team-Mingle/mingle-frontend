@@ -85,7 +85,7 @@ class _UploadIdentificationScreenState
                   decoration: BoxDecoration(
                       border: Border.all(color: GRAYSCALE_GRAY_02),
                       borderRadius: BorderRadius.circular(8.0),
-                      color: GRAYSCALE_GRAY_01_5),
+                      color: GRAYSCALE_GRAY_0_5),
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,

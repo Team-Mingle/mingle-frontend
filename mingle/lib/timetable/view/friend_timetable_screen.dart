@@ -10,7 +10,6 @@ import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/timetable/components/timetable_grid.dart';
-import 'package:mingle/timetable/model/friend_timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_model.dart';
 import 'package:mingle/timetable/repository/friend_repository.dart';
@@ -55,6 +54,13 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
           .read(friendRepositoryProvider)
           .deleteFriend(friendId: widget.friendId);
       widget.refreshFriendList();
+      fToast.showToast(
+        child: const ToastMessage(message: "친구가 삭제되었습니다."),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
     } on DioException catch (e) {
       print(e);
     }
@@ -116,6 +122,11 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
       setState(() {
         widget.friendName = newFriendName;
       });
+      fToast.showToast(
+        child: const ToastMessage(message: "친구의 이름이 변경되었습니다."),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
     } on DioException catch (e) {
       fToast.showToast(
         child: ToastMessage(
@@ -606,8 +617,6 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
                           deleteFriend();
                         },
                         child: Container(

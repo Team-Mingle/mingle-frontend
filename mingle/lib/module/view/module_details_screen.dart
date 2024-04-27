@@ -18,6 +18,9 @@ import 'package:mingle/module/repository/course_evaluation_repository.dart';
 import 'package:mingle/module/repository/course_repository.dart';
 import 'package:mingle/module/util/module_satisfaction_enum.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
+import 'package:mingle/point_shop/model/coupon_model.dart';
+import 'package:mingle/point_shop/provider/my_coupon_provider.dart';
+import 'package:mingle/point_shop/view/point_shop_screen.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
@@ -35,25 +38,7 @@ class ModuleDetailsScreen extends ConsumerStatefulWidget {
 
 class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
   bool isExpanded = false;
-  List<String> authors = [
-    "23년 1학기 수강자",
-    "23년 1학기 수강자(나)",
-    "23년 1학기 수강자",
-    "23년 1학기 수강자"
-  ];
-  List<String> reviews = [
-    "완전 꿀강임!\n학점 얻어가세요",
-    "교수가 제정신이 아님.....................",
-    "걍..네",
-    "완전 꿀강임!\n학점 얻어가세요"
-  ];
-  List<moduleSatisfaction> satisfactions = [
-    moduleSatisfaction.satisfied,
-    moduleSatisfaction.unsatisfied,
-    moduleSatisfaction.meh,
-    moduleSatisfaction.satisfied
-  ];
-  List<int> likes = [8, 8, 4, 8];
+  CouponModel? myCoupon;
   late FToast fToast;
 
   @override
@@ -62,6 +47,13 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
     super.initState();
     fToast = FToast();
     fToast.init(context);
+    getCoupon();
+  }
+
+  void getCoupon() async {
+    setState(() {
+      myCoupon = ref.read(myCouponProvider);
+    });
   }
 
   void navigateToAddModuleReview() {
@@ -295,6 +287,14 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
               ],
             ),
           ),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 16.0,
+            color: GRAYSCALE_GRAY_01,
+          ),
+          const SizedBox(
+            height: 42.0,
+          ),
           FutureBuilder(
             future: ref
                 .watch(courseEvalutationRepositoryProvider)
@@ -304,7 +304,9 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
                 (context, AsyncSnapshot<CourseEvaluationResponseDto> snapshot) {
               if (!snapshot.hasData) {
                 return const Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(
+                    color: PRIMARY_COLOR_ORANGE_01,
+                  ),
                 );
               }
               if (snapshot.hasError) {
@@ -317,11 +319,6 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
 
               return renderModuleReviews(moduleReviews);
             },
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 16.0,
-            color: GRAYSCALE_GRAY_01,
           ),
           const SizedBox(
             height: 50.0,
@@ -371,14 +368,53 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
           const SizedBox(
             height: 16.0,
           ),
-          ...List.generate(
-              moduleReviews.length,
-              (index) => ModuleReviewCard(
-                  reivew: moduleReviews[index].comment,
-                  author: moduleReviews[index].convertSemesterString(),
-                  likes: 0, // TODO: change to likes
-                  satisfaction:
-                      moduleReviews[index].convertRatingToSatisfaction()))
+          if (myCoupon == null)
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  height: 50.0,
+                ),
+                const Text(
+                  "강의평가는 조회 이용권을 보유해야 볼 수 있어요.",
+                  style: TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                ),
+                const SizedBox(
+                  height: 17.0,
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => const PointShopScreen())),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "이용권 구매하러 가기",
+                        style: TextStyle(
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: -0.06,
+                            color: PRIMARY_COLOR_ORANGE_01),
+                      ),
+                      SvgPicture.asset(
+                          "assets/img/timetable_screen/right_tick_icon.svg")
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 9.0,
+                )
+              ],
+            ),
+          if (myCoupon != null)
+            ...List.generate(
+                moduleReviews.length,
+                (index) => ModuleReviewCard(
+                    reivew: moduleReviews[index].comment,
+                    author: moduleReviews[index].convertSemesterString(),
+                    likes: 0, // TODO: change to likes
+                    satisfaction:
+                        moduleReviews[index].convertRatingToSatisfaction()))
         ],
       ),
     );

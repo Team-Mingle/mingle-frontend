@@ -55,6 +55,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   bool isLoading = false;
   String newTimetableName = "";
   List<FriendModel> friendList = [];
+  final ScrollController scrollController = ScrollController();
   late FToast fToast;
 
   @override
@@ -68,13 +69,19 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   }
 
   void getClasses() async {
-    await ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetable();
+    // await ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetable();
+
     if (ref.read(pinnedTimetableIdProvider) == null) {
       setState(() {
+        timetable = null;
         flag = 0;
       });
       return;
     }
+    setState(() {
+      flag = 1;
+    });
+
     TimetableModel currentTimetable = await ref
         .read(timetableRepositoryProvider)
         .getTimetable(timetableId: ref.read(pinnedTimetableIdProvider)!);
@@ -110,6 +117,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
           .deleteTimetable(timetableId: timetableId);
       ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetable();
     } on DioException catch (e) {
+      print(e.response?.data['message']);
       fToast.showToast(
         child: const ToastMessage(message: generalErrorMsg),
         gravity: ToastGravity.CENTER,
@@ -140,11 +148,17 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     }
   }
 
+  setTimetableName(String newTimetableName) {
+    setState(() {
+      timetable!.name = newTimetableName;
+    });
+  }
+
   void addFriend() async {
     setState(() {
       isLoading = true;
     });
-    if (myDisplayName.isEmpty) {
+    if (friendDisplayName.isEmpty) {
       fToast.showToast(
         child: const ToastMessage(message: "이름을 입력해주세요."),
         gravity: ToastGravity.CENTER,
@@ -1045,9 +1059,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // print(ref.watch(pinnedTimetableIdProvider));
+    ref.watch(pinnedTimetableIdProvider);
     // getClasses();
-
     ref.listen(pinnedTimetableIdProvider, (prev, next) {
       if (prev != next) {
         getClasses();
@@ -1055,348 +1068,399 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
       /* do something, for example, call the method doSomething */
     });
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: BACKGROUND_COLOR_GRAY,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        surfaceTintColor: Colors.transparent,
-        toolbarHeight: 56.0,
+        resizeToAvoidBottomInset: true,
         backgroundColor: BACKGROUND_COLOR_GRAY,
-        elevation: 0,
-        leading: Ink(
-          width: 44.0,
-          height: 48.0,
-          child: InkWell(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          surfaceTintColor: Colors.transparent,
+          toolbarHeight: 56.0,
+          backgroundColor: BACKGROUND_COLOR_GRAY,
+          elevation: 0,
+          leading: Ink(
+            width: 44.0,
+            height: 48.0,
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
                     builder: (_) => TimeTableListScreen(
-                          deleteTimetable: deleteTimetable,
-                          changeTimetableName: changeTimetableName,
-                        )),
-              );
-            },
-            child: Align(
-              alignment: Alignment.center,
-              child: SvgPicture.asset(
-                'assets/img/common/ic_list.svg',
-                width: 24,
-                height: 24,
-              ),
-            ),
-          ),
-        ),
-        title: Row(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 8.0,
-                ),
-                Text(
-                  timetable == null
-                      ? ""
-                      : TimetableListModel.convertKeyToSemester(
-                          timetable!.semester),
-                  style: const TextStyle(
-                    color: GRAYSCALE_GRAY_04,
-                    fontSize: 12,
-                    fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.w400,
+                      deleteTimetable: deleteTimetable,
+                      setTimetableName: setTimetableName,
+                    ),
                   ),
-                ),
-                Text(
-                  timetable == null ? "" : timetable!.name,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16.0,
-                    letterSpacing: -0.02,
-                    height: 1.5,
-                    fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-              ],
-            ),
-            const Spacer(),
-          ],
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Align(
-              alignment: Alignment.center,
-              child: SvgPicture.asset(
-                'assets/img/common/ic_add.svg',
-                width: 24,
-                height: 24,
-              ),
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddTimeTableScreen(
-                      addClass: addClass, addedClasses: addedCourses),
-                ),
-              );
-            },
-          ),
-          IconButton(
-              icon: Align(
+                );
+              },
+              child: Align(
                 alignment: Alignment.center,
                 child: SvgPicture.asset(
-                  'assets/img/timetable_screen/add_friend.svg',
+                  'assets/img/common/ic_list.svg',
                   width: 24,
                   height: 24,
                 ),
               ),
-              onPressed: () => shareOrRegisterModal()
-
-              // showDialog(
-              //   context: context,
-              //   builder: (BuildContext context) {
-              //     return const AddFriendDialog();
-              //   },
-              // );
-
-              ),
-          IconButton(
-            icon: Align(
-              alignment: Alignment.center,
-              child: SvgPicture.asset(
-                'assets/img/common/ic_setting.svg',
-                width: 24,
-                height: 24,
-              ),
             ),
-            onPressed: showTimetableSettingModal,
           ),
-        ],
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: SizedBox(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+          title: Row(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (flag == 0) // flag 값이 0인 경우
-                    const SizedBox(height: 200),
-                  if (flag == 0)
-                    const Text(
-                      '아직 시간표를 만들지 않았어요.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16.0,
-                        letterSpacing: -0.02,
-                        height: 1.5,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  if (flag == 0) const SizedBox(height: 8),
-                  if (flag == 0)
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => TimeTableListScreen(
-                              deleteTimetable: deleteTimetable,
-                              changeTimetableName: changeTimetableName,
-                              isAddTimetable: true,
-                            ),
-                          ),
-                        );
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "새 시간표 추가하기",
-                            style: TextStyle(
-                              fontFamily: "Pretendard",
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: PRIMARY_COLOR_ORANGE_01,
-                            ),
-                            textAlign: TextAlign.left,
-                          ),
-                          SvgPicture.asset(
-                            'assets/img/home_screen/ic_navigation_right_orange.svg',
-                            width: 16,
-                            height: 16,
-                          ),
-                        ],
-                      ),
-                    ),
-                  if (flag == 0) const SizedBox(height: 200),
-                  if (flag == 1) // flag 값이 1인 경우
-                    TimeTableGrid(
-                      addedClasses: addedCourses,
-                    ),
                   const SizedBox(
-                    height: 24.0,
+                    height: 8.0,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _isFriendListExpanded = !_isFriendListExpanded;
-                        });
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 12.0),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: GRAYSCALE_GRAY_02),
-                            borderRadius: BorderRadius.circular(8.0)),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                const Text(
-                                  "친구 목록",
-                                  style: TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                const Spacer(),
-                                SvgPicture.asset(_isFriendListExpanded
-                                    ? "assets/img/module_review_screen/up_tick_icon.svg"
-                                    : "assets/img/module_review_screen/down_tick_icon.svg")
-                              ],
-                            ),
-                            ExpandedSection(
-                                expand: _isFriendListExpanded,
-                                child: SizedBox(
-                                  width: double.infinity,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(
-                                        height: 16.0,
-                                      ),
-                                      if (friendList.isEmpty)
-                                        const Text(
-                                          "아직 추가된 친구가 없네요!\n친구를 추가하면 시간표를 공유할 수 있어요.",
-                                          style: TextStyle(
-                                              color: GRAYSCALE_GRAY_04,
-                                              letterSpacing: -0.14),
-                                        ),
-                                      ...List.generate(
-                                        friendList.length,
-                                        (index) => GestureDetector(
-                                          onTap: () => Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      FriendTimetableScreen(
-                                                        refreshFriendList:
-                                                            getFriends,
-                                                        friendId:
-                                                            friendList[index]
-                                                                .friendId,
-                                                        friendName:
-                                                            friendList[index]
-                                                                .friendName,
-                                                      ))),
-                                          child: Container(
-                                            width: double.infinity,
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 14.5),
-                                            child: Text(
-                                              friendList[index].friendName,
-                                              style: const TextStyle(
-                                                  fontSize: 16.0,
-                                                  letterSpacing: -0.32),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 17.0,
-                                      ),
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child: GestureDetector(
-                                          onTap: shareOrRegisterModal,
-                                          child: const Text(
-                                            "친구 추가하기",
-                                            style: TextStyle(
-                                                fontSize: 12.0,
-                                                fontWeight: FontWeight.w500,
-                                                color: PRIMARY_COLOR_ORANGE_01),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                )),
-                          ],
-                        ),
-                      ),
+                  Text(
+                    timetable == null
+                        ? ""
+                        : TimetableListModel.convertKeyToSemester(
+                            timetable!.semester),
+                    style: const TextStyle(
+                      color: GRAYSCALE_GRAY_04,
+                      fontSize: 12,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  Text(
+                    timetable == null ? "" : timetable!.name,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0,
+                      letterSpacing: -0.02,
+                      height: 1.5,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   const SizedBox(
-                    height: 16.0,
+                    height: 16,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: GestureDetector(
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (_) => const ModuleReviewMainScreen()),
-                      ),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 12.0),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: GRAYSCALE_GRAY_02),
-                            borderRadius: BorderRadius.circular(8.0)),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                const Text(
-                                  "강의평가 홈 바로가기",
-                                  style: TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                const Spacer(),
-                                SvgPicture.asset(
-                                  'assets/img/timetable_screen/link.svg',
-                                  width: 24,
-                                  height: 24,
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 84),
                 ],
               ),
-            ),
+              const Spacer(),
+            ],
           ),
+          actions: <Widget>[
+            IconButton(
+              icon: Align(
+                alignment: Alignment.center,
+                child: SvgPicture.asset(
+                  'assets/img/common/ic_add.svg',
+                  width: 24,
+                  height: 24,
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddTimeTableScreen(
+                        addClass: addClass, addedClasses: addedCourses),
+                  ),
+                );
+              },
+            ),
+            IconButton(
+                icon: Align(
+                  alignment: Alignment.center,
+                  child: SvgPicture.asset(
+                    'assets/img/timetable_screen/add_friend.svg',
+                    width: 24,
+                    height: 24,
+                  ),
+                ),
+                onPressed: () => shareOrRegisterModal()
+
+                // showDialog(
+                //   context: context,
+                //   builder: (BuildContext context) {
+                //     return const AddFriendDialog();
+                //   },
+                // );
+
+                ),
+            IconButton(
+              icon: Align(
+                alignment: Alignment.center,
+                child: SvgPicture.asset(
+                  'assets/img/common/ic_setting.svg',
+                  width: 24,
+                  height: 24,
+                ),
+              ),
+              onPressed: showTimetableSettingModal,
+            ),
+          ],
         ),
-      ),
-    );
+        body: Center(
+            child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: CustomScrollView(
+                    controller: scrollController,
+                    physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
+                    slivers: [
+                      CupertinoSliverRefreshControl(
+                        onRefresh: () async {
+                          await Future.delayed(
+                              const Duration(milliseconds: 1000), () {
+                            print('refreshing');
+                            // ref
+                            //     .watch(univRecentPostProvider.notifier)
+                            //     .paginate(normalRefetch: true);
+                            // ref
+                            //     .watch(totalRecentPostProvider.notifier)
+                            //     .paginate(normalRefetch: true);
+                            // ref
+                            //     .watch(bestPostProvider.notifier)
+                            //     .paginate(normalRefetch: true);
+                          });
+                          // await widget.notifierProvider!.paginate(forceRefetch: true);
+                        },
+                      ),
+                      SliverList(
+                        delegate: SliverChildListDelegate([
+                          SizedBox(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                if (flag == 0) // flag 값이 0인 경우
+                                  const SizedBox(height: 200),
+                                if (flag == 0)
+                                  const Text(
+                                    '아직 시간표를 만들지 않았어요.',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16.0,
+                                      letterSpacing: -0.02,
+                                      height: 1.5,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                if (flag == 0) const SizedBox(height: 8),
+                                if (flag == 0)
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (_) => TimeTableListScreen(
+                                            deleteTimetable: deleteTimetable,
+                                            setTimetableName: setTimetableName,
+                                            isAddTimetable: true,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        const Text(
+                                          "새 시간표 추가하기",
+                                          style: TextStyle(
+                                            fontFamily: "Pretendard",
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w500,
+                                            color: PRIMARY_COLOR_ORANGE_01,
+                                          ),
+                                          textAlign: TextAlign.left,
+                                        ),
+                                        SvgPicture.asset(
+                                          'assets/img/home_screen/ic_navigation_right_orange.svg',
+                                          width: 16,
+                                          height: 16,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                if (flag == 0) const SizedBox(height: 200),
+                                if (flag == 1) // flag 값이 1인 경우
+                                  TimeTableGrid(
+                                    addedClasses: addedCourses,
+                                  ),
+                                const SizedBox(
+                                  height: 24.0,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        _isFriendListExpanded =
+                                            !_isFriendListExpanded;
+                                      });
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16.0, vertical: 12.0),
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                              color: GRAYSCALE_GRAY_02),
+                                          borderRadius:
+                                              BorderRadius.circular(8.0)),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              const Text(
+                                                "친구 목록",
+                                                style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                              const Spacer(),
+                                              SvgPicture.asset(_isFriendListExpanded
+                                                  ? "assets/img/module_review_screen/up_tick_icon.svg"
+                                                  : "assets/img/module_review_screen/down_tick_icon.svg")
+                                            ],
+                                          ),
+                                          ExpandedSection(
+                                              expand: _isFriendListExpanded,
+                                              child: SizedBox(
+                                                width: double.infinity,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    const SizedBox(
+                                                      height: 16.0,
+                                                    ),
+                                                    if (friendList.isEmpty)
+                                                      const Text(
+                                                        "아직 추가된 친구가 없네요!\n친구를 추가하면 시간표를 공유할 수 있어요.",
+                                                        style: TextStyle(
+                                                            color:
+                                                                GRAYSCALE_GRAY_04,
+                                                            letterSpacing:
+                                                                -0.14),
+                                                      ),
+                                                    ...List.generate(
+                                                      friendList.length,
+                                                      (index) =>
+                                                          GestureDetector(
+                                                        onTap: () => Navigator
+                                                                .of(context)
+                                                            .push(
+                                                                MaterialPageRoute(
+                                                                    builder: (_) =>
+                                                                        FriendTimetableScreen(
+                                                                          refreshFriendList:
+                                                                              getFriends,
+                                                                          friendId:
+                                                                              friendList[index].friendId,
+                                                                          friendName:
+                                                                              friendList[index].friendName,
+                                                                        ))),
+                                                        child: Container(
+                                                          width:
+                                                              double.infinity,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  vertical:
+                                                                      14.5),
+                                                          child: Text(
+                                                            friendList[index]
+                                                                .friendName,
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        16.0,
+                                                                    letterSpacing:
+                                                                        -0.32),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 17.0,
+                                                    ),
+                                                    Align(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: GestureDetector(
+                                                        onTap:
+                                                            shareOrRegisterModal,
+                                                        child: const Text(
+                                                          "친구 추가하기",
+                                                          style: TextStyle(
+                                                              fontSize: 12.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              color:
+                                                                  PRIMARY_COLOR_ORANGE_01),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 16.0,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0),
+                                  child: GestureDetector(
+                                    onTap: () => Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (_) =>
+                                              const ModuleReviewMainScreen()),
+                                    ),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16.0, vertical: 12.0),
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                              color: GRAYSCALE_GRAY_02),
+                                          borderRadius:
+                                              BorderRadius.circular(8.0)),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              const Text(
+                                                "강의평가 홈 바로가기",
+                                                style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                              const Spacer(),
+                                              SvgPicture.asset(
+                                                'assets/img/timetable_screen/link.svg',
+                                                width: 24,
+                                                height: 24,
+                                              )
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 84),
+                              ],
+                            ),
+                          ),
+                        ]),
+                      ),
+                    ]))));
   }
 
   void showDeleteCourseDialog(CourseModel currentCourse) {

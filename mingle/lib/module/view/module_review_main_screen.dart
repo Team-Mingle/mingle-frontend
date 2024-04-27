@@ -1,13 +1,41 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
-import 'package:mingle/point_shop/components/viewing_pass_card.dart';
+import 'package:mingle/module/components/viewing_pass_card.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
 import 'package:mingle/module/view/module_search_screen.dart';
+import 'package:mingle/point_shop/model/coupon_model.dart';
+import 'package:mingle/point_shop/provider/my_coupon_provider.dart';
+import 'package:mingle/point_shop/repository/point_shop_repository.dart';
+import 'package:mingle/point_shop/view/point_shop_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
-class ModuleReviewMainScreen extends StatelessWidget {
+class ModuleReviewMainScreen extends ConsumerStatefulWidget {
   const ModuleReviewMainScreen({super.key});
+
+  @override
+  ConsumerState<ModuleReviewMainScreen> createState() =>
+      _ModuleReviewMainScreenState();
+}
+
+class _ModuleReviewMainScreenState
+    extends ConsumerState<ModuleReviewMainScreen> {
+  CouponModel? myCoupon;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchCoupon();
+  }
+
+  void fetchCoupon() async {
+    setState(() {
+      myCoupon = ref.read(myCouponProvider);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,11 +143,42 @@ class ModuleReviewMainScreen extends StatelessWidget {
           const SizedBox(
             height: 8.0,
           ),
-          const ViewingPassCard(
-            title: "강의평가 30일 조회 이용권",
-            purchaseDate: "23.11.4",
-            expiryDate: "23.11.4",
-          ),
+          myCoupon == null
+              ? Container(
+                  padding: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: GRAYSCALE_GRAY_01_5),
+                      borderRadius: BorderRadius.circular(8.0)),
+                  child: Row(
+                    children: [
+                      const Text(
+                        "보유 중인 이용권이 없어요.",
+                        style: TextStyle(letterSpacing: -0.14),
+                      ),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const PointShopScreen(),
+                          ),
+                        ),
+                        child: const Text(
+                          "이용권 구매하기",
+                          style: TextStyle(
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: -0.06,
+                              color: PRIMARY_COLOR_ORANGE_01),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : const ViewingPassCard(
+                  title: "강의평가 30일 조회 이용권",
+                  purchaseDate: "23.11.4",
+                  expiryDate: "23.11.4",
+                ),
           const Spacer(),
           Align(
             alignment: Alignment.center,
@@ -140,7 +199,7 @@ class ModuleReviewMainScreen extends StatelessWidget {
                       width: 14.0,
                     ),
                     const SizedBox(
-                      width: 2.0,
+                      width: 1.0,
                     ),
                     GestureDetector(
                       onTap: () => Navigator.of(context).push(MaterialPageRoute(

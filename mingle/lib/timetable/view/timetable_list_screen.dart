@@ -16,12 +16,12 @@ import 'package:mingle/timetable/view/self_add_timetable_screen.dart';
 
 class TimeTableListScreen extends ConsumerStatefulWidget {
   final bool isAddTimetable;
-  final Function changeTimetableName;
+  final Function setTimetableName;
   final Function deleteTimetable;
   const TimeTableListScreen({
     Key? key,
     this.isAddTimetable = false,
-    required this.changeTimetableName,
+    required this.setTimetableName,
     required this.deleteTimetable,
   }) : super(key: key);
 
@@ -63,6 +63,22 @@ class _MyTimeTableListScreenState extends ConsumerState<TimeTableListScreen> {
     });
   }
 
+  Future<void> deleteTimetable(int timetableId) async {
+    try {
+      await ref
+          .watch(timetableRepositoryProvider)
+          .deleteTimetable(timetableId: timetableId);
+      ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetable();
+    } on DioException catch (e) {
+      print(e.response?.data['message']);
+      fToast.showToast(
+        child: const ToastMessage(message: generalErrorMsg),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
+    }
+  }
+
   void addTimetable(String selectedSemester) async {
     try {
       final year = int.parse(selectedSemester.substring(0, 4));
@@ -70,11 +86,27 @@ class _MyTimeTableListScreenState extends ConsumerState<TimeTableListScreen> {
 
       await ref.watch(timetableRepositoryProvider).addTimetable(
           addTimetableDto: AddTimetableDto(year: year, semester: semester));
-      ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetable();
+      await ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetable();
       getTimetables();
     } on DioException catch (e) {
       fToast.showToast(
         child: const ToastMessage(message: generalErrorMsg),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
+    }
+  }
+
+  void changeTimetableName(String newTimetableName) async {
+    try {
+      await ref.watch(timetableRepositoryProvider).changeTimetableName(
+          timetableId: ref.read(pinnedTimetableIdProvider)!,
+          changeTimetableNameDto:
+              ChangeTimetableNameDto(name: newTimetableName));
+    } on DioException catch (e) {
+      fToast.showToast(
+        child: ToastMessage(
+            message: e.response?.data['message'] ?? generalErrorMsg),
         gravity: ToastGravity.CENTER,
         toastDuration: const Duration(seconds: 2),
       );
@@ -217,15 +249,16 @@ class _MyTimeTableListScreenState extends ConsumerState<TimeTableListScreen> {
                                         setState(() {
                                           values[index].name = newTimetableName;
                                         });
-                                        widget.changeTimetableName(
-                                            newTimetableName);
+                                        widget
+                                            .setTimetableName(newTimetableName);
+                                        changeTimetableName(newTimetableName);
                                       },
                                       deleteTimetable: (int timetableId) async {
                                         setState(() {
                                           values.removeAt(index);
                                         });
-                                        await widget
-                                            .deleteTimetable(timetableId);
+
+                                        await deleteTimetable(timetableId);
                                         getTimetables();
                                       },
                                       pinTimetable: (TimetablePreviewModel

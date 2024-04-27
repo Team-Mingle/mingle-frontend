@@ -11,6 +11,8 @@ import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/view/splash_screen.dart';
 import 'package:mingle/firebase_notification.dart';
 import 'package:mingle/firebase_options.dart';
+import 'package:mingle/module/view/first_onboarding_screen.dart';
+import 'package:mingle/module/view/module_review_main_screen.dart';
 import 'package:mingle/point_shop/view/point_shop_screen.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.dart';
@@ -242,38 +244,40 @@ class _AppState extends ConsumerState<_App> {
   Widget build(BuildContext context) {
     return ProviderScope(
       child: MaterialApp(
-          navigatorKey: navigatorKey,
-          theme: ThemeData(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            fontFamily: 'Pretendard',
-            disabledColor: GRAYSCALE_GRAY_02,
-            bottomSheetTheme:
-                const BottomSheetThemeData(backgroundColor: Colors.transparent),
-            textSelectionTheme: const TextSelectionThemeData(
-              cursorColor: GRAYSCALE_GRAY_04,
-              selectionColor: SECONDARY_COLOR_ORANGE_03,
-              selectionHandleColor: PRIMARY_COLOR_ORANGE_01,
-            ),
-            cupertinoOverrideTheme: const CupertinoThemeData(
-              primaryColor: PRIMARY_COLOR_ORANGE_01,
-            ),
+        navigatorKey: navigatorKey,
+        theme: ThemeData(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          fontFamily: 'Pretendard',
+          disabledColor: GRAYSCALE_GRAY_02,
+          bottomSheetTheme:
+              const BottomSheetThemeData(backgroundColor: Colors.transparent),
+          textSelectionTheme: const TextSelectionThemeData(
+            cursorColor: GRAYSCALE_GRAY_04,
+            selectionColor: SECONDARY_COLOR_ORANGE_03,
+            selectionHandleColor: PRIMARY_COLOR_ORANGE_01,
           ),
-          navigatorObservers: [
-            FirebaseAnalyticsObserver(analytics: analytics),
-          ],
-          debugShowCheckedModeBanner: false,
-          home:
-              // const SplashScreen(),
-              //  const EnterOfferIdScreen()
-              // const FinishTempSinupScreen(),
-              // const TimeTableHomeScreen()
-              const PointShopScreen()
-          //     const FriendTimetableScreen(
-          //   friendId: 1,
-          // ),
-          // const ServiceAgreementScreen(),
+          cupertinoOverrideTheme: const CupertinoThemeData(
+            primaryColor: PRIMARY_COLOR_ORANGE_01,
           ),
+        ),
+        navigatorObservers: [
+          FirebaseAnalyticsObserver(analytics: analytics),
+        ],
+        debugShowCheckedModeBanner: false,
+        home:
+            // const ModuleReviewMainScreen()
+            const SplashScreen(),
+        //  const EnterOfferIdScreen()
+        // const FinishTempSinupScreen(),
+        // const TimeTableHomeScreen()
+        // const FirstOnboardingScreen()
+        // const PointShopScreen()
+        //     const FriendTimetableScreen(
+        //   friendId: 1,
+        // ),
+        // const ServiceAgreementScreen(),
+      ),
     );
   }
 }
