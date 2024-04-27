@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/module/provider/freshman_identification_upload_provider.dart';
-import 'package:mingle/module/view/freshman_verification_success_screen.dart';
+import 'package:mingle/point_shop/view/freshman_verification_success_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
 class FreshmanUploadIdentificationScreen extends ConsumerStatefulWidget {

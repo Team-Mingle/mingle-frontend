@@ -4,7 +4,7 @@ import 'package:mingle/common/component/expanded_section.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/module/components/my_points_card.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
-import 'package:mingle/module/view/freshman_upload_identification_screen.dart';
+import 'package:mingle/point_shop/view/freshman_upload_identification_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
 class PointShopScreen extends StatefulWidget {

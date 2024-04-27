@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
-import 'package:mingle/module/components/viewing_pass_card.dart';
+import 'package:mingle/point_shop/components/viewing_pass_card.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
 import 'package:mingle/module/view/module_search_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';

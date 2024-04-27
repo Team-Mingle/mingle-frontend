@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
-import 'package:mingle/module/view/point_shop_screen.dart';
+import 'package:mingle/point_shop/view/point_shop_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
 class FreshmanVerificationSuccessScreen extends StatelessWidget {
