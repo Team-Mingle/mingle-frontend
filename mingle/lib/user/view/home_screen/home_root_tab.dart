@@ -31,9 +31,11 @@ class CustomScrollController {
 
 class HomeRootTab extends StatefulWidget {
   bool isFromLogin;
+  int index;
   HomeRootTab({
     Key? key,
     this.isFromLogin = false,
+    this.index = 0,
   }) : super(key: key);
 
   @override
@@ -73,6 +75,15 @@ class _HomeRootTabState extends State<HomeRootTab> {
     //CustomScrollController(),
     CustomScrollController(),
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      _selectedIndex = widget.index;
+    });
+  }
 
   void _onItemTapped(int index) {
     if (index == _selectedIndex) {

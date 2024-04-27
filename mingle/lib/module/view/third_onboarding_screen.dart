@@ -1,12 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/const/data.dart';
 import 'package:mingle/module/view/module_review_main_screen.dart';
+import 'package:mingle/secure_storage/secure_storage.dart';
+import 'package:mingle/timetable/view/timetable_tab_screen.dart';
+import 'package:mingle/user/view/home_screen/home_root_tab.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:show_up_animation/show_up_animation.dart';
 
-class ThirdOnboardingScreen extends StatelessWidget {
+class ThirdOnboardingScreen extends ConsumerStatefulWidget {
   const ThirdOnboardingScreen({super.key});
+
+  @override
+  ConsumerState<ThirdOnboardingScreen> createState() =>
+      _ThirdOnboardingScreenState();
+}
+
+class _ThirdOnboardingScreenState extends ConsumerState<ThirdOnboardingScreen> {
+  bool isEnabled = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 1000)).then((_) {
+      setState(() {
+        isEnabled = true;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +66,17 @@ class ThirdOnboardingScreen extends StatelessWidget {
               height: 32.0,
             ),
             GestureDetector(
-              onTap: () => Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                      builder: (_) => const ModuleReviewMainScreen())),
+              onTap: isEnabled
+                  ? () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (_) => HomeRootTab(
+                                index: 3,
+                              )));
+                      ref
+                          .read(secureStorageProvider)
+                          .write(key: IS_FRESH_ONBOARDING_KEY, value: "n");
+                    }
+                  : () {},
               child: Container(
                 height: 48.0,
                 width: MediaQuery.of(context).size.width,

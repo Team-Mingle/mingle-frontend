@@ -8,6 +8,7 @@ import 'package:mingle/common/component/post_card.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
+import 'package:mingle/module/view/first_onboarding_screen.dart';
 import 'package:mingle/second_hand_market/provider/second_hand_market_post_provider.dart';
 import 'package:mingle/secure_storage/secure_storage.dart';
 import 'package:mingle/user/model/banner_model.dart';
@@ -57,6 +58,7 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
   @override
   void initState() {
     showModal();
+    initializeOnboarding();
     setState(() {
       totalRecent = ref.read(totalRecentPostProvider);
       univRecent = ref.read(univRecentPostProvider);
@@ -65,6 +67,13 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
     widget.controller.scrollUp = scrollUp;
     _bannerProvider = ref.read(bannerProvider.future);
     super.initState();
+  }
+
+  void initializeOnboarding() async {
+    final storage = ref.read(secureStorageProvider);
+    if ((await storage.read(key: IS_FRESH_ONBOARDING_KEY)) == null) {
+      await storage.write(key: IS_FRESH_ONBOARDING_KEY, value: 'y');
+    }
   }
 
   void scrollUp() {

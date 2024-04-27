@@ -13,8 +13,10 @@ import 'package:mingle/common/const/data.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
+import 'package:mingle/module/view/first_onboarding_screen.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/module/view/module_review_main_screen.dart';
+import 'package:mingle/secure_storage/secure_storage.dart';
 import 'package:mingle/timetable/components/add_friend_dialog.dart';
 import 'package:mingle/timetable/model/class_model.dart';
 import 'package:mingle/module/model/course_model.dart';
@@ -60,12 +62,23 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
 
   @override
   void initState() {
+    checkIsOnboarding();
     // TODO: implement initState
     super.initState();
     getClasses();
     getFriends();
     fToast = FToast();
     fToast.init(context);
+  }
+
+  void checkIsOnboarding() async {
+    if (await ref
+            .read(secureStorageProvider)
+            .read(key: IS_FRESH_ONBOARDING_KEY) ==
+        'y') {
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const FirstOnboardingScreen()));
+    }
   }
 
   void getClasses() async {
@@ -1204,6 +1217,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                           await Future.delayed(
                               const Duration(milliseconds: 1000), () {
                             print('refreshing');
+                            getFriends();
+                            getClasses();
                             // ref
                             //     .watch(univRecentPostProvider.notifier)
                             //     .paginate(normalRefetch: true);

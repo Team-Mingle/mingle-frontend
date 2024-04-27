@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -207,88 +208,114 @@ class _MyTimeTableListScreenState extends ConsumerState<TimeTableListScreen> {
                     color: PRIMARY_COLOR_ORANGE_01,
                   ),
                 )
-              : SingleChildScrollView(
-                  // physics: const AlwaysScrollableScrollPhysics(),
-                  child: Center(
-                    child: Column(
-                        children:
-                            List.generate(timetables.keys.length, (index) {
-                      final String key = timetables.keys.elementAt(index);
-                      final List<TimetablePreviewModel> values =
-                          timetables[key]!;
-                      return Container(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 32),
-                              Row(
+              : timetables.isEmpty
+                  ? const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '아직 시간표를 만들지 않았어요.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: GRAYSCALE_GRAY_03,
+                                fontSize: 16.0,
+                                letterSpacing: -0.02,
+                                height: 1.5,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )
+                  : SingleChildScrollView(
+                      // physics: const AlwaysScrollableScrollPhysics(),
+                      child: Center(
+                        child: Column(
+                            children:
+                                List.generate(timetables.keys.length, (index) {
+                          final String key = timetables.keys.elementAt(index);
+                          final List<TimetablePreviewModel> values =
+                              timetables[key]!;
+                          return Container(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    TimetableListModel.convertKeyToSemester(
-                                        key),
-                                    style: const TextStyle(
-                                      color: GRAYSCALE_GRAY_03,
-                                      fontSize: 16.0,
-                                      letterSpacing: -0.02,
-                                      height: 1.5,
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                                  const SizedBox(height: 32),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        TimetableListModel.convertKeyToSemester(
+                                            key),
+                                        style: const TextStyle(
+                                          color: GRAYSCALE_GRAY_03,
+                                          fontSize: 16.0,
+                                          letterSpacing: -0.02,
+                                          height: 1.5,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
                                   ),
+                                  const SizedBox(height: 8),
+                                  ...List.generate(
+                                      values.length,
+                                      (index) => TimetableListWidget(
+                                          changeTimetableName:
+                                              (String newTimetableName) {
+                                            setState(() {
+                                              values[index].name =
+                                                  newTimetableName;
+                                            });
+                                            widget.setTimetableName(
+                                                newTimetableName);
+                                            changeTimetableName(
+                                                newTimetableName);
+                                          },
+                                          deleteTimetable:
+                                              (int timetableId) async {
+                                            setState(() {
+                                              values.removeAt(index);
+                                            });
+
+                                            await deleteTimetable(timetableId);
+                                            getTimetables();
+                                          },
+                                          pinTimetable: (TimetablePreviewModel
+                                                  timetableToBePinned) =>
+                                              pinTimetable(
+                                                  values, timetableToBePinned),
+                                          timetables: values,
+                                          timetablePreviewModel: values[index]))
                                 ],
                               ),
-                              const SizedBox(height: 8),
-                              ...List.generate(
-                                  values.length,
-                                  (index) => TimetableListWidget(
-                                      changeTimetableName:
-                                          (String newTimetableName) {
-                                        setState(() {
-                                          values[index].name = newTimetableName;
-                                        });
-                                        widget
-                                            .setTimetableName(newTimetableName);
-                                        changeTimetableName(newTimetableName);
-                                      },
-                                      deleteTimetable: (int timetableId) async {
-                                        setState(() {
-                                          values.removeAt(index);
-                                        });
-
-                                        await deleteTimetable(timetableId);
-                                        getTimetables();
-                                      },
-                                      pinTimetable: (TimetablePreviewModel
-                                              timetableToBePinned) =>
-                                          pinTimetable(
-                                              values, timetableToBePinned),
-                                      timetables: values,
-                                      timetablePreviewModel: values[index]))
-                            ],
-                          ),
-                        ),
-                      );
-                    })
-                        // [
-                        //   TimetableList(),
-                        //   SizedBox(
-                        //     height: 56.0,
-                        //   ),
-                        //   TimetableList(),
-                        //   SizedBox(
-                        //     height: 56.0,
-                        //   ),
-                        //   TimetableList(),
-                        //   SizedBox(
-                        //     height: 56.0,
-                        //   ),
-                        // ],
-                        ),
-                  ),
-                ),
+                            ),
+                          );
+                        })
+                            // [
+                            //   TimetableList(),
+                            //   SizedBox(
+                            //     height: 56.0,
+                            //   ),
+                            //   TimetableList(),
+                            //   SizedBox(
+                            //     height: 56.0,
+                            //   ),
+                            //   TimetableList(),
+                            //   SizedBox(
+                            //     height: 56.0,
+                            //   ),
+                            // ],
+                            ),
+                      ),
+                    ),
         ),
       ),
     );

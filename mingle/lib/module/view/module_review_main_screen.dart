@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/const/utils.dart';
 import 'package:mingle/module/components/viewing_pass_card.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
 import 'package:mingle/module/view/module_search_screen.dart';
@@ -23,17 +24,25 @@ class ModuleReviewMainScreen extends ConsumerStatefulWidget {
 class _ModuleReviewMainScreenState
     extends ConsumerState<ModuleReviewMainScreen> {
   CouponModel? myCoupon;
+  bool isLoading = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    setState(() {
+      isLoading = true;
+    });
     fetchCoupon();
   }
 
   void fetchCoupon() async {
+    await ref.read(myCouponProvider.notifier).getCoupon();
     setState(() {
       myCoupon = ref.read(myCouponProvider);
+    });
+    setState(() {
+      isLoading = false;
     });
   }
 
@@ -143,47 +152,55 @@ class _ModuleReviewMainScreenState
           const SizedBox(
             height: 8.0,
           ),
-          myCoupon == null
-              ? Container(
-                  padding: const EdgeInsets.all(16.0),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: GRAYSCALE_GRAY_01_5),
-                      borderRadius: BorderRadius.circular(8.0)),
-                  child: Row(
-                    children: [
-                      const Text(
-                        "보유 중인 이용권이 없어요.",
-                        style: TextStyle(letterSpacing: -0.14),
-                      ),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const PointShopScreen(),
-                          ),
-                        ),
-                        child: const Text(
-                          "이용권 구매하기",
-                          style: TextStyle(
-                              fontSize: 12.0,
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: -0.06,
-                              color: PRIMARY_COLOR_ORANGE_01),
-                        ),
-                      ),
-                    ],
+          isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(
+                    color: PRIMARY_COLOR_ORANGE_01,
                   ),
                 )
-              : const ViewingPassCard(
-                  title: "강의평가 30일 조회 이용권",
-                  purchaseDate: "23.11.4",
-                  expiryDate: "23.11.4",
-                ),
+              : myCoupon == null
+                  ? Container(
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: GRAYSCALE_GRAY_01_5),
+                          borderRadius: BorderRadius.circular(8.0)),
+                      child: Row(
+                        children: [
+                          const Text(
+                            "보유 중인 이용권이 없어요.",
+                            style: TextStyle(letterSpacing: -0.14),
+                          ),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => const PointShopScreen(),
+                              ),
+                            ),
+                            child: const Text(
+                              "이용권 구매하기",
+                              style: TextStyle(
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.w500,
+                                  letterSpacing: -0.06,
+                                  color: PRIMARY_COLOR_ORANGE_01),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : ViewingPassCard(
+                      title: myCoupon!.name,
+                      purchaseDate:
+                          convertDateToValidityDate(myCoupon!.startDate),
+                      expiryDate: convertDateToValidityDate(myCoupon!.endDate),
+                    ),
           const Spacer(),
           Align(
             alignment: Alignment.center,
             child: GestureDetector(
-              onTap: () {},
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => const AddModuleReviewScreen())),
               child: Container(
                   width: 99.0,
                   padding: const EdgeInsets.symmetric(
@@ -201,14 +218,10 @@ class _ModuleReviewMainScreenState
                     const SizedBox(
                       width: 1.0,
                     ),
-                    GestureDetector(
-                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => const AddModuleReviewScreen())),
-                      child: const Text(
-                        "평가하기",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, color: Colors.white),
-                      ),
+                    const Text(
+                      "평가하기",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500, color: Colors.white),
                     )
                   ])),
             ),

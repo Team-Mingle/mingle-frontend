@@ -60,3 +60,11 @@ String convertKorDayToEngDay(String day) {
       return "MONDAY";
   }
 }
+
+String convertDateToValidityDate(String date) {
+  List<String> splittedDate = date.split("-");
+  String year = splittedDate[0].substring(2);
+  String month = int.parse(splittedDate[1]).toString();
+  String day = int.parse(splittedDate[2]).toString();
+  return "$year.$month.$day";
+}

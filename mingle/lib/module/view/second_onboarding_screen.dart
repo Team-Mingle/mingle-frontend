@@ -3,14 +3,34 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mingle/module/view/third_onboarding_screen.dart';
 import 'package:show_up_animation/show_up_animation.dart';
 
-class SecondOnboardingScreen extends StatelessWidget {
+class SecondOnboardingScreen extends StatefulWidget {
   const SecondOnboardingScreen({super.key});
+
+  @override
+  State<SecondOnboardingScreen> createState() => _SecondOnboardingScreenState();
+}
+
+class _SecondOnboardingScreenState extends State<SecondOnboardingScreen> {
+  bool isEnabled = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 2000)).then((_) {
+      setState(() {
+        isEnabled = true;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const ThirdOnboardingScreen())),
+      onTap: () => isEnabled
+          ? Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (_) => const ThirdOnboardingScreen()))
+          : {},
       child: Scaffold(
         body: Column(
           children: [

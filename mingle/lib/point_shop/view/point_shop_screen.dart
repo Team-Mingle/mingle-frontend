@@ -11,6 +11,7 @@ import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
 import 'package:mingle/point_shop/model/shop_coupon_list_model.dart';
 import 'package:mingle/point_shop/model/shop_coupon_model.dart';
+import 'package:mingle/point_shop/provider/my_coupon_provider.dart';
 import 'package:mingle/point_shop/provider/remaining_points_provider.dart';
 import 'package:mingle/point_shop/repository/point_shop_repository.dart';
 import 'package:mingle/point_shop/view/freshman_upload_identification_screen.dart';
@@ -50,6 +51,8 @@ class _PointShopScreenState extends ConsumerState<PointShopScreen> {
       ref.watch(pointShopRepositoryProvider).createCoupon(
           createCouponDto:
               CreateCouponDto(couponProductId: shopCouponModel.id));
+      ref.read(remainingPointsProvider.notifier).fetchRemainingPoints();
+      ref.read(myCouponProvider.notifier).getCoupon();
     } on DioException catch (e) {
       print(e);
       fToast.showToast(
