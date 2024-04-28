@@ -5,17 +5,18 @@ import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/module/model/course_model.dart';
 
-class TimeTableGrid extends StatefulWidget {
+class TimeTableScreenshotGrid extends StatefulWidget {
   final List<Widget> addedClasses;
   final bool isFull;
-  const TimeTableGrid(
+  const TimeTableScreenshotGrid(
       {super.key, required this.addedClasses, this.isFull = false});
 
   @override
-  State<TimeTableGrid> createState() => _TimeTableGridState();
+  State<TimeTableScreenshotGrid> createState() =>
+      _TimeTableScreenshotGridState();
 }
 
-class _TimeTableGridState extends State<TimeTableGrid> {
+class _TimeTableScreenshotGridState extends State<TimeTableScreenshotGrid> {
   late LinkedScrollControllerGroup _controllers;
   late ScrollController _timeScroller;
   late ScrollController _tableScroller;
@@ -40,8 +41,8 @@ class _TimeTableGridState extends State<TimeTableGrid> {
         13,
         (row) => Container(
               // color: Colors.white,
-              height: 61,
-              width: 48,
+              height: TIMETABLE_GRID_HEIGHT,
+              width: TIMETABLE_GRID_WIDTH,
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border(
@@ -133,6 +134,7 @@ class _TimeTableGridState extends State<TimeTableGrid> {
             ));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -149,7 +151,7 @@ class _TimeTableGridState extends State<TimeTableGrid> {
                     // right: BorderSide(color: GRAYSCALE_GRAY_02, width: 0.0),
                     top: BorderSide(color: GRAYSCALE_GRAY_02),
                     left: BorderSide(color: GRAYSCALE_GRAY_02),
-                    // bottom: BorderSide(color: GRAYSCALE_GRAY_02, width: 0.0),
+                    // bottom: BorderSide(color: GRAYSCALE_GRAY_02, width: 1.0),
                   ),
                 ),
                 height: 20.0,
@@ -170,19 +172,40 @@ class _TimeTableGridState extends State<TimeTableGrid> {
                 ),
               ),
               child: ClipRRect(
-                borderRadius:
-                    const BorderRadius.only(topRight: Radius.circular(8.0)),
-                child: GridView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 7,
-                    crossAxisSpacing: 1,
-                    mainAxisSpacing: 1,
-                    childAspectRatio: 47 / 20,
+                  borderRadius:
+                      const BorderRadius.only(topRight: Radius.circular(8.0)),
+                  child: Row(
+                    children: List.generate(d.length, (index) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            right: index < d.length - 1
+                                ? const BorderSide(color: GRAYSCALE_GRAY_01)
+                                : BorderSide.none,
+                            // top: BorderSide(color: GRAYSCALE_GRAY_02),
+                            // left: BorderSide(color: GRAYSCALE_GRAY_02),
+                            // bottom: BorderSide(color: GRAYSCALE_GRAY_02, width: 0.0),
+                          ),
+                        ),
+                        width: TIMETABLE_GRID_WIDTH,
+                        child: Center(
+                          child: d[index],
+                        ),
+                      );
+                    }),
+                  )
+
+                  // GridView(
+                  //   physics: const NeverScrollableScrollPhysics(),
+                  //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  //     crossAxisCount: 7,
+                  //     crossAxisSpacing: 1,
+                  //     mainAxisSpacing: 1,
+                  //     childAspectRatio: 47 / 20,
+                  //   ),
+                  //   children: d,
+                  // ),
                   ),
-                  children: d,
-                ),
-              ),
             ),
           ],
         ),
@@ -190,9 +213,7 @@ class _TimeTableGridState extends State<TimeTableGrid> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              height: widget.isFull
-                  ? TIMETABLE_TOTAL_HEIGHT + 100
-                  : TIMETABLE_TOTAL_HEIGHT,
+              height: TIMETABLE_TOTAL_HEIGHT + 359.0,
               width: 22.0,
               decoration: const BoxDecoration(
                 borderRadius:
@@ -206,54 +227,49 @@ class _TimeTableGridState extends State<TimeTableGrid> {
                 ),
               ),
               child: ClipRRect(
-                  borderRadius:
-                      const BorderRadius.only(bottomLeft: Radius.circular(8.0)),
-                  child: SingleChildScrollView(
-                    physics: const ClampingScrollPhysics(),
-                    controller: _timeScroller,
-                    child: Column(
-                      children: List.generate(t.length, (index) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            border: Border(
-                              top: index == 0
-                                  ? BorderSide.none
-                                  : const BorderSide(color: GRAYSCALE_GRAY_01),
-                              // top: BorderSide(color: GRAYSCALE_GRAY_02),
-                              // left: BorderSide(color: GRAYSCALE_GRAY_02),
-                              // bottom: BorderSide(color: GRAYSCALE_GRAY_02, width: 0.0),
-                            ),
-                          ),
-                          height: TIMETABLE_GRID_HEIGHT,
-                          width: 22.0,
-                          child: Center(
-                            child: t[index],
-                          ),
-                        );
-                      }),
-                    ),
-                  )
+                borderRadius:
+                    const BorderRadius.only(bottomLeft: Radius.circular(8.0)),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: List.generate(t.length, (index) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          top: index == 0
+                              ? BorderSide.none
+                              : const BorderSide(color: GRAYSCALE_GRAY_01),
+                          // top: BorderSide(color: GRAYSCALE_GRAY_02),
+                          // left: BorderSide(color: GRAYSCALE_GRAY_02),
+                          // bottom: BorderSide(color: GRAYSCALE_GRAY_02, width: 0.0),
+                        ),
+                      ),
+                      height: TIMETABLE_GRID_HEIGHT,
+                      width: 22.0,
+                      child: Center(
+                        child: t[index],
+                      ),
+                    );
+                  }),
+                ),
 
-                  // GridView(
-                  //   padding: EdgeInsets.zero,
-                  //   shrinkWrap: true,
-                  //   physics: const ClampingScrollPhysics(),
-                  //   controller: _timeScroller,
-                  //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  //     crossAxisCount: 1,
-                  //     crossAxisSpacing: 1,
-                  //     mainAxisSpacing: 1,
-                  //     childAspectRatio: 21 / 60,
-                  //   ),
-                  //   children: t,
-                  // ),
-                  ),
+                // GridView(
+                //   padding: EdgeInsets.zero,
+                //   shrinkWrap: true,
+                //   physics: const ClampingScrollPhysics(),
+                //   controller: _timeScroller,
+                //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                //     crossAxisCount: 1,
+                //     crossAxisSpacing: 1,
+                //     mainAxisSpacing: 1,
+                //     childAspectRatio: 21 / 60,
+                //   ),
+                //   children: t,
+                // ),
+              ),
             ),
             Container(
               width: 338, // 그리드의 전체 너비
-              height: widget.isFull
-                  ? TIMETABLE_TOTAL_HEIGHT + 100
-                  : TIMETABLE_TOTAL_HEIGHT, // 그리드의 전체 높이
+              height: TIMETABLE_TOTAL_HEIGHT + 359.0, // 그리드의 전체 높이
               decoration: BoxDecoration(
                 // borderRadius: BorderRadius.circular(8),
                 // borderRadius: BorderRadius.circular(8.0),
@@ -269,28 +285,24 @@ class _TimeTableGridState extends State<TimeTableGrid> {
               child: ClipRRect(
                 borderRadius:
                     const BorderRadius.only(bottomRight: Radius.circular(8.0)),
-                child: SingleChildScrollView(
-                  physics: const ClampingScrollPhysics(),
-                  controller: _tableScroller,
-                  child: Stack(children: [
-                    Row(
-                      children: [
-                        ...timetable.map((e) => Column(
-                              children: e,
-                            ))
-                      ],
-                    ),
-                    ...widget.addedClasses
-                    // Positioned(
-                    //     top: 366.0,
-                    //     left: 48.0,
-                    //     child: Container(
-                    //       color: Colors.black,
-                    //       height: 122.0,
-                    //       width: 48.0,
-                    //     ))
-                  ]),
-                ),
+                child: Stack(children: [
+                  Row(
+                    children: [
+                      ...timetable.map((e) => Column(
+                            children: e,
+                          ))
+                    ],
+                  ),
+                  ...widget.addedClasses
+                  // Positioned(
+                  //     top: 366.0,
+                  //     left: 48.0,
+                  //     child: Container(
+                  //       color: Colors.black,
+                  //       height: 122.0,
+                  //       width: 48.0,
+                  //     ))
+                ]),
 
                 //     Stack(children: [
                 //   GridView(

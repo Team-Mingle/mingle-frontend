@@ -53,6 +53,7 @@ class _SearchCourseModalWidgetState
       borderRadius: BorderRadius.circular(8.0),
       child: Container(
         color: Colors.white,
+        height: 350.0,
         width: MediaQuery.of(context).size.width,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -246,7 +247,7 @@ class _SearchCourseModalWidgetState
                               ],
                             )
                           : SizedBox(
-                              height: 373,
+                              height: 283,
                               child: SingleChildScrollView(
                                 child: Column(
                                     children: List.generate(courses.length + 1,

@@ -1,37 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/module/model/course_model.dart';
+import 'package:mingle/module/view/add_module_review_screen.dart';
+import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/timetable/components/search_course_modal.dart';
 import 'package:mingle/timetable/model/class_model.dart';
+import 'package:mingle/timetable/model/timetable_model.dart';
+import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
+import 'package:mingle/timetable/repository/timetable_repository.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
 import 'package:mingle/timetable/view/self_add_timetable_screen.dart';
 import 'package:mingle/timetable/components/timetable_grid.dart';
 
-class AddTimeTableScreen extends StatefulWidget {
+class AddTimeTableScreen extends ConsumerStatefulWidget {
   final Function addClass;
-  final List<Widget> addedClasses;
-  const AddTimeTableScreen(
-      {super.key, required this.addClass, required this.addedClasses});
+  List<Widget> addedClasses;
+  AddTimeTableScreen({
+    super.key,
+    required this.addClass,
+    required this.addedClasses,
+  });
 
   @override
-  State<AddTimeTableScreen> createState() => _AddTimeTableScreenState();
+  ConsumerState<AddTimeTableScreen> createState() => _AddTimeTableScreenState();
 }
 
-class _AddTimeTableScreenState extends State<AddTimeTableScreen> {
+class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
   @override
   void initState() {
+    getClasses();
     Future.delayed(const Duration(milliseconds: 650)).then((_) {
       showModalBottomSheet<void>(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
         ),
-        isScrollControlled: false,
+        isScrollControlled: true,
         context: context,
         builder: (BuildContext context) {
-          return SearchCourseModalWidget(
-            addClass: widget.addClass,
-            addClassesAtAddTimeTableScreen: addClassesAtAddTimeTableScreen,
+          return AnimatedPadding(
+            duration: const Duration(milliseconds: 200),
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: SearchCourseModalWidget(
+              addClass: widget.addClass,
+              addClassesAtAddTimeTableScreen: addClassesAtAddTimeTableScreen,
+            ),
           );
         },
       );
@@ -39,9 +54,31 @@ class _AddTimeTableScreenState extends State<AddTimeTableScreen> {
     super.initState();
   }
 
-  void addClassesAtAddTimeTableScreen(CourseModel courseModel) {
+  void addClassesAtAddTimeTableScreen(
+      CourseModel courseModel, bool overrideValidation) {
+    if (overrideValidation) {
+      print("im overriden");
+      getClasses();
+      return;
+    }
     setState(() {
       widget.addedClasses.addAll(courseModel.generateClasses(() {}));
+    });
+  }
+
+  void getClasses() async {
+    // await ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetable();
+
+    TimetableModel currentTimetable = await ref
+        .read(timetableRepositoryProvider)
+        .getTimetable(timetableId: ref.read(pinnedTimetableIdProvider)!);
+    List<CourseModel> courses = currentTimetable.coursePreviewDtoList;
+    List<Widget> coursesToBeAdded = [];
+    for (CourseModel course in courses) {
+      coursesToBeAdded.addAll(course.generateClasses(() {}));
+    }
+    setState(() {
+      widget.addedClasses = coursesToBeAdded;
     });
   }
 
@@ -108,7 +145,7 @@ class _AddTimeTableScreenState extends State<AddTimeTableScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(
-                  height: 11.0,
+                  height: 9.0,
                 ),
                 TimeTableGrid(
                   addedClasses: widget.addedClasses,

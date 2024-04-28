@@ -5,8 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:mingle/common/component/expanded_section.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
@@ -18,6 +20,7 @@ import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/module/view/module_review_main_screen.dart';
 import 'package:mingle/secure_storage/secure_storage.dart';
 import 'package:mingle/timetable/components/add_friend_dialog.dart';
+import 'package:mingle/timetable/components/timetable_screenshot_grid.dart';
 import 'package:mingle/timetable/model/class_model.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/timetable/model/friend_model.dart';
@@ -34,6 +37,8 @@ import 'package:mingle/timetable/view/friend_timetable_screen.dart';
 import 'package:mingle/timetable/view/timetable_list_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:image/image.dart' as IMG;
 
 class TimeTableHomeScreen extends ConsumerStatefulWidget {
   const TimeTableHomeScreen({
@@ -58,6 +63,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   String newTimetableName = "";
   List<FriendModel> friendList = [];
   final ScrollController scrollController = ScrollController();
+  ScreenshotController screenshotController = ScreenshotController();
   late FToast fToast;
 
   @override
@@ -210,7 +216,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
         backgroundColor: Colors.transparent,
         builder: (BuildContext context) {
           return Container(
-            height: 176,
+            // height: 176,
             width: double.infinity,
             decoration: const BoxDecoration(
               color: Colors.white,
@@ -221,6 +227,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
             padding:
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32.0),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 GestureDetector(
@@ -245,6 +252,89 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 14.0),
                     child: const Text(
                       "시간표 삭제하기",
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    double pixelRatio = MediaQuery.of(context).devicePixelRatio;
+                    screenshotController
+                        .captureFromLongWidget(
+                      InheritedTheme.captureAll(
+                        context,
+                        Material(
+                            child: TimeTableScreenshotGrid(
+                          addedClasses: addedCourses,
+                        )),
+                      ),
+                      pixelRatio: pixelRatio,
+                      delay: const Duration(milliseconds: 100),
+                      context: context,
+
+                      ///
+                      /// Additionally you can define constraint for your image.
+                      ///
+                      // constraints: BoxConstraints(
+                      //   maxHeight:
+                      //       MediaQuery.of(context).size.height - 37,
+                      //   maxWidth: MediaQuery.of(context).size.width,
+                      // )
+                    )
+                        .then(
+                      (capturedImage) async {
+                        final container = SizedBox(
+                            height: MediaQuery.of(context).size.height - 50,
+                            width: MediaQuery.of(context).size.width,
+                            child: Image.memory(
+                              capturedImage,
+                              fit: BoxFit.contain,
+                            ));
+                        screenshotController
+                            .captureFromWidget(container)
+                            .then((image) async {
+                          await ImageGallerySaver.saveImage(image);
+                        });
+                        // Uint8List resizedImage = capturedImage;
+                        // resizedImage =
+                        //     await FlutterImageCompress.compressWithList(
+                        //   resizedImage,
+                        //   minHeight:
+                        //       MediaQuery.of(context).size.height.round() - 100,
+                        //   minWidth:
+                        //       MediaQuery.of(context).size.width.round() - 50,
+                        // );
+                        // IMG.Image img = IMG.decodeImage(resizedImage)!;
+                        // IMG.Image resized = IMG.copyResize(img,
+                        //     width: img.width *
+                        //         ((MediaQuery.of(context).size.height - 50)
+                        //             .round()) ~/
+                        //         img.height,
+                        //     height: (MediaQuery.of(context).size.height - 50)
+                        //         .round());
+                        // resizedImage = IMG.encodeJpg(resized);
+                        // await ImageGallerySaver.saveImage(capturedImage);
+                        fToast.showToast(
+                          child: const ToastMessage(message: "갤러리에 저장되었습니다"),
+                          gravity: ToastGravity.CENTER,
+                          toastDuration: const Duration(seconds: 2),
+                        );
+                        // Handle captured image
+                      },
+                    ).onError((error, stackTrace) {
+                      fToast.showToast(
+                        child: const ToastMessage(message: generalErrorMsg),
+                        gravity: ToastGravity.CENTER,
+                        toastDuration: const Duration(seconds: 2),
+                      );
+                    });
+                    Navigator.of(context).pop();
+                    // deleteTimetable(ref.read(pinnedTimetableIdProvider)!);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 14.0),
+                    child: const Text(
+                      "시간표 저장하기",
                       style: TextStyle(fontSize: 16.0),
                     ),
                   ),
@@ -466,12 +556,21 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     );
   }
 
-  void addClass(CourseModel courseModel) {
+  void addClass(CourseModel courseModel, bool overrideValidation) {
+    if (overrideValidation) {
+      getClasses();
+      return;
+    }
+    List<Widget> newCourses = [...addedCourses];
+    newCourses.addAll(courseModel.generateClasses(() {
+      showCourseDetailModal(courseModel);
+    }));
     setState(() {
-      addedCourses.addAll(courseModel.generateClasses(() {
-        print("tapped");
-        showCourseDetailModal(courseModel);
-      }));
+      addedCourses = newCourses;
+      // addedCourses.addAll(courseModel.generateClasses(() {
+      //   print("tapped");
+      //   showCourseDetailModal(courseModel);
+      // }));
     });
   }
 
@@ -662,145 +761,14 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   Future<dynamic> secondRegisterCodeModal() => showModalBottomSheet(
         backgroundColor: Colors.transparent,
         context: context,
+        isScrollControlled: true,
         builder: (BuildContext context) {
-          return Container(
-            height: 415.0,
-            padding: const EdgeInsets.symmetric(horizontal: 20.0)
-                .copyWith(top: 20.0, bottom: 24.0),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(
-                Radius.circular(20),
-              ),
-            ),
-            child: Stack(
-              children: [
-                Align(
-                    alignment: Alignment.topRight,
-                    child: GestureDetector(
-                      onTap: () => Navigator.of(context).pop(),
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 4.0),
-                        child: SvgPicture.asset(
-                            "assets/img/timetable_screen/close.svg"),
-                      ),
-                    )),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(
-                      height: 4.0,
-                    ),
-                    const Text(
-                      "다른 사용자 코드 등록하기",
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    const SizedBox(
-                      height: 8.0,
-                    ),
-                    const Text(
-                      "친구에게 보여질 이름을 작성하세요.",
-                      style: TextStyle(color: GRAYSCALE_GRAY_04),
-                    ),
-                    const SizedBox(
-                      height: 12.0,
-                    ),
-                    Container(
-                      height: 48.0,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12.0,
-                      ),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: GRAYSCALE_GRAY_02),
-                          borderRadius: BorderRadius.circular(8.0)),
-                      child: Center(
-                        child: TextFormField(
-                          onChanged: (name) {
-                            setState(() {
-                              friendDisplayName = name;
-                            });
-                          },
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: "이름 입력",
-                            hintStyle: TextStyle(
-                                color: GRAYSCALE_GRAY_03, fontSize: 16.0),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 152.0,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pop();
-                        firstShareCodeModal();
-                      },
-                      child: Container(
-                        height: 48.0,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
-                            borderRadius: BorderRadius.circular(8.0)),
-                        child: const Center(
-                          child: Text(
-                            "내 코드 공유할래요",
-                            style: TextStyle(color: PRIMARY_COLOR_ORANGE_02),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 8.0,
-                    ),
-                    isLoading
-                        ? const CircularProgressIndicator(
-                            color: PRIMARY_COLOR_ORANGE_02,
-                          )
-                        : GestureDetector(
-                            onTap: addFriend,
-                            child: Container(
-                              height: 48.0,
-                              decoration: BoxDecoration(
-                                  color: PRIMARY_COLOR_ORANGE_02,
-                                  border: Border.all(
-                                      color: PRIMARY_COLOR_ORANGE_02),
-                                  borderRadius: BorderRadius.circular(8.0)),
-                              child: const Center(
-                                child: Text(
-                                  "친구 추가 마치기",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
-      );
-
-  Future<String?> firstShareCodeModal() async {
-    String defaultName =
-        await ref.watch(friendRepositoryProvider).getDefaultName();
-    setState(() {
-      myDisplayName = defaultName;
-    });
-    return showModalBottomSheet<String>(
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      context: context,
-      builder: (BuildContext context) {
-        return AnimatedPadding(
-          duration: const Duration(milliseconds: 150),
-          curve: Curves.easeOut,
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
+          print("bottom padding: ${MediaQuery.of(context).viewInsets.bottom}");
+          return AnimatedPadding(
+            duration: const Duration(milliseconds: 150),
+            curve: Curves.easeOut,
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Container(
               height: 415.0,
               padding: const EdgeInsets.symmetric(horizontal: 20.0)
@@ -830,7 +798,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                         height: 4.0,
                       ),
                       const Text(
-                        "내 코드 공유하기",
+                        "다른 사용자 코드 등록하기",
                         style: TextStyle(fontSize: 16.0),
                       ),
                       const SizedBox(
@@ -853,19 +821,15 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                             borderRadius: BorderRadius.circular(8.0)),
                         child: Center(
                           child: TextFormField(
-                            maxLength: 10,
                             onChanged: (name) {
                               setState(() {
-                                myDisplayName = name;
+                                friendDisplayName = name;
                               });
                             },
-                            initialValue: defaultName,
-                            decoration: InputDecoration(
-                              counterText: "",
+                            decoration: const InputDecoration(
                               border: InputBorder.none,
-                              suffix: Text("${myDisplayName.length}/10"),
                               hintText: "이름 입력",
-                              hintStyle: const TextStyle(
+                              hintStyle: TextStyle(
                                   color: GRAYSCALE_GRAY_03, fontSize: 16.0),
                             ),
                           ),
@@ -877,7 +841,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                       GestureDetector(
                         onTap: () {
                           Navigator.of(context).pop();
-                          firstRegisterCodeModal();
+                          Navigator.of(context).pop();
+                          firstShareCodeModal();
                         },
                         child: Container(
                           height: 48.0,
@@ -887,7 +852,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                               borderRadius: BorderRadius.circular(8.0)),
                           child: const Center(
                             child: Text(
-                              "다른 사용자 코드 등록할래요",
+                              "내 코드 공유할래요",
                               style: TextStyle(color: PRIMARY_COLOR_ORANGE_02),
                             ),
                           ),
@@ -896,31 +861,177 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                       const SizedBox(
                         height: 8.0,
                       ),
-                      GestureDetector(
-                        onTap: () => secondShareCodeModal(),
-                        child: Container(
-                          height: 48.0,
-                          decoration: BoxDecoration(
+                      isLoading
+                          ? const CircularProgressIndicator(
                               color: PRIMARY_COLOR_ORANGE_02,
-                              border:
-                                  Border.all(color: PRIMARY_COLOR_ORANGE_02),
-                              borderRadius: BorderRadius.circular(8.0)),
-                          child: const Center(
-                            child: Text(
-                              "다음",
-                              style: TextStyle(color: Colors.white),
+                            )
+                          : GestureDetector(
+                              onTap: addFriend,
+                              child: Container(
+                                height: 48.0,
+                                decoration: BoxDecoration(
+                                    color: PRIMARY_COLOR_ORANGE_02,
+                                    border: Border.all(
+                                        color: PRIMARY_COLOR_ORANGE_02),
+                                    borderRadius: BorderRadius.circular(8.0)),
+                                child: const Center(
+                                  child: Text(
+                                    "친구 추가 마치기",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ],
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      );
+
+  Future<String?> firstShareCodeModal() async {
+    String defaultName =
+        await ref.watch(friendRepositoryProvider).getDefaultName();
+    setState(() {
+      myDisplayName = defaultName;
+    });
+    return showModalBottomSheet<String>(
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      context: context,
+      builder: (_) => StatefulBuilder(
+        builder: (context, setState) {
+          return AnimatedPadding(
+            duration: const Duration(milliseconds: 150),
+            curve: Curves.easeOut,
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: Container(
+                height: 415.0,
+                padding: const EdgeInsets.symmetric(horizontal: 20.0)
+                    .copyWith(top: 20.0, bottom: 24.0),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                child: Stack(
+                  children: [
+                    Align(
+                        alignment: Alignment.topRight,
+                        child: GestureDetector(
+                          onTap: () => Navigator.of(context).pop(),
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 4.0),
+                            child: SvgPicture.asset(
+                                "assets/img/timetable_screen/close.svg"),
+                          ),
+                        )),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(
+                          height: 4.0,
+                        ),
+                        const Text(
+                          "내 코드 공유하기",
+                          style: TextStyle(fontSize: 16.0),
+                        ),
+                        const SizedBox(
+                          height: 8.0,
+                        ),
+                        const Text(
+                          "친구에게 보여질 이름을 작성하세요.",
+                          style: TextStyle(color: GRAYSCALE_GRAY_04),
+                        ),
+                        const SizedBox(
+                          height: 12.0,
+                        ),
+                        Container(
+                          height: 48.0,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12.0,
+                          ),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: GRAYSCALE_GRAY_02),
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: Center(
+                            child: TextFormField(
+                              maxLength: 10,
+                              onChanged: (name) {
+                                setState(() {
+                                  myDisplayName = name;
+                                });
+                              },
+                              initialValue: defaultName,
+                              decoration: InputDecoration(
+                                counterText: "",
+                                border: InputBorder.none,
+                                suffix: Text("${myDisplayName.length}/10"),
+                                hintText: "이름 입력",
+                                hintStyle: const TextStyle(
+                                    color: GRAYSCALE_GRAY_03, fontSize: 16.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 152.0,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                            firstRegisterCodeModal();
+                          },
+                          child: Container(
+                            height: 48.0,
+                            decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: PRIMARY_COLOR_ORANGE_02),
+                                borderRadius: BorderRadius.circular(8.0)),
+                            child: const Center(
+                              child: Text(
+                                "다른 사용자 코드 등록할래요",
+                                style:
+                                    TextStyle(color: PRIMARY_COLOR_ORANGE_02),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8.0,
+                        ),
+                        GestureDetector(
+                          onTap: () => secondShareCodeModal(),
+                          child: Container(
+                            height: 48.0,
+                            decoration: BoxDecoration(
+                                color: PRIMARY_COLOR_ORANGE_02,
+                                border:
+                                    Border.all(color: PRIMARY_COLOR_ORANGE_02),
+                                borderRadius: BorderRadius.circular(8.0)),
+                            child: const Center(
+                              child: Text(
+                                "다음",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -1303,6 +1414,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                                   TimeTableGrid(
                                     addedClasses: addedCourses,
                                   ),
+                                // TimeTableScreenshotGrid(
+                                //     addedClasses: addedCourses),
                                 const SizedBox(
                                   height: 24.0,
                                 ),
