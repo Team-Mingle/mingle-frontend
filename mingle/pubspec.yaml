@@ -67,6 +67,8 @@ dependencies:
   cached_network_image: ^3.3.1
   screenshot: ^2.3.0
   image_gallery_saver: "^2.0.3"
+  image: ^4.1.7
+  flutter_image_compress: ^2.2.0
 
 dev_dependencies:
   flutter_test:

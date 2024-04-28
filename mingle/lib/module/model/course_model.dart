@@ -121,6 +121,27 @@ class CourseModel {
     return classes;
   }
 
+  CourseModel copyWith(
+      {int? id,
+      String? name,
+      String? courseCode,
+      String? semester,
+      String? professor,
+      String? subclass,
+      List<CourseTimeModel>? courseTimeDtoList,
+      String? rgb}) {
+    return CourseModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      courseCode: courseCode ?? this.courseCode,
+      semester: semester ?? this.semester,
+      professor: professor ?? this.professor,
+      subclass: subclass ?? this.subclass,
+      courseTimeDtoList: courseTimeDtoList ?? this.courseTimeDtoList,
+      rgb: rgb ?? this.rgb,
+    );
+  }
+
   Color convertRGBtoColor() {
     List<String> rgbList = rgb!.split(",");
     int r = int.parse(rgbList[0]);

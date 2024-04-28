@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
@@ -37,6 +38,7 @@ import 'package:mingle/timetable/view/timetable_list_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:image/image.dart' as IMG;
 
 class TimeTableHomeScreen extends ConsumerStatefulWidget {
   const TimeTableHomeScreen({
@@ -259,28 +261,59 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                     double pixelRatio = MediaQuery.of(context).devicePixelRatio;
                     screenshotController
                         .captureFromLongWidget(
-                            InheritedTheme.captureAll(
-                              context,
-                              Material(
-                                  child: TimeTableScreenshotGrid(
-                                addedClasses: addedCourses,
-                              )),
-                            ),
-                            pixelRatio: pixelRatio,
-                            delay: const Duration(milliseconds: 100),
-                            context: context,
+                      InheritedTheme.captureAll(
+                        context,
+                        Material(
+                            child: TimeTableScreenshotGrid(
+                          addedClasses: addedCourses,
+                        )),
+                      ),
+                      pixelRatio: pixelRatio,
+                      delay: const Duration(milliseconds: 100),
+                      context: context,
 
-                            ///
-                            /// Additionally you can define constraint for your image.
-                            ///
-                            constraints: BoxConstraints(
-                              maxHeight:
-                                  MediaQuery.of(context).size.height - 37,
-                              maxWidth: MediaQuery.of(context).size.width,
-                            ))
+                      ///
+                      /// Additionally you can define constraint for your image.
+                      ///
+                      // constraints: BoxConstraints(
+                      //   maxHeight:
+                      //       MediaQuery.of(context).size.height - 37,
+                      //   maxWidth: MediaQuery.of(context).size.width,
+                      // )
+                    )
                         .then(
                       (capturedImage) async {
-                        await ImageGallerySaver.saveImage(capturedImage);
+                        final container = SizedBox(
+                            height: MediaQuery.of(context).size.height - 50,
+                            width: MediaQuery.of(context).size.width,
+                            child: Image.memory(
+                              capturedImage,
+                              fit: BoxFit.contain,
+                            ));
+                        screenshotController
+                            .captureFromWidget(container)
+                            .then((image) async {
+                          await ImageGallerySaver.saveImage(image);
+                        });
+                        // Uint8List resizedImage = capturedImage;
+                        // resizedImage =
+                        //     await FlutterImageCompress.compressWithList(
+                        //   resizedImage,
+                        //   minHeight:
+                        //       MediaQuery.of(context).size.height.round() - 100,
+                        //   minWidth:
+                        //       MediaQuery.of(context).size.width.round() - 50,
+                        // );
+                        // IMG.Image img = IMG.decodeImage(resizedImage)!;
+                        // IMG.Image resized = IMG.copyResize(img,
+                        //     width: img.width *
+                        //         ((MediaQuery.of(context).size.height - 50)
+                        //             .round()) ~/
+                        //         img.height,
+                        //     height: (MediaQuery.of(context).size.height - 50)
+                        //         .round());
+                        // resizedImage = IMG.encodeJpg(resized);
+                        // await ImageGallerySaver.saveImage(capturedImage);
                         fToast.showToast(
                           child: const ToastMessage(message: "갤러리에 저장되었습니다"),
                           gravity: ToastGravity.CENTER,
@@ -288,7 +321,13 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                         );
                         // Handle captured image
                       },
-                    );
+                    ).onError((error, stackTrace) {
+                      fToast.showToast(
+                        child: const ToastMessage(message: generalErrorMsg),
+                        gravity: ToastGravity.CENTER,
+                        toastDuration: const Duration(seconds: 2),
+                      );
+                    });
                     Navigator.of(context).pop();
                     // deleteTimetable(ref.read(pinnedTimetableIdProvider)!);
                   },

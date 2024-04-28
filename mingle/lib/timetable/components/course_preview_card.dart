@@ -12,6 +12,7 @@ import 'package:mingle/common/const/error_codes.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
+import 'package:mingle/timetable/model/add_course_response_model.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
@@ -44,15 +45,18 @@ class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
 
   void addClass({bool overrideValidation = false}) async {
     try {
-      await ref.watch(timetableRepositoryProvider).addCourse(
-            timetableId: ref.watch(pinnedTimetableIdProvider)!,
-            addClassDto: AddClassDto(
-                courseId: widget.course.id,
-                overrideValidation: overrideValidation),
-          );
-
-      widget.addClass(widget.course, overrideValidation);
-      widget.addClassesAtAddTimeTableScreen(widget.course, overrideValidation);
+      AddCourseResponseModel addCourseResponseModel =
+          await ref.watch(timetableRepositoryProvider).addCourse(
+                timetableId: ref.watch(pinnedTimetableIdProvider)!,
+                addClassDto: AddClassDto(
+                    courseId: widget.course.id,
+                    overrideValidation: overrideValidation),
+              );
+      CourseModel courseToBeAdded =
+          widget.course.copyWith(rgb: addCourseResponseModel.rgb);
+      widget.addClass(courseToBeAdded, overrideValidation);
+      widget.addClassesAtAddTimeTableScreen(
+          courseToBeAdded, overrideValidation);
       Navigator.of(context).pop();
     } on DioException catch (e) {
       print(e);
