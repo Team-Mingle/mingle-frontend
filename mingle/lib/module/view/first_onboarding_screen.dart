@@ -34,7 +34,8 @@ class _FirstOnboardingScreenState extends State<FirstOnboardingScreen> {
       child: Scaffold(
         body: Stack(
           children: [
-            Image.asset("assets/img/module_review_screen/first_background.png"),
+            Image.asset(
+                "assets/img/module_review_screen/first_onboarding_background.png"),
             Column(
               children: [
                 const SizedBox(

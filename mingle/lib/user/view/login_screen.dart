@@ -183,122 +183,134 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       backgroundColor: Colors.white,
                       elevation: 0,
                     ),
-              body: DefaultPadding(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(
-                          height: 34,
-                        ),
-                        const Text(
-                          "로그인",
-                          style: TextStyle(
-                              fontSize: 24.0,
-                              letterSpacing: -0.04,
-                              height: 1.4,
-                              fontWeight: FontWeight.w400),
-                        ),
-                        const SizedBox(
-                          height: 32.0,
-                        ),
-                        TextFormField(
-                          controller: emailController,
-                          obscureText: false,
-                          decoration: const InputDecoration(
-                              hintText: "학교 이메일 주소",
-                              hintStyle: TextStyle(color: GRAYSCALE_GRAY_02),
-                              focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: PRIMARY_COLOR_ORANGE_01)),
-                              border: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: GRAYSCALE_GRAY_03))),
-                        ),
-                        const SizedBox(
-                          height: 25.0,
-                        ),
-                        TextFormField(
-                          controller: passwordController,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                              errorText: errorMsg,
-                              hintText: "비밀번호",
-                              hintStyle:
-                                  const TextStyle(color: GRAYSCALE_GRAY_02),
-                              focusedBorder: const UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: PRIMARY_COLOR_ORANGE_01)),
-                              border: const UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: GRAYSCALE_GRAY_03))),
-                        ),
-                        const SizedBox(
-                          height: 66.0,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (_) =>
-                                          const SelectCountryScreen())),
-                              child: const Text(
-                                "회원가입",
+              body: Builder(builder: (context) {
+                return DefaultPadding(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: SingleChildScrollView(
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height -
+                            Scaffold.of(context).appBarMaxHeight! -
+                            MediaQuery.of(context).viewInsets.bottom,
+                        child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                height: 34,
+                              ),
+                              const Text(
+                                "로그인",
                                 style: TextStyle(
-                                    color: GRAYSCALE_GRAY_04,
-                                    fontSize: 14.0,
-                                    letterSpacing: -0.01,
+                                    fontSize: 24.0,
+                                    letterSpacing: -0.04,
                                     height: 1.4,
                                     fontWeight: FontWeight.w400),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 16.0,
-                              width: 48,
-                              child: VerticalDivider(
-                                thickness: 1,
-                                color: GRAYSCALE_GRAY_04,
+                              const SizedBox(
+                                height: 32.0,
                               ),
-                            ),
-                            InkWell(
-                              onTap: () =>
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (_) => const SelectCountryScreen(
-                                            isPasswordReset: true,
-                                          ))),
-                              child: const Text(
-                                "비밀번호 재설정",
-                                style: TextStyle(
-                                    color: GRAYSCALE_GRAY_04,
-                                    fontSize: 14.0,
-                                    letterSpacing: -0.01,
-                                    height: 1.4,
-                                    fontWeight: FontWeight.w400),
+                              TextFormField(
+                                controller: emailController,
+                                obscureText: false,
+                                decoration: const InputDecoration(
+                                    hintText: "학교 이메일 주소",
+                                    hintStyle:
+                                        TextStyle(color: GRAYSCALE_GRAY_02),
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: PRIMARY_COLOR_ORANGE_01)),
+                                    border: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: GRAYSCALE_GRAY_03))),
                               ),
-                            ),
-                          ],
-                        ),
-                        Expanded(
-                          child: Container(),
-                        ),
-                        NextButton(
-                          isLoading: isLoading,
-                          nextScreen: const SplashScreen(),
-                          buttonName: "로그인",
-                          checkSelected: emailController.text.isNotEmpty &&
-                              passwordController.text.isNotEmpty,
-                          validators: [validateForm],
-                        ),
-                        const SizedBox(
-                          height: 40.0,
-                        )
-                      ]),
-                ),
-              )),
+                              const SizedBox(
+                                height: 25.0,
+                              ),
+                              TextFormField(
+                                controller: passwordController,
+                                obscureText: true,
+                                decoration: InputDecoration(
+                                    errorText: errorMsg,
+                                    hintText: "비밀번호",
+                                    hintStyle: const TextStyle(
+                                        color: GRAYSCALE_GRAY_02),
+                                    focusedBorder: const UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: PRIMARY_COLOR_ORANGE_01)),
+                                    border: const UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: GRAYSCALE_GRAY_03))),
+                              ),
+                              const SizedBox(
+                                height: 66.0,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  InkWell(
+                                    onTap: () => Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                const SelectCountryScreen())),
+                                    child: const Text(
+                                      "회원가입",
+                                      style: TextStyle(
+                                          color: GRAYSCALE_GRAY_04,
+                                          fontSize: 14.0,
+                                          letterSpacing: -0.01,
+                                          height: 1.4,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 16.0,
+                                    width: 48,
+                                    child: VerticalDivider(
+                                      thickness: 1,
+                                      color: GRAYSCALE_GRAY_04,
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: () => Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                const SelectCountryScreen(
+                                                  isPasswordReset: true,
+                                                ))),
+                                    child: const Text(
+                                      "비밀번호 재설정",
+                                      style: TextStyle(
+                                          color: GRAYSCALE_GRAY_04,
+                                          fontSize: 14.0,
+                                          letterSpacing: -0.01,
+                                          height: 1.4,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Expanded(
+                                child: Container(),
+                              ),
+                              NextButton(
+                                isLoading: isLoading,
+                                nextScreen: const SplashScreen(),
+                                buttonName: "로그인",
+                                checkSelected:
+                                    emailController.text.isNotEmpty &&
+                                        passwordController.text.isNotEmpty,
+                                validators: [validateForm],
+                              ),
+                              const SizedBox(
+                                height: 40.0,
+                              )
+                            ]),
+                      ),
+                    ),
+                  ),
+                );
+              })),
         ),
       ),
     );
