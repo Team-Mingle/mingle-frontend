@@ -210,7 +210,9 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     }
   }
 
-  void showTimetableSettingModal() => showModalBottomSheet<void>(
+  void showTimetableSettingModal(
+          {required double screenHeight, required double screenWidth}) =>
+      showModalBottomSheet<void>(
         isScrollControlled: false,
         context: context,
         backgroundColor: Colors.transparent,
@@ -284,8 +286,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                         .then(
                       (capturedImage) async {
                         final container = SizedBox(
-                            height: MediaQuery.of(context).size.height - 50,
-                            width: MediaQuery.of(context).size.width,
+                            height: screenHeight - 50,
+                            width: screenWidth,
                             child: Image.memory(
                               capturedImage,
                               fit: BoxFit.contain,
@@ -322,6 +324,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                         // Handle captured image
                       },
                     ).onError((error, stackTrace) {
+                      print(error);
+                      print(stackTrace);
                       fToast.showToast(
                         child: const ToastMessage(message: generalErrorMsg),
                         gravity: ToastGravity.CENTER,
@@ -1316,7 +1320,9 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                     height: 24,
                   ),
                 ),
-                onPressed: showTimetableSettingModal,
+                onPressed: () => showTimetableSettingModal(
+                    screenHeight: MediaQuery.of(context).size.height,
+                    screenWidth: MediaQuery.of(context).size.width),
               ),
           ],
         ),
