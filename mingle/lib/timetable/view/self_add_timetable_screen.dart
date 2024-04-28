@@ -1,12 +1,22 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/const/data.dart';
+import 'package:mingle/common/const/error_codes.dart';
+import 'package:mingle/common/const/utils.dart';
+import 'package:mingle/common/model/course_time_model.dart';
+import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/timetable/components/add_course_time_dropdowns.dart';
 import 'package:mingle/timetable/model/class_model.dart';
+import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
+import 'package:mingle/timetable/repository/timetable_repository.dart';
 
-class AddDirectTimeTableScreen extends StatefulWidget {
+class AddDirectTimeTableScreen extends ConsumerStatefulWidget {
   final Function addClass;
   final Function addClassesAtAddTimeTableScreen;
   const AddDirectTimeTableScreen({
@@ -16,11 +26,12 @@ class AddDirectTimeTableScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<AddDirectTimeTableScreen> createState() =>
+  ConsumerState<AddDirectTimeTableScreen> createState() =>
       _AddDirectTimeTableScreenState();
 }
 
-class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
+class _AddDirectTimeTableScreenState
+    extends ConsumerState<AddDirectTimeTableScreen> {
   List<Widget> timeDropdownWidgets = [];
   String moduleName = "";
   List<String> days = [];
@@ -29,6 +40,7 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
   String moduleCode = "";
   String location = "";
   String profName = "";
+  late FToast fToast;
 
   @override
   void initState() {
@@ -43,6 +55,8 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
     days.add("");
     startTimes.add("");
     endTimes.add("");
+    fToast = FToast();
+    fToast.init(context);
     super.initState();
   }
 
@@ -82,6 +96,45 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
     print(days);
     print(startTimes);
     print(endTimes);
+  }
+
+  Future<CourseModel?> sendAddPersonalClassRequest(
+      {bool overrideValidation = false}) async {
+    try {
+      CourseModel result = await ref
+          .watch(timetableRepositoryProvider)
+          .addPersonalCourse(
+              timetableId: ref.watch(pinnedTimetableIdProvider)!,
+              addPersonalCourseDto: AddPersonalCourseDto(
+                  overrideValidation: overrideValidation,
+                  name: moduleName,
+                  courseTimeDtoList: List.generate(
+                      days.length,
+                      (index) => CourseTimeModel(
+                          dayOfWeek: convertKorDayToEngDay(days[index]),
+                          startTime: startTimes[index],
+                          endTime: endTimes[index])),
+                  courseCode: moduleCode,
+                  venue: location,
+                  professor: profName,
+                  memo: ""));
+      widget.addClass(result, overrideValidation);
+      widget.addClassesAtAddTimeTableScreen(result, overrideValidation);
+      return result;
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 409 &&
+          e.response?.data['code'] == TIMETABLE_CONFLICT) {
+        showTimetableConflictDialog();
+      } else {
+        fToast.showToast(
+          child: ToastMessage(
+              message: e.response?.data['message'] ?? generalErrorMsg),
+          gravity: ToastGravity.CENTER,
+          toastDuration: const Duration(seconds: 2),
+        );
+      }
+    }
+    return null;
   }
 
   @override
@@ -130,11 +183,8 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
                 ),
               ),
             ),
-            onTap: () {
-              //TODO: fix
-              // CourseModel classModel = CourseModel(id: id, name: name, courseCode: courseCode, professor: professor, courseTimeDtoList: courseTimeDtoList, rgb: rgb)
-              // widget.addClass(classModel);
-              // widget.addClassesAtAddTimeTableScreen(classModel);
+            onTap: () async {
+              await sendAddPersonalClassRequest();
               Navigator.pop(context);
             },
           ),
@@ -521,9 +571,106 @@ class _AddDirectTimeTableScreenState extends State<AddDirectTimeTableScreen> {
                     ),
                   ),
                 ),
+                const SizedBox(
+                  height: 20.0,
+                )
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  void showTimetableConflictDialog() {
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        insetPadding: EdgeInsets.zero,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0)),
+              // width: 343,
+              padding: const EdgeInsets.only(
+                  top: 32.0, left: 32.0, right: 32.0, bottom: 24.0),
+              child: Column(
+                children: [
+                  const Text(
+                    "‘강의명’을 시간표에 추가하시겠습니까?",
+                    style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: -0.32),
+                  ),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                  const Text(
+                    "시간이 겹치는 강의가 삭제됩니다.",
+                    style: TextStyle(letterSpacing: -0.14),
+                  ),
+                  const SizedBox(
+                    height: 16.0,
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          sendAddPersonalClassRequest(overrideValidation: true);
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(
+                          height: 40.0,
+                          width: 120.0,
+                          decoration: BoxDecoration(
+                              color: GRAYSCALE_GRAY_01,
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: const Center(
+                            child: Text(
+                              "강의 추가하기",
+                              style: TextStyle(
+                                  color: GRAYSCALE_GRAY_04,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 8.0,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(
+                          height: 40.0,
+                          width: 120.0,
+                          decoration: BoxDecoration(
+                              color: PRIMARY_COLOR_ORANGE_02,
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: const Center(
+                            child: Text(
+                              "취소하기",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

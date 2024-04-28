@@ -65,6 +65,11 @@ class CourseModel {
   List<Widget> generateClasses(void Function() onTap) {
     List<Widget> classes = [];
     for (int i = 0; i < courseTimeDtoList.length; i++) {
+      if (courseTimeDtoList[i].dayOfWeek == null ||
+          courseTimeDtoList[i].startTime == null ||
+          courseTimeDtoList[i].endTime == null) {
+        continue;
+      }
       String startTime = courseTimeDtoList[i].startTime!;
       String endTime = courseTimeDtoList[i].endTime!;
       double topOffset = convertStartTimeToOffset(startTime);
@@ -78,11 +83,37 @@ class CourseModel {
           child: GestureDetector(
             onTap: onTap,
             child: Container(
-              height: height,
-              width: TIMETABLE_GRID_WIDTH,
-              color: convertRGBtoColor(),
-              child: Text(courseCode),
-            ),
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  color: convertRGBtoColor(),
+                ),
+                height: height,
+                width: TIMETABLE_GRID_WIDTH,
+                child: Wrap(
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          name,
+                          style: const TextStyle(
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w600,
+                              overflow: TextOverflow.ellipsis),
+                          maxLines: 1,
+                        ),
+                        const SizedBox(
+                          height: 4.0,
+                        ),
+                        Text(
+                          courseCode,
+                          style: const TextStyle(
+                              fontSize: 12.0, overflow: TextOverflow.ellipsis),
+                          maxLines: 2,
+                        )
+                      ],
+                    ),
+                  ],
+                )),
           ),
         ),
       );

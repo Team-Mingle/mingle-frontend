@@ -121,8 +121,6 @@ class _HomeRootTabState extends State<HomeRootTab> {
             _onItemTapped(index);
           },
         );
-      // case 3:
-      //   return const ModuleReviewMainScreen();
       case 3:
         return const TimeTableHomeScreen();
       case 4:
@@ -132,7 +130,6 @@ class _HomeRootTabState extends State<HomeRootTab> {
             _onItemTapped(index);
           },
         );
-
       default:
         return HomeTabScreen(
           controller: _controllers[0],

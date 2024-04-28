@@ -41,6 +41,32 @@ Map<String, dynamic> _$AddTimetableDtoToJson(AddTimetableDto instance) =>
       'semester': instance.semester,
     };
 
+AddPersonalCourseDto _$AddPersonalCourseDtoFromJson(
+        Map<String, dynamic> json) =>
+    AddPersonalCourseDto(
+      name: json['name'] as String,
+      courseTimeDtoList: (json['courseTimeDtoList'] as List<dynamic>)
+          .map((e) => CourseTimeModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      courseCode: json['courseCode'] as String,
+      venue: json['venue'] as String,
+      professor: json['professor'] as String,
+      memo: json['memo'] as String,
+      overrideValidation: json['overrideValidation'] as bool? ?? false,
+    );
+
+Map<String, dynamic> _$AddPersonalCourseDtoToJson(
+        AddPersonalCourseDto instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'courseTimeDtoList': instance.courseTimeDtoList,
+      'courseCode': instance.courseCode,
+      'venue': instance.venue,
+      'professor': instance.professor,
+      'memo': instance.memo,
+      'overrideValidation': instance.overrideValidation,
+    };
+
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
@@ -139,6 +165,38 @@ class _TimetableRepository implements TimetableRepository {
           baseUrl,
         ))));
     final value = _result.data;
+    return value;
+  }
+
+  @override
+  Future<CourseModel> addPersonalCourse({
+    required int timetableId,
+    required AddPersonalCourseDto addPersonalCourseDto,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(addPersonalCourseDto.toJson());
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<CourseModel>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/${timetableId}/course/personal',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = CourseModel.fromJson(_result.data!);
     return value;
   }
 

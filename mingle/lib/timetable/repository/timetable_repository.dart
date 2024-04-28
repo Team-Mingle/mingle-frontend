@@ -2,7 +2,9 @@ import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mingle/common/const/data.dart';
+import 'package:mingle/common/model/course_time_model.dart';
 import 'package:mingle/dio/dio.dart';
+import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/timetable/model/default_timetable_id_model.dart';
 import 'package:mingle/timetable/model/friend_timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_list_model.dart';
@@ -37,6 +39,12 @@ abstract class TimetableRepository {
   Future<dynamic> addCourse(
       {@Path() required int timetableId,
       @Body() required AddClassDto addClassDto});
+
+  @POST('/{timetableId}/course/personal')
+  @Headers({'accessToken': 'true'})
+  Future<CourseModel> addPersonalCourse(
+      {@Path() required int timetableId,
+      @Body() required AddPersonalCourseDto addPersonalCourseDto});
 
   @PATCH('/{timetableId}/pin')
   @Headers({'accessToken': 'true'})
@@ -104,3 +112,42 @@ class AddTimetableDto {
 
   Map<String, dynamic> toJson() => _$AddTimetableDtoToJson(this);
 }
+
+@JsonSerializable()
+class AddPersonalCourseDto {
+  final String name;
+  final List<CourseTimeModel> courseTimeDtoList;
+  final String courseCode;
+  final String venue;
+  final String professor;
+  final String memo;
+  final bool overrideValidation;
+
+  AddPersonalCourseDto(
+      {required this.name,
+      required this.courseTimeDtoList,
+      required this.courseCode,
+      required this.venue,
+      required this.professor,
+      required this.memo,
+      this.overrideValidation = false});
+
+  Map<String, dynamic> toJson() => _$AddPersonalCourseDtoToJson(this);
+}
+
+
+// {
+//   "name": "string",
+//   "courseTimeDtoList": [
+//     {
+//       "dayOfWeek": "MONDAY",
+//       "startTime": "HH:mm:SS",
+//       "endTime": "HH:mm:SS"
+//     }
+//   ],
+//   "courseCode": "string",
+//   "venue": "string",
+//   "professor": "string",
+//   "memo": "string",
+//   "overrideValidation": true
+// }

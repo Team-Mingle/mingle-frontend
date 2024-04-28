@@ -36,6 +36,8 @@
 	<string>This app does not require access to the microphone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>&quot;밍글&quot;이 사진 또는 동영상을 게시물에 등록하는 기능 사용을 위해 사진 라이브러리에 접근하도록 허용합니다. </string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>&quot;밍글&quot;이 사진을 갤러리에 저장하는 기능 사용을 위해 사진 라이브러리에 접근하도록 허용합니다. </string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

@@ -16,6 +16,8 @@ class CourseTimeModel {
   static String removeSecondsFromTime(String time) {
     return time.substring(0, 5);
   }
+
+  Map<String, dynamic> toJson() => _$CourseTimeModelToJson(this);
 }
 
 

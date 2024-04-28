@@ -51,8 +51,8 @@ class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
                 overrideValidation: overrideValidation),
           );
 
-      widget.addClass(widget.course);
-      widget.addClassesAtAddTimeTableScreen(widget.course);
+      widget.addClass(widget.course, overrideValidation);
+      widget.addClassesAtAddTimeTableScreen(widget.course, overrideValidation);
       Navigator.of(context).pop();
     } on DioException catch (e) {
       print(e);

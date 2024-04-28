@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:mingle/common/component/expanded_section.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
@@ -18,6 +19,7 @@ import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/module/view/module_review_main_screen.dart';
 import 'package:mingle/secure_storage/secure_storage.dart';
 import 'package:mingle/timetable/components/add_friend_dialog.dart';
+import 'package:mingle/timetable/components/timetable_screenshot_grid.dart';
 import 'package:mingle/timetable/model/class_model.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/timetable/model/friend_model.dart';
@@ -34,6 +36,7 @@ import 'package:mingle/timetable/view/friend_timetable_screen.dart';
 import 'package:mingle/timetable/view/timetable_list_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:screenshot/screenshot.dart';
 
 class TimeTableHomeScreen extends ConsumerStatefulWidget {
   const TimeTableHomeScreen({
@@ -58,6 +61,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   String newTimetableName = "";
   List<FriendModel> friendList = [];
   final ScrollController scrollController = ScrollController();
+  ScreenshotController screenshotController = ScreenshotController();
   late FToast fToast;
 
   @override
@@ -210,7 +214,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
         backgroundColor: Colors.transparent,
         builder: (BuildContext context) {
           return Container(
-            height: 176,
+            // height: 176,
             width: double.infinity,
             decoration: const BoxDecoration(
               color: Colors.white,
@@ -221,6 +225,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
             padding:
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32.0),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 GestureDetector(
@@ -245,6 +250,52 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 14.0),
                     child: const Text(
                       "시간표 삭제하기",
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    double pixelRatio = MediaQuery.of(context).devicePixelRatio;
+                    screenshotController
+                        .captureFromLongWidget(
+                            InheritedTheme.captureAll(
+                              context,
+                              Material(
+                                  child: TimeTableScreenshotGrid(
+                                addedClasses: addedCourses,
+                              )),
+                            ),
+                            pixelRatio: pixelRatio,
+                            delay: const Duration(milliseconds: 100),
+                            context: context,
+
+                            ///
+                            /// Additionally you can define constraint for your image.
+                            ///
+                            constraints: BoxConstraints(
+                              maxHeight:
+                                  MediaQuery.of(context).size.height - 37,
+                              maxWidth: MediaQuery.of(context).size.width,
+                            ))
+                        .then(
+                      (capturedImage) async {
+                        await ImageGallerySaver.saveImage(capturedImage);
+                        fToast.showToast(
+                          child: const ToastMessage(message: "갤러리에 저장되었습니다"),
+                          gravity: ToastGravity.CENTER,
+                          toastDuration: const Duration(seconds: 2),
+                        );
+                        // Handle captured image
+                      },
+                    );
+                    Navigator.of(context).pop();
+                    // deleteTimetable(ref.read(pinnedTimetableIdProvider)!);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 14.0),
+                    child: const Text(
+                      "시간표 저장하기",
                       style: TextStyle(fontSize: 16.0),
                     ),
                   ),
@@ -466,12 +517,21 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     );
   }
 
-  void addClass(CourseModel courseModel) {
+  void addClass(CourseModel courseModel, bool overrideValidation) {
+    if (overrideValidation) {
+      getClasses();
+      return;
+    }
+    List<Widget> newCourses = [...addedCourses];
+    newCourses.addAll(courseModel.generateClasses(() {
+      showCourseDetailModal(courseModel);
+    }));
     setState(() {
-      addedCourses.addAll(courseModel.generateClasses(() {
-        print("tapped");
-        showCourseDetailModal(courseModel);
-      }));
+      addedCourses = newCourses;
+      // addedCourses.addAll(courseModel.generateClasses(() {
+      //   print("tapped");
+      //   showCourseDetailModal(courseModel);
+      // }));
     });
   }
 
@@ -1315,6 +1375,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                                   TimeTableGrid(
                                     addedClasses: addedCourses,
                                   ),
+                                // TimeTableScreenshotGrid(
+                                //     addedClasses: addedCourses),
                                 const SizedBox(
                                   height: 24.0,
                                 ),
