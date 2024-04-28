@@ -86,6 +86,7 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
   Widget build(BuildContext context) {
     // print(t);
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Scaffold(
           appBar: AppBar(
@@ -140,8 +141,9 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
             backgroundColor: Colors.white,
             elevation: 0,
           ),
-          body: Center(
+          body: SingleChildScrollView(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(
