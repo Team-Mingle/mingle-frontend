@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/component/search_history_service.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
+import 'package:mingle/module/model/course_detail_model.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/module/repository/course_repository.dart';
 import 'package:mingle/timetable/components/course_preview_card.dart';
@@ -30,7 +31,7 @@ class _SearchCourseModalWidgetState
     extends ConsumerState<SearchCourseModalWidget> {
   final TextEditingController _searchController = TextEditingController();
   List<String>? previousSearch;
-  Future<CursorPagination<CourseModel>>? searchFuture;
+  Future<CursorPagination<CourseDetailModel>>? searchFuture;
 
   @override
   void initState() {
@@ -187,7 +188,8 @@ class _SearchCourseModalWidgetState
                 : FutureBuilder(
                     future: searchFuture,
                     builder: (context,
-                        AsyncSnapshot<CursorPagination<CourseModel>> snapshot) {
+                        AsyncSnapshot<CursorPagination<CourseDetailModel>>
+                            snapshot) {
                       print("hasData: ${snapshot.hasData}");
                       if (!snapshot.hasData ||
                           snapshot.connectionState != ConnectionState.done) {
@@ -199,8 +201,9 @@ class _SearchCourseModalWidgetState
                           )),
                         );
                       }
-                      CursorPagination<CourseModel> courseList = snapshot.data!;
-                      List<CourseModel> courses = courseList.data;
+                      CursorPagination<CourseDetailModel> courseList =
+                          snapshot.data!;
+                      List<CourseDetailModel> courses = courseList.data;
                       return courses.isEmpty
                           ? Column(
                               mainAxisAlignment: MainAxisAlignment.center,

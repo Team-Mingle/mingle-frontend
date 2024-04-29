@@ -170,7 +170,7 @@ class _TimetableRepository implements TimetableRepository {
   }
 
   @override
-  Future<CourseModel> addPersonalCourse({
+  Future<CourseDetailModel> addPersonalCourse({
     required int timetableId,
     required AddPersonalCourseDto addPersonalCourseDto,
   }) async {
@@ -181,7 +181,7 @@ class _TimetableRepository implements TimetableRepository {
     final _data = <String, dynamic>{};
     _data.addAll(addPersonalCourseDto.toJson());
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<CourseModel>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<CourseDetailModel>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -197,7 +197,7 @@ class _TimetableRepository implements TimetableRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = CourseModel.fromJson(_result.data!);
+    final value = CourseDetailModel.fromJson(_result.data!);
     return value;
   }
 

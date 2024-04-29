@@ -16,6 +16,7 @@ CourseModel _$CourseModelFromJson(Map<String, dynamic> json) => CourseModel(
       courseTimeDtoList: (json['courseTimeDtoList'] as List<dynamic>)
           .map((e) => CourseTimeModel.fromJson(e as Map<String, dynamic>))
           .toList(),
+      courseType: json['courseType'] as String?,
       rgb: json['rgb'] as String?,
     );
 
@@ -29,4 +30,5 @@ Map<String, dynamic> _$CourseModelToJson(CourseModel instance) =>
       'subclass': instance.subclass,
       'courseTimeDtoList': instance.courseTimeDtoList,
       'rgb': instance.rgb,
+      'courseType': instance.courseType,
     };

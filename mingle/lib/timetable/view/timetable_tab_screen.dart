@@ -13,6 +13,7 @@ import 'package:mingle/common/component/expanded_section.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
+import 'package:mingle/module/model/course_detail_model.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
 import 'package:mingle/module/view/first_onboarding_screen.dart';
@@ -104,11 +105,16 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     TimetableModel currentTimetable = await ref
         .read(timetableRepositoryProvider)
         .getTimetable(timetableId: ref.read(pinnedTimetableIdProvider)!);
-    List<CourseModel> courses = currentTimetable.coursePreviewDtoList;
+    List<CourseDetailModel> courses = currentTimetable.coursePreviewDtoList;
     List<Widget> coursesToBeAdded = [];
-    for (CourseModel course in courses) {
-      coursesToBeAdded
-          .addAll(course.generateClasses(() => showCourseDetailModal(course)));
+    for (CourseDetailModel course in courses) {
+      coursesToBeAdded.addAll(course.generateClasses(() {
+        if (course.courseType == "PERSONAL") {
+          showSelfAddedCourseDetailModal(course);
+        } else {
+          showCourseDetailModal(course);
+        }
+      }));
     }
     setState(() {
       timetable = currentTimetable;
@@ -266,8 +272,11 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                       InheritedTheme.captureAll(
                         context,
                         Material(
-                            child: TimeTableScreenshotGrid(
-                          addedClasses: addedCourses,
+                            child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          child: TimeTableScreenshotGrid(
+                            addedClasses: addedCourses,
+                          ),
                         )),
                       ),
                       pixelRatio: pixelRatio,
@@ -349,7 +358,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
         },
       );
 
-  void showCourseDetailModal(CourseModel currentCourse) {
+  void showCourseDetailModal(CourseDetailModel currentCourse) {
     showModalBottomSheet<void>(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12.0),
@@ -407,6 +416,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                             builder: (_) => ModuleDetailsScreen(
                               courseId: currentCourse.id,
                               moduleName: currentCourse.name,
+                              courseDetail: currentCourse,
                             ),
                           ),
                         );
@@ -466,7 +476,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     );
   }
 
-  void showSelfAddedCourseDetailModal(CourseModel currentCourse) {
+  void showSelfAddedCourseDetailModal(CourseDetailModel currentCourse) {
     showModalBottomSheet<void>(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12.0),
@@ -514,11 +524,15 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                   color: GRAYSCALE_GRAY_01_5,
                 ),
                 GestureDetector(
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => ModuleDetailsScreen(
-                            courseId: currentCourse.id,
-                            moduleName: currentCourse.name,
-                          ))),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => ModuleDetailsScreen(
+                              courseId: currentCourse.id,
+                              moduleName: currentCourse.name,
+                              courseDetail: currentCourse,
+                            )));
+                  },
                   child: const Padding(
                     padding: EdgeInsets.symmetric(vertical: 14.0),
                     child: Text(
@@ -528,9 +542,14 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) =>
-                          EditSelfAddedCourseScreen(course: currentCourse))),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => EditSelfAddedCourseScreen(
+                              course: currentCourse,
+                              refreshClasses: getClasses,
+                            )));
+                  },
                   child: const Padding(
                     padding: EdgeInsets.symmetric(vertical: 14.0),
                     child: Text(
@@ -560,14 +579,18 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     );
   }
 
-  void addClass(CourseModel courseModel, bool overrideValidation) {
+  void addClass(CourseDetailModel courseModel, bool overrideValidation) {
     if (overrideValidation) {
       getClasses();
       return;
     }
     List<Widget> newCourses = [...addedCourses];
     newCourses.addAll(courseModel.generateClasses(() {
-      showCourseDetailModal(courseModel);
+      if (courseModel.courseType == "PERSONAL") {
+        showSelfAddedCourseDetailModal(courseModel);
+      } else {
+        showCourseDetailModal(courseModel);
+      }
     }));
     setState(() {
       addedCourses = newCourses;
@@ -1328,7 +1351,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
         ),
         body: Center(
             child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.only(top: 20),
                 child: CustomScrollView(
                     controller: scrollController,
                     physics: const BouncingScrollPhysics(

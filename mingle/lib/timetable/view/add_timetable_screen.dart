@@ -32,26 +32,49 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
   void initState() {
     getClasses();
     Future.delayed(const Duration(milliseconds: 650)).then((_) {
-      showModalBottomSheet<void>(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        isScrollControlled: true,
-        context: context,
-        builder: (BuildContext context) {
-          return AnimatedPadding(
-            duration: const Duration(milliseconds: 200),
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: SearchCourseModalWidget(
-              addClass: widget.addClass,
-              addClassesAtAddTimeTableScreen: addClassesAtAddTimeTableScreen,
-            ),
-          );
-        },
-      );
+      showAddCourseBottomSheet();
+      // showModalBottomSheet<void>(
+
+      //   shape: RoundedRectangleBorder(
+      //     borderRadius: BorderRadius.circular(20.0),
+      //   ),
+      //   isScrollControlled: true,
+      //   context: context,
+      //   builder: (BuildContext context) {
+      //     return AnimatedPadding(
+      //       duration: const Duration(milliseconds: 200),
+      //       padding: EdgeInsets.only(
+      //           bottom: MediaQuery.of(context).viewInsets.bottom),
+      //       child: SearchCourseModalWidget(
+      //         addClass: widget.addClass,
+      //         addClassesAtAddTimeTableScreen: addClassesAtAddTimeTableScreen,
+      //       ),
+      //     );
+      //   },
+      // );
     });
     super.initState();
+  }
+
+  void showAddCourseBottomSheet() {
+    showModalBottomSheet<void>(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      isScrollControlled: true,
+      context: context,
+      builder: (BuildContext context) {
+        return AnimatedPadding(
+          duration: const Duration(milliseconds: 200),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: SearchCourseModalWidget(
+            addClass: widget.addClass,
+            addClassesAtAddTimeTableScreen: addClassesAtAddTimeTableScreen,
+          ),
+        );
+      },
+    );
   }
 
   void addClassesAtAddTimeTableScreen(
@@ -89,6 +112,7 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Scaffold(
+          backgroundColor: Colors.white,
           appBar: AppBar(
             surfaceTintColor: Colors.transparent,
             automaticallyImplyLeading: true,
@@ -152,6 +176,39 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
                 TimeTableGrid(
                   addedClasses: widget.addedClasses,
                 ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      bottomSheet: GestureDetector(
+        onVerticalDragUpdate: (details) {
+          if (details.delta.dy < 20) {
+            showAddCourseBottomSheet();
+          }
+        },
+        onTap: showAddCourseBottomSheet,
+        child: Material(
+          elevation: 5.0,
+          child: Container(
+            width: double.infinity,
+            height: 50.0,
+            decoration: BoxDecoration(
+                border: Border.all(color: GRAYSCALE_GRAY_02),
+                borderRadius: BorderRadius.circular(8.0),
+                color: GRAYSCALE_GRAY_01),
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 8.0,
+                ),
+                Container(
+                  height: 4.0,
+                  width: 120.0,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(2.0),
+                      color: GRAYSCALE_GRAY_03),
+                )
               ],
             ),
           ),

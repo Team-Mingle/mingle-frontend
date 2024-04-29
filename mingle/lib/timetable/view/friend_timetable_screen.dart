@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
+import 'package:mingle/module/model/course_detail_model.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
@@ -77,7 +78,7 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
           .friendTimetableDetailList;
       TimetableModel? selectedTimetable =
           friendTimetables.isEmpty ? null : friendTimetables[0];
-      List<CourseModel> courses = selectedTimetable == null
+      List<CourseDetailModel> courses = selectedTimetable == null
           ? []
           : selectedTimetable.coursePreviewDtoList;
       generateClassWidgets(courses);
@@ -95,9 +96,9 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
     }
   }
 
-  void generateClassWidgets(List<CourseModel> courses) {
+  void generateClassWidgets(List<CourseDetailModel> courses) {
     List<Widget> coursesToBeAdded = [];
-    for (CourseModel course in courses) {
+    for (CourseDetailModel course in courses) {
       coursesToBeAdded
           .addAll(course.generateClasses(() => showCourseDetailModal(course)));
     }
@@ -302,7 +303,7 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
     });
   }
 
-  void showCourseDetailModal(CourseModel currentCourse) {
+  void showCourseDetailModal(CourseDetailModel currentCourse) {
     showModalBottomSheet<void>(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12.0),
@@ -358,6 +359,7 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
                           builder: (_) => ModuleDetailsScreen(
                             courseId: currentCourse.id,
                             moduleName: currentCourse.name,
+                            courseDetail: currentCourse,
                           ),
                         ),
                       ),

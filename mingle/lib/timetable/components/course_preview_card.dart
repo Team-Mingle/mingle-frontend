@@ -10,6 +10,7 @@ import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/common/const/error_codes.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
+import 'package:mingle/module/model/course_detail_model.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/timetable/model/add_course_response_model.dart';
@@ -18,7 +19,7 @@ import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 
 class CoursePreviewCard extends ConsumerStatefulWidget {
-  final CourseModel course;
+  final CourseDetailModel course;
   final Function addClass;
   final Function addClassesAtAddTimeTableScreen;
   const CoursePreviewCard(
@@ -166,11 +167,13 @@ class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
                                 width: 4.0,
                               ),
                               GestureDetector(
-                                onTap: () => Navigator.of(context).push(
-                                    MaterialPageRoute(
+                                onTap: () => Navigator.of(context)
+                                    .push(MaterialPageRoute(
                                         builder: (_) => ModuleDetailsScreen(
-                                            courseId: widget.course.id,
-                                            moduleName: widget.course.name))),
+                                              courseId: widget.course.id,
+                                              moduleName: widget.course.name,
+                                              courseDetail: widget.course,
+                                            ))),
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 12.0, vertical: 8.0),

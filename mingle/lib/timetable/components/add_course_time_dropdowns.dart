@@ -10,12 +10,14 @@ class AddTimeDropdownsWidget extends StatefulWidget {
   final String? initialStartTime;
   final String? initialEndTime;
   final int index;
+  final Function delete;
   const AddTimeDropdownsWidget(
       {Key? key,
       required this.onDayChange,
       required this.onStartTimeChange,
       required this.onEndTimeChange,
       required this.index,
+      required this.delete,
       this.initialDay,
       this.initialStartTime,
       this.initialEndTime})
@@ -219,6 +221,8 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                       isExpanded: true,
                       underline: const SizedBox.shrink(),
                       hint: const Text('요일 선택'),
+                      borderRadius: BorderRadius.circular(8.0),
+                      dropdownColor: Colors.white,
                       value: selectedItem1,
                       items: items1.map((String item) {
                         return DropdownMenuItem<String>(
@@ -255,6 +259,22 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                 ],
               ),
             ),
+            const Spacer(),
+            if (widget.index > 0)
+              GestureDetector(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: SvgPicture.asset(
+                      'assets/img/post_screen/cross_icon.svg',
+                      width: 18,
+                      height: 18,
+                    ),
+                  ),
+                ),
+                onTap: () => widget.delete(widget.index),
+              ),
           ],
         ),
         const SizedBox(height: 16),
@@ -275,6 +295,8 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                       isExpanded: true,
                       underline: const SizedBox.shrink(),
                       hint: const Text('시작 시간'),
+                      borderRadius: BorderRadius.circular(8.0),
+                      dropdownColor: Colors.white,
                       value: selectedItem2,
                       items: items2.map((String item) {
                         return DropdownMenuItem<String>(
@@ -327,6 +349,8 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                       isExpanded: true,
                       underline: const SizedBox.shrink(),
                       hint: const Text('끝나는 시간'),
+                      borderRadius: BorderRadius.circular(8.0),
+                      dropdownColor: Colors.white,
                       value: selectedItem3,
                       items: items3.map((String item) {
                         return DropdownMenuItem<String>(

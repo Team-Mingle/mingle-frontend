@@ -28,8 +28,12 @@ import 'package:mingle/user/view/signup_screen/default_padding.dart';
 class ModuleDetailsScreen extends ConsumerStatefulWidget {
   final int courseId;
   final String moduleName;
+  final CourseDetailModel courseDetail;
   const ModuleDetailsScreen(
-      {super.key, required this.courseId, required this.moduleName});
+      {super.key,
+      required this.courseId,
+      required this.moduleName,
+      required this.courseDetail});
 
   @override
   ConsumerState<ModuleDetailsScreen> createState() =>
@@ -96,6 +100,7 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         shape: const Border(
             bottom: BorderSide(color: GRAYSCALE_GRAY_01, width: 1)),
         backgroundColor: Colors.white,
@@ -128,34 +133,36 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
         height: MediaQuery.of(context).size.height,
         child: Stack(
           children: [
-            FutureBuilder(
-              future: ref
-                  .watch(courseRepositoryProvider)
-                  .getCourseDetails(courseId: widget.courseId),
-              // postDetailFuture(postId),
-              builder: (context, AsyncSnapshot<CourseDetailModel> snapshot) {
-                if (!snapshot.hasData) {
-                  print(snapshot);
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: PRIMARY_COLOR_ORANGE_01,
-                    ),
-                  );
-                }
-                if (snapshot.hasError) {
-                  return const Center(
-                    child: Text("다시 시도 ㄱㄱ"),
-                  );
-                }
-                CourseDetailModel course = snapshot.data!;
+            renderContent(widget.courseDetail),
 
-                return Stack(
-                  children: [
-                    renderContent(course),
-                  ],
-                );
-              },
-            ),
+            // FutureBuilder(
+            //   future: ref
+            //       .watch(courseRepositoryProvider)
+            //       .getCourseDetails(courseId: widget.courseId),
+            //   // postDetailFuture(postId),
+            //   builder: (context, AsyncSnapshot<CourseDetailModel> snapshot) {
+            //     if (!snapshot.hasData) {
+            //       print(snapshot);
+            //       return const Center(
+            //         child: CircularProgressIndicator(
+            //           color: PRIMARY_COLOR_ORANGE_01,
+            //         ),
+            //       );
+            //     }
+            //     if (snapshot.hasError) {
+            //       return const Center(
+            //         child: Text("다시 시도 ㄱㄱ"),
+            //       );
+            //     }
+            //     CourseDetailModel course = snapshot.data!;
+
+            //     return Stack(
+            //       children: [
+            //         renderContent(course),
+            //       ],
+            //     );
+            //   },
+            // ),
           ],
         ),
       ),
@@ -241,20 +248,20 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
                 const SizedBox(
                   height: 24.0,
                 ),
-                const Row(
+                Row(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       width: 72.0,
                       child: Text(
                         "강의시간",
                         style: TextStyle(color: GRAYSCALE_GRAY_03),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 12.0,
                     ),
                     //TODO: change to actual time
-                    Expanded(child: Text("화2/수2"))
+                    Expanded(child: Text(courseDetailModel.getStartTimes()))
                   ],
                 ),
                 ExpandedSection(
@@ -295,31 +302,32 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
           const SizedBox(
             height: 42.0,
           ),
-          FutureBuilder(
-            future: ref
-                .watch(courseEvalutationRepositoryProvider)
-                .getCourseEvaluations(courseId: widget.courseId),
-            // postDetailFuture(postId),
-            builder:
-                (context, AsyncSnapshot<CourseEvaluationResponseDto> snapshot) {
-              if (!snapshot.hasData) {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: PRIMARY_COLOR_ORANGE_01,
-                  ),
-                );
-              }
-              if (snapshot.hasError) {
-                return const Center(
-                  child: Text("강의평가 불러오기에 실패했습니다."),
-                );
-              }
-              List<CourseEvaluationModel> moduleReviews =
-                  snapshot.data!.courseEvaluationList;
+          if (widget.courseDetail.courseType == "CRAWL")
+            FutureBuilder(
+              future: ref
+                  .watch(courseEvalutationRepositoryProvider)
+                  .getCourseEvaluations(courseId: widget.courseId),
+              // postDetailFuture(postId),
+              builder: (context,
+                  AsyncSnapshot<CourseEvaluationResponseDto> snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: PRIMARY_COLOR_ORANGE_01,
+                    ),
+                  );
+                }
+                if (snapshot.hasError) {
+                  return const Center(
+                    child: Text("강의평가 불러오기에 실패했습니다."),
+                  );
+                }
+                List<CourseEvaluationModel> moduleReviews =
+                    snapshot.data!.courseEvaluationList;
 
-              return renderModuleReviews(moduleReviews);
-            },
-          ),
+                return renderModuleReviews(moduleReviews);
+              },
+            ),
           const SizedBox(
             height: 50.0,
           ),

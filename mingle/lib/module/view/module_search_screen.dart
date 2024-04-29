@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/component/search_history_service.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
+import 'package:mingle/module/model/course_detail_model.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/module/repository/course_repository.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
@@ -21,7 +22,7 @@ class ModuleSearchScreen extends ConsumerStatefulWidget {
 class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
   List<String>? previousSearch;
   final TextEditingController _searchController = TextEditingController();
-  Future<CursorPagination<CourseModel>>? searchFuture;
+  Future<CursorPagination<CourseDetailModel>>? searchFuture;
   @override
   void initState() {
     super.initState();
@@ -167,7 +168,7 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
           : FutureBuilder(
               future: searchFuture,
               builder: (context,
-                  AsyncSnapshot<CursorPagination<CourseModel>> snapshot) {
+                  AsyncSnapshot<CursorPagination<CourseDetailModel>> snapshot) {
                 if (!snapshot.hasData ||
                     snapshot.connectionState != ConnectionState.done) {
                   print(snapshot);
@@ -176,8 +177,8 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
                     color: PRIMARY_COLOR_ORANGE_01,
                   ));
                 }
-                CursorPagination<CourseModel> courseList = snapshot.data!;
-                List<CourseModel> courses = courseList.data;
+                CursorPagination<CourseDetailModel> courseList = snapshot.data!;
+                List<CourseDetailModel> courses = courseList.data;
                 return courses.isEmpty
                     ? const Column(
                         children: [
@@ -278,7 +279,7 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
     );
   }
 
-  Widget coursePreviewCard(CourseModel course) {
+  Widget coursePreviewCard(CourseDetailModel course) {
     return GestureDetector(
       onTap: widget.isAdd
           ? () {
@@ -289,6 +290,7 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
               builder: (_) => ModuleDetailsScreen(
                     courseId: course.id,
                     moduleName: course.name,
+                    courseDetail: course,
                   ))),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),

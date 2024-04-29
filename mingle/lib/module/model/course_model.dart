@@ -16,6 +16,7 @@ class CourseModel {
   final String? subclass;
   final List<CourseTimeModel> courseTimeDtoList;
   final String? rgb;
+  String? courseType;
 
   CourseModel(
       {required this.id,
@@ -25,6 +26,7 @@ class CourseModel {
       required this.professor,
       this.subclass,
       required this.courseTimeDtoList,
+      required this.courseType,
       this.rgb});
 
   factory CourseModel.fromJson(Map<String, dynamic> json) =>
@@ -92,6 +94,7 @@ class CourseModel {
                 child: Wrap(
                   children: [
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           name,
@@ -129,7 +132,8 @@ class CourseModel {
       String? professor,
       String? subclass,
       List<CourseTimeModel>? courseTimeDtoList,
-      String? rgb}) {
+      String? rgb,
+      String? courseType}) {
     return CourseModel(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -139,6 +143,7 @@ class CourseModel {
       subclass: subclass ?? this.subclass,
       courseTimeDtoList: courseTimeDtoList ?? this.courseTimeDtoList,
       rgb: rgb ?? this.rgb,
+      courseType: courseType ?? this.courseType,
     );
   }
 

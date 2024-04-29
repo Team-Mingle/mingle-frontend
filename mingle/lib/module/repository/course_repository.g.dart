@@ -19,7 +19,7 @@ class _CourseRepository implements CourseRepository {
   String? baseUrl;
 
   @override
-  Future<CursorPagination<CourseModel>> search(
+  Future<CursorPagination<CourseDetailModel>> search(
       {required String keyword}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'keyword': keyword};
@@ -27,7 +27,7 @@ class _CourseRepository implements CourseRepository {
     _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<CursorPagination<CourseModel>>(Options(
+        _setStreamType<CursorPagination<CourseDetailModel>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -43,16 +43,15 @@ class _CourseRepository implements CourseRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = CursorPagination<CourseModel>.fromJson(
+    final value = CursorPagination<CourseDetailModel>.fromJson(
       _result.data!,
-      (json) => CourseModel.fromJson(json as Map<String, dynamic>),
+      (json) => CourseDetailModel.fromJson(json as Map<String, dynamic>),
     );
     return value;
   }
 
   @override
-  Future<CourseDetailModel> getCourseDetails(
-      {required dynamic courseId}) async {
+  Future<CourseDetailModel> getCourseDetails({required int courseId}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
@@ -61,6 +60,38 @@ class _CourseRepository implements CourseRepository {
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<CourseDetailModel>(Options(
       method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/${courseId}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = CourseDetailModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<CourseDetailModel> editCourse({
+    required int courseId,
+    required AddPersonalCourseDto addPersonalCourseDto,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(addPersonalCourseDto.toJson());
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<CourseDetailModel>(Options(
+      method: 'PATCH',
       headers: _headers,
       extra: _extra,
     )
