@@ -22,11 +22,13 @@ class CoursePreviewCard extends ConsumerStatefulWidget {
   final CourseDetailModel course;
   final Function addClass;
   final Function addClassesAtAddTimeTableScreen;
+  final Function showAddCourseSuccessToast;
   const CoursePreviewCard({
     super.key,
     required this.course,
     required this.addClass,
     required this.addClassesAtAddTimeTableScreen,
+    required this.showAddCourseSuccessToast,
   });
 
   @override
@@ -59,6 +61,7 @@ class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
       widget.addClass(courseToBeAdded, overrideValidation);
       widget.addClassesAtAddTimeTableScreen(
           courseToBeAdded, overrideValidation);
+      widget.showAddCourseSuccessToast();
       Navigator.of(context).pop();
     } on DioException catch (e) {
       print(e);

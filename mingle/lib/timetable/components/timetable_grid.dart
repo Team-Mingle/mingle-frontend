@@ -8,8 +8,12 @@ import 'package:mingle/module/model/course_model.dart';
 class TimeTableGrid extends StatefulWidget {
   final List<Widget> addedClasses;
   final bool isFull;
+  final double gridTotalHeight;
   const TimeTableGrid(
-      {super.key, required this.addedClasses, this.isFull = false});
+      {super.key,
+      required this.addedClasses,
+      this.isFull = false,
+      this.gridTotalHeight = TIMETABLE_TOTAL_HEIGHT});
 
   @override
   State<TimeTableGrid> createState() => _TimeTableGridState();
@@ -191,8 +195,8 @@ class _TimeTableGridState extends State<TimeTableGrid> {
           children: [
             Container(
               height: widget.isFull
-                  ? TIMETABLE_TOTAL_HEIGHT + 100
-                  : TIMETABLE_TOTAL_HEIGHT,
+                  ? widget.gridTotalHeight + 100
+                  : widget.gridTotalHeight,
               width: 22.0,
               decoration: const BoxDecoration(
                 borderRadius:
@@ -252,8 +256,8 @@ class _TimeTableGridState extends State<TimeTableGrid> {
             Container(
               width: 338, // 그리드의 전체 너비
               height: widget.isFull
-                  ? TIMETABLE_TOTAL_HEIGHT + 100
-                  : TIMETABLE_TOTAL_HEIGHT, // 그리드의 전체 높이
+                  ? widget.gridTotalHeight + 100
+                  : widget.gridTotalHeight, // 그리드의 전체 높이
               decoration: BoxDecoration(
                 // borderRadius: BorderRadius.circular(8),
                 // borderRadius: BorderRadius.circular(8.0),

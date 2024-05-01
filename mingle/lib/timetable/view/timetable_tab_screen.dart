@@ -91,6 +91,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
 
   void getClasses() async {
     // await ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetable();
+    // await ref.read(pinnedTimetableProvider.notifier).fetchPinnedTimetable();
     TimetableModel? currentTimetable = ref.read(pinnedTimetableProvider);
     if (currentTimetable == null) {
       setState(() {
@@ -579,8 +580,10 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     );
   }
 
-  void addClass(CourseDetailModel courseModel, bool overrideValidation) {
+  void addClass(CourseDetailModel courseModel, bool overrideValidation) async {
     if (overrideValidation) {
+      await ref.read(pinnedTimetableProvider.notifier).fetchPinnedTimetable();
+      print("overriding here");
       getClasses();
       return;
     }
@@ -605,17 +608,19 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     try {
       List<Widget> newAddedCourses = [];
       TimetableModel newTimetable = timetable!;
+      newTimetable.coursePreviewDtoList
+          .removeWhere((element) => element.id == courseModel.id);
       for (int i = 0; i < timetable!.coursePreviewDtoList.length; i++) {
         CourseDetailModel detailModel = timetable!.coursePreviewDtoList[i];
-        if (detailModel.id != courseModel.id) {
-          newAddedCourses.addAll(detailModel.generateClasses(() {
-            if (detailModel.courseType == "PERSONAL") {
-              showSelfAddedCourseDetailModal(detailModel);
-            } else {
-              showCourseDetailModal(detailModel);
-            }
-          }));
-        }
+        // if (detailModel.id != courseModel.id) {
+        newAddedCourses.addAll(detailModel.generateClasses(() {
+          if (detailModel.courseType == "PERSONAL") {
+            showSelfAddedCourseDetailModal(detailModel);
+          } else {
+            showCourseDetailModal(detailModel);
+          }
+        }));
+        // }
       }
       print(newAddedCourses);
       print(addedCourses);

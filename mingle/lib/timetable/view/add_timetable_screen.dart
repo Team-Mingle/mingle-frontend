@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
@@ -32,28 +34,9 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
   @override
   void initState() {
     getClasses();
-    Future.delayed(const Duration(milliseconds: 650)).then((_) {
-      showAddCourseBottomSheet();
-      // showModalBottomSheet<void>(
-
-      //   shape: RoundedRectangleBorder(
-      //     borderRadius: BorderRadius.circular(20.0),
-      //   ),
-      //   isScrollControlled: true,
-      //   context: context,
-      //   builder: (BuildContext context) {
-      //     return AnimatedPadding(
-      //       duration: const Duration(milliseconds: 200),
-      //       padding: EdgeInsets.only(
-      //           bottom: MediaQuery.of(context).viewInsets.bottom),
-      //       child: SearchCourseModalWidget(
-      //         addClass: widget.addClass,
-      //         addClassesAtAddTimeTableScreen: addClassesAtAddTimeTableScreen,
-      //       ),
-      //     );
-      //   },
-      // );
-    });
+    // Future.delayed(const Duration(milliseconds: 650)).then((_) {
+    //   showAddCourseBottomSheet();
+    // });
     super.initState();
   }
 
@@ -79,9 +62,10 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
   }
 
   void addClassesAtAddTimeTableScreen(
-      CourseModel courseModel, bool overrideValidation) {
+      CourseModel courseModel, bool overrideValidation) async {
     if (overrideValidation) {
       print("im overriden");
+      await ref.read(pinnedTimetableProvider.notifier).fetchPinnedTimetable();
       getClasses();
       return;
     }
@@ -93,9 +77,7 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
   void getClasses() async {
     // await ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetable();
 
-    TimetableModel currentTimetable = await ref
-        .read(timetableRepositoryProvider)
-        .getTimetable(timetableId: ref.read(pinnedTimetableIdProvider)!);
+    TimetableModel currentTimetable = ref.read(pinnedTimetableProvider)!;
     List<CourseModel> courses = currentTimetable.coursePreviewDtoList;
     List<Widget> coursesToBeAdded = [];
     for (CourseModel course in courses) {
@@ -171,52 +153,28 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
             backgroundColor: Colors.white,
             elevation: 0,
           ),
-          body: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  height: 9.0,
-                ),
-                TimeTableGrid(
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: 9.0,
+              ),
+              SizedBox(
+                // height: 300.0,
+                child: TimeTableGrid(
+                  gridTotalHeight: 300.0,
                   addedClasses: widget.addedClasses,
                 ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      bottomSheet: GestureDetector(
-        onVerticalDragUpdate: (details) {
-          if (details.delta.dy < 20) {
-            showAddCourseBottomSheet();
-          }
-        },
-        onTap: showAddCourseBottomSheet,
-        child: Material(
-          elevation: 5.0,
-          child: Container(
-            width: double.infinity,
-            height: 50.0,
-            decoration: BoxDecoration(
-                border: Border.all(color: GRAYSCALE_GRAY_02),
-                borderRadius: BorderRadius.circular(8.0),
-                color: GRAYSCALE_GRAY_01),
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 8.0,
+              ),
+              Expanded(
+                child: SearchCourseModalWidget(
+                  addClass: widget.addClass,
+                  addClassesAtAddTimeTableScreen:
+                      addClassesAtAddTimeTableScreen,
                 ),
-                Container(
-                  height: 4.0,
-                  width: 120.0,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2.0),
-                      color: GRAYSCALE_GRAY_03),
-                )
-              ],
-            ),
+              )
+            ],
           ),
         ),
       ),

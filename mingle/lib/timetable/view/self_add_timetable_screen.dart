@@ -700,6 +700,7 @@ class _AddDirectTimeTableScreenState
                       GestureDetector(
                         onTap: () {
                           sendAddPersonalClassRequest(overrideValidation: true);
+                          Navigator.of(context).pop();
                         },
                         child: Container(
                           height: 40.0,

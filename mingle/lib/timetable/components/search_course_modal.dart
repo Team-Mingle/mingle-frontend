@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/component/search_history_service.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
+import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/module/model/course_detail_model.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/module/repository/course_repository.dart';
@@ -32,12 +34,15 @@ class _SearchCourseModalWidgetState
   final TextEditingController _searchController = TextEditingController();
   List<String>? previousSearch;
   Future<CursorPagination<CourseDetailModel>>? searchFuture;
+  late FToast fToast;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getSearchHistories();
+    fToast = FToast();
+    fToast.init(context);
   }
 
   void getSearchHistories() async {
@@ -48,13 +53,20 @@ class _SearchCourseModalWidgetState
     });
   }
 
+  void showAddCourseSuccessToast() {
+    fToast.showToast(
+        child: const ToastMessage(message: "강의가 추가되었습니다"),
+        toastDuration: const Duration(seconds: 2),
+        gravity: ToastGravity.CENTER);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8.0),
       child: Container(
         color: Colors.white,
-        height: 350.0,
+        // height: 350.0,
         width: MediaQuery.of(context).size.width,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -249,8 +261,8 @@ class _SearchCourseModalWidgetState
                                 )
                               ],
                             )
-                          : SizedBox(
-                              height: 283,
+                          : Expanded(
+                              // height: 283,
                               child: SingleChildScrollView(
                                 child: Column(
                                     children: List.generate(courses.length + 1,
@@ -276,6 +288,8 @@ class _SearchCourseModalWidgetState
                                                   "일치하는 강의가 ${courses.length}개 있습니다"),
                                             )
                                           : CoursePreviewCard(
+                                              showAddCourseSuccessToast:
+                                                  showAddCourseSuccessToast,
                                               addClass: widget.addClass,
                                               addClassesAtAddTimeTableScreen: widget
                                                   .addClassesAtAddTimeTableScreen,

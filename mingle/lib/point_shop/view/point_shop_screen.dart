@@ -540,7 +540,7 @@ class _PointShopScreenState extends ConsumerState<PointShopScreen> {
               height: 64.0,
               color: GRAYSCALE_GRAY_01,
             ),
-            const DefaultPadding(child: MyPointsCard()),
+            DefaultPadding(child: MyPointsCard(pointsOwned: pointsOwned)),
             const SizedBox(
               height: 106.0,
             )

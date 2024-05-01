@@ -3,7 +3,8 @@ import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
 
 class MyPointsCard extends StatelessWidget {
-  const MyPointsCard({super.key});
+  final int pointsOwned;
+  const MyPointsCard({super.key, required this.pointsOwned});
 
   @override
   Widget build(BuildContext context) {
@@ -15,16 +16,16 @@ class MyPointsCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
       child: Row(
         children: [
-          const Column(
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("보유 포인트"),
-              SizedBox(
+              const Text("보유 포인트"),
+              const SizedBox(
                 height: 8.0,
               ),
               Text(
-                "0p",
-                style: TextStyle(
+                "${pointsOwned}p",
+                style: const TextStyle(
                     fontSize: 16.0,
                     letterSpacing: -0.02,
                     height: 1.5,

@@ -233,35 +233,35 @@ class MyPageScreen extends ConsumerWidget {
                     const SizedBox(
                       height: 21.0,
                     ),
-                    // const Align(
-                    //   alignment: Alignment.centerLeft,
-                    //   child: Text(
-                    //     "강의평가",
-                    //     style: TextStyle(
-                    //         fontSize: 18.0, fontWeight: FontWeight.w500),
-                    //   ),
-                    // ),
-                    // const SizedBox(
-                    //   height: 16.0,
-                    // ),
-                    // Container(
-                    //   height: 120.0,
-                    //   // width: 335.0,
-                    //   decoration: BoxDecoration(
-                    //     color: Colors.white,
-                    //     border: Border.all(
-                    //       color: Colors.white,
-                    //     ),
-                    //     borderRadius: BorderRadius.circular(10.0),
-                    //   ),
-                    //   child: MyPageTile(
-                    //     titles: moduleReviewTitles,
-                    //     screens: moduleReviewScreens,
-                    //   ),
-                    // ),
-                    // const SizedBox(
-                    //   height: 21.0,
-                    // ),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "강의평가",
+                        style: TextStyle(
+                            fontSize: 18.0, fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 16.0,
+                    ),
+                    Container(
+                      height: 120.0,
+                      // width: 335.0,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(
+                          color: Colors.white,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: MyPageTile(
+                        titles: moduleReviewTitles,
+                        screens: moduleReviewScreens,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 21.0,
+                    ),
                     Container(
                       height: 168.0,
                       // width: 335.0,
