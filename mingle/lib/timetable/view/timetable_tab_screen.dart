@@ -785,7 +785,17 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                         height: 8.0,
                       ),
                       GestureDetector(
-                        onTap: () => secondRegisterCodeModal(),
+                        onTap: () {
+                          if (friendCode.isEmpty) {
+                            fToast.showToast(
+                              child: const ToastMessage(message: "코드를 입력해주세요."),
+                              gravity: ToastGravity.CENTER,
+                              toastDuration: const Duration(seconds: 2),
+                            );
+                            return;
+                          }
+                          secondRegisterCodeModal();
+                        },
                         child: Container(
                           height: 48.0,
                           decoration: BoxDecoration(
@@ -892,6 +902,20 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                       ),
                       GestureDetector(
                         onTap: () {
+                          if (friendDisplayName.isEmpty) {
+                            fToast.showToast(
+                              child: const ToastMessage(message: "이름을 입력해주세요."),
+                              gravity: ToastGravity.CENTER,
+                              toastDuration: const Duration(seconds: 2),
+                            );
+                            return;
+                          }
+                          fToast.showToast(
+                            child: const ToastMessage(
+                                message: "친구를 추가하여 30p가 적립되었어요."),
+                            gravity: ToastGravity.CENTER,
+                            toastDuration: const Duration(seconds: 2),
+                          );
                           Navigator.of(context).pop();
                           Navigator.of(context).pop();
                           firstShareCodeModal();
