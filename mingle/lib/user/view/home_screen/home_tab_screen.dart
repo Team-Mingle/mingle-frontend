@@ -11,6 +11,8 @@ import 'package:mingle/common/model/cursor_pagination_model.dart';
 import 'package:mingle/module/view/first_onboarding_screen.dart';
 import 'package:mingle/second_hand_market/provider/second_hand_market_post_provider.dart';
 import 'package:mingle/secure_storage/secure_storage.dart';
+import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
+import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
 import 'package:mingle/user/model/banner_model.dart';
 import 'package:mingle/user/provider/banner_provider.dart';
 import 'package:mingle/post/provider/post_provider.dart';
@@ -59,6 +61,7 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
   void initState() {
     showModal();
     initializeOnboarding();
+    fetchTimetable();
     setState(() {
       totalRecent = ref.read(totalRecentPostProvider);
       univRecent = ref.read(univRecentPostProvider);
@@ -67,6 +70,11 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
     widget.controller.scrollUp = scrollUp;
     _bannerProvider = ref.read(bannerProvider.future);
     super.initState();
+  }
+
+  void fetchTimetable() async {
+    await ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetableId();
+    await ref.read(pinnedTimetableProvider.notifier).fetchPinnedTimetable();
   }
 
   void initializeOnboarding() async {

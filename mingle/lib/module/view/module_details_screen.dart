@@ -21,6 +21,7 @@ import 'package:mingle/module/view/add_module_review_screen.dart';
 import 'package:mingle/point_shop/model/coupon_model.dart';
 import 'package:mingle/point_shop/provider/my_coupon_provider.dart';
 import 'package:mingle/point_shop/view/point_shop_screen.dart';
+import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
@@ -84,6 +85,7 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
       await ref.watch(timetableRepositoryProvider).addCourse(
           timetableId: pinnedTimetableId!,
           addClassDto: AddClassDto(courseId: widget.courseId));
+      await ref.read(pinnedTimetableProvider.notifier).fetchPinnedTimetable();
     } on DioException catch (e) {
       print(e);
       fToast.showToast(

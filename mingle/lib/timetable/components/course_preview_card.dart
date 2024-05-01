@@ -15,18 +15,19 @@ import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/timetable/model/add_course_response_model.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
-import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
+import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 
 class CoursePreviewCard extends ConsumerStatefulWidget {
   final CourseDetailModel course;
   final Function addClass;
   final Function addClassesAtAddTimeTableScreen;
-  const CoursePreviewCard(
-      {super.key,
-      required this.course,
-      required this.addClass,
-      required this.addClassesAtAddTimeTableScreen});
+  const CoursePreviewCard({
+    super.key,
+    required this.course,
+    required this.addClass,
+    required this.addClassesAtAddTimeTableScreen,
+  });
 
   @override
   ConsumerState<CoursePreviewCard> createState() => _CoursePreviewCardState();
@@ -53,7 +54,7 @@ class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
                     courseId: widget.course.id,
                     overrideValidation: overrideValidation),
               );
-      CourseModel courseToBeAdded =
+      CourseDetailModel courseToBeAdded =
           widget.course.copyWith(rgb: addCourseResponseModel.rgb);
       widget.addClass(courseToBeAdded, overrideValidation);
       widget.addClassesAtAddTimeTableScreen(

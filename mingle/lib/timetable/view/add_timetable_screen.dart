@@ -8,6 +8,7 @@ import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/timetable/components/search_course_modal.dart';
 import 'package:mingle/timetable/model/class_model.dart';
 import 'package:mingle/timetable/model/timetable_model.dart';
+import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
@@ -107,6 +108,11 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(pinnedTimetableProvider, (prev, next) {
+      if (prev != next) {
+        getClasses();
+      }
+    });
     // print(t);
     return Scaffold(
       backgroundColor: Colors.white,

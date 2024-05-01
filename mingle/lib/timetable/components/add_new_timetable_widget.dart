@@ -8,7 +8,7 @@ import 'package:mingle/common/component/character_count_textfield.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
-import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
+import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 
 class AddNewTimetableWidget extends ConsumerStatefulWidget {

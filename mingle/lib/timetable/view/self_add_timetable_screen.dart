@@ -14,7 +14,7 @@ import 'package:mingle/module/model/course_detail_model.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/timetable/components/add_course_time_dropdowns.dart';
 import 'package:mingle/timetable/model/class_model.dart';
-import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
+import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 
 class AddDirectTimeTableScreen extends ConsumerStatefulWidget {

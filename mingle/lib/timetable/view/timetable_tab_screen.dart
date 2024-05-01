@@ -28,6 +28,7 @@ import 'package:mingle/timetable/model/friend_model.dart';
 import 'package:mingle/timetable/model/timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_model.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
+import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
 import 'package:mingle/timetable/repository/friend_repository.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
@@ -90,8 +91,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
 
   void getClasses() async {
     // await ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetable();
-
-    if (ref.read(pinnedTimetableIdProvider) == null) {
+    TimetableModel? currentTimetable = ref.read(pinnedTimetableProvider);
+    if (currentTimetable == null) {
       setState(() {
         timetable = null;
         flag = 0;
@@ -101,10 +102,9 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     setState(() {
       flag = 1;
     });
-
-    TimetableModel currentTimetable = await ref
-        .read(timetableRepositoryProvider)
-        .getTimetable(timetableId: ref.read(pinnedTimetableIdProvider)!);
+    // await ref
+    //     .read(timetableRepositoryProvider)
+    //     .getTimetable(timetableId: ref.read(pinnedTimetableIdProvider)!);
     List<CourseDetailModel> courses = currentTimetable.coursePreviewDtoList;
     List<Widget> coursesToBeAdded = [];
     for (CourseDetailModel course in courses) {
@@ -140,7 +140,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
       await ref
           .watch(timetableRepositoryProvider)
           .deleteTimetable(timetableId: timetableId);
-      ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetable();
+      ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetableId();
     } on DioException catch (e) {
       print(e.response?.data['message']);
       fToast.showToast(
@@ -561,7 +561,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                 GestureDetector(
                   onTap: () {
                     Navigator.of(context).pop();
-                    deleteClass(currentCourse);
+                    showDeleteCourseDialog(currentCourse);
                   },
                   child: const Padding(
                     padding: EdgeInsets.symmetric(vertical: 14.0),
@@ -601,12 +601,32 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     });
   }
 
-  void deleteClass(CourseModel courseModel) async {
+  void deleteClass(CourseDetailModel courseModel) async {
     try {
+      List<Widget> newAddedCourses = [];
+      TimetableModel newTimetable = timetable!;
+      for (int i = 0; i < timetable!.coursePreviewDtoList.length; i++) {
+        CourseDetailModel detailModel = timetable!.coursePreviewDtoList[i];
+        if (detailModel.id != courseModel.id) {
+          newAddedCourses.addAll(detailModel.generateClasses(() {
+            if (detailModel.courseType == "PERSONAL") {
+              showSelfAddedCourseDetailModal(detailModel);
+            } else {
+              showCourseDetailModal(detailModel);
+            }
+          }));
+        }
+      }
+      print(newAddedCourses);
+      print(addedCourses);
+      setState(() {
+        addedCourses = newAddedCourses;
+        timetable = newTimetable;
+      });
       await ref.read(timetableRepositoryProvider).deleteCourse(
           timetableId: ref.watch(pinnedTimetableIdProvider)!,
           courseId: courseModel.id);
-      getClasses();
+      // getClasses();
     } on DioException catch (e) {
       print(e);
     }
@@ -1221,6 +1241,13 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
       }
       /* do something, for example, call the method doSomething */
     });
+
+    ref.listen(pinnedTimetableProvider, (prev, next) {
+      if (prev != next) {
+        getClasses();
+      }
+    });
+
     return Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: BACKGROUND_COLOR_GRAY,
@@ -1625,7 +1652,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                     ]))));
   }
 
-  void showDeleteCourseDialog(CourseModel currentCourse) {
+  void showDeleteCourseDialog(CourseDetailModel currentCourse) {
     showDialog(
       context: context,
       builder: (_) => Dialog(

@@ -24,6 +24,36 @@ class CourseDetailModel extends CourseModel {
       required super.rgb,
       required super.courseType});
 
+  @override
+  CourseDetailModel copyWith(
+      {int? id,
+      String? name,
+      String? courseCode,
+      String? semester,
+      String? professor,
+      String? subclass,
+      List<CourseTimeModel>? courseTimeDtoList,
+      String? rgb,
+      String? courseType,
+      String? venue,
+      String? memo,
+      String? prerequisite}) {
+    return CourseDetailModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      courseCode: courseCode ?? this.courseCode,
+      semester: semester ?? this.semester,
+      professor: professor ?? this.professor,
+      subclass: subclass ?? this.subclass,
+      courseTimeDtoList: courseTimeDtoList ?? this.courseTimeDtoList,
+      rgb: rgb ?? this.rgb,
+      courseType: courseType ?? this.courseType,
+      venue: venue ?? this.venue,
+      memo: memo ?? this.memo,
+      prerequisite: prerequisite ?? this.prerequisite,
+    );
+  }
+
   factory CourseDetailModel.fromJson(Map<String, dynamic> json) =>
       _$CourseDetailModelFromJson(json);
 }
