@@ -56,6 +56,7 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
   }
 
   void getCoupon() async {
+    await ref.read(myCouponProvider.notifier).getCoupon();
     setState(() {
       myCoupon = ref.read(myCouponProvider);
     });
@@ -100,81 +101,84 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        surfaceTintColor: Colors.transparent,
-        shape: const Border(
-            bottom: BorderSide(color: GRAYSCALE_GRAY_01, width: 1)),
         backgroundColor: Colors.white,
-        titleSpacing: 0.0,
-        elevation: 0,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 0.0),
-          child: IconButton(
-            padding: EdgeInsets.zero,
-            icon: const ImageIcon(
-              AssetImage("assets/img/module_review_screen/back_tick_icon.png"),
+        appBar: AppBar(
+          surfaceTintColor: Colors.transparent,
+          shape: const Border(
+              bottom: BorderSide(color: GRAYSCALE_GRAY_01, width: 1)),
+          backgroundColor: Colors.white,
+          titleSpacing: 0.0,
+          elevation: 0,
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 0.0),
+            child: IconButton(
+              padding: EdgeInsets.zero,
+              icon: const ImageIcon(
+                AssetImage(
+                    "assets/img/module_review_screen/back_tick_icon.png"),
+                color: GRAYSCALE_BLACK,
+              ),
               color: GRAYSCALE_BLACK,
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
-            color: GRAYSCALE_BLACK,
-            onPressed: () {
-              Navigator.pop(context);
-            },
+          ),
+          title: const Text(
+            "강의개요",
+            style: TextStyle(
+                fontSize: 16.0,
+                letterSpacing: -0.02,
+                height: 1.5,
+                color: Colors.black),
           ),
         ),
-        title: const Text(
-          "강의개요",
-          style: TextStyle(
-              fontSize: 16.0,
-              letterSpacing: -0.02,
-              height: 1.5,
-              color: Colors.black),
-        ),
-      ),
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        child: Stack(
-          children: [
-            renderContent(widget.courseDetail),
+        body: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Stack(
+            children: [
+              renderContent(widget.courseDetail),
 
-            // FutureBuilder(
-            //   future: ref
-            //       .watch(courseRepositoryProvider)
-            //       .getCourseDetails(courseId: widget.courseId),
-            //   // postDetailFuture(postId),
-            //   builder: (context, AsyncSnapshot<CourseDetailModel> snapshot) {
-            //     if (!snapshot.hasData) {
-            //       print(snapshot);
-            //       return const Center(
-            //         child: CircularProgressIndicator(
-            //           color: PRIMARY_COLOR_ORANGE_01,
-            //         ),
-            //       );
-            //     }
-            //     if (snapshot.hasError) {
-            //       return const Center(
-            //         child: Text("다시 시도 ㄱㄱ"),
-            //       );
-            //     }
-            //     CourseDetailModel course = snapshot.data!;
+              // FutureBuilder(
+              //   future: ref
+              //       .watch(courseRepositoryProvider)
+              //       .getCourseDetails(courseId: widget.courseId),
+              //   // postDetailFuture(postId),
+              //   builder: (context, AsyncSnapshot<CourseDetailModel> snapshot) {
+              //     if (!snapshot.hasData) {
+              //       print(snapshot);
+              //       return const Center(
+              //         child: CircularProgressIndicator(
+              //           color: PRIMARY_COLOR_ORANGE_01,
+              //         ),
+              //       );
+              //     }
+              //     if (snapshot.hasError) {
+              //       return const Center(
+              //         child: Text("다시 시도 ㄱㄱ"),
+              //       );
+              //     }
+              //     CourseDetailModel course = snapshot.data!;
 
-            //     return Stack(
-            //       children: [
-            //         renderContent(course),
-            //       ],
-            //     );
-            //   },
-            // ),
-          ],
+              //     return Stack(
+              //       children: [
+              //         renderContent(course),
+              //       ],
+              //     );
+              //   },
+              // ),
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: ExpandableFab(
-        distance: 112,
-        navigateToAddModuleReview: navigateToAddModuleReview,
-        addModuleToTimetable: addModuleToTimetable,
-      ),
-      // renderContent(),
-    );
+        floatingActionButton: widget.courseDetail.courseType == "CRAWL"
+            ? ExpandableFab(
+                distance: 112,
+                navigateToAddModuleReview: navigateToAddModuleReview,
+                addModuleToTimetable: addModuleToTimetable,
+              )
+            : null
+        // renderContent(),
+        );
   }
 
   Widget renderContent(CourseDetailModel courseDetailModel) {

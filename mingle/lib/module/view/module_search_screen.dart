@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -249,8 +250,10 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
         });
       },
       child: Container(
+        width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
         child: Row(
+          mainAxisSize: MainAxisSize.max,
           children: [
             Text(
               history,

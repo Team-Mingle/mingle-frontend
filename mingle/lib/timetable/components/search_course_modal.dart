@@ -329,6 +329,7 @@ class _SearchCourseModalWidgetState
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
         child: Row(
+          mainAxisSize: MainAxisSize.max,
           children: [
             Text(
               history,

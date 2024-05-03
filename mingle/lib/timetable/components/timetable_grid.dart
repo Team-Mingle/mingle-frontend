@@ -44,8 +44,8 @@ class _TimeTableGridState extends State<TimeTableGrid> {
         13,
         (row) => Container(
               // color: Colors.white,
-              height: 61,
-              width: 48,
+              height: TIMETABLE_GRID_HEIGHT,
+              width: TIMETABLE_GRID_WIDTH,
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border(

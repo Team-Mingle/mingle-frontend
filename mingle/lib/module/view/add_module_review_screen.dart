@@ -175,6 +175,7 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
+                width: double.infinity,
                 color: GRAYSCALE_GRAY_01,
                 padding: const EdgeInsets.symmetric(
                     vertical: 16.0, horizontal: 20.0),

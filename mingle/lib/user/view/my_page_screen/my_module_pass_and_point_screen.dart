@@ -42,6 +42,11 @@ class _MyModulePassAndPointScreenState
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(myCouponProvider, (prev, next) {
+      setState(() {
+        myCoupon = ref.read(myCouponProvider);
+      });
+    });
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

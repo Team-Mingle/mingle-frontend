@@ -96,85 +96,90 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
       }
     });
     // print(t);
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            surfaceTintColor: Colors.transparent,
-            automaticallyImplyLeading: true,
-            leading: Align(
-              alignment: Alignment.center,
-              child: GestureDetector(
-                child: SvgPicture.asset(
-                  "assets/img/post_screen/cross_icon.svg",
-                  // height: 24.0,
-                  // width: 24.0,
+    return GestureDetector(
+      onTap: FocusScope.of(context).unfocus,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              surfaceTintColor: Colors.transparent,
+              automaticallyImplyLeading: true,
+              leading: Align(
+                alignment: Alignment.center,
+                child: GestureDetector(
+                  child: SvgPicture.asset(
+                    "assets/img/post_screen/cross_icon.svg",
+                    // height: 24.0,
+                    // width: 24.0,
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                 ),
-                onTap: () {
-                  Navigator.pop(context);
-                },
               ),
+              titleSpacing: 0.0,
+              title: const Text(
+                "강의 추가하기",
+                style: TextStyle(
+                    color: GRAYSCALE_GRAY_03,
+                    fontSize: 14.0,
+                    letterSpacing: -0.01,
+                    height: 1.4,
+                    fontWeight: FontWeight.w400),
+              ),
+              centerTitle: true,
+              actions: [
+                InkWell(
+                  child: const Padding(
+                    padding: EdgeInsets.only(right: 20.0),
+                    child: Text(
+                      "직접 추가",
+                      style: TextStyle(
+                          color: PRIMARY_COLOR_ORANGE_01,
+                          fontSize: 14.0,
+                          letterSpacing: -0.01,
+                          height: 1.4,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => AddDirectTimeTableScreen(
+                            addClass: widget.addClass,
+                            addClassesAtAddTimeTableScreen:
+                                addClassesAtAddTimeTableScreen,
+                          ))),
+                ),
+              ],
+              backgroundColor: Colors.white,
+              elevation: 0,
             ),
-            titleSpacing: 0.0,
-            title: const Text(
-              "강의 추가하기",
-              style: TextStyle(
-                  color: GRAYSCALE_GRAY_03,
-                  fontSize: 14.0,
-                  letterSpacing: -0.01,
-                  height: 1.4,
-                  fontWeight: FontWeight.w400),
-            ),
-            centerTitle: true,
-            actions: [
-              InkWell(
-                child: const Padding(
-                  padding: EdgeInsets.only(right: 20.0),
-                  child: Text(
-                    "직접 추가",
-                    style: TextStyle(
-                        color: PRIMARY_COLOR_ORANGE_01,
-                        fontSize: 14.0,
-                        letterSpacing: -0.01,
-                        height: 1.4,
-                        fontWeight: FontWeight.w400),
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // if (!FocusScope.of(context).hasFocus)
+                const SizedBox(
+                  height: 9.0,
+                ),
+                // if (!FocusScope.of(context).hasFocus)
+                SizedBox(
+                  // height: 300.0,
+                  child: TimeTableGrid(
+                    gridTotalHeight: 300.0,
+                    addedClasses: widget.addedClasses,
                   ),
                 ),
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => AddDirectTimeTableScreen(
-                          addClass: widget.addClass,
-                          addClassesAtAddTimeTableScreen:
-                              addClassesAtAddTimeTableScreen,
-                        ))),
-              ),
-            ],
-            backgroundColor: Colors.white,
-            elevation: 0,
-          ),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(
-                height: 9.0,
-              ),
-              SizedBox(
-                // height: 300.0,
-                child: TimeTableGrid(
-                  gridTotalHeight: 300.0,
-                  addedClasses: widget.addedClasses,
-                ),
-              ),
-              Expanded(
-                child: SearchCourseModalWidget(
-                  addClass: widget.addClass,
-                  addClassesAtAddTimeTableScreen:
-                      addClassesAtAddTimeTableScreen,
-                ),
-              )
-            ],
+                Expanded(
+                  child: SearchCourseModalWidget(
+                    addClass: widget.addClass,
+                    addClassesAtAddTimeTableScreen:
+                        addClassesAtAddTimeTableScreen,
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

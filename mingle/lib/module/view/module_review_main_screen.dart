@@ -48,6 +48,11 @@ class _ModuleReviewMainScreenState
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(myCouponProvider, (prev, next) {
+      setState(() {
+        myCoupon = ref.read(myCouponProvider);
+      });
+    });
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -227,7 +232,7 @@ class _ModuleReviewMainScreenState
             ),
           ),
           const SizedBox(
-            height: 11.0,
+            height: 60.0,
           )
         ]),
       ),
