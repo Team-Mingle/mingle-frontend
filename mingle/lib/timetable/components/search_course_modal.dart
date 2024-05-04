@@ -312,6 +312,7 @@ class _SearchCourseModalWidgetState
 
   Widget recentSearchCard(String history, int index) {
     return GestureDetector(
+      behavior: HitTestBehavior.translucent,
       onTap: () {
         setState(() {
           _searchController.text = history;

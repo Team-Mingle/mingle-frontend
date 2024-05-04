@@ -21,6 +21,10 @@ class PinnedTimetableIdStateNotifier extends StateNotifier<int?> {
       state = null;
     }
   }
+
+  void updatePinnedTimetableId(int timetableId) {
+    state = timetableId;
+  }
 }
 
 final pinnedTimetableIdProvider =

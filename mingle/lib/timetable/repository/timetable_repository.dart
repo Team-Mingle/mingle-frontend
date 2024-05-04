@@ -7,6 +7,7 @@ import 'package:mingle/dio/dio.dart';
 import 'package:mingle/module/model/course_detail_model.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/timetable/model/add_course_response_model.dart';
+import 'package:mingle/timetable/model/add_timetable_response_model.dart';
 import 'package:mingle/timetable/model/default_timetable_id_model.dart';
 import 'package:mingle/timetable/model/friend_timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_list_model.dart';
@@ -34,7 +35,8 @@ abstract class TimetableRepository {
 
   @POST("")
   @Headers({'accessToken': 'true'})
-  Future<void> addTimetable({@Body() required AddTimetableDto addTimetableDto});
+  Future<AddTimetableResponseModel> addTimetable(
+      {@Body() required AddTimetableDto addTimetableDto});
 
   @POST('/{timetableId}/course')
   @Headers({'accessToken': 'true'})

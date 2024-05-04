@@ -235,6 +235,7 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
 
   Widget recentSearchCard(String history, int index) {
     return GestureDetector(
+      behavior: HitTestBehavior.translucent,
       onTap: () {
         setState(() {
           _searchController.text = history;

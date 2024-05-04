@@ -9,6 +9,7 @@ import 'package:mingle/common/const/data.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/timetable/components/add_new_timetable_widget.dart';
 import 'package:mingle/timetable/components/timetable_list_container.dart';
+import 'package:mingle/timetable/model/add_timetable_response_model.dart';
 import 'package:mingle/timetable/model/timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_preview_model.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
@@ -80,16 +81,21 @@ class _MyTimeTableListScreenState extends ConsumerState<TimeTableListScreen> {
     }
   }
 
-  void addTimetable(String selectedSemester) async {
+  Future<void> addTimetable(String selectedSemester) async {
     try {
       final year = int.parse(selectedSemester.substring(0, 4));
       final semester = int.parse(selectedSemester.substring(6, 7));
 
-      await ref.watch(timetableRepositoryProvider).addTimetable(
-          addTimetableDto: AddTimetableDto(year: year, semester: semester));
-      await ref
+      AddTimetableResponseModel addedTimetable = await ref
+          .watch(timetableRepositoryProvider)
+          .addTimetable(
+              addTimetableDto: AddTimetableDto(year: year, semester: semester));
+      ref
           .read(pinnedTimetableIdProvider.notifier)
-          .fetchPinnedTimetableId();
+          .updatePinnedTimetableId(addedTimetable.id);
+      // await ref
+      //     .read(pinnedTimetableIdProvider.notifier)
+      //     .fetchPinnedTimetableId();
       getTimetables();
     } on DioException catch (e) {
       fToast.showToast(

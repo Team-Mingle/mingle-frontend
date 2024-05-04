@@ -163,7 +163,14 @@ class _TimetableListWidgetState extends ConsumerState<TimetableListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        ref
+            .read(pinnedTimetableIdProvider.notifier)
+            .updatePinnedTimetableId(widget.timetablePreviewModel.timetableId);
+        Navigator.of(context).pop();
+      },
       child: Column(
         children: [
           Padding(

@@ -184,13 +184,15 @@ class _AddNewTimetableWidgetState extends ConsumerState<AddNewTimetableWidget> {
                     width: 8.0,
                   ),
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       fToast.showToast(
                           child: const ToastMessage(message: "시간표가 추가되었습니다."),
                           toastDuration: const Duration(seconds: 2),
                           gravity: ToastGravity.CENTER);
+                      await widget.addTimetable(selectedSemester!);
                       Navigator.of(context).pop();
-                      widget.addTimetable(selectedSemester!);
+                      Navigator.of(context).pop();
+
                       // changeTimetabelName();
                     },
                     child: Container(
