@@ -1,4 +1,6 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
 
@@ -213,16 +215,21 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                 border: Border.all(color: GRAYSCALE_GRAY_03),
                 borderRadius: BorderRadius.circular(8),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              // padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Row(
                 children: [
                   Expanded(
-                    child: DropdownButton<String>(
+                    child: DropdownButton2<String>(
                       isExpanded: true,
                       underline: const SizedBox.shrink(),
                       hint: const Text('요일 선택'),
-                      borderRadius: BorderRadius.circular(8.0),
-                      dropdownColor: Colors.white,
+                      dropdownStyleData: DropdownStyleData(
+                        maxHeight: 250.0,
+                        width: 160.0,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8.0)),
+                      ),
                       value: selectedItem1,
                       items: items1.map((String item) {
                         return DropdownMenuItem<String>(
@@ -246,13 +253,20 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                           selectedItem1 = value;
                         });
                       },
-                      icon: Align(
-                        alignment: Alignment.center,
-                        child: SvgPicture.asset(
-                          'assets/img/common/ic_dropdown.svg',
-                          width: 24,
-                          height: 24,
+                      iconStyleData: IconStyleData(
+                        icon: Align(
+                          alignment: Alignment.center,
+                          child: SvgPicture.asset(
+                            'assets/img/common/ic_dropdown.svg',
+                            width: 24,
+                            height: 24,
+                          ),
                         ),
+                        openMenuIcon: null,
+                        iconSize: 14,
+                      ),
+                      buttonStyleData: const ButtonStyleData(
+                        padding: EdgeInsets.symmetric(horizontal: 12),
                       ),
                     ),
                   ),
@@ -287,16 +301,23 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                 border: Border.all(color: GRAYSCALE_GRAY_03),
                 borderRadius: BorderRadius.circular(8),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              // padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Row(
                 children: [
                   Expanded(
-                    child: DropdownButton<String>(
+                    child: DropdownButton2<String>(
                       isExpanded: true,
                       underline: const SizedBox.shrink(),
                       hint: const Text('시작 시간'),
-                      borderRadius: BorderRadius.circular(8.0),
-                      dropdownColor: Colors.white,
+                      dropdownStyleData: DropdownStyleData(
+                        maxHeight: 250.0,
+                        width: 160.0,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8.0)),
+                      ),
+                      // borderRadius: BorderRadius.circular(8.0),
+                      // dropdownColor: Colors.white,
                       value: selectedItem2,
                       items: items2.map((String item) {
                         return DropdownMenuItem<String>(
@@ -320,13 +341,21 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                           selectedItem2 = value;
                         });
                       },
-                      icon: Align(
-                        alignment: Alignment.center,
-                        child: SvgPicture.asset(
-                          'assets/img/common/ic_dropdown.svg',
-                          width: 24,
-                          height: 24,
+
+                      iconStyleData: IconStyleData(
+                        icon: Align(
+                          alignment: Alignment.center,
+                          child: SvgPicture.asset(
+                            'assets/img/common/ic_dropdown.svg',
+                            width: 24,
+                            height: 24,
+                          ),
                         ),
+                        openMenuIcon: null,
+                        iconSize: 14,
+                      ),
+                      buttonStyleData: const ButtonStyleData(
+                        padding: EdgeInsets.symmetric(horizontal: 12),
                       ),
                     ),
                   ),
@@ -341,16 +370,21 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                 border: Border.all(color: GRAYSCALE_GRAY_03),
                 borderRadius: BorderRadius.circular(8),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              // padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Row(
                 children: [
                   Expanded(
-                    child: DropdownButton<String>(
+                    child: DropdownButton2<String>(
                       isExpanded: true,
                       underline: const SizedBox.shrink(),
                       hint: const Text('끝나는 시간'),
-                      borderRadius: BorderRadius.circular(8.0),
-                      dropdownColor: Colors.white,
+                      dropdownStyleData: DropdownStyleData(
+                        maxHeight: 250.0,
+                        width: 160.0,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8.0)),
+                      ),
                       value: selectedItem3,
                       items: items3.map((String item) {
                         return DropdownMenuItem<String>(
@@ -374,13 +408,20 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                           selectedItem3 = value;
                         });
                       },
-                      icon: Align(
-                        alignment: Alignment.center,
-                        child: SvgPicture.asset(
-                          'assets/img/common/ic_dropdown.svg',
-                          width: 24,
-                          height: 24,
+                      iconStyleData: IconStyleData(
+                        icon: Align(
+                          alignment: Alignment.center,
+                          child: SvgPicture.asset(
+                            'assets/img/common/ic_dropdown.svg',
+                            width: 24,
+                            height: 24,
+                          ),
                         ),
+                        openMenuIcon: null,
+                        iconSize: 14,
+                      ),
+                      buttonStyleData: const ButtonStyleData(
+                        padding: EdgeInsets.symmetric(horizontal: 12),
                       ),
                     ),
                   ),

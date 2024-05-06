@@ -155,28 +155,30 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
               backgroundColor: Colors.white,
               elevation: 0,
             ),
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            body: Stack(
               children: [
-                // if (!FocusScope.of(context).hasFocus)
-                const SizedBox(
-                  height: 9.0,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // if (!FocusScope.of(context).hasFocus)
+                    const SizedBox(
+                      height: 9.0,
+                    ),
+                    // if (!FocusScope.of(context).hasFocus)
+                    SizedBox(
+                      // height: 300.0,
+                      child: TimeTableGrid(
+                        gridTotalHeight: 300.0,
+                        addedClasses: widget.addedClasses,
+                      ),
+                    ),
+                  ],
                 ),
-                // if (!FocusScope.of(context).hasFocus)
-                SizedBox(
-                  // height: 300.0,
-                  child: TimeTableGrid(
-                    gridTotalHeight: 300.0,
-                    addedClasses: widget.addedClasses,
-                  ),
-                ),
-                Expanded(
-                  child: SearchCourseModalWidget(
-                    addClass: widget.addClass,
-                    addClassesAtAddTimeTableScreen:
-                        addClassesAtAddTimeTableScreen,
-                  ),
+                SearchCourseModalWidget(
+                  addClass: widget.addClass,
+                  addClassesAtAddTimeTableScreen:
+                      addClassesAtAddTimeTableScreen,
                 )
               ],
             ),

@@ -16,6 +16,7 @@ import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/timetable/model/add_course_response_model.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
+import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 
 class CoursePreviewCard extends ConsumerStatefulWidget {
@@ -61,11 +62,12 @@ class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
       widget.addClass(courseToBeAdded, overrideValidation);
       widget.addClassesAtAddTimeTableScreen(
           courseToBeAdded, overrideValidation);
+      ref.read(pinnedTimetableProvider.notifier).fetchPinnedTimetable();
       widget.showAddCourseSuccessToast();
       Navigator.of(context).pop();
     } on DioException catch (e) {
       print(e);
-      print(e.response?.data['code']);
+      // print(e.response?.data['code']);
       if (e.response?.statusCode == 409 &&
           e.response?.data['code'] == TIMETABLE_CONFLICT) {
         showTimetableConflictDialog();
@@ -128,10 +130,9 @@ class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
                         const SizedBox(
                           width: 4.0,
                         ),
-                        const Text(
-                          //TODO: change to actual timing
-                          "화2/수2",
-                          style: TextStyle(
+                        Text(
+                          widget.course.getStartTimes(),
+                          style: const TextStyle(
                               fontSize: 12.0,
                               letterSpacing: -0.005,
                               height: 1.3,
