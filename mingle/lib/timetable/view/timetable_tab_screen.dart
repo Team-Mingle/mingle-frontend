@@ -40,11 +40,12 @@ import 'package:mingle/timetable/view/timetable_list_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:image/image.dart' as IMG;
 
 class TimeTableHomeScreen extends ConsumerStatefulWidget {
+  final double bottomPaddingHeight;
   const TimeTableHomeScreen({
     Key? key,
+    required this.bottomPaddingHeight,
   }) : super(key: key);
 
   @override
@@ -67,7 +68,9 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   final ScrollController scrollController = ScrollController();
   ScreenshotController screenshotController = ScreenshotController();
   late FToast fToast;
-
+  final TOP_PADDING = 20.0;
+  final BOTTOM_PADDING = 24.0;
+  final SIDE_PADDINGS = 40.0;
   @override
   void initState() {
     checkIsOnboarding();
@@ -229,9 +232,9 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
             width: double.infinity,
             decoration: const BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.all(
-                Radius.circular(12.0),
-              ),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(12.0),
+                  topRight: Radius.circular(12.0)),
             ),
             padding:
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32.0),
@@ -371,7 +374,9 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(12.0),
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(12.0),
+                  topRight: Radius.circular(12.0)),
               child: Container(
                 // height: 311.0,
                 color: Colors.white,
@@ -486,7 +491,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
       context: context,
       builder: (BuildContext context) {
         return ClipRRect(
-          borderRadius: BorderRadius.circular(12.0),
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(12.0), topRight: Radius.circular(12.0)),
           child: Container(
             height: 311.0,
             color: Colors.white,
@@ -644,9 +650,9 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
           return Container(
             decoration: const BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.all(
-                Radius.circular(20),
-              ),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(12.0),
+                  topRight: Radius.circular(12.0)),
             ),
             height: 192.0,
             padding: const EdgeInsets.symmetric(horizontal: 20.0)
@@ -706,9 +712,9 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                   .copyWith(top: 20.0, bottom: 24.0),
               decoration: const BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20),
-                ),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12.0),
+                    topRight: Radius.circular(12.0)),
               ),
               child: Stack(
                 children: [
@@ -837,9 +843,9 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                   .copyWith(top: 20.0, bottom: 24.0),
               decoration: const BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20),
-                ),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12.0),
+                    topRight: Radius.circular(12.0)),
               ),
               child: Stack(
                 children: [
@@ -992,9 +998,9 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                     .copyWith(top: 20.0, bottom: 24.0),
                 decoration: const BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(12.0),
+                      topRight: Radius.circular(12.0)),
                 ),
                 child: Stack(
                   children: [
@@ -1126,9 +1132,9 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
               .copyWith(top: 20.0, bottom: 24.0),
           decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.all(
-              Radius.circular(20),
-            ),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12.0),
+                topRight: Radius.circular(12.0)),
           ),
           child: Stack(
             children: [
@@ -1277,14 +1283,16 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
       }
     });
 
+    print(widget.bottomPaddingHeight);
+
     return Scaffold(
         resizeToAvoidBottomInset: true,
-        backgroundColor: BACKGROUND_COLOR_GRAY,
+        backgroundColor: Colors.white,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           surfaceTintColor: Colors.transparent,
           toolbarHeight: 56.0,
-          backgroundColor: BACKGROUND_COLOR_GRAY,
+          backgroundColor: Colors.white,
           elevation: 0,
           leading: Ink(
             width: 44.0,
@@ -1405,142 +1413,150 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
               ),
           ],
         ),
-        body: Center(
-            child: Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: CustomScrollView(
-                    controller: scrollController,
-                    physics: const BouncingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics()),
-                    slivers: [
-                      CupertinoSliverRefreshControl(
-                        onRefresh: () async {
-                          await Future.delayed(
-                              const Duration(milliseconds: 1000), () {
-                            print('refreshing');
-                            getFriends();
-                            getClasses();
-                            // ref
-                            //     .watch(univRecentPostProvider.notifier)
-                            //     .paginate(normalRefetch: true);
-                            // ref
-                            //     .watch(totalRecentPostProvider.notifier)
-                            //     .paginate(normalRefetch: true);
-                            // ref
-                            //     .watch(bestPostProvider.notifier)
-                            //     .paginate(normalRefetch: true);
-                          });
-                          // await widget.notifierProvider!.paginate(forceRefetch: true);
-                        },
-                      ),
-                      SliverList(
-                        delegate: SliverChildListDelegate([
-                          SizedBox(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                if (flag == 0) // flag 값이 0인 경우
-                                  const SizedBox(height: 200),
-                                if (flag == 0)
-                                  const Text(
-                                    '아직 시간표를 만들지 않았어요.',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16.0,
-                                      letterSpacing: -0.02,
-                                      height: 1.5,
-                                      fontWeight: FontWeight.w400,
+        body: Builder(builder: (context) {
+          final availableWidth =
+              MediaQuery.of(context).size.width - SIDE_PADDINGS;
+          final availableHeight = MediaQuery.of(context).size.height -
+              widget.bottomPaddingHeight -
+              TIMETABLE_BOTTOM_WIDGETS_HEIGHT -
+              Scaffold.of(context).appBarMaxHeight!;
+          return Center(
+              child: Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: CustomScrollView(
+                      controller: scrollController,
+                      physics: const BouncingScrollPhysics(
+                          parent: AlwaysScrollableScrollPhysics()),
+                      slivers: [
+                        CupertinoSliverRefreshControl(
+                          onRefresh: () async {
+                            await Future.delayed(
+                                const Duration(milliseconds: 1000), () {
+                              print('refreshing');
+                              getFriends();
+                              getClasses();
+                              // ref
+                              //     .watch(univRecentPostProvider.notifier)
+                              //     .paginate(normalRefetch: true);
+                              // ref
+                              //     .watch(totalRecentPostProvider.notifier)
+                              //     .paginate(normalRefetch: true);
+                              // ref
+                              //     .watch(bestPostProvider.notifier)
+                              //     .paginate(normalRefetch: true);
+                            });
+                            // await widget.notifierProvider!.paginate(forceRefetch: true);
+                          },
+                        ),
+                        SliverList(
+                          delegate: SliverChildListDelegate([
+                            SizedBox(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  if (flag == 0) // flag 값이 0인 경우
+                                    const SizedBox(height: 200),
+                                  if (flag == 0)
+                                    const Text(
+                                      '아직 시간표를 만들지 않았어요.',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16.0,
+                                        letterSpacing: -0.02,
+                                        height: 1.5,
+                                        fontWeight: FontWeight.w400,
+                                      ),
                                     ),
-                                  ),
-                                if (flag == 0) const SizedBox(height: 8),
-                                if (flag == 0)
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (_) => TimeTableListScreen(
-                                            deleteTimetable: deleteTimetable,
-                                            setTimetableName: setTimetableName,
-                                            isAddTimetable: true,
+                                  if (flag == 0) const SizedBox(height: 8),
+                                  if (flag == 0)
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (_) => TimeTableListScreen(
+                                              deleteTimetable: deleteTimetable,
+                                              setTimetableName:
+                                                  setTimetableName,
+                                              isAddTimetable: true,
+                                            ),
                                           ),
-                                        ),
-                                      );
-                                    },
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        const Text(
-                                          "새 시간표 추가하기",
-                                          style: TextStyle(
-                                            fontFamily: "Pretendard",
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w500,
-                                            color: PRIMARY_COLOR_ORANGE_01,
-                                          ),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                        SvgPicture.asset(
-                                          'assets/img/home_screen/ic_navigation_right_orange.svg',
-                                          width: 16,
-                                          height: 16,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                if (flag == 0) const SizedBox(height: 200),
-                                if (flag == 1) // flag 값이 1인 경우
-                                  TimeTableGrid(
-                                    addedClasses: addedCourses,
-                                  ),
-                                // TimeTableScreenshotGrid(
-                                //     addedClasses: addedCourses),
-                                const SizedBox(
-                                  height: 24.0,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        _isFriendListExpanded =
-                                            !_isFriendListExpanded;
-                                      });
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16.0, vertical: 12.0),
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                              color: GRAYSCALE_GRAY_02),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0)),
-                                      child: Column(
+                                        );
+                                      },
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
-                                          Row(
-                                            children: [
-                                              const Text(
-                                                "친구 목록",
-                                                style: TextStyle(
-                                                    fontSize: 16.0,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
-                                              const Spacer(),
-                                              SvgPicture.asset(_isFriendListExpanded
-                                                  ? "assets/img/module_review_screen/up_tick_icon.svg"
-                                                  : "assets/img/module_review_screen/down_tick_icon.svg")
-                                            ],
+                                          const Text(
+                                            "새 시간표 추가하기",
+                                            style: TextStyle(
+                                              fontFamily: "Pretendard",
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
+                                              color: PRIMARY_COLOR_ORANGE_01,
+                                            ),
+                                            textAlign: TextAlign.left,
                                           ),
-                                          ExpandedSection(
+                                          SvgPicture.asset(
+                                            'assets/img/home_screen/ic_navigation_right_orange.svg',
+                                            width: 16,
+                                            height: 16,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  if (flag == 0) const SizedBox(height: 200),
+                                  if (flag == 1) // flag 값이 1인 경우
+                                    TimeTableGrid(
+                                      addedClasses: addedCourses,
+                                    ),
+                                  // TimeTableScreenshotGrid(
+                                  //     addedClasses: addedCourses),
+                                  const SizedBox(
+                                    height: 24.0,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16.0),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _isFriendListExpanded =
+                                              !_isFriendListExpanded;
+                                        });
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16.0, vertical: 15.0),
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            border: Border.all(
+                                                color: GRAYSCALE_GRAY_02),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0)),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                const Text(
+                                                  "친구 목록",
+                                                  style: TextStyle(
+                                                      fontSize: 16.0,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                                const Spacer(),
+                                                SvgPicture.asset(_isFriendListExpanded
+                                                    ? "assets/img/module_review_screen/up_tick_icon.svg"
+                                                    : "assets/img/module_review_screen/down_tick_icon.svg")
+                                              ],
+                                            ),
+                                            ExpandedSection(
                                               expand: _isFriendListExpanded,
                                               child: SizedBox(
                                                 width: double.infinity,
@@ -1621,64 +1637,77 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                                                     )
                                                   ],
                                                 ),
-                                              )),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 16.0,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0),
-                                  child: GestureDetector(
-                                    onTap: () => Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (_) =>
-                                              const ModuleReviewMainScreen()),
-                                    ),
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16.0, vertical: 12.0),
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                              color: GRAYSCALE_GRAY_02),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0)),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              const Text(
-                                                "강의평가 홈 바로가기",
-                                                style: TextStyle(
-                                                    fontSize: 16.0,
-                                                    fontWeight:
-                                                        FontWeight.w500),
                                               ),
-                                              const Spacer(),
-                                              SvgPicture.asset(
-                                                'assets/img/timetable_screen/link.svg',
-                                                width: 24,
-                                                height: 24,
-                                              )
-                                            ],
-                                          ),
-                                        ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(height: 84),
-                              ],
+                                  const SizedBox(
+                                    height: 16.0,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16.0),
+                                    child: GestureDetector(
+                                      onTap: () => Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                const ModuleReviewMainScreen()),
+                                      ),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16.0, vertical: 15.0),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          boxShadow: const [
+                                            BoxShadow(
+                                                color: Color.fromRGBO(
+                                                    0, 0, 0, 0.04),
+                                                offset: Offset(0, 2),
+                                                blurRadius: 4),
+                                            BoxShadow(
+                                                color: Color.fromRGBO(
+                                                    0, 0, 0, 0.06),
+                                                offset: Offset(1, 1),
+                                                blurRadius: 10),
+                                          ],
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                const Text(
+                                                  "강의평가 홈 바로가기",
+                                                  style: TextStyle(
+                                                      fontSize: 16.0,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                                const Spacer(),
+                                                SvgPicture.asset(
+                                                  'assets/img/timetable_screen/link.svg',
+                                                  width: 24,
+                                                  height: 24,
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 84),
+                                ],
+                              ),
                             ),
-                          ),
-                        ]),
-                      ),
-                    ]))));
+                          ]),
+                        ),
+                      ])));
+        }));
   }
 
   void showDeleteCourseDialog(CourseDetailModel currentCourse) {

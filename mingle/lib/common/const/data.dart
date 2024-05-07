@@ -15,6 +15,8 @@ const TIMETABLE_GRID_HEIGHT = 434 / 13;
 const TIMETABLE_GRID_WIDTH = 48.0;
 const TIMETABLE_TOTAL_HEIGHT = 436.0;
 
+const TIMETABLE_BOTTOM_WIDGETS_HEIGHT = 128.0;
+
 const HISTORY_KEY = "_histories";
 
 // const baseUrl = "api.prod.mingle.community";

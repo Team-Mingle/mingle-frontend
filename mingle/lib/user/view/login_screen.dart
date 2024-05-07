@@ -162,6 +162,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
     }
 
+    print(MediaQuery.of(context).viewInsets.bottom);
+
     return PopScope(
       canPop: false,
       child: Form(
@@ -194,10 +196,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: SingleChildScrollView(
+                      physics: const NeverScrollableScrollPhysics(),
                       child: SizedBox(
                         height: MediaQuery.of(context).size.height -
-                            Scaffold.of(context).appBarMaxHeight! -
-                            MediaQuery.of(context).viewInsets.bottom,
+                            Scaffold.of(context).appBarMaxHeight!,
                         child: Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,

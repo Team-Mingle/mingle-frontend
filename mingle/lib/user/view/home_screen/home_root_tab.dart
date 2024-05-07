@@ -95,7 +95,7 @@ class _HomeRootTabState extends State<HomeRootTab> {
     }
   }
 
-  Widget _getSelectedScreen(int selectedIndex) {
+  Widget _getSelectedScreen(int selectedIndex, double bottomPaddingHeight) {
     switch (selectedIndex) {
       case 0:
         // Navigator.of(context)
@@ -122,7 +122,9 @@ class _HomeRootTabState extends State<HomeRootTab> {
           },
         );
       case 3:
-        return const TimeTableHomeScreen();
+        return TimeTableHomeScreen(
+          bottomPaddingHeight: bottomPaddingHeight,
+        );
       case 4:
         return MarketTabScreen(
           controller: _controllers[3],
@@ -151,7 +153,8 @@ class _HomeRootTabState extends State<HomeRootTab> {
     return PopScope(
       canPop: false,
       child: Scaffold(
-        body: _getSelectedScreen(_selectedIndex),
+        body: _getSelectedScreen(_selectedIndex,
+            MediaQuery.of(context).padding.bottom + kBottomNavigationBarHeight),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: _selectedIndex,
