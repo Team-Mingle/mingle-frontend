@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/const/data.dart';
 import 'package:mingle/module/view/module_review_main_screen.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
+import 'package:mingle/timetable/provider/timetable_grid_height_provider.dart';
+import 'package:mingle/timetable/provider/timetable_grid_width_provider.dart';
 import 'package:mingle/user/view/home_screen/home_tab_screen.dart';
 import 'package:mingle/post/view/lawn_tab_screen.dart';
 import 'package:mingle/second_hand_market/view/market_tab_screen.dart';
@@ -29,7 +33,7 @@ class CustomScrollController {
   void Function() scrollUp = () {};
 }
 
-class HomeRootTab extends StatefulWidget {
+class HomeRootTab extends ConsumerStatefulWidget {
   bool isFromLogin;
   int index;
   HomeRootTab({
@@ -39,10 +43,10 @@ class HomeRootTab extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<HomeRootTab> createState() => _HomeRootTabState();
+  ConsumerState<HomeRootTab> createState() => _HomeRootTabState();
 }
 
-class _HomeRootTabState extends State<HomeRootTab> {
+class _HomeRootTabState extends ConsumerState<HomeRootTab> {
   int _selectedIndex = 0;
 
   final List<String> _normalSvgImagePaths = [
@@ -150,11 +154,28 @@ class _HomeRootTabState extends State<HomeRootTab> {
 
   @override
   Widget build(BuildContext context) {
+    final availableHeight = MediaQuery.of(context).size.height -
+        (MediaQuery.of(context).padding.top + kToolbarHeight) -
+        TIMETABLE_BOTTOM_WIDGETS_HEIGHT -
+        (MediaQuery.of(context).padding.bottom + kBottomNavigationBarHeight) -
+        TIMETABLE_TOP_PADDING -
+        TIMETABLE_BOTTOM_PADDING;
+    Future.delayed(
+        Duration.zero,
+        () => ref.read(timetableGridWidthProvider.notifier).update(
+              (state) =>
+                  (MediaQuery.of(context).size.width - TIMETABLE_SIDE_PADDINGS),
+            ));
+    Future.delayed(
+        Duration.zero,
+        () => ref
+            .read(timetableGridHeightProvider.notifier)
+            .update((state) => availableHeight));
     return PopScope(
       canPop: false,
       child: Scaffold(
-        body: _getSelectedScreen(_selectedIndex,
-            MediaQuery.of(context).padding.bottom + kBottomNavigationBarHeight),
+        body: _getSelectedScreen(
+            _selectedIndex, MediaQuery.of(context).padding.bottom),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: _selectedIndex,

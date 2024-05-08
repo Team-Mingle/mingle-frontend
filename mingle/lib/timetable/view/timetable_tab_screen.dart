@@ -68,9 +68,6 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   final ScrollController scrollController = ScrollController();
   ScreenshotController screenshotController = ScreenshotController();
   late FToast fToast;
-  final TOP_PADDING = 20.0;
-  final BOTTOM_PADDING = 24.0;
-  final SIDE_PADDINGS = 40.0;
   @override
   void initState() {
     checkIsOnboarding();
@@ -118,7 +115,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
         } else {
           showCourseDetailModal(course);
         }
-      }));
+      }, ref));
     }
     setState(() {
       timetable = currentTimetable;
@@ -600,7 +597,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
       } else {
         showCourseDetailModal(courseModel);
       }
-    }));
+    }, ref));
     setState(() {
       addedCourses = newCourses;
       // addedCourses.addAll(courseModel.generateClasses(() {
@@ -625,7 +622,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
           } else {
             showCourseDetailModal(detailModel);
           }
-        }));
+        }, ref));
         // }
       }
       print(newAddedCourses);
@@ -1283,8 +1280,6 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
       }
     });
 
-    print(widget.bottomPaddingHeight);
-
     return Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
@@ -1359,25 +1354,37 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
           ),
           actions: <Widget>[
             if (timetable != null)
-              IconButton(
-                icon: Align(
-                  alignment: Alignment.center,
-                  child: SvgPicture.asset(
-                    'assets/img/common/ic_add.svg',
-                    width: 24,
-                    height: 24,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddTimeTableScreen(
-                          addClass: addClass, addedClasses: addedCourses),
+              Builder(builder: (context) {
+                // final availableWidth =
+                //     MediaQuery.of(context).size.width - TIMETABLE_SIDE_PADDINGS;
+
+                // // Scaffold.of(context).appBarMaxHeight!;
+                // final double gridWidth =
+                //     ((availableWidth - 24) ~/ 7).toDouble();
+                // final double gridHeight =
+                //     ((availableHeight - 22) ~/ 11).toDouble();
+                // final double gridTotalWidth = gridWidth * 7 + 24;
+                // final double gridTotalHeight = gridHeight * 11 + 22;
+                return IconButton(
+                  icon: Align(
+                    alignment: Alignment.center,
+                    child: SvgPicture.asset(
+                      'assets/img/common/ic_add.svg',
+                      width: 24,
+                      height: 24,
                     ),
-                  );
-                },
-              ),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddTimeTableScreen(
+                            addClass: addClass, addedClasses: addedCourses),
+                      ),
+                    );
+                  },
+                );
+              }),
             IconButton(
                 icon: Align(
                   alignment: Alignment.center,
@@ -1414,12 +1421,24 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
           ],
         ),
         body: Builder(builder: (context) {
-          final availableWidth =
-              MediaQuery.of(context).size.width - SIDE_PADDINGS;
-          final availableHeight = MediaQuery.of(context).size.height -
-              widget.bottomPaddingHeight -
-              TIMETABLE_BOTTOM_WIDGETS_HEIGHT -
-              Scaffold.of(context).appBarMaxHeight!;
+          // final availableWidth =
+          //     MediaQuery.of(context).size.width - TIMETABLE_SIDE_PADDINGS;
+          // final availableHeight = MediaQuery.of(context).size.height -
+          //     (widget.bottomPaddingHeight + kToolbarHeight) -
+          //     TIMETABLE_BOTTOM_WIDGETS_HEIGHT -
+          //     (widget.bottomPaddingHeight + kBottomNavigationBarHeight) -
+          //     TIMETABLE_TOP_PADDING -
+          //     TIMETABLE_BOTTOM_PADDING;
+          // final double gridWidth = ((availableWidth - 24) ~/ 7).toDouble();
+          // final double gridHeight = ((availableHeight - 22) ~/ 11).toDouble();
+          // final double gridTotalWidth = gridWidth * 7 + 24;
+          // final double gridTotalHeight = gridHeight * 11 + 22;
+          // print("toolbar: $kToolbarHeight");
+          // print("toppad: ${MediaQuery.of(context).padding.top}");
+          // print("botnav: $kBottomNavigationBarHeight");
+          // print("bottom: ${widget.bottomPaddingHeight}");
+          // print("total: $availableHeight");
+          // print("scf: ${Scaffold.of(context).appBarMaxHeight}");
           return Center(
               child: Padding(
                   padding: const EdgeInsets.only(top: 20),

@@ -20,11 +20,13 @@ class FriendTimetableScreen extends ConsumerStatefulWidget {
   final int friendId;
   String friendName;
   final Function refreshFriendList;
-  FriendTimetableScreen(
-      {super.key,
-      required this.friendId,
-      required this.friendName,
-      required this.refreshFriendList});
+
+  FriendTimetableScreen({
+    super.key,
+    required this.friendId,
+    required this.friendName,
+    required this.refreshFriendList,
+  });
 
   @override
   ConsumerState<FriendTimetableScreen> createState() =>
@@ -99,8 +101,8 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
   void generateClassWidgets(List<CourseDetailModel> courses) {
     List<Widget> coursesToBeAdded = [];
     for (CourseDetailModel course in courses) {
-      coursesToBeAdded
-          .addAll(course.generateClasses(() => showCourseDetailModal(course)));
+      coursesToBeAdded.addAll(
+          course.generateClasses(() => showCourseDetailModal(course), ref));
     }
     setState(() {
       addedClasses = coursesToBeAdded;

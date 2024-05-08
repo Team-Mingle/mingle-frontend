@@ -20,6 +20,7 @@ import 'package:mingle/timetable/components/timetable_grid.dart';
 class AddTimeTableScreen extends ConsumerStatefulWidget {
   final Function addClass;
   List<Widget> addedClasses;
+
   AddTimeTableScreen({
     super.key,
     required this.addClass,
@@ -70,7 +71,7 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
       return;
     }
     setState(() {
-      widget.addedClasses.addAll(courseModel.generateClasses(() {}));
+      widget.addedClasses.addAll(courseModel.generateClasses(() {}, ref));
     });
   }
 
@@ -81,7 +82,7 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
     List<CourseModel> courses = currentTimetable.coursePreviewDtoList;
     List<Widget> coursesToBeAdded = [];
     for (CourseModel course in courses) {
-      coursesToBeAdded.addAll(course.generateClasses(() {}));
+      coursesToBeAdded.addAll(course.generateClasses(() {}, ref));
     }
     setState(() {
       widget.addedClasses = coursesToBeAdded;
@@ -169,7 +170,6 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
                     SizedBox(
                       // height: 300.0,
                       child: TimeTableGrid(
-                        gridTotalHeight: 300.0,
                         addedClasses: widget.addedClasses,
                       ),
                     ),

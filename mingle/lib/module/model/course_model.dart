@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/common/const/utils.dart';
 import 'package:mingle/common/model/course_time_model.dart';
+import 'package:mingle/timetable/provider/timetable_grid_height_divider_value_provider.dart';
+import 'package:mingle/timetable/provider/timetable_grid_height_provider.dart';
+import 'package:mingle/timetable/provider/timetable_grid_width_provider.dart';
 
 part 'course_model.g.dart';
 
@@ -43,15 +47,15 @@ class CourseModel {
     return result;
   }
 
-  double convertStartTimeToOffset(String startTime) {
+  double convertStartTimeToOffset(String startTime, gridHeight) {
     var splitted = startTime.split(":");
     int hour = int.parse(splitted[0]);
     int minutes = int.parse(splitted[1]);
-    double offset = (hour - 8 + (minutes / 60)) * TIMETABLE_GRID_HEIGHT;
+    double offset = (hour - 8 + (minutes / 60)) * gridHeight;
     return offset;
   }
 
-  double calculateHeight(String startTime, String endTime) {
+  double calculateHeight(String startTime, String endTime, double gridHeight) {
     var startSplitted = startTime.split(":");
     int startHour = int.parse(startSplitted[0]);
     int startMinutes = int.parse(startSplitted[1]);
@@ -60,11 +64,11 @@ class CourseModel {
     int endMinutes = int.parse(endSplitted[1]);
     double height =
         (endHour + (endMinutes / 60) - startHour - (startMinutes / 60)) *
-            TIMETABLE_GRID_HEIGHT;
+            gridHeight;
     return height;
   }
 
-  List<Widget> generateClasses(void Function() onTap) {
+  List<Widget> generateClasses(void Function() onTap, WidgetRef ref) {
     List<Widget> classes = [];
     for (int i = 0; i < courseTimeDtoList.length; i++) {
       if (courseTimeDtoList[i].dayOfWeek == null ||
@@ -72,12 +76,27 @@ class CourseModel {
           courseTimeDtoList[i].endTime == null) {
         continue;
       }
+      double gridTotalWidth = ref.read(timetableGridWidthProvider);
+      double gridTotalHeight = ref.read(timetableGridHeightProvider);
+      int gridTotalHeightDividerValue =
+          ref.read(timetableGridHeightDividerValueProvider);
+      const double timetableGridTopSquareHeight = 20.0;
+      // 20 is actual height, 2 is top and bottom paddings
+      const double timetableGridTopSquareWidth = 22.0;
+      // 22 is actual width, 2 is left and right paddings
+      final double gridWidth =
+          ((gridTotalWidth - timetableGridTopSquareWidth) ~/ 7).toDouble();
+      final double gridHeight =
+          ((gridTotalHeight - timetableGridTopSquareHeight) ~/
+                  gridTotalHeightDividerValue)
+              .toDouble();
       String startTime = courseTimeDtoList[i].startTime!;
       String endTime = courseTimeDtoList[i].endTime!;
-      double topOffset = convertStartTimeToOffset(startTime);
-      double leftOffset = convertDayToInt(courseTimeDtoList[i].dayOfWeek!) *
-          TIMETABLE_GRID_WIDTH;
-      double height = calculateHeight(startTime, endTime);
+      double topOffset = convertStartTimeToOffset(startTime, gridHeight);
+      double leftOffset =
+          convertDayToInt(courseTimeDtoList[i].dayOfWeek!) * gridWidth;
+
+      double height = calculateHeight(startTime, endTime, gridHeight);
       classes.add(
         Positioned(
           top: topOffset,
@@ -90,7 +109,7 @@ class CourseModel {
                   color: convertRGBtoColor(),
                 ),
                 height: height,
-                width: TIMETABLE_GRID_WIDTH,
+                width: gridWidth,
                 child: Wrap(
                   children: [
                     Column(

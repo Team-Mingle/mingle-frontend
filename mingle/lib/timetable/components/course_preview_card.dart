@@ -85,6 +85,7 @@ class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.translucent,
       onTap: () => setState(() {
         isExpanded = !isExpanded;
       }),
@@ -100,6 +101,7 @@ class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
       //             ))),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+        color: isExpanded ? GRAYSCALE_GRAY_01 : Colors.white,
         child: Row(
           children: [
             Expanded(
