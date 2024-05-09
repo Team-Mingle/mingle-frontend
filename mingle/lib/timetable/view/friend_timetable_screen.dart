@@ -101,8 +101,9 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
   void generateClassWidgets(List<CourseDetailModel> courses) {
     List<Widget> coursesToBeAdded = [];
     for (CourseDetailModel course in courses) {
-      coursesToBeAdded.addAll(
-          course.generateClasses(() => showCourseDetailModal(course), ref));
+      coursesToBeAdded.addAll(course.generateClasses(
+          () => showCourseDetailModal(course), ref,
+          isFull: true));
     }
     setState(() {
       addedClasses = coursesToBeAdded;
@@ -213,6 +214,7 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
                       ),
                       TimeTableGrid(
                         isFull: true,
+                        timetable: currentTimetable!,
                         addedClasses: addedClasses,
                       ),
                     ],

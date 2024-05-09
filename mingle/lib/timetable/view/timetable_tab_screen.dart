@@ -30,6 +30,7 @@ import 'package:mingle/timetable/model/timetable_model.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
+import 'package:mingle/timetable/provider/timetable_grid_height_divider_value_provider.dart';
 import 'package:mingle/timetable/repository/friend_repository.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 import 'package:mingle/timetable/view/add_timetable_screen.dart';
@@ -598,6 +599,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
         showCourseDetailModal(courseModel);
       }
     }, ref));
+    timetable!.coursePreviewDtoList.add(courseModel);
     setState(() {
       addedCourses = newCourses;
       // addedCourses.addAll(courseModel.generateClasses(() {
@@ -1274,6 +1276,12 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
       /* do something, for example, call the method doSomething */
     });
 
+    ref.listen(timetableGridHeightDividerValueProvider, (prev, next) {
+      if (prev != next) {
+        getClasses();
+      }
+    });
+
     ref.listen(pinnedTimetableProvider, (prev, next) {
       if (prev != next) {
         getClasses();
@@ -1379,7 +1387,9 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => AddTimeTableScreen(
-                            addClass: addClass, addedClasses: addedCourses),
+                            timetable: timetable!,
+                            addClass: addClass,
+                            addedClasses: addedCourses),
                       ),
                     );
                   },
@@ -1406,18 +1416,28 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                 ),
             if (timetable != null)
               IconButton(
-                icon: Align(
-                  alignment: Alignment.center,
-                  child: SvgPicture.asset(
-                    'assets/img/common/ic_setting.svg',
-                    width: 24,
-                    height: 24,
+                  icon: Align(
+                    alignment: Alignment.center,
+                    child: SvgPicture.asset(
+                      'assets/img/common/ic_setting.svg',
+                      width: 24,
+                      height: 24,
+                    ),
                   ),
-                ),
-                onPressed: () => showTimetableSettingModal(
-                    screenHeight: MediaQuery.of(context).size.height,
-                    screenWidth: MediaQuery.of(context).size.width),
-              ),
+                  onPressed: () {
+                    setState(() {
+                      timetable!.isFull = !timetable!.isFull;
+                    });
+                    ref
+                        .read(timetableGridHeightDividerValueProvider.notifier)
+                        .update((state) =>
+                            timetable!.getGridTotalHeightDividerValue());
+                  }
+
+                  //  () => showTimetableSettingModal(
+                  //     screenHeight: MediaQuery.of(context).size.height,
+                  //     screenWidth: MediaQuery.of(context).size.width),
+                  ),
           ],
         ),
         body: Builder(builder: (context) {
@@ -1532,12 +1552,13 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                                   if (flag == 0) const SizedBox(height: 200),
                                   if (flag == 1) // flag 값이 1인 경우
                                     TimeTableGrid(
+                                      timetable: timetable!,
                                       addedClasses: addedCourses,
                                     ),
                                   // TimeTableScreenshotGrid(
                                   //     addedClasses: addedCourses),
                                   const SizedBox(
-                                    height: 24.0,
+                                    height: 10.0,
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(

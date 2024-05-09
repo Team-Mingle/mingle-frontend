@@ -17,6 +17,18 @@ class CourseTimeModel {
     return time.substring(0, 5);
   }
 
+  int getStartingHour() {
+    return int.parse(startTime!.split(":")[0]);
+  }
+
+  int getFinishingHour() {
+    int res = int.parse(endTime!.split(":")[0]);
+    if (int.parse(endTime!.split(":")[1]) > 0) {
+      res++;
+    }
+    return res;
+  }
+
   Map<String, dynamic> toJson() => _$CourseTimeModelToJson(this);
 }
 

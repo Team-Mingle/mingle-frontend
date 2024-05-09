@@ -51,7 +51,7 @@ class CourseModel {
     var splitted = startTime.split(":");
     int hour = int.parse(splitted[0]);
     int minutes = int.parse(splitted[1]);
-    double offset = (hour - 8 + (minutes / 60)) * gridHeight;
+    double offset = (hour - 1 + (minutes / 60)) * gridHeight;
     return offset;
   }
 
@@ -68,7 +68,8 @@ class CourseModel {
     return height;
   }
 
-  List<Widget> generateClasses(void Function() onTap, WidgetRef ref) {
+  List<Widget> generateClasses(void Function() onTap, WidgetRef ref,
+      {bool isFull = false}) {
     List<Widget> classes = [];
     for (int i = 0; i < courseTimeDtoList.length; i++) {
       if (courseTimeDtoList[i].dayOfWeek == null ||
@@ -78,11 +79,15 @@ class CourseModel {
       }
       double gridTotalWidth = ref.read(timetableGridWidthProvider);
       double gridTotalHeight = ref.read(timetableGridHeightProvider);
+      if (isFull) {
+        gridTotalHeight += 100;
+      }
       int gridTotalHeightDividerValue =
           ref.read(timetableGridHeightDividerValueProvider);
       const double timetableGridTopSquareHeight = 20.0;
       // 20 is actual height, 2 is top and bottom paddings
       const double timetableGridTopSquareWidth = 22.0;
+
       // 22 is actual width, 2 is left and right paddings
       final double gridWidth =
           ((gridTotalWidth - timetableGridTopSquareWidth) ~/ 7).toDouble();
@@ -98,9 +103,12 @@ class CourseModel {
 
       double height = calculateHeight(startTime, endTime, gridHeight);
       classes.add(
-        Positioned(
+        AnimatedPositioned(
+          curve: Curves.easeOut,
+          duration: const Duration(milliseconds: 400),
           top: topOffset,
           left: leftOffset,
+          height: height,
           child: GestureDetector(
             onTap: onTap,
             child: Container(
@@ -108,7 +116,7 @@ class CourseModel {
                 decoration: BoxDecoration(
                   color: convertRGBtoColor(),
                 ),
-                height: height,
+                // height: height,
                 width: gridWidth,
                 child: Wrap(
                   children: [

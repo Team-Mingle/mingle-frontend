@@ -18,6 +18,7 @@ import 'package:mingle/timetable/view/self_add_timetable_screen.dart';
 import 'package:mingle/timetable/components/timetable_grid.dart';
 
 class AddTimeTableScreen extends ConsumerStatefulWidget {
+  final TimetableModel timetable;
   final Function addClass;
   List<Widget> addedClasses;
 
@@ -25,6 +26,7 @@ class AddTimeTableScreen extends ConsumerStatefulWidget {
     super.key,
     required this.addClass,
     required this.addedClasses,
+    required this.timetable,
   });
 
   @override
@@ -170,6 +172,7 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
                     SizedBox(
                       // height: 300.0,
                       child: TimeTableGrid(
+                        timetable: widget.timetable,
                         addedClasses: widget.addedClasses,
                       ),
                     ),

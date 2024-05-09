@@ -132,13 +132,15 @@ class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
                         const SizedBox(
                           width: 4.0,
                         ),
-                        Text(
-                          widget.course.getStartTimes(),
-                          style: const TextStyle(
-                              fontSize: 12.0,
-                              letterSpacing: -0.005,
-                              height: 1.3,
-                              color: GRAYSCALE_GRAY_04),
+                        Expanded(
+                          child: Text(
+                            widget.course.getStartTimes(),
+                            style: const TextStyle(
+                                fontSize: 12.0,
+                                letterSpacing: -0.005,
+                                height: 1.3,
+                                color: GRAYSCALE_GRAY_04),
+                          ),
                         ),
                       ],
                     ),

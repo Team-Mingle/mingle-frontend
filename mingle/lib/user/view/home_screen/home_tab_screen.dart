@@ -11,8 +11,10 @@ import 'package:mingle/common/model/cursor_pagination_model.dart';
 import 'package:mingle/module/view/first_onboarding_screen.dart';
 import 'package:mingle/second_hand_market/provider/second_hand_market_post_provider.dart';
 import 'package:mingle/secure_storage/secure_storage.dart';
+import 'package:mingle/timetable/model/timetable_model.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
+import 'package:mingle/timetable/provider/timetable_grid_height_divider_value_provider.dart';
 import 'package:mingle/user/model/banner_model.dart';
 import 'package:mingle/user/provider/banner_provider.dart';
 import 'package:mingle/post/provider/post_provider.dart';
@@ -61,21 +63,38 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
   void initState() {
     showModal();
     initializeOnboarding();
-    fetchTimetable();
+    // fetchTimetable();
     setState(() {
       totalRecent = ref.read(totalRecentPostProvider);
       univRecent = ref.read(univRecentPostProvider);
       bestPost = ref.read(bestPostProvider);
     });
+    ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetableId();
+    ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetableId();
+    TimetableModel? pinnedTimetable = ref.read(pinnedTimetableProvider);
+    if (pinnedTimetable != null) {
+      Future.delayed(
+          Duration.zero,
+          () => ref
+              .read(timetableGridHeightDividerValueProvider.notifier)
+              .update(
+                  (state) => pinnedTimetable.getGridTotalHeightDividerValue()));
+    }
     widget.controller.scrollUp = scrollUp;
     _bannerProvider = ref.read(bannerProvider.future);
     super.initState();
   }
 
-  void fetchTimetable() async {
-    await ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetableId();
-    await ref.read(pinnedTimetableProvider.notifier).fetchPinnedTimetable();
-  }
+  // void fetchTimetable() async {
+  //   await ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetableId();
+  //   await ref.read(pinnedTimetableProvider.notifier).fetchPinnedTimetable();
+  //   // TimetableModel? pinnedTimetable = ref.read(pinnedTimetableProvider);
+  //   // if (pinnedTimetable != null) {
+  //   //   ref
+  //   //       .read(timetableGridHeightDividerValueProvider.notifier)
+  //   //       .update((state) => pinnedTimetable.getGridTotalHeightDividerValue());
+  //   // }
+  // }
 
   void initializeOnboarding() async {
     final storage = ref.read(secureStorageProvider);

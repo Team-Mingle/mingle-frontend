@@ -5,6 +5,9 @@ import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/module/view/module_review_main_screen.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
+import 'package:mingle/timetable/model/timetable_model.dart';
+import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
+import 'package:mingle/timetable/provider/timetable_grid_height_divider_value_provider.dart';
 import 'package:mingle/timetable/provider/timetable_grid_height_provider.dart';
 import 'package:mingle/timetable/provider/timetable_grid_width_provider.dart';
 import 'package:mingle/user/view/home_screen/home_tab_screen.dart';
@@ -171,6 +174,14 @@ class _HomeRootTabState extends ConsumerState<HomeRootTab> {
         () => ref
             .read(timetableGridHeightProvider.notifier)
             .update((state) => availableHeight));
+    // Future.delayed(Duration.zero, () {
+    //   ref.read(pinnedTimetableProvider.notifier).fetchPinnedTimetable();
+    //   TimetableModel? pinnedTimetable = ref.read(pinnedTimetableProvider);
+    //   if (pinnedTimetable != null) {
+    //     ref.read(timetableGridHeightDividerValueProvider.notifier).update(
+    //         (state) => pinnedTimetable.getGridTotalHeightDividerValue());
+    //   }
+    // });
     return PopScope(
       canPop: false,
       child: Scaffold(
