@@ -43,26 +43,27 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
     super.initState();
   }
 
-  void showAddCourseBottomSheet() {
-    showModalBottomSheet<void>(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      isScrollControlled: true,
-      context: context,
-      builder: (BuildContext context) {
-        return AnimatedPadding(
-          duration: const Duration(milliseconds: 200),
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: SearchCourseModalWidget(
-            addClass: widget.addClass,
-            addClassesAtAddTimeTableScreen: addClassesAtAddTimeTableScreen,
-          ),
-        );
-      },
-    );
-  }
+  // void showAddCourseBottomSheet() {
+  //   showModalBottomSheet<void>(
+  //     shape: RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.circular(20.0),
+  //     ),
+  //     isScrollControlled: true,
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AnimatedPadding(
+  //         duration: const Duration(milliseconds: 200),
+  //         padding:
+  //             EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+  //         child: SearchCourseModalWidget(
+  //           topPadding: 0,
+  //           addClass: widget.addClass,
+  //           addClassesAtAddTimeTableScreen: addClassesAtAddTimeTableScreen,
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   void addClassesAtAddTimeTableScreen(
       CourseModel courseModel, bool overrideValidation) async {
@@ -98,93 +99,103 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
         getClasses();
       }
     });
+    double availableHeight = (MediaQuery.of(context).size.height -
+        MediaQuery.of(context).padding.top -
+        kToolbarHeight);
+
+    double topPaddingHeight = availableHeight / 2 + kToolbarHeight;
+
+    double timetableHeight = availableHeight / 2;
+
     // print(t);
-    return GestureDetector(
-      onTap: FocusScope.of(context).unfocus,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: Scaffold(
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-              surfaceTintColor: Colors.transparent,
-              automaticallyImplyLeading: true,
-              leading: Align(
-                alignment: Alignment.center,
-                child: GestureDetector(
-                  child: SvgPicture.asset(
-                    "assets/img/post_screen/cross_icon.svg",
-                    // height: 24.0,
-                    // width: 24.0,
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-              titleSpacing: 0.0,
-              title: const Text(
-                "강의 추가하기",
-                style: TextStyle(
-                    color: GRAYSCALE_GRAY_03,
-                    fontSize: 14.0,
-                    letterSpacing: -0.01,
-                    height: 1.4,
-                    fontWeight: FontWeight.w400),
-              ),
-              centerTitle: true,
-              actions: [
-                InkWell(
-                  child: const Padding(
-                    padding: EdgeInsets.only(right: 20.0),
-                    child: Text(
-                      "직접 추가",
-                      style: TextStyle(
-                          color: PRIMARY_COLOR_ORANGE_01,
-                          fontSize: 14.0,
-                          letterSpacing: -0.01,
-                          height: 1.4,
-                          fontWeight: FontWeight.w400),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: SafeArea(
+          child: Stack(
+            children: [
+              Scaffold(
+                backgroundColor: Colors.white,
+                appBar: AppBar(
+                  surfaceTintColor: Colors.transparent,
+                  automaticallyImplyLeading: true,
+                  leading: Align(
+                    alignment: Alignment.center,
+                    child: GestureDetector(
+                      child: SvgPicture.asset(
+                        "assets/img/post_screen/cross_icon.svg",
+                        // height: 24.0,
+                        // width: 24.0,
+                      ),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
                     ),
                   ),
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => AddDirectTimeTableScreen(
-                            addClass: widget.addClass,
-                            addClassesAtAddTimeTableScreen:
-                                addClassesAtAddTimeTableScreen,
-                          ))),
+                  titleSpacing: 0.0,
+                  title: const Text(
+                    "강의 추가하기",
+                    style: TextStyle(
+                        color: GRAYSCALE_GRAY_03,
+                        fontSize: 14.0,
+                        letterSpacing: -0.01,
+                        height: 1.4,
+                        fontWeight: FontWeight.w400),
+                  ),
+                  centerTitle: true,
+                  actions: [
+                    InkWell(
+                      child: const Padding(
+                        padding: EdgeInsets.only(right: 20.0),
+                        child: Text(
+                          "직접 추가",
+                          style: TextStyle(
+                              color: PRIMARY_COLOR_ORANGE_01,
+                              fontSize: 14.0,
+                              letterSpacing: -0.01,
+                              height: 1.4,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      ),
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => AddDirectTimeTableScreen(
+                                addClass: widget.addClass,
+                                addClassesAtAddTimeTableScreen:
+                                    addClassesAtAddTimeTableScreen,
+                              ))),
+                    ),
+                  ],
+                  backgroundColor: Colors.white,
+                  elevation: 0,
                 ),
-              ],
-              backgroundColor: Colors.white,
-              elevation: 0,
-            ),
-            body: Stack(
-              children: [
-                Column(
+                body: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     // if (!FocusScope.of(context).hasFocus)
-                    const SizedBox(
-                      height: 9.0,
-                    ),
+
                     // if (!FocusScope.of(context).hasFocus)
                     SizedBox(
                       // height: 300.0,
                       child: TimeTableGrid(
+                        isAdd: true,
                         timetable: widget.timetable,
                         addedClasses: widget.addedClasses,
+                        isAddHeight: timetableHeight,
                       ),
                     ),
                   ],
                 ),
-                SearchCourseModalWidget(
-                  addClass: widget.addClass,
-                  addClassesAtAddTimeTableScreen:
-                      addClassesAtAddTimeTableScreen,
-                )
-              ],
-            ),
+              ),
+              SearchCourseModalWidget(
+                topPadding: topPaddingHeight,
+                addClass: widget.addClass,
+                addClassesAtAddTimeTableScreen: addClassesAtAddTimeTableScreen,
+              )
+            ],
           ),
         ),
       ),

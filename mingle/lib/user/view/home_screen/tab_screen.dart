@@ -187,13 +187,11 @@ class TabScreen extends StatelessWidget {
                 ),
                 backgroundColor: PRIMARY_COLOR_ORANGE_02,
                 shape: const CircleBorder(),
-                child: Transform.translate(
-                  offset: const Offset(2, 5),
-                  child: SvgPicture.asset(
-                    'assets/img/common/ic_pen.svg',
-                    width: 55,
-                    height: 55,
-                  ),
+                child: SvgPicture.asset(
+                  'assets/img/common/pen_icon.svg',
+
+                  // width: 55,
+                  // height: 55,
                 ),
               ),
             ),

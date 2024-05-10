@@ -163,6 +163,7 @@ class _HomeRootTabState extends ConsumerState<HomeRootTab> {
         (MediaQuery.of(context).padding.bottom + kBottomNavigationBarHeight) -
         TIMETABLE_TOP_PADDING -
         TIMETABLE_BOTTOM_PADDING;
+
     Future.delayed(
         Duration.zero,
         () => ref.read(timetableGridWidthProvider.notifier).update(
@@ -204,13 +205,13 @@ class _HomeRootTabState extends ConsumerState<HomeRootTab> {
                 icon: Stack(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 2.0),
+                      padding: const EdgeInsets.only(bottom: 0.0),
                       child: SvgPicture.asset(
                         _selectedIndex == index
                             ? _selectedSvgImagePaths[index]
                             : _normalSvgImagePaths[index],
-                        width: 24,
-                        height: 24,
+                        width: 28,
+                        height: 28,
                       ),
                     ),
                   ],
@@ -219,8 +220,10 @@ class _HomeRootTabState extends ConsumerState<HomeRootTab> {
               );
             },
           ),
-          selectedLabelStyle: const TextStyle(color: Colors.black),
-          unselectedLabelStyle: const TextStyle(color: GRAYSCALE_GRAY_03),
+          selectedLabelStyle:
+              const TextStyle(color: Colors.black, fontSize: 10.0, height: 1),
+          unselectedLabelStyle: const TextStyle(
+              color: GRAYSCALE_GRAY_03, fontSize: 10.0, height: 1),
         ),
       ),
     );

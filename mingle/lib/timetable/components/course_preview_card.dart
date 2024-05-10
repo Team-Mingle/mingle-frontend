@@ -14,6 +14,7 @@ import 'package:mingle/module/model/course_detail_model.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/timetable/model/add_course_response_model.dart';
+import 'package:mingle/timetable/model/timetable_model.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
@@ -82,6 +83,18 @@ class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
     }
   }
 
+  bool isCourseInTimetable() {
+    TimetableModel timetableModel = ref.read(pinnedTimetableProvider)!;
+
+    for (CourseDetailModel courseDetailModel
+        in timetableModel.coursePreviewDtoList) {
+      if (courseDetailModel.id == widget.course.id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -106,12 +119,38 @@ class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
           children: [
             Expanded(
               child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      widget.course.name,
-                      style: const TextStyle(fontWeight: FontWeight.w500),
+                    RichText(
+                      textAlign: TextAlign.start,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                              text: widget.course.name,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14.0,
+                                  color: Colors.black)),
+                          if (isCourseInTimetable())
+                            WidgetSpan(
+                              alignment: PlaceholderAlignment.middle,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 4.0),
+                                child: SvgPicture.asset(
+                                    "assets/img/timetable_screen/check_icon.svg"),
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
+                    // Text(
+                    //   widget.course.name,
+                    //   style: const TextStyle(fontWeight: FontWeight.w500),
+                    // ),
+                    // if (isCourseInTimetable())
+                    //   SvgPicture.asset(
+                    //       "assets/img/timetable_screen/check_icon.svg"),
                     const SizedBox(
                       height: 4.0,
                     ),

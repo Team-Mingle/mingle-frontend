@@ -18,11 +18,12 @@ import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
 class SearchCourseModalWidget extends ConsumerStatefulWidget {
   final Function addClass;
   final Function addClassesAtAddTimeTableScreen;
-  const SearchCourseModalWidget({
-    super.key,
-    required this.addClass,
-    required this.addClassesAtAddTimeTableScreen,
-  });
+  final double topPadding;
+  const SearchCourseModalWidget(
+      {super.key,
+      required this.addClass,
+      required this.addClassesAtAddTimeTableScreen,
+      required this.topPadding});
 
   @override
   ConsumerState<SearchCourseModalWidget> createState() =>
@@ -76,11 +77,9 @@ class _SearchCourseModalWidgetState
         child: AnimatedPadding(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
-          padding: EdgeInsets.only(top: isSearching ? 0 : 329),
+          padding: EdgeInsets.only(top: isSearching ? 0 : widget.topPadding),
           child: Container(
             color: Colors.white,
-            // height: 350.0,
-            height: isSearching ? 890 : null,
             width: MediaQuery.of(context).size.width,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,

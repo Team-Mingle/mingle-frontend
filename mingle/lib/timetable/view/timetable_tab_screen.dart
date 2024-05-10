@@ -1416,28 +1416,18 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                 ),
             if (timetable != null)
               IconButton(
-                  icon: Align(
-                    alignment: Alignment.center,
-                    child: SvgPicture.asset(
-                      'assets/img/common/ic_setting.svg',
-                      width: 24,
-                      height: 24,
-                    ),
+                icon: Align(
+                  alignment: Alignment.center,
+                  child: SvgPicture.asset(
+                    'assets/img/common/ic_setting.svg',
+                    width: 24,
+                    height: 24,
                   ),
-                  onPressed: () {
-                    setState(() {
-                      timetable!.isFull = !timetable!.isFull;
-                    });
-                    ref
-                        .read(timetableGridHeightDividerValueProvider.notifier)
-                        .update((state) =>
-                            timetable!.getGridTotalHeightDividerValue());
-                  }
-
-                  //  () => showTimetableSettingModal(
-                  //     screenHeight: MediaQuery.of(context).size.height,
-                  //     screenWidth: MediaQuery.of(context).size.width),
-                  ),
+                ),
+                onPressed: () => showTimetableSettingModal(
+                    screenHeight: MediaQuery.of(context).size.height,
+                    screenWidth: MediaQuery.of(context).size.width),
+              ),
           ],
         ),
         body: Builder(builder: (context) {
