@@ -13,6 +13,7 @@ import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/timetable/components/timetable_grid.dart';
 import 'package:mingle/timetable/model/timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_model.dart';
+import 'package:mingle/timetable/provider/timetable_grid_height_divider_value_provider.dart';
 import 'package:mingle/timetable/repository/friend_repository.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 
@@ -83,11 +84,13 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
       List<CourseDetailModel> courses = selectedTimetable == null
           ? []
           : selectedTimetable.coursePreviewDtoList;
-      generateClassWidgets(courses);
       setState(() {
         timetables = friendTimetables;
         currentTimetable =
             friendTimetables.isEmpty ? null : friendTimetables[0];
+      });
+      generateClassWidgets(courses);
+      setState(() {
         isLoading = false;
       });
     } on DioException catch (e) {
@@ -102,7 +105,9 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
     List<Widget> coursesToBeAdded = [];
     for (CourseDetailModel course in courses) {
       coursesToBeAdded.addAll(course.generateClasses(
-          () => showCourseDetailModal(course), ref,
+          () => showCourseDetailModal(course),
+          ref,
+          currentTimetable!.getGridTotalHeightDividerValue(),
           isFull: true));
     }
     setState(() {
@@ -143,6 +148,11 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(timetableGridHeightDividerValueProvider, (prev, next) {
+      if (prev != next) {
+        generateClassWidgets(currentTimetable!.coursePreviewDtoList);
+      }
+    });
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(

@@ -116,7 +116,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
         } else {
           showCourseDetailModal(course);
         }
-      }, ref));
+      }, ref, currentTimetable.getGridTotalHeightDividerValue()));
     }
     setState(() {
       timetable = currentTimetable;
@@ -598,7 +598,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
       } else {
         showCourseDetailModal(courseModel);
       }
-    }, ref));
+    }, ref, timetable!.getGridTotalHeightDividerValue()));
     timetable!.coursePreviewDtoList.add(courseModel);
     setState(() {
       addedCourses = newCourses;
@@ -624,7 +624,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
           } else {
             showCourseDetailModal(detailModel);
           }
-        }, ref));
+        }, ref, timetable!.getGridTotalHeightDividerValue()));
         // }
       }
       print(newAddedCourses);

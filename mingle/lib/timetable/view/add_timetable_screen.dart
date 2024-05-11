@@ -74,7 +74,8 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
       return;
     }
     setState(() {
-      widget.addedClasses.addAll(courseModel.generateClasses(() {}, ref));
+      widget.addedClasses.addAll(courseModel.generateClasses(
+          () {}, ref, widget.timetable.getGridTotalHeightDividerValue()));
     });
   }
 
@@ -85,7 +86,8 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
     List<CourseModel> courses = currentTimetable.coursePreviewDtoList;
     List<Widget> coursesToBeAdded = [];
     for (CourseModel course in courses) {
-      coursesToBeAdded.addAll(course.generateClasses(() {}, ref));
+      coursesToBeAdded.addAll(course.generateClasses(
+          () {}, ref, currentTimetable.getGridTotalHeightDividerValue()));
     }
     setState(() {
       widget.addedClasses = coursesToBeAdded;

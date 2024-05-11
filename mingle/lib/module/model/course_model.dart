@@ -69,7 +69,8 @@ class CourseModel {
     return height;
   }
 
-  List<Widget> generateClasses(void Function() onTap, WidgetRef ref,
+  List<Widget> generateClasses(
+      void Function() onTap, WidgetRef ref, int gridTotalHeightDividerValue,
       {bool isFull = false}) {
     List<Widget> classes = [];
     for (int i = 0; i < courseTimeDtoList.length; i++) {
@@ -83,8 +84,8 @@ class CourseModel {
       if (isFull) {
         gridTotalHeight += 100;
       }
-      int gridTotalHeightDividerValue =
-          ref.read(pinnedTimetableProvider)!.getGridTotalHeightDividerValue();
+      // int gridTotalHeightDividerValue =
+      //     ref.read(pinnedTimetableProvider)!.getGridTotalHeightDividerValue();
       const double timetableGridTopSquareHeight = 20.0;
       // 20 is actual height, 2 is top and bottom paddings
       const double timetableGridTopSquareWidth = 22.0;
