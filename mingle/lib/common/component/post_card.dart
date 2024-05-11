@@ -64,7 +64,7 @@ class PostCard extends ConsumerWidget {
           data: data,
           notifierProvider: ref.watch(secondHandPostProvider.notifier),
           postDetailProvider: secondHandPostDetailProvider,
-          onMorePressed: () => changeTabIndex?.call(3),
+          onMorePressed: () => changeTabIndex?.call(4),
         );
         break;
       default:
