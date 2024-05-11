@@ -1284,6 +1284,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
 
     ref.listen(pinnedTimetableProvider, (prev, next) {
       if (prev != next) {
+        // print(prev);
+        // print(next);
         getClasses();
       }
     });

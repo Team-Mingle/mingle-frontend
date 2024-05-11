@@ -4,6 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/common/const/utils.dart';
 import 'package:mingle/common/model/course_time_model.dart';
+import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
 import 'package:mingle/timetable/provider/timetable_grid_height_divider_value_provider.dart';
 import 'package:mingle/timetable/provider/timetable_grid_height_provider.dart';
 import 'package:mingle/timetable/provider/timetable_grid_width_provider.dart';
@@ -83,7 +84,7 @@ class CourseModel {
         gridTotalHeight += 100;
       }
       int gridTotalHeightDividerValue =
-          ref.read(timetableGridHeightDividerValueProvider);
+          ref.read(pinnedTimetableProvider)!.getGridTotalHeightDividerValue();
       const double timetableGridTopSquareHeight = 20.0;
       // 20 is actual height, 2 is top and bottom paddings
       const double timetableGridTopSquareWidth = 22.0;

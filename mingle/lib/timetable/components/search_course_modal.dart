@@ -64,7 +64,6 @@ class _SearchCourseModalWidgetState
 
   @override
   Widget build(BuildContext context) {
-    print(isSearching);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();

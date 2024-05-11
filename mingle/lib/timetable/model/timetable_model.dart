@@ -52,7 +52,7 @@ class TimetableModel {
   int getGridTotalHeightDividerValue() {
     return isFull
         ? max(getCourseEndHour() - getCourseStartHour() + 1, 11)
-        : max(18 - getCourseStartHour(), 11);
+        : max(18 - getCourseStartHour(), 9);
   }
 }
 

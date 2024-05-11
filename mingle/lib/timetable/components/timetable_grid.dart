@@ -68,7 +68,8 @@ class _TimeTableGridState extends ConsumerState<TimeTableGrid> {
   void initState() {
     super.initState();
     int gridHeightDividerValue =
-        ref.read(timetableGridHeightDividerValueProvider);
+        widget.timetable.getGridTotalHeightDividerValue();
+    // ref.read(timetableGridHeightDividerValueProvider);
     double gridTotalWidth = ref.read(timetableGridWidthProvider);
     double gridTotalHeight = ref.read(timetableGridHeightProvider);
     if (widget.isFull) {
@@ -109,6 +110,8 @@ class _TimeTableGridState extends ConsumerState<TimeTableGrid> {
 
   @override
   Widget build(BuildContext context) {
+    // print(widget.isAddHeight);
+
     ref.listen(timetableGridHeightDividerValueProvider, (prev, next) {
       if (prev != next) {
         setState(() {});
@@ -117,7 +120,8 @@ class _TimeTableGridState extends ConsumerState<TimeTableGrid> {
     // print(widget.gridTotalWidth);
     // print((widget.gridTotalWidth - 22) / 7);
     int gridHeightDividerValue =
-        ref.read(timetableGridHeightDividerValueProvider);
+        widget.timetable.getGridTotalHeightDividerValue();
+    // ref.read(timetableGridHeightDividerValueProvider);
     double gridTotalWidth = ref.read(timetableGridWidthProvider);
     double gridTotalHeight = ref.read(timetableGridHeightProvider);
     if (widget.isFull) {
@@ -135,6 +139,9 @@ class _TimeTableGridState extends ConsumerState<TimeTableGrid> {
 
     gridTotalWidth = gridWidth * 7;
     gridTotalHeight = gridHeight * gridHeightDividerValue + 2;
+    // print("gridHeight: $gridHeight");
+    // print("totalHeight: $gridTotalHeight");
+    print("gridHeightDividerValue: $gridHeightDividerValue");
 
     if (widget.isAdd) {
       gridTotalHeight = widget.isAddHeight - timetableGridTopSquareHeight;
@@ -501,7 +508,6 @@ class _TimeTableGridState extends ConsumerState<TimeTableGrid> {
                   onChanged: (bool value) async {
                     // This is called when the user toggles the switch.
                     setState(() {
-                      print(value);
                       widget.timetable.isFull = value;
                     });
                     ref
@@ -510,7 +516,8 @@ class _TimeTableGridState extends ConsumerState<TimeTableGrid> {
                             widget.timetable.getGridTotalHeightDividerValue());
 
                     int gridHeightDividerValue =
-                        await ref.read(timetableGridHeightDividerValueProvider);
+                        widget.timetable.getGridTotalHeightDividerValue();
+                    // await ref.read(timetableGridHeightDividerValueProvider);
                     double gridTotalWidth =
                         await ref.read(timetableGridWidthProvider);
                     double gridTotalHeight =
@@ -531,8 +538,6 @@ class _TimeTableGridState extends ConsumerState<TimeTableGrid> {
                     gridTotalHeight = gridHeight * gridHeightDividerValue;
 
                     int startHour = widget.timetable.getCourseStartHour() - 1;
-                    print("startHour: $startHour");
-                    print("gridHeight: $gridHeight");
                     // _timeScroller.animateTo(gridHeight * startHour,
                     //     duration: const Duration(milliseconds: 400),
                     //     curve: Curves.easeIn);
@@ -544,12 +549,12 @@ class _TimeTableGridState extends ConsumerState<TimeTableGrid> {
                     //      scroll overflow at the bottom. This causes the animation to quit, and therefore not animating.
                     //      Therefore, the animation is delayed by the duration required for the height change animation to
                     //      complete, so that scroll overflow issue is mitigated.
-                    Future.delayed(const Duration(milliseconds: 400)).then(
+                    Future.delayed(const Duration(milliseconds: 450)).then(
                         (value) => _tableScroller.animateTo(
                             gridHeight * startHour,
                             duration: const Duration(milliseconds: 400),
                             curve: Curves.easeIn));
-                    Future.delayed(const Duration(milliseconds: 400)).then(
+                    Future.delayed(const Duration(milliseconds: 450)).then(
                         (value) => _timeScroller.animateTo(
                             gridHeight * startHour,
                             duration: const Duration(milliseconds: 400),

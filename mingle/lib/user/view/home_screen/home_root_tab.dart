@@ -164,17 +164,23 @@ class _HomeRootTabState extends ConsumerState<HomeRootTab> {
         TIMETABLE_TOP_PADDING -
         TIMETABLE_BOTTOM_PADDING;
 
-    Future.delayed(
-        Duration.zero,
-        () => ref.read(timetableGridWidthProvider.notifier).update(
-              (state) =>
-                  (MediaQuery.of(context).size.width - TIMETABLE_SIDE_PADDINGS),
-            ));
-    Future.delayed(
-        Duration.zero,
-        () => ref
-            .read(timetableGridHeightProvider.notifier)
-            .update((state) => availableHeight));
+    Future.delayed(Duration.zero, () {
+      if (ref.read(timetableGridWidthProvider) != 0) {
+        return;
+      }
+      ref.read(timetableGridWidthProvider.notifier).update(
+            (state) =>
+                (MediaQuery.of(context).size.width - TIMETABLE_SIDE_PADDINGS),
+          );
+    });
+    Future.delayed(Duration.zero, () {
+      if (ref.read(timetableGridHeightProvider) != 0) {
+        return;
+      }
+      ref
+          .read(timetableGridHeightProvider.notifier)
+          .update((state) => availableHeight);
+    });
     // Future.delayed(Duration.zero, () {
     //   ref.read(pinnedTimetableProvider.notifier).fetchPinnedTimetable();
     //   TimetableModel? pinnedTimetable = ref.read(pinnedTimetableProvider);
