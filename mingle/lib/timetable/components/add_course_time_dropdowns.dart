@@ -1,4 +1,5 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
@@ -41,6 +42,54 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
   ];
 
   final List<String> items2 = [
+    '00:00',
+    '00:10',
+    '00:20',
+    '00:30',
+    '00:40',
+    '00:50',
+    '01:00',
+    '01:10',
+    '01:20',
+    '01:30',
+    '01:40',
+    '01:50',
+    '02:00',
+    '02:10',
+    '02:20',
+    '02:30',
+    '02:40',
+    '02:50',
+    '03:00',
+    '03:10',
+    '03:20',
+    '03:30',
+    '03:40',
+    '03:50',
+    '04:00',
+    '04:10',
+    '04:20',
+    '04:30',
+    '04:40',
+    '04:50',
+    '05:00',
+    '05:10',
+    '05:20',
+    '05:30',
+    '05:40',
+    '05:50',
+    '06:00',
+    '06:10',
+    '06:20',
+    '06:30',
+    '06:40',
+    '06:50',
+    '07:00',
+    '07:10',
+    '07:20',
+    '07:30',
+    '07:40',
+    '07:50',
     '08:00',
     '08:10',
     '08:20',
@@ -113,10 +162,81 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
     '19:30',
     '19:40',
     '19:50',
-    '20:00'
+    '20:00',
+    '20:10',
+    '20:20',
+    '20:30',
+    '20:40',
+    '20:50',
+    '21:00',
+    '21:10',
+    '21:20',
+    '21:30',
+    '21:40',
+    '21:50',
+    '22:00',
+    '22:10',
+    '22:20',
+    '22:30',
+    '22:40',
+    '22:50',
+    '23:00',
+    '23:10',
+    '23:20',
+    '23:30',
+    '23:40',
+    '23:50',
   ];
 
   final List<String> items3 = [
+    '00:00',
+    '00:10',
+    '00:20',
+    '00:30',
+    '00:40',
+    '00:50',
+    '01:00',
+    '01:10',
+    '01:20',
+    '01:30',
+    '01:40',
+    '01:50',
+    '02:00',
+    '02:10',
+    '02:20',
+    '02:30',
+    '02:40',
+    '02:50',
+    '03:00',
+    '03:10',
+    '03:20',
+    '03:30',
+    '03:40',
+    '03:50',
+    '04:00',
+    '04:10',
+    '04:20',
+    '04:30',
+    '04:40',
+    '04:50',
+    '05:00',
+    '05:10',
+    '05:20',
+    '05:30',
+    '05:40',
+    '05:50',
+    '06:00',
+    '06:10',
+    '06:20',
+    '06:30',
+    '06:40',
+    '06:50',
+    '07:00',
+    '07:10',
+    '07:20',
+    '07:30',
+    '07:40',
+    '07:50',
     '08:00',
     '08:10',
     '08:20',
@@ -189,7 +309,31 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
     '19:30',
     '19:40',
     '19:50',
-    '20:00'
+    '20:00',
+    '20:00',
+    '20:10',
+    '20:20',
+    '20:30',
+    '20:40',
+    '20:50',
+    '21:00',
+    '21:10',
+    '21:20',
+    '21:30',
+    '21:40',
+    '21:50',
+    '22:00',
+    '22:10',
+    '22:20',
+    '22:30',
+    '22:40',
+    '22:50',
+    '23:00',
+    '23:10',
+    '23:20',
+    '23:30',
+    '23:40',
+    '23:50',
   ];
 
   String? selectedItem1, selectedItem2, selectedItem3;
@@ -208,224 +352,239 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
       children: [
         Row(
           children: [
-            Container(
-              width: 160,
-              height: 48,
-              decoration: BoxDecoration(
-                border: Border.all(color: GRAYSCALE_GRAY_03),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              // padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: DropdownButton2<String>(
-                      isExpanded: true,
-                      underline: const SizedBox.shrink(),
-                      hint: const Text('요일 선택'),
-                      dropdownStyleData: DropdownStyleData(
-                        maxHeight: 250.0,
-                        width: 160.0,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8.0)),
-                      ),
-                      value: selectedItem1,
-                      items: items1.map((String item) {
-                        return DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(
-                            item,
-                            style: TextStyle(
-                              color: selectedItem1 == item
-                                  ? Colors.black
-                                  : GRAYSCALE_GRAY_03,
-                              fontWeight: selectedItem1 == item
-                                  ? FontWeight.w500
-                                  : FontWeight.w400,
+            Expanded(
+              child: Container(
+                // width: 160,
+                height: 48,
+                decoration: BoxDecoration(
+                  border: Border.all(color: GRAYSCALE_GRAY_03),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                // padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: DropdownButton2<String>(
+                        isExpanded: true,
+                        underline: const SizedBox.shrink(),
+                        hint: const Text('요일 선택'),
+                        alignment: Alignment.centerLeft,
+                        dropdownStyleData: DropdownStyleData(
+                          maxHeight: 250.0,
+                          // width: 160.0,
+                          padding: EdgeInsets.zero,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8.0)),
+                        ),
+                        value: selectedItem1,
+                        items: items1.map((String item) {
+                          return DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(
+                              item,
+                              style: TextStyle(
+                                color: selectedItem1 == item
+                                    ? Colors.black
+                                    : GRAYSCALE_GRAY_03,
+                                fontWeight: selectedItem1 == item
+                                    ? FontWeight.w500
+                                    : FontWeight.w400,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          widget.onDayChange(value, widget.index);
+                          setState(() {
+                            selectedItem1 = value;
+                          });
+                        },
+                        iconStyleData: IconStyleData(
+                          icon: Align(
+                            alignment: Alignment.center,
+                            child: SvgPicture.asset(
+                              'assets/img/common/ic_dropdown.svg',
+                              width: 24,
+                              height: 24,
                             ),
                           ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        widget.onDayChange(value, widget.index);
-                        setState(() {
-                          selectedItem1 = value;
-                        });
-                      },
-                      iconStyleData: IconStyleData(
-                        icon: Align(
-                          alignment: Alignment.center,
-                          child: SvgPicture.asset(
-                            'assets/img/common/ic_dropdown.svg',
-                            width: 24,
-                            height: 24,
-                          ),
+                          openMenuIcon: null,
+                          iconSize: 14,
                         ),
-                        openMenuIcon: null,
-                        iconSize: 14,
-                      ),
-                      buttonStyleData: const ButtonStyleData(
-                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        buttonStyleData: const ButtonStyleData(
+                          padding: EdgeInsets.only(right: 12),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-            const Spacer(),
-            if (widget.index > 0)
-              GestureDetector(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: SvgPicture.asset(
-                      'assets/img/post_screen/cross_icon.svg',
-                      width: 18,
-                      height: 18,
+            const SizedBox(width: 8.0),
+            // const Spacer(),
+            widget.index > 0
+                ? Expanded(
+                    child: GestureDetector(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: SvgPicture.asset(
+                            'assets/img/post_screen/cross_icon.svg',
+                            width: 18,
+                            height: 18,
+                          ),
+                        ),
+                      ),
+                      onTap: () => widget.delete(widget.index),
                     ),
-                  ),
-                ),
-                onTap: () => widget.delete(widget.index),
-              ),
+                  )
+                : const Spacer(),
           ],
         ),
         const SizedBox(height: 16),
         Row(
           children: [
-            Container(
-              width: 160,
-              height: 48,
-              decoration: BoxDecoration(
-                border: Border.all(color: GRAYSCALE_GRAY_03),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              // padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: DropdownButton2<String>(
-                      isExpanded: true,
-                      underline: const SizedBox.shrink(),
-                      hint: const Text('시작 시간'),
-                      dropdownStyleData: DropdownStyleData(
-                        maxHeight: 250.0,
-                        width: 160.0,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8.0)),
-                      ),
-                      // borderRadius: BorderRadius.circular(8.0),
-                      // dropdownColor: Colors.white,
-                      value: selectedItem2,
-                      items: items2.map((String item) {
-                        return DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(
-                            item,
-                            style: TextStyle(
-                              color: selectedItem2 == item
-                                  ? Colors.black
-                                  : GRAYSCALE_GRAY_03,
-                              fontWeight: selectedItem2 == item
-                                  ? FontWeight.w500
-                                  : FontWeight.w400,
+            Expanded(
+              child: Container(
+                // width: 160,
+                height: 48,
+                decoration: BoxDecoration(
+                  border: Border.all(color: GRAYSCALE_GRAY_03),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                // padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: DropdownButton2<String>(
+                        isExpanded: true,
+                        underline: const SizedBox.shrink(),
+                        hint: const Text('시작 시간'),
+
+                        dropdownStyleData: DropdownStyleData(
+                          // offset: const Offset(0, 9 * 48.0),
+                          maxHeight: 250.0,
+                          // width: 160.0,
+                          padding: EdgeInsets.zero,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8.0)),
+                        ),
+                        // borderRadius: BorderRadius.circular(8.0),
+                        // dropdownColor: Colors.white,
+                        value: selectedItem2,
+                        items: items2.map((String item) {
+                          return DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(
+                              item,
+                              style: TextStyle(
+                                color: selectedItem2 == item
+                                    ? Colors.black
+                                    : GRAYSCALE_GRAY_03,
+                                fontWeight: selectedItem2 == item
+                                    ? FontWeight.w500
+                                    : FontWeight.w400,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          widget.onStartTimeChange(value, widget.index);
+                          setState(() {
+                            selectedItem2 = value;
+                          });
+                        },
+
+                        iconStyleData: IconStyleData(
+                          icon: Align(
+                            alignment: Alignment.center,
+                            child: SvgPicture.asset(
+                              'assets/img/common/ic_dropdown.svg',
+                              width: 24,
+                              height: 24,
                             ),
                           ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        widget.onStartTimeChange(value, widget.index);
-                        setState(() {
-                          selectedItem2 = value;
-                        });
-                      },
-
-                      iconStyleData: IconStyleData(
-                        icon: Align(
-                          alignment: Alignment.center,
-                          child: SvgPicture.asset(
-                            'assets/img/common/ic_dropdown.svg',
-                            width: 24,
-                            height: 24,
-                          ),
+                          openMenuIcon: null,
+                          iconSize: 14,
                         ),
-                        openMenuIcon: null,
-                        iconSize: 14,
-                      ),
-                      buttonStyleData: const ButtonStyleData(
-                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        buttonStyleData: const ButtonStyleData(
+                          padding: EdgeInsets.only(right: 12),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             const SizedBox(width: 8.0),
-            Container(
-              width: 160,
-              height: 48,
-              decoration: BoxDecoration(
-                border: Border.all(color: GRAYSCALE_GRAY_03),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              // padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: DropdownButton2<String>(
-                      isExpanded: true,
-                      underline: const SizedBox.shrink(),
-                      hint: const Text('끝나는 시간'),
-                      dropdownStyleData: DropdownStyleData(
-                        maxHeight: 250.0,
-                        width: 160.0,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8.0)),
-                      ),
-                      value: selectedItem3,
-                      items: items3.map((String item) {
-                        return DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(
-                            item,
-                            style: TextStyle(
-                              color: selectedItem3 == item
-                                  ? Colors.black
-                                  : GRAYSCALE_GRAY_03,
-                              fontWeight: selectedItem3 == item
-                                  ? FontWeight.w500
-                                  : FontWeight.w400,
+            Expanded(
+              child: Container(
+                // width: 160,
+                height: 48,
+                decoration: BoxDecoration(
+                  border: Border.all(color: GRAYSCALE_GRAY_03),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                // padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: DropdownButton2<String>(
+                        isExpanded: true,
+                        underline: const SizedBox.shrink(),
+                        hint: const Text('끝나는 시간'),
+                        dropdownStyleData: DropdownStyleData(
+                          maxHeight: 250.0,
+                          // width: 160.0,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8.0)),
+                        ),
+                        value: selectedItem3,
+                        items: items3.map((String item) {
+                          return DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(
+                              item,
+                              style: TextStyle(
+                                color: selectedItem3 == item
+                                    ? Colors.black
+                                    : GRAYSCALE_GRAY_03,
+                                fontWeight: selectedItem3 == item
+                                    ? FontWeight.w500
+                                    : FontWeight.w400,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          widget.onEndTimeChange(value, widget.index);
+                          setState(() {
+                            selectedItem3 = value;
+                          });
+                        },
+                        iconStyleData: IconStyleData(
+                          icon: Align(
+                            alignment: Alignment.center,
+                            child: SvgPicture.asset(
+                              'assets/img/common/ic_dropdown.svg',
+                              width: 24,
+                              height: 24,
                             ),
                           ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        widget.onEndTimeChange(value, widget.index);
-                        setState(() {
-                          selectedItem3 = value;
-                        });
-                      },
-                      iconStyleData: IconStyleData(
-                        icon: Align(
-                          alignment: Alignment.center,
-                          child: SvgPicture.asset(
-                            'assets/img/common/ic_dropdown.svg',
-                            width: 24,
-                            height: 24,
-                          ),
+                          openMenuIcon: null,
+                          iconSize: 14,
                         ),
-                        openMenuIcon: null,
-                        iconSize: 14,
-                      ),
-                      buttonStyleData: const ButtonStyleData(
-                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        buttonStyleData: const ButtonStyleData(
+                          padding: EdgeInsets.only(right: 12),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],
