@@ -49,10 +49,15 @@ class TimetableModel {
         : finishingHours[finishingHours.length - 1];
   }
 
-  int getGridTotalHeightDividerValue() {
+  int getGridTotalHeightDividerValue({bool isScreenshot = false}) {
+    if (isScreenshot) {
+      return max(getCourseEndHour() - getCourseStartHour() + 1, 11);
+    }
     return isFull
         ? max(getCourseEndHour() - getCourseStartHour() + 1, 11)
-        : max(18 - getCourseStartHour(), 9);
+        : max(18 - getCourseStartHour() + 1, 9);
+
+    // min()
   }
 }
 

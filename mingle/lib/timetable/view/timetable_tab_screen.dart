@@ -21,7 +21,7 @@ import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/module/view/module_review_main_screen.dart';
 import 'package:mingle/secure_storage/secure_storage.dart';
 import 'package:mingle/timetable/components/add_friend_dialog.dart';
-import 'package:mingle/timetable/components/timetable_screenshot_grid.dart';
+import 'package:mingle/timetable/components/timetable_screenshot_grid_v2.dart';
 import 'package:mingle/timetable/model/class_model.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/timetable/model/friend_model.dart';
@@ -270,16 +270,14 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                   onTap: () {
                     double pixelRatio = MediaQuery.of(context).devicePixelRatio;
                     screenshotController
-                        .captureFromLongWidget(
-                      InheritedTheme.captureAll(
-                        context,
-                        Material(
-                            child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0),
-                          child: TimeTableScreenshotGrid(
-                            addedClasses: addedCourses,
-                          ),
-                        )),
+                        .captureFromWidget(
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: TimeTableScreenshotGrid(
+                          height: MediaQuery.of(context).size.height - 20,
+                          width: MediaQuery.of(context).size.width,
+                          timetable: timetable!,
+                        ),
                       ),
                       pixelRatio: pixelRatio,
                       delay: const Duration(milliseconds: 100),
@@ -1547,6 +1545,12 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                                       timetable: timetable!,
                                       addedClasses: addedCourses,
                                     ),
+                                  // TimeTableScreenshotGrid(
+                                  //   height:
+                                  //       MediaQuery.of(context).size.height,
+                                  //   width: MediaQuery.of(context).size.width,
+                                  //   timetable: timetable!,
+                                  // ),
                                   // TimeTableScreenshotGrid(
                                   //     addedClasses: addedCourses),
                                   const SizedBox(

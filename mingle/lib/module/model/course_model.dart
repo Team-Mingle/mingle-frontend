@@ -71,7 +71,10 @@ class CourseModel {
 
   List<Widget> generateClasses(
       void Function() onTap, WidgetRef ref, int gridTotalHeightDividerValue,
-      {bool isFull = false}) {
+      {bool isFull = false,
+      bool isScreenshot = false,
+      double screenShotHeight = 0.0,
+      double screenShotWidth = 0.0}) {
     List<Widget> classes = [];
     for (int i = 0; i < courseTimeDtoList.length; i++) {
       if (courseTimeDtoList[i].dayOfWeek == null ||
@@ -79,11 +82,18 @@ class CourseModel {
           courseTimeDtoList[i].endTime == null) {
         continue;
       }
-      double gridTotalWidth = ref.read(timetableGridWidthProvider);
-      double gridTotalHeight = ref.read(timetableGridHeightProvider);
+      double gridTotalWidth =
+          isScreenshot ? screenShotWidth : ref.read(timetableGridWidthProvider);
+      double gridTotalHeight = isScreenshot
+          ? screenShotHeight
+          : ref.read(timetableGridHeightProvider);
       if (isFull) {
         gridTotalHeight += 100;
       }
+      // if (isScreenshot) {
+      //   gridTotalHeight = screenShotHeight;
+      //   gridTotalWidth = screenShotWidth;
+      // }
       // int gridTotalHeightDividerValue =
       //     ref.read(pinnedTimetableProvider)!.getGridTotalHeightDividerValue();
       const double timetableGridTopSquareHeight = 20.0;
