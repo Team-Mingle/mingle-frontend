@@ -62,8 +62,19 @@ class _SearchCourseModalWidgetState
         gravity: ToastGravity.CENTER);
   }
 
+  void setIsSearching(bool value) {
+    setState(() {
+      isSearching = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    void unfocus() {
+      print('unfocus called');
+      FocusScope.of(context).unfocus();
+    }
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -103,10 +114,13 @@ class _SearchCourseModalWidgetState
                         }),
                         autofocus: false,
                         onEditingComplete: () {
+                          if (_searchController.text.isEmpty) {
+                            return;
+                          }
                           SearchHistoryService.getInstance().then((service) {
                             service.addHistory(_searchController.text);
                           });
-                          FocusScope.of(context).unfocus();
+                          // FocusScope.of(context).unfocus();
                           setState(() {
                             searchFuture = ref
                                 .watch(courseRepositoryProvider)
@@ -317,7 +331,10 @@ class _SearchCourseModalWidgetState
                                                   addClassesAtAddTimeTableScreen:
                                                       widget
                                                           .addClassesAtAddTimeTableScreen,
-                                                  course: courses[index - 1]),
+                                                  course: courses[index - 1],
+                                                  setIsSearching:
+                                                      setIsSearching,
+                                                ),
                                           const Divider(
                                             height: 1.0,
                                             color: GRAYSCALE_GRAY_01_5,

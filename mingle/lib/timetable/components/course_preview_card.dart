@@ -25,12 +25,14 @@ class CoursePreviewCard extends ConsumerStatefulWidget {
   final Function addClass;
   final Function addClassesAtAddTimeTableScreen;
   final Function showAddCourseSuccessToast;
+  final Function setIsSearching;
   const CoursePreviewCard({
     super.key,
     required this.course,
     required this.addClass,
     required this.addClassesAtAddTimeTableScreen,
     required this.showAddCourseSuccessToast,
+    required this.setIsSearching,
   });
 
   @override
@@ -39,6 +41,7 @@ class CoursePreviewCard extends ConsumerStatefulWidget {
 
 class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
   bool isExpanded = false;
+  bool isLoading = false;
   late FToast fToast;
 
   @override
@@ -51,6 +54,9 @@ class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
 
   void addClass({bool overrideValidation = false}) async {
     try {
+      setState(() {
+        isLoading = true;
+      });
       AddCourseResponseModel addCourseResponseModel =
           await ref.watch(timetableRepositoryProvider).addCourse(
                 timetableId: ref.watch(pinnedTimetableIdProvider)!,
@@ -65,8 +71,15 @@ class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
           courseToBeAdded, overrideValidation);
       ref.read(pinnedTimetableProvider.notifier).fetchPinnedTimetable();
       widget.showAddCourseSuccessToast();
-      Navigator.of(context).pop();
+      setState(() {
+        isLoading = false;
+      });
+      // Navigator.of(context).pop();
+      widget.setIsSearching(false);
     } on DioException catch (e) {
+      setState(() {
+        isLoading = false;
+      });
       print(e);
       // print(e.response?.data['code']);
       if (e.response?.statusCode == 409 &&
@@ -99,9 +112,12 @@ class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () => setState(() {
-        isExpanded = !isExpanded;
-      }),
+      onTap: () {
+        FocusScope.of(context).unfocus();
+        setState(() {
+          isExpanded = !isExpanded;
+        });
+      },
       // onTap: widget.isAdd
       //     ? () {
       //         widget.setModule!(course.name, course.id);
@@ -194,22 +210,33 @@ class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
                             children: [
                               GestureDetector(
                                 onTap: addClass,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12.0, vertical: 8.0),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: PRIMARY_COLOR_ORANGE_01),
-                                      color: SUB_LIGHT_PINK,
-                                      borderRadius: BorderRadius.circular(8.0)),
-                                  child: const Text(
-                                    "시간표에 추가",
-                                    style: TextStyle(
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.w500,
-                                        color: PRIMARY_COLOR_ORANGE_01),
-                                  ),
-                                ),
+                                child: isLoading
+                                    ? Center(
+                                        child: Transform.scale(
+                                          scale: 0.8,
+                                          child:
+                                              const CircularProgressIndicator(
+                                            color: PRIMARY_COLOR_ORANGE_01,
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12.0, vertical: 8.0),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: PRIMARY_COLOR_ORANGE_01),
+                                            color: SUB_LIGHT_PINK,
+                                            borderRadius:
+                                                BorderRadius.circular(8.0)),
+                                        child: const Text(
+                                          "시간표에 추가",
+                                          style: TextStyle(
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.w500,
+                                              color: PRIMARY_COLOR_ORANGE_01),
+                                        ),
+                                      ),
                               ),
                               const SizedBox(
                                 width: 4.0,

@@ -25,6 +25,8 @@ class CourseTimeModel {
     int res = int.parse(endTime!.split(":")[0]);
     if (int.parse(endTime!.split(":")[1]) > 0) {
       res++;
+    } else {
+      res--;
     }
     return res;
   }

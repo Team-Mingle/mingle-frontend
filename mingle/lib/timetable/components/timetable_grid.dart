@@ -494,76 +494,76 @@ class _TimeTableGridState extends ConsumerState<TimeTableGrid> {
             ),
           ],
         ),
-        if (!widget.isAdd)
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: SizedBox(
-              height: 30.0,
-              child: FittedBox(
-                child: Switch(
-                  inactiveThumbColor: GRAYSCALE_GRAY_03,
-                  inactiveTrackColor: Colors.white,
-                  activeColor: PRIMARY_COLOR_ORANGE_01,
-                  value: widget.timetable.isFull,
-                  onChanged: (bool value) async {
-                    // This is called when the user toggles the switch.
-                    setState(() {
-                      widget.timetable.isFull = value;
-                    });
-                    ref
-                        .read(timetableGridHeightDividerValueProvider.notifier)
-                        .update((state) =>
-                            widget.timetable.getGridTotalHeightDividerValue());
+        // if (!widget.isAdd)
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 20.0),
+        //     child: SizedBox(
+        //       height: 30.0,
+        //       child: FittedBox(
+        //         child: Switch(
+        //           inactiveThumbColor: GRAYSCALE_GRAY_03,
+        //           inactiveTrackColor: Colors.white,
+        //           activeColor: PRIMARY_COLOR_ORANGE_01,
+        //           value: widget.timetable.isFull,
+        //           onChanged: (bool value) async {
+        //             // This is called when the user toggles the switch.
+        //             setState(() {
+        //               widget.timetable.isFull = value;
+        //             });
+        //             ref
+        //                 .read(timetableGridHeightDividerValueProvider.notifier)
+        //                 .update((state) =>
+        //                     widget.timetable.getGridTotalHeightDividerValue());
 
-                    int gridHeightDividerValue =
-                        widget.timetable.getGridTotalHeightDividerValue();
-                    // await ref.read(timetableGridHeightDividerValueProvider);
-                    double gridTotalWidth =
-                        await ref.read(timetableGridWidthProvider);
-                    double gridTotalHeight =
-                        await ref.read(timetableGridHeightProvider);
-                    if (widget.isFull) {
-                      gridTotalHeight += 100;
-                    }
-                    const double timetableGridTopSquareHeight = 22.0;
-                    const double timetableGridTopSquareWidth = 22.0;
-                    final double gridWidth =
-                        ((gridTotalWidth - timetableGridTopSquareWidth) ~/ 7)
-                            .toDouble();
-                    final double gridHeight =
-                        ((gridTotalHeight - timetableGridTopSquareHeight) ~/
-                                gridHeightDividerValue)
-                            .toDouble();
-                    gridTotalWidth = gridWidth * 7;
-                    gridTotalHeight = gridHeight * gridHeightDividerValue;
+        //             int gridHeightDividerValue =
+        //                 widget.timetable.getGridTotalHeightDividerValue();
+        //             // await ref.read(timetableGridHeightDividerValueProvider);
+        //             double gridTotalWidth =
+        //                 await ref.read(timetableGridWidthProvider);
+        //             double gridTotalHeight =
+        //                 await ref.read(timetableGridHeightProvider);
+        //             if (widget.isFull) {
+        //               gridTotalHeight += 100;
+        //             }
+        //             const double timetableGridTopSquareHeight = 22.0;
+        //             const double timetableGridTopSquareWidth = 22.0;
+        //             final double gridWidth =
+        //                 ((gridTotalWidth - timetableGridTopSquareWidth) ~/ 7)
+        //                     .toDouble();
+        //             final double gridHeight =
+        //                 ((gridTotalHeight - timetableGridTopSquareHeight) ~/
+        //                         gridHeightDividerValue)
+        //                     .toDouble();
+        //             gridTotalWidth = gridWidth * 7;
+        //             gridTotalHeight = gridHeight * gridHeightDividerValue;
 
-                    int startHour = widget.timetable.getCourseStartHour() - 1;
-                    // _timeScroller.animateTo(gridHeight * startHour,
-                    //     duration: const Duration(milliseconds: 400),
-                    //     curve: Curves.easeIn);
-                    // _tableScroller.animateTo(gridHeight * startHour,
-                    //     duration: const Duration(milliseconds: 400),
-                    //     curve: Curves.easeIn);
+        //             int startHour = widget.timetable.getCourseStartHour() - 1;
+        //             // _timeScroller.animateTo(gridHeight * startHour,
+        //             //     duration: const Duration(milliseconds: 400),
+        //             //     curve: Curves.easeIn);
+        //             // _tableScroller.animateTo(gridHeight * startHour,
+        //             //     duration: const Duration(milliseconds: 400),
+        //             //     curve: Curves.easeIn);
 
-                    //TODO: animateTo doesnt work in size-up animation at bottom scroll edge (height increase) because of
-                    //      scroll overflow at the bottom. This causes the animation to quit, and therefore not animating.
-                    //      Therefore, the animation is delayed by the duration required for the height change animation to
-                    //      complete, so that scroll overflow issue is mitigated.
-                    Future.delayed(const Duration(milliseconds: 450)).then(
-                        (value) => _tableScroller.animateTo(
-                            gridHeight * startHour,
-                            duration: const Duration(milliseconds: 400),
-                            curve: Curves.easeIn));
-                    Future.delayed(const Duration(milliseconds: 450)).then(
-                        (value) => _timeScroller.animateTo(
-                            gridHeight * startHour,
-                            duration: const Duration(milliseconds: 400),
-                            curve: Curves.easeIn));
-                  },
-                ),
-              ),
-            ),
-          )
+        //             //TODO: animateTo doesnt work in size-up animation at bottom scroll edge (height increase) because of
+        //             //      scroll overflow at the bottom. This causes the animation to quit, and therefore not animating.
+        //             //      Therefore, the animation is delayed by the duration required for the height change animation to
+        //             //      complete, so that scroll overflow issue is mitigated.
+        //             Future.delayed(const Duration(milliseconds: 450)).then(
+        //                 (value) => _tableScroller.animateTo(
+        //                     gridHeight * startHour,
+        //                     duration: const Duration(milliseconds: 400),
+        //                     curve: Curves.easeIn));
+        //             Future.delayed(const Duration(milliseconds: 450)).then(
+        //                 (value) => _timeScroller.animateTo(
+        //                     gridHeight * startHour,
+        //                     duration: const Duration(milliseconds: 400),
+        //                     curve: Curves.easeIn));
+        //           },
+        //         ),
+        //       ),
+        //     ),
+        //   )
       ],
     );
   }
