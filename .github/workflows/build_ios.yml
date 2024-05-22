@@ -46,7 +46,7 @@ jobs:
       - name: Flutter get
         uses: subosito/flutter-action@v1
         with:
-          flutter-version: "3.19.5"
+          flutter-version: "3.22.0"
 
       # Install your project's dependencies
 
