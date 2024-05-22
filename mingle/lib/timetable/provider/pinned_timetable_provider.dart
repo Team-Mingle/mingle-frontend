@@ -6,12 +6,12 @@ import 'package:mingle/timetable/model/timetable_model.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 
-class PinnedTimetableStateNotifier extends StateNotifier<TimetableModel?> {
+class PinnedTimetableStateNotifier extends StateNotifier<TimetableBase?> {
   final TimetableRepository timetableRepository;
   final int? pinnedTimetableId;
   PinnedTimetableStateNotifier(
       {required this.timetableRepository, this.pinnedTimetableId})
-      : super(null) {
+      : super(TimetableLoading()) {
     fetchPinnedTimetable();
   }
   Future<void> fetchPinnedTimetable() async {
@@ -28,7 +28,7 @@ class PinnedTimetableStateNotifier extends StateNotifier<TimetableModel?> {
 }
 
 final pinnedTimetableProvider =
-    StateNotifierProvider<PinnedTimetableStateNotifier, TimetableModel?>((ref) {
+    StateNotifierProvider<PinnedTimetableStateNotifier, TimetableBase?>((ref) {
   final repository = ref.watch(timetableRepositoryProvider);
   final int? pinnedTimetableId = ref.watch(pinnedTimetableIdProvider);
 

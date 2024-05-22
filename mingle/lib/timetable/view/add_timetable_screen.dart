@@ -82,7 +82,10 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
   void getClasses() async {
     // await ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetable();
 
-    TimetableModel currentTimetable = ref.read(pinnedTimetableProvider)!;
+    TimetableBase currentTimetable = ref.read(pinnedTimetableProvider)!;
+    if (currentTimetable is! TimetableModel) {
+      return;
+    }
     List<CourseModel> courses = currentTimetable.coursePreviewDtoList;
     List<Widget> coursesToBeAdded = [];
     for (CourseModel course in courses) {

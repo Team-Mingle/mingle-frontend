@@ -23,9 +23,7 @@ class CourseTimeModel {
 
   int getFinishingHour() {
     int res = int.parse(endTime!.split(":")[0]);
-    if (int.parse(endTime!.split(":")[1]) > 0) {
-      res++;
-    } else {
+    if (int.parse(endTime!.split(":")[1]) == 0) {
       res--;
     }
     return res;

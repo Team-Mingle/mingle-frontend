@@ -56,10 +56,9 @@ class TimeTableHomeScreen extends ConsumerStatefulWidget {
 
 class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   bool _isFriendListExpanded = false;
-  TimetableModel? timetable;
+  TimetableBase? timetable;
   List<Color> usedCoursePalette = [];
   List<Widget> addedCourses = [];
-  int flag = 1;
   String friendCode = "";
   String friendDisplayName = "";
   String myDisplayName = "";
@@ -93,17 +92,13 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   void getClasses() async {
     // await ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetable();
     // await ref.read(pinnedTimetableProvider.notifier).fetchPinnedTimetable();
-    TimetableModel? currentTimetable = ref.read(pinnedTimetableProvider);
-    if (currentTimetable == null) {
-      setState(() {
-        timetable = null;
-        flag = 0;
-      });
+    TimetableBase? currentTimetable = ref.read(pinnedTimetableProvider);
+    setState(() {
+      timetable = currentTimetable;
+    });
+    if (currentTimetable == null || currentTimetable is! TimetableModel) {
       return;
     }
-    setState(() {
-      flag = 1;
-    });
     // await ref
     //     .read(timetableRepositoryProvider)
     //     .getTimetable(timetableId: ref.read(pinnedTimetableIdProvider)!);
@@ -155,7 +150,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
 
   void changeTimetableName(String newTimetableName) async {
     try {
-      if (newTimetableName == timetable!.name) {
+      TimetableModel timetable = this.timetable as TimetableModel;
+      if (newTimetableName == timetable.name) {
         return;
       }
       await ref.watch(timetableRepositoryProvider).changeTimetableName(
@@ -163,7 +159,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
           changeTimetableNameDto:
               ChangeTimetableNameDto(name: newTimetableName));
       setState(() {
-        timetable!.name = newTimetableName;
+        timetable.name = newTimetableName;
       });
     } on DioException catch (e) {
       fToast.showToast(
@@ -176,8 +172,9 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   }
 
   setTimetableName(String newTimetableName) {
+    TimetableModel timetable = this.timetable as TimetableModel;
     setState(() {
-      timetable!.name = newTimetableName;
+      timetable.name = newTimetableName;
     });
   }
 
@@ -276,7 +273,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                         child: TimeTableScreenshotGrid(
                           height: MediaQuery.of(context).size.height - 20,
                           width: MediaQuery.of(context).size.width,
-                          timetable: timetable!,
+                          timetable: timetable as TimetableModel,
                         ),
                       ),
                       pixelRatio: pixelRatio,
@@ -583,6 +580,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   }
 
   void addClass(CourseDetailModel courseModel, bool overrideValidation) async {
+    TimetableModel timetable = this.timetable as TimetableModel;
     if (overrideValidation) {
       await ref.read(pinnedTimetableProvider.notifier).fetchPinnedTimetable();
       print("overriding here");
@@ -596,8 +594,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
       } else {
         showCourseDetailModal(courseModel);
       }
-    }, ref, timetable!.getGridTotalHeightDividerValue()));
-    timetable!.coursePreviewDtoList.add(courseModel);
+    }, ref, timetable.getGridTotalHeightDividerValue()));
+    timetable.coursePreviewDtoList.add(courseModel);
     setState(() {
       addedCourses = newCourses;
       // addedCourses.addAll(courseModel.generateClasses(() {
@@ -608,13 +606,14 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   }
 
   void deleteClass(CourseDetailModel courseModel) async {
+    TimetableModel timetable = this.timetable as TimetableModel;
     try {
       List<Widget> newAddedCourses = [];
-      TimetableModel newTimetable = timetable!;
+      TimetableModel newTimetable = timetable;
       newTimetable.coursePreviewDtoList
           .removeWhere((element) => element.id == courseModel.id);
-      for (int i = 0; i < timetable!.coursePreviewDtoList.length; i++) {
-        CourseDetailModel detailModel = timetable!.coursePreviewDtoList[i];
+      for (int i = 0; i < timetable.coursePreviewDtoList.length; i++) {
+        CourseDetailModel detailModel = timetable.coursePreviewDtoList[i];
         // if (detailModel.id != courseModel.id) {
         newAddedCourses.addAll(detailModel.generateClasses(() {
           if (detailModel.courseType == "PERSONAL") {
@@ -622,7 +621,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
           } else {
             showCourseDetailModal(detailModel);
           }
-        }, ref, timetable!.getGridTotalHeightDividerValue()));
+        }, ref, timetable.getGridTotalHeightDividerValue()));
         // }
       }
       print(newAddedCourses);
@@ -1329,29 +1328,29 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                   const SizedBox(
                     height: 8.0,
                   ),
-                  Text(
-                    timetable == null
-                        ? ""
-                        : TimetableListModel.convertKeyToSemester(
-                            timetable!.semester),
-                    style: const TextStyle(
-                      color: GRAYSCALE_GRAY_04,
-                      fontSize: 12,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w400,
+                  if (timetable != null && timetable is TimetableModel)
+                    Text(
+                      TimetableListModel.convertKeyToSemester(
+                          (timetable as TimetableModel).semester),
+                      style: const TextStyle(
+                        color: GRAYSCALE_GRAY_04,
+                        fontSize: 12,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
-                  ),
-                  Text(
-                    timetable == null ? "" : timetable!.name,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16.0,
-                      letterSpacing: -0.02,
-                      height: 1.5,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w500,
+                  if (timetable != null && timetable is TimetableModel)
+                    Text(
+                      (timetable as TimetableModel).name,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16.0,
+                        letterSpacing: -0.02,
+                        height: 1.5,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
                   const SizedBox(
                     height: 16,
                   ),
@@ -1361,7 +1360,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
             ],
           ),
           actions: <Widget>[
-            if (timetable != null)
+            if (timetable != null && timetable is TimetableModel)
               Builder(builder: (context) {
                 // final availableWidth =
                 //     MediaQuery.of(context).size.width - TIMETABLE_SIDE_PADDINGS;
@@ -1387,7 +1386,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => AddTimeTableScreen(
-                            timetable: timetable!,
+                            timetable: timetable as TimetableModel,
                             addClass: addClass,
                             addedClasses: addedCourses),
                       ),
@@ -1414,7 +1413,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                 // );
 
                 ),
-            if (timetable != null)
+            if (timetable != null && timetable is TimetableModel)
               IconButton(
                 icon: Align(
                   alignment: Alignment.center,
@@ -1485,9 +1484,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  if (flag == 0) // flag 값이 0인 경우
+                                  if (timetable == null) ...[
                                     const SizedBox(height: 200),
-                                  if (flag == 0)
                                     const Text(
                                       '아직 시간표를 만들지 않았어요.',
                                       textAlign: TextAlign.center,
@@ -1499,8 +1497,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                                         fontWeight: FontWeight.w400,
                                       ),
                                     ),
-                                  if (flag == 0) const SizedBox(height: 8),
-                                  if (flag == 0)
+                                    const SizedBox(height: 8),
                                     GestureDetector(
                                       onTap: () {
                                         Navigator.of(context).push(
@@ -1539,10 +1536,33 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                                         ],
                                       ),
                                     ),
-                                  if (flag == 0) const SizedBox(height: 200),
-                                  if (flag == 1) // flag 값이 1인 경우
+                                    const SizedBox(height: 200),
+                                  ],
+                                  if (timetable is TimetableError) ...[
+                                    const SizedBox(height: 200),
+                                    const Text(
+                                      generalErrorMsg,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16.0,
+                                        letterSpacing: -0.02,
+                                        height: 1.5,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                  if (timetable is TimetableLoading) ...[
+                                    const SizedBox(height: 200),
+                                    const CircularProgressIndicator(
+                                      color: PRIMARY_COLOR_ORANGE_01,
+                                    ),
+                                    const SizedBox(height: 200),
+                                  ],
+                                  if (timetable
+                                      is TimetableModel) // flag 값이 1인 경우
                                     TimeTableGrid(
-                                      timetable: timetable!,
+                                      timetable: timetable as TimetableModel,
                                       addedClasses: addedCourses,
                                     ),
                                   // TimeTableScreenshotGrid(
@@ -1832,8 +1852,9 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   }
 
   void showChangeTimetableNameDialog() {
+    TimetableModel timetable = this.timetable as TimetableModel;
     setState(() {
-      newTimetableName = timetable!.name;
+      newTimetableName = timetable.name;
     });
     showDialog(
       context: context,
@@ -1877,7 +1898,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                             borderRadius: BorderRadius.circular(8.0)),
                         child: Center(
                           child: TextFormField(
-                            initialValue: timetable!.name,
+                            initialValue: timetable.name,
                             maxLength: 10,
                             onChanged: (name) {
                               setState(() {

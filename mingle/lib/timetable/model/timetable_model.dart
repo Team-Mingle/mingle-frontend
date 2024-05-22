@@ -7,8 +7,10 @@ import 'package:mingle/module/model/course_model.dart';
 
 part 'timetable_model.g.dart';
 
+abstract class TimetableBase {}
+
 @JsonSerializable()
-class TimetableModel {
+class TimetableModel extends TimetableBase {
   String name;
   final String semester;
   List<CourseDetailModel> coursePreviewDtoList;
@@ -60,6 +62,10 @@ class TimetableModel {
     // min()
   }
 }
+
+class TimetableLoading extends TimetableBase {}
+
+class TimetableError extends TimetableBase {}
 
 // "name": "string",
 //   "semester": "FIRST_SEMESTER_2019",

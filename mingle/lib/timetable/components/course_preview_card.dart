@@ -97,8 +97,8 @@ class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
   }
 
   bool isCourseInTimetable() {
-    TimetableModel timetableModel = ref.read(pinnedTimetableProvider)!;
-
+    TimetableModel timetableModel =
+        ref.read(pinnedTimetableProvider)! as TimetableModel;
     for (CourseDetailModel courseDetailModel
         in timetableModel.coursePreviewDtoList) {
       if (courseDetailModel.id == widget.course.id) {

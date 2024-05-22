@@ -71,8 +71,8 @@ class _HomeTabScreenState extends ConsumerState<HomeTabScreen> {
     });
     ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetableId();
     ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetableId();
-    TimetableModel? pinnedTimetable = ref.read(pinnedTimetableProvider);
-    if (pinnedTimetable != null) {
+    TimetableBase? pinnedTimetable = ref.read(pinnedTimetableProvider);
+    if (pinnedTimetable != null && pinnedTimetable is TimetableModel) {
       Future.delayed(
           Duration.zero,
           () => ref
