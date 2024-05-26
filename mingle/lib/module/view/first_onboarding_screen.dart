@@ -31,11 +31,29 @@ class _FirstOnboardingScreenState extends State<FirstOnboardingScreen> {
           ? Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (_) => const SecondOnboardingScreen()))
           : {},
+      onHorizontalDragUpdate: (details) {
+        // if (details.delta.dx > 0) {
+        //   // print("Dragging in +X direction");
+        // } else {
+        //   // print("Dragging in -X direction");
+        // }
+        print(details.delta.dx);
+        if (details.delta.dx < -20 && isEnabled) {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (_) => const SecondOnboardingScreen()));
+          // print("Dragging in +Y direction");
+        } else {
+          // print("Dragging in -Y direction");
+        }
+      },
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: Stack(
           children: [
-            Image.asset(
-                "assets/img/module_review_screen/first_onboarding_background.png"),
+            Center(
+              child: Image.asset(
+                  "assets/img/module_review_screen/first_onboarding_background.png"),
+            ),
             Column(
               children: [
                 const SizedBox(

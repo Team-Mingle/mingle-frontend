@@ -408,6 +408,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                       color: GRAYSCALE_GRAY_01_5,
                     ),
                     GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () {
                         Navigator.of(context).pop();
                         Navigator.of(context).push(
@@ -420,16 +421,20 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                           ),
                         );
                       },
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 14.0),
-                        child: Text(
-                          "강의상세/ 강의평 보기",
-                          style:
-                              TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                      child: const SizedBox(
+                        width: double.infinity,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 14.0),
+                          child: Text(
+                            "강의상세/ 강의평 보기",
+                            style:
+                                TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                          ),
                         ),
                       ),
                     ),
                     GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () {
                         Navigator.of(context).pop();
                         Navigator.of(context).push(
@@ -441,27 +446,34 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                           ),
                         );
                       },
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 14.0),
-                        child: Text(
-                          "강의평 작성하기",
-                          style:
-                              TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                      child: const SizedBox(
+                        width: double.infinity,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 14.0),
+                          child: Text(
+                            "강의평 작성하기",
+                            style:
+                                TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                          ),
                         ),
                       ),
                     ),
                     GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () {
                         Navigator.of(context).pop();
                         // deleteClass(currentCourse);
                         showDeleteCourseDialog(currentCourse);
                       },
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 14.0),
-                        child: Text(
-                          "삭제하기",
-                          style:
-                              TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                      child: const SizedBox(
+                        width: double.infinity,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 14.0),
+                          child: Text(
+                            "삭제하기",
+                            style:
+                                TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                          ),
                         ),
                       ),
                     ),
@@ -524,6 +536,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                   color: GRAYSCALE_GRAY_01_5,
                 ),
                 GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).push(MaterialPageRoute(
@@ -533,15 +546,19 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                               courseDetail: currentCourse,
                             )));
                   },
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 14.0),
-                    child: Text(
-                      "강의 상세보기",
-                      style: TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                  child: const SizedBox(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 14.0),
+                      child: Text(
+                        "강의 상세보기",
+                        style: TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                      ),
                     ),
                   ),
                 ),
                 GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).push(MaterialPageRoute(
@@ -550,24 +567,31 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                               refreshClasses: getClasses,
                             )));
                   },
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 14.0),
-                    child: Text(
-                      "강의 수정하기",
-                      style: TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                  child: const SizedBox(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 14.0),
+                      child: Text(
+                        "강의 수정하기",
+                        style: TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                      ),
                     ),
                   ),
                 ),
                 GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: () {
                     Navigator.of(context).pop();
                     showDeleteCourseDialog(currentCourse);
                   },
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 14.0),
-                    child: Text(
-                      "삭제하기",
-                      style: TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                  child: const SizedBox(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 14.0),
+                      child: Text(
+                        "삭제하기",
+                        style: TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                      ),
                     ),
                   ),
                 ),
