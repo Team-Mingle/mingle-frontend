@@ -605,7 +605,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     });
   }
 
-  void deleteClass(CourseDetailModel courseModel) async {
+  void deleteClass(CourseDetailModel courseModel) {
     TimetableModel timetable = this.timetable as TimetableModel;
     try {
       List<Widget> newAddedCourses = [];
@@ -630,7 +630,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
         addedCourses = newAddedCourses;
         timetable = newTimetable;
       });
-      await ref.read(timetableRepositoryProvider).deleteCourse(
+      ref.read(timetableRepositoryProvider).deleteCourse(
           timetableId: ref.watch(pinnedTimetableIdProvider)!,
           courseId: courseModel.id);
       // getClasses();
