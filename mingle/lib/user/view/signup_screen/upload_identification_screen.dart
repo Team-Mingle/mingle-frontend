@@ -119,25 +119,25 @@ class _UploadIdentificationScreenState
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 24.0,
-              ),
-              const Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "  •  ",
-                    style: TextStyle(fontWeight: FontWeight.w700),
-                  ),
-                  Expanded(
-                    child: Text(
-                      "첨부한 사진에서 얼굴 사진 등 민감한 부분은 가린 후 제출해주세요.",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w700, letterSpacing: -0.28),
-                    ),
-                  ),
-                ],
-              ),
+              // const SizedBox(
+              //   height: 24.0,
+              // ),
+              // const Row(
+              //   crossAxisAlignment: CrossAxisAlignment.start,
+              //   children: [
+              //     Text(
+              //       "  •  ",
+              //       style: TextStyle(fontWeight: FontWeight.w700),
+              //     ),
+              //     Expanded(
+              //       child: Text(
+              //         "첨부한 사진에서 얼굴 사진 등 민감한 부분은 가린 후 제출해주세요.",
+              //         style: TextStyle(
+              //             fontWeight: FontWeight.w700, letterSpacing: -0.28),
+              //       ),
+              //     ),
+              //   ],
+              // ),
               const SizedBox(
                 height: 16.0,
               ),
