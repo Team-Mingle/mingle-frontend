@@ -23,9 +23,9 @@ Map<String, dynamic> _$CourseEvaluationResponseDtoToJson(
 AddCourseEvaluationDto _$AddCourseEvaluationDtoFromJson(
         Map<String, dynamic> json) =>
     AddCourseEvaluationDto(
-      courseId: json['courseId'] as int,
-      year: json['year'] as int,
-      semester: json['semester'] as int,
+      courseId: (json['courseId'] as num).toInt(),
+      year: (json['year'] as num).toInt(),
+      semester: (json['semester'] as num).toInt(),
       comment: json['comment'] as String,
       rating: json['rating'] as String,
     );

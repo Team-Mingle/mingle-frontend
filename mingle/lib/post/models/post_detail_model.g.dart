@@ -8,7 +8,7 @@ part of 'post_detail_model.dart';
 
 PostDetailModel _$PostDetailModelFromJson(Map<String, dynamic> json) =>
     PostDetailModel(
-      postId: json['postId'] as int,
+      postId: (json['postId'] as num).toInt(),
       title: json['title'] as String,
       content: json['content'] as String,
       nickname: json['nickname'] as String,
@@ -17,10 +17,10 @@ PostDetailModel _$PostDetailModelFromJson(Map<String, dynamic> json) =>
       status: json['status'] as String,
       boardType: json['boardType'] as String,
       categoryType: json['categoryType'] as String,
-      likeCount: json['likeCount'] as int,
-      commentCount: json['commentCount'] as int,
-      viewCount: json['viewCount'] as int,
-      scrapCount: json['scrapCount'] as int,
+      likeCount: (json['likeCount'] as num).toInt(),
+      commentCount: (json['commentCount'] as num).toInt(),
+      viewCount: (json['viewCount'] as num).toInt(),
+      scrapCount: (json['scrapCount'] as num).toInt(),
       postImgUrl: (json['postImgUrl'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),

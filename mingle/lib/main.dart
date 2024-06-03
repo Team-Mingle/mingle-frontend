@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mingle/backoffice/view/freshman_signup_requests_screen.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/view/splash_screen.dart';
 import 'package:mingle/firebase_notification.dart';
@@ -268,7 +269,8 @@ class _AppState extends ConsumerState<_App> {
         debugShowCheckedModeBanner: false,
         home:
             // const ModuleReviewMainScreen()
-            const SplashScreen(),
+            // const SplashScreen(),
+            const FreshmanSignupRequestScreen(),
         //  const EnterOfferIdScreen()
         // const FinishTempSinupScreen(),
         // const TimeTableHomeScreen()
