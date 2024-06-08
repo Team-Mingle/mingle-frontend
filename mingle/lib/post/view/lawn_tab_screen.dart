@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mingle/backoffice/provider/backoffice_provider.dart';
 import 'package:mingle/common/component/general_post_preview_card.dart';
+import 'package:mingle/common/model/cursor_pagination_model.dart';
+import 'package:mingle/post/models/post_model.dart';
 // import 'package:mingle/common/component/post_preview_card.dart';
 import 'package:mingle/post/provider/post_provider.dart';
 import 'package:mingle/user/provider/user_provider.dart';
@@ -23,59 +26,65 @@ class LawnTabScreen extends ConsumerStatefulWidget {
 class _LawnTabScreenState extends ConsumerState<LawnTabScreen> {
   @override
   Widget build(BuildContext context) {
-    String univName = ref.watch(currentUserProvider)!.univName;
+    // List<
+    //         StateNotifierProvider<BackofficePostStateNotifier,
+    //             CursorPaginationBase>> dataList =
+    //     List.generate(27, (index) => universityAllPostProvider(index + 1));
+    // // List<dynamic> notifierProviderList = List.generate(
+    // //     27, (index) => universityAllPostProvider(index + 1));
+    // // List<dynamic> allNotifierProviderList = List.generate(
+    // //     27, (index) => universityAllPostProvider(index + 1));
+    // List<ProviderFamily<PostModel?, int>> postDetailProviderList =
+    //     List.generate(
+    //         27, (index) => universityAllPostProviderDetailProvider(index + 1));
     return TabScreen(
-      boardType: "UNIV",
-      title: '잔디밭',
-      subtitle: univName,
-      tab1: '전체글',
-      tab2: '자유',
-      tab3: '질문',
-      tab4: '학생회',
-      tabContents: [
-        GeneralPostPreviewCard(
-          controller: widget.controller,
-          boardType: "잔디밭",
-          // postList: dummyPostList,
-          data: ref.watch(univAllPostProvider),
-          notifierProvider: ref.watch(univAllPostProvider.notifier),
-          allNotifierProvider: ref.watch(univAllPostProvider.notifier),
-          postDetailProvider: univAllPostDetailProvider,
-          // postFuture: paginatePost("MINGLE", ref),
-          cardType: CardType.square,
-        ),
-        GeneralPostPreviewCard(
-          controller: widget.controller,
-          boardType: "잔디밭",
-          data: ref.watch(univFreePostProvider),
-          // postFuture: paginatePost("FREE", ref),
-          notifierProvider: ref.watch(univFreePostProvider.notifier),
-          allNotifierProvider: ref.watch(univAllPostProvider.notifier),
-          postDetailProvider: univFreePostDetailProvider,
-          cardType: CardType.square,
-        ),
-        GeneralPostPreviewCard(
-          controller: widget.controller,
-          boardType: "잔디밭",
-          data: ref.watch(univQnAPostProvider),
-          // postFuture: paginatePost("QNA", ref),
-          notifierProvider: ref.watch(univQnAPostProvider.notifier),
-          allNotifierProvider: ref.watch(univAllPostProvider.notifier),
-          postDetailProvider: univQnAPostDetailProvider,
-          cardType: CardType.square,
-        ),
-        GeneralPostPreviewCard(
-          controller: widget.controller,
-          boardType: "잔디밭",
-          data: ref.watch(univKsaPostProvider),
-          // postFuture: paginatePost("KSA", ref),
-          notifierProvider: ref.watch(univKsaPostProvider.notifier),
-          allNotifierProvider: ref.watch(univAllPostProvider.notifier),
-          postDetailProvider: univKsaPostDetailProvider,
-          cardType: CardType.square,
-        ),
-      ],
-    );
+        boardType: "UNIV",
+        title: '잔디밭',
+        tabs: const [
+          "HKU",
+          "HKUST",
+          "CUHK",
+          "CITYU",
+          "POLYU",
+          "FRESHMAN",
+          "NUS",
+          "NTU",
+          "SMU",
+          "USTB",
+          "UIBE",
+          "BNU",
+          "BFSU",
+          "PKUHSC",
+          "BIFT",
+          "CUEB",
+          "CMU",
+          "BLCU",
+          "BUPT",
+          "BIT",
+          "RUC",
+          "CUC",
+          "BISU",
+          "CAFA",
+          "THU",
+          "BUAA",
+          "CUPL"
+        ],
+        tabContents: List.generate(
+            27,
+            (index) => GeneralPostPreviewCard(
+                  controller: widget.controller,
+                  boardType: "잔디밭",
+                  // postList: dummyPostList,
+                  data: ref.watch(universityAllPostProviderList[index]),
+                  notifierProvider:
+                      ref.watch(universityAllPostProviderList[index].notifier),
+                  allNotifierProvider:
+                      ref.watch(universityAllPostProviderList[index].notifier),
+                  postDetailProvider:
+                      universityAllPostDetailProviderList[index],
+                  // postFuture: paginatePost("MINGLE", ref),
+                  cardType: CardType.square,
+                )));
   }
 
   @override

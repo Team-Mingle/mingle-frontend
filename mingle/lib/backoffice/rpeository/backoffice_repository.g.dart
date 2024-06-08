@@ -19,7 +19,7 @@ class _BackofficeRepository implements BackofficeRepository {
   String? baseUrl;
 
   @override
-  Future<void> rejectTempSignup({required String memberId}) async {
+  Future<void> rejectTempSignup({required int memberId}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'memberId': memberId};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
@@ -44,7 +44,7 @@ class _BackofficeRepository implements BackofficeRepository {
   }
 
   @override
-  Future<void> authenticateTempSignup({required String memberId}) async {
+  Future<void> authenticateTempSignup({required int memberId}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'memberId': memberId};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
@@ -66,6 +66,98 @@ class _BackofficeRepository implements BackofficeRepository {
           _dio.options.baseUrl,
           baseUrl,
         ))));
+  }
+
+  @override
+  Future<TempSignupRequestListModel> getTempSignupRequestList() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<TempSignupRequestListModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/temp-sign-up-apply-list',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = TempSignupRequestListModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<CursorPagination<PostModel>> getAllUnivPosts(
+      {required int universityId}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<CursorPagination<PostModel>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/post/univ/${universityId}/all',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = CursorPagination<PostModel>.fromJson(
+      _result.data!,
+      (json) => PostModel.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
+  Future<CursorPagination<PostModel>> getAllTotalPosts(
+      {required String countryId}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<CursorPagination<PostModel>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/post/total/${countryId}/all',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = CursorPagination<PostModel>.fromJson(
+      _result.data!,
+      (json) => PostModel.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

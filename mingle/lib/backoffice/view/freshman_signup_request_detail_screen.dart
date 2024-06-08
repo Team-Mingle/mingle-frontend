@@ -3,16 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mingle/backoffice/model/temp_signup_request_model.dart';
+import 'package:mingle/backoffice/rpeository/backoffice_repository.dart';
 import 'package:mingle/backoffice/view/simple_image_detail_screen.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 
 class FreshmanSignupRequestDetailScreen extends ConsumerStatefulWidget {
-  final List<String> memberIds;
+  final List<TempSignupRequestModel> members;
   final int currentIndex;
+  final Function removeFromList;
   const FreshmanSignupRequestDetailScreen(
-      {super.key, required this.memberIds, required this.currentIndex});
+      {super.key,
+      required this.members,
+      required this.currentIndex,
+      required this.removeFromList});
 
   @override
   ConsumerState<FreshmanSignupRequestDetailScreen> createState() =>
@@ -22,6 +28,8 @@ class FreshmanSignupRequestDetailScreen extends ConsumerStatefulWidget {
 class _FreshmanSignupRequestDetailScreenState
     extends ConsumerState<FreshmanSignupRequestDetailScreen> {
   late FToast fToast;
+  bool isAuthLoading = false;
+  bool isRejectLoading = false;
 
   @override
   void initState() {
@@ -31,11 +39,20 @@ class _FreshmanSignupRequestDetailScreenState
     fToast.init(context);
   }
 
-  void authenticate() async {
+  void authenticate(String memberId) async {
     try {
       // await ref.read(backofficeRepositoryProvider).authenticateTempSignup(memberId: );
+      setState(() {
+        isAuthLoading = true;
+      });
+      setState(() {
+        isAuthLoading = false;
+      });
       navigateToNextRequest();
     } on DioException catch (e) {
+      setState(() {
+        isAuthLoading = false;
+      });
       fToast.showToast(
           child: const ToastMessage(message: generalErrorMsg),
           gravity: ToastGravity.CENTER,
@@ -43,11 +60,21 @@ class _FreshmanSignupRequestDetailScreenState
     }
   }
 
-  void reject() async {
+  void reject(String memberId) async {
     try {
+      setState(() {
+        isRejectLoading = true;
+      });
+      // await ref.read(backofficeRepositoryProvider).rejectTempSignup(memberId: memberId)
+      setState(() {
+        isRejectLoading = false;
+      });
       // await ref.read(backofficeRepositoryProvider).rejectTempSignup(memberId: );
       navigateToNextRequest();
     } on DioException catch (e) {
+      setState(() {
+        isRejectLoading = false;
+      });
       fToast.showToast(
           child: const ToastMessage(message: generalErrorMsg),
           gravity: ToastGravity.CENTER,
@@ -56,7 +83,8 @@ class _FreshmanSignupRequestDetailScreenState
   }
 
   void navigateToNextRequest() {
-    if (widget.currentIndex == widget.memberIds.length - 1) {
+    if (widget.currentIndex == widget.members.length - 1) {
+      widget.removeFromList(widget.members[widget.currentIndex].nickname);
       fToast.showToast(
           child: const ToastMessage(message: "마지막 요청입니다."),
           gravity: ToastGravity.CENTER,
@@ -66,8 +94,9 @@ class _FreshmanSignupRequestDetailScreenState
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (_) => FreshmanSignupRequestDetailScreen(
-            memberIds: widget.memberIds,
-            currentIndex: widget.currentIndex + 1,
+            members: widget.members,
+            currentIndex: widget.currentIndex,
+            removeFromList: widget.removeFromList,
           ),
         ),
       );
@@ -76,6 +105,7 @@ class _FreshmanSignupRequestDetailScreenState
 
   @override
   Widget build(BuildContext context) {
+    TempSignupRequestModel currentUser = widget.members[widget.currentIndex];
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -90,9 +120,9 @@ class _FreshmanSignupRequestDetailScreenState
             onTap: () => Navigator.of(context).pop(),
           ),
         ),
-        title: const Text(
-          "신입생님의 회원가입 요청",
-          style: TextStyle(
+        title: Text(
+          "${currentUser.nickname}님의 회원가입 요청",
+          style: const TextStyle(
               fontSize: 16.0,
               letterSpacing: -0.02,
               height: 1.5,
@@ -112,21 +142,19 @@ class _FreshmanSignupRequestDetailScreenState
               height: 300.0,
               child: GestureDetector(
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => const SimpleImageDetailScreen(
-                        imgLink:
-                            "https://images.unsplash.com/photo-1716222350384-763cc1ec344a?q=80&w=3538&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"))),
-                child: const Image(
+                    builder: (_) => SimpleImageDetailScreen(
+                        imgLink: currentUser.photoUrl))),
+                child: Image(
                   fit: BoxFit.contain,
-                  image: NetworkImage(
-                      "https://images.unsplash.com/photo-1716222350384-763cc1ec344a?q=80&w=3538&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"),
+                  image: NetworkImage(currentUser.photoUrl),
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Row(
                 children: [
-                  Text(
+                  const Text(
                     "이름: ",
                     style: TextStyle(
                         fontSize: 20.0,
@@ -134,8 +162,8 @@ class _FreshmanSignupRequestDetailScreenState
                         color: GRAYSCALE_GRAY_03),
                   ),
                   Text(
-                    "홍길동",
-                    style: TextStyle(
+                    currentUser.nickname,
+                    style: const TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.w500,
                         color: Colors.black),
@@ -146,11 +174,11 @@ class _FreshmanSignupRequestDetailScreenState
             const SizedBox(
               height: 4.0,
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Row(
                 children: [
-                  Text(
+                  const Text(
                     "이메일: ",
                     style: TextStyle(
                         fontSize: 20.0,
@@ -158,8 +186,8 @@ class _FreshmanSignupRequestDetailScreenState
                         color: GRAYSCALE_GRAY_03),
                   ),
                   Text(
-                    "gildonghong@gmail.com",
-                    style: TextStyle(
+                    currentUser.email ?? "",
+                    style: const TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.w500,
                         color: Colors.black),
@@ -170,11 +198,11 @@ class _FreshmanSignupRequestDetailScreenState
             const SizedBox(
               height: 4.0,
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Row(
                 children: [
-                  Text(
+                  const Text(
                     "학번: ",
                     style: TextStyle(
                         fontSize: 20.0,
@@ -182,8 +210,8 @@ class _FreshmanSignupRequestDetailScreenState
                         color: GRAYSCALE_GRAY_03),
                   ),
                   Text(
-                    "24",
-                    style: TextStyle(
+                    currentUser.studentId ?? "",
+                    style: const TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.w500,
                         color: Colors.black),
@@ -201,7 +229,7 @@ class _FreshmanSignupRequestDetailScreenState
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: authenticate,
+                    // onTap: () => authenticate(currentUser.),
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8.0),
@@ -223,7 +251,7 @@ class _FreshmanSignupRequestDetailScreenState
                     width: 20.0,
                   ),
                   GestureDetector(
-                    onTap: reject,
+                    // onTap: reject,
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8.0),

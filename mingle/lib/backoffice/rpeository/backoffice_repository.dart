@@ -1,16 +1,10 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mingle/backoffice/model/temp_signup_request_list_model.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
-import 'package:mingle/common/model/pagination_params.dart';
 import 'package:mingle/dio/dio.dart';
-import 'package:mingle/module/model/course_detail_model.dart';
-import 'package:mingle/module/model/course_model.dart';
-import 'package:mingle/post/models/category_model.dart';
-import 'package:mingle/post/models/comment_model.dart';
-import 'package:mingle/post/models/post_detail_model.dart';
 import 'package:mingle/post/models/post_model.dart';
-import 'package:mingle/timetable/repository/timetable_repository.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'backoffice_repository.g.dart';
@@ -29,10 +23,24 @@ abstract class BackofficeRepository {
 
   @POST('/reject-temp-sign-up')
   @Headers({'accessToken': 'true'})
-  Future<void> rejectTempSignup({@Query("memberId") required String memberId});
+  Future<void> rejectTempSignup({@Query("memberId") required int memberId});
 
   @POST('/authenticate-temp-sign-up')
   @Headers({'accessToken': 'true'})
   Future<void> authenticateTempSignup(
-      {@Query("memberId") required String memberId});
+      {@Query("memberId") required int memberId});
+
+  @GET('/temp-sign-up-apply-list')
+  @Headers({'accessToken': 'true'})
+  Future<TempSignupRequestListModel> getTempSignupRequestList();
+
+  @GET('/post/univ/{universityId}/all')
+  @Headers({'accessToken': 'true'})
+  Future<CursorPagination<PostModel>> getAllUnivPosts(
+      {@Path() required int universityId});
+
+  @GET('/post/total/{countryId}/all')
+  @Headers({'accessToken': 'true'})
+  Future<CursorPagination<PostModel>> getAllTotalPosts(
+      {@Path() required String countryId});
 }

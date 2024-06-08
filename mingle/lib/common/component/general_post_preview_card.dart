@@ -22,7 +22,6 @@ class GeneralPostPreviewCard extends ConsumerStatefulWidget {
   // final List<Map<String, String>> postList;
 
   // final Future<List<PostModel>> postFuture;
-  String? categoryType;
   String emptyMessage;
   final String boardType;
   final CursorPaginationBase data;
@@ -42,7 +41,6 @@ class GeneralPostPreviewCard extends ConsumerStatefulWidget {
     this.postDetailProvider,
     this.emptyMessage = "아직 올라온 게시물이 없어요!",
     this.controller,
-    this.categoryType,
     // required this.postFuture,
   });
 
@@ -108,7 +106,6 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
   }
 
   void scrollUp() {
-    print(widget.categoryType);
     print("going upppp??");
     print(scrollController.hasClients);
     // print(scrollController.offset);
@@ -122,8 +119,6 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    bool isChina = ref.watch(currentUserProvider) != null &&
-        ref.watch(currentUserProvider)!.country == "CHINA";
     if (widget.controller != null) {
       widget.controller!.scrollUp = scrollUp;
     }
@@ -271,8 +266,6 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
                                       MaterialPageRoute(
                                         builder: (_) => PostDetailScreen(
                                           boardType: widget.boardType,
-                                          allNotifierProvider:
-                                              widget.allNotifierProvider,
                                           postId: post.postId,
                                           refreshList: refreshList,
                                           postDetailProvider:
@@ -312,9 +305,6 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
                                                           MainAxisAlignment
                                                               .start,
                                                       children: [
-                                                        buildTypeIndicator(
-                                                            post.categoryType,
-                                                            isChina),
                                                         Expanded(
                                                           child: Text(
                                                             post.title,
@@ -355,12 +345,8 @@ class _GeneralPostPreviewCardState extends ConsumerState<GeneralPostPreviewCard>
                                                         ),
                                                       ],
                                                     ),
-                                                    SizedBox(
-                                                      height:
-                                                          post.categoryType ==
-                                                                  "FREE"
-                                                              ? 6.0
-                                                              : 2.0,
+                                                    const SizedBox(
+                                                      height: 2.0,
                                                     ),
                                                     Text(
                                                       post.content,

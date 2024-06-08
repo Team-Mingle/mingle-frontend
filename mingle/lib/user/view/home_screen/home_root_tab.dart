@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mingle/backoffice/view/freshman_signup_requests_screen.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/module/view/module_review_main_screen.dart';
@@ -53,34 +54,27 @@ class _HomeRootTabState extends ConsumerState<HomeRootTab> {
   int _selectedIndex = 0;
 
   final List<String> _normalSvgImagePaths = [
-    'assets/img/root_screen/ic_home_unselected.svg',
     'assets/img/root_screen/ic_square_unselected.svg',
     'assets/img/root_screen/ic_lawn_unselected.svg',
     'assets/img/root_screen/ic_timetable_unselected.svg',
-    'assets/img/root_screen/ic_market_unselected.svg',
   ];
 
   final List<String> _selectedSvgImagePaths = [
-    'assets/img/root_screen/ic_home_selected.svg',
     'assets/img/root_screen/ic_square_selected.svg',
     'assets/img/root_screen/ic_lawn_selected.svg',
     'assets/img/root_screen/ic_timetable_selected.svg',
-    'assets/img/root_screen/ic_market_selected.svg',
   ];
 
   final List<String> _labels = [
-    '홈',
     '광장',
     '잔디밭',
-    '시간표',
-    '장터',
+    '회원가입',
   ];
   final List<CustomScrollController> _controllers = [
     CustomScrollController(),
     CustomScrollController(),
     CustomScrollController(),
     //CustomScrollController(),
-    CustomScrollController(),
   ];
 
   @override
@@ -104,41 +98,39 @@ class _HomeRootTabState extends ConsumerState<HomeRootTab> {
 
   Widget _getSelectedScreen(int selectedIndex, double bottomPaddingHeight) {
     switch (selectedIndex) {
+      // case 0:
+      // Navigator.of(context)
+      //     .push(MaterialPageRoute(builder: (_) => const HomeTabScreen()));
+      // return HomeTabScreen(
+      //   controller: _controllers[0],
+      //   setIsFromLogin: setIsFromLogin,
+      //   changeTabIndex: (int index) {
+      //     _onItemTapped(index);
+      //   },
+      // );
       case 0:
-        // Navigator.of(context)
-        //     .push(MaterialPageRoute(builder: (_) => const HomeTabScreen()));
-        return HomeTabScreen(
-          controller: _controllers[0],
-          setIsFromLogin: setIsFromLogin,
-          changeTabIndex: (int index) {
-            _onItemTapped(index);
-          },
-        );
-      case 1:
         return SquareTabScreen(
           controller: _controllers[1],
           changeTabIndex: (int index) {
             _onItemTapped(index);
           },
         );
-      case 2:
+      case 1:
         return LawnTabScreen(
           controller: _controllers[2],
           changeTabIndex: (int index) {
             _onItemTapped(index);
           },
         );
-      case 3:
-        return TimeTableHomeScreen(
-          bottomPaddingHeight: bottomPaddingHeight,
-        );
-      case 4:
-        return MarketTabScreen(
-          controller: _controllers[3],
-          changeTabIndex: (int index) {
-            _onItemTapped(index);
-          },
-        );
+      case 2:
+        return const FreshmanSignupRequestScreen();
+      // case 4:
+      //   return MarketTabScreen(
+      //     controller: _controllers[3],
+      //     changeTabIndex: (int index) {
+      //       _onItemTapped(index);
+      //     },
+      //   );
       default:
         return HomeTabScreen(
           controller: _controllers[0],

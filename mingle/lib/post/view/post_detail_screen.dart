@@ -6,6 +6,7 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mingle/backoffice/provider/backoffice_provider.dart';
 import 'package:mingle/common/component/anonymous_textfield.dart';
 import 'package:mingle/common/component/dummy_textfield.dart';
 import 'package:mingle/common/component/report_modal.dart';
@@ -19,7 +20,6 @@ import 'package:mingle/post/models/add_comment_model.dart';
 import 'package:mingle/post/models/comment_model.dart';
 import 'package:mingle/post/models/post_detail_model.dart';
 import 'package:mingle/post/models/post_model.dart';
-import 'package:mingle/post/provider/post_provider.dart';
 import 'package:mingle/post/repository/comment_repository.dart';
 import 'package:mingle/post/repository/post_repository.dart';
 import 'package:mingle/post/view/edit_post_screen.dart';
@@ -31,16 +31,15 @@ class PostDetailScreen extends ConsumerStatefulWidget {
   final String? boardType;
   final Function refreshList;
   final ProviderFamily<PostModel?, int>? postDetailProvider;
-  final PostStateNotifier? notifierProvider;
-  final PostStateNotifier? allNotifierProvider;
-  const PostDetailScreen(
-      {super.key,
-      required this.postId,
-      required this.refreshList,
-      this.boardType,
-      this.postDetailProvider,
-      this.notifierProvider,
-      this.allNotifierProvider});
+  final BackofficePostStateNotifier? notifierProvider;
+  const PostDetailScreen({
+    super.key,
+    required this.postId,
+    required this.refreshList,
+    this.boardType,
+    this.postDetailProvider,
+    this.notifierProvider,
+  });
 
   @override
   ConsumerState<PostDetailScreen> createState() => _PostDetailScreenState();
@@ -185,7 +184,6 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
     });
     if (widget.notifierProvider != null) {
       widget.notifierProvider!.getDetail(postId: widget.postId);
-      widget.allNotifierProvider!.getDetail(postId: widget.postId);
     }
   }
 
@@ -195,7 +193,6 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
       print("getting details");
       setState(() {
         widget.notifierProvider!.getDetail(postId: widget.postId);
-        widget.allNotifierProvider!.getDetail(postId: widget.postId);
       });
     } else {
       setState(() {
@@ -215,7 +212,6 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
 
     if (widget.notifierProvider != null) {
       widget.notifierProvider!.getDetail(postId: widget.postId);
-      widget.allNotifierProvider!.getDetail(postId: widget.postId);
     }
   }
 
@@ -237,7 +233,6 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
 
     if (widget.notifierProvider != null) {
       widget.notifierProvider!.getDetail(postId: widget.postId);
-      widget.allNotifierProvider!.getDetail(postId: widget.postId);
     }
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mingle/backoffice/provider/backoffice_provider.dart';
 import 'package:mingle/common/component/general_post_preview_card.dart';
 // import 'package:mingle/common/component/post_preview_card.dart';
 import 'package:mingle/post/provider/post_provider.dart';
@@ -18,60 +19,38 @@ class SquareTabScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool isChina = ref.watch(currentUserProvider) != null &&
-        ref.watch(currentUserProvider)!.country == "CHINA";
     return TabScreen(
       boardType: 'TOTAL',
       title: '광장',
-      subtitle: '모든 학교의 학생들이 모인',
-      tab1: '전체글',
-      tab2: '자유',
-      tab3: '질문',
-      tab4: isChina ? '총학생회' : '밍글소식',
+      tabs: const ["홍콩", "중국", "싱가폴"],
       tabContents: [
         GeneralPostPreviewCard(
           boardType: "광장",
           controller: controller,
-          categoryType: "전체",
           // postList: dummyPostList,
-          data: ref.watch(totalAllPostProvider),
-          notifierProvider: ref.watch(totalAllPostProvider.notifier),
-          allNotifierProvider: ref.watch(totalAllPostProvider.notifier),
-          postDetailProvider: totalAllPostDetailProvider,
+          data: ref.watch(hongkongAllPostProvider),
+          notifierProvider: ref.watch(hongkongAllPostProvider.notifier),
+          allNotifierProvider: ref.watch(hongkongAllPostProvider.notifier),
+          postDetailProvider: hongkongAllPostProviderDetailProvider,
           // postFuture: paginatePost("MINGLE", ref),
           cardType: CardType.square,
         ),
         GeneralPostPreviewCard(
           controller: controller,
           boardType: "광장",
-          categoryType: "자유",
-          data: ref.watch(totalFreePostProvider),
-          // postFuture: paginatePost("FREE", ref),
-          notifierProvider: ref.watch(totalFreePostProvider.notifier),
-          allNotifierProvider: ref.watch(totalAllPostProvider.notifier),
-          postDetailProvider: totalFreePostDetailProvider,
+          data: ref.watch(chinaAllPostProvider),
+          notifierProvider: ref.watch(chinaAllPostProvider.notifier),
+          allNotifierProvider: ref.watch(chinaAllPostProvider.notifier),
+          postDetailProvider: chinaAllPostProviderDetailProvider,
           cardType: CardType.square,
         ),
         GeneralPostPreviewCard(
           boardType: "광장",
-          categoryType: "질문",
           controller: controller,
-          data: ref.watch(totalQnAPostProvider),
-          // postFuture: paginatePost("QNA", ref),
-          notifierProvider: ref.watch(totalQnAPostProvider.notifier),
-          allNotifierProvider: ref.watch(totalAllPostProvider.notifier),
-          postDetailProvider: totalQnAPostDetailProvider,
-          cardType: CardType.square,
-        ),
-        GeneralPostPreviewCard(
-          boardType: "광장",
-          categoryType: "밍글소식",
-          controller: controller,
-          data: ref.watch(totalMinglePostProvider),
-          // postFuture: paginatePost("KSA", ref),
-          notifierProvider: ref.watch(totalMinglePostProvider.notifier),
-          allNotifierProvider: ref.watch(totalAllPostProvider.notifier),
-          postDetailProvider: totalMinglePostDetailProvider,
+          data: ref.watch(singaporeAllPostProvider),
+          notifierProvider: ref.watch(singaporeAllPostProvider.notifier),
+          allNotifierProvider: ref.watch(singaporeAllPostProvider.notifier),
+          postDetailProvider: singaporeAllPostProviderDetailProvider,
           cardType: CardType.square,
         ),
       ],
