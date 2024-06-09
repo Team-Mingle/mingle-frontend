@@ -3,6 +3,20 @@
 part of 'backoffice_repository.dart';
 
 // **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+RejectReasonDto _$RejectReasonDtoFromJson(Map<String, dynamic> json) =>
+    RejectReasonDto(
+      rejectReason: json['rejectReason'] as String,
+    );
+
+Map<String, dynamic> _$RejectReasonDtoToJson(RejectReasonDto instance) =>
+    <String, dynamic>{
+      'rejectReason': instance.rejectReason,
+    };
+
+// **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
 
@@ -19,12 +33,16 @@ class _BackofficeRepository implements BackofficeRepository {
   String? baseUrl;
 
   @override
-  Future<void> rejectTempSignup({required int memberId}) async {
+  Future<void> rejectTempSignup({
+    required int memberId,
+    required RejectReasonDto rejectReasonDto,
+  }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'memberId': memberId};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
-    final Map<String, dynamic>? _data = null;
+    final _data = <String, dynamic>{};
+    _data.addAll(rejectReasonDto.toJson());
     await _dio.fetch<void>(_setStreamType<void>(Options(
       method: 'POST',
       headers: _headers,

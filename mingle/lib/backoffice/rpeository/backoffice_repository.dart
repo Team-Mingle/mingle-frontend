@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:mingle/backoffice/model/temp_signup_request_list_model.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
@@ -23,7 +24,9 @@ abstract class BackofficeRepository {
 
   @POST('/reject-temp-sign-up')
   @Headers({'accessToken': 'true'})
-  Future<void> rejectTempSignup({@Query("memberId") required int memberId});
+  Future<void> rejectTempSignup(
+      {@Query("memberId") required int memberId,
+      @Body() required RejectReasonDto rejectReasonDto});
 
   @POST('/authenticate-temp-sign-up')
   @Headers({'accessToken': 'true'})
@@ -43,4 +46,13 @@ abstract class BackofficeRepository {
   @Headers({'accessToken': 'true'})
   Future<CursorPagination<PostModel>> getAllTotalPosts(
       {@Path() required String countryId});
+}
+
+@JsonSerializable()
+class RejectReasonDto {
+  final String rejectReason;
+
+  RejectReasonDto({required this.rejectReason});
+
+  Map<String, dynamic> toJson() => _$RejectReasonDtoToJson(this);
 }

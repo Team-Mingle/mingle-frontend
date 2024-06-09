@@ -4,6 +4,7 @@ part 'temp_signup_request_model.g.dart';
 
 @JsonSerializable()
 class TempSignupRequestModel {
+  final int memberId;
   final String photoUrl;
   final String nickname;
   final String? studentId;
@@ -11,6 +12,7 @@ class TempSignupRequestModel {
   final String? email;
 
   TempSignupRequestModel({
+    required this.memberId,
     required this.photoUrl,
     required this.nickname,
     required this.studentId,

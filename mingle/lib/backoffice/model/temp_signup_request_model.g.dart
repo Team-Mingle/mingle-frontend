@@ -9,6 +9,7 @@ part of 'temp_signup_request_model.dart';
 TempSignupRequestModel _$TempSignupRequestModelFromJson(
         Map<String, dynamic> json) =>
     TempSignupRequestModel(
+      memberId: (json['memberId'] as num).toInt(),
       photoUrl: json['photoUrl'] as String,
       nickname: json['nickname'] as String,
       studentId: json['studentId'] as String?,
@@ -19,6 +20,7 @@ TempSignupRequestModel _$TempSignupRequestModelFromJson(
 Map<String, dynamic> _$TempSignupRequestModelToJson(
         TempSignupRequestModel instance) =>
     <String, dynamic>{
+      'memberId': instance.memberId,
       'photoUrl': instance.photoUrl,
       'nickname': instance.nickname,
       'studentId': instance.studentId,
