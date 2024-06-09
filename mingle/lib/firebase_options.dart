@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCgyHZmcxvWha41Th8V2MtMltM4ckLhkiA',
-    appId: '1:861115253936:android:cf389da542e5f83b9aa775',
-    messagingSenderId: '861115253936',
-    projectId: 'mingle-new',
-    storageBucket: 'mingle-new.appspot.com',
+    apiKey: 'AIzaSyC6ahgwLlN1oi63p2aoAce-xd5kpXN1Xho',
+    appId: '1:533614866605:android:8b9968f55fee47ab86d624',
+    messagingSenderId: '533614866605',
+    projectId: 'mingle-admin',
+    storageBucket: 'mingle-admin.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBRXug_-e2GENXymkP7wd_LQkZ0dEmiP8o',
-    appId: '1:861115253936:ios:851b606a7d0b75f19aa775',
-    messagingSenderId: '861115253936',
-    projectId: 'mingle-new',
-    storageBucket: 'mingle-new.appspot.com',
-    iosBundleId: 'com.teamingle.mingle.ImageNotification',
+    apiKey: 'AIzaSyDEyhXE_T_3loZish-m13wU48gDeYPOmRM',
+    appId: '1:533614866605:ios:ff1ec06630a4648086d624',
+    messagingSenderId: '533614866605',
+    projectId: 'mingle-admin',
+    storageBucket: 'mingle-admin.appspot.com',
+    iosBundleId: 'com.company.mingle-admin',
   );
 }

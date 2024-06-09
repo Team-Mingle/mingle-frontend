@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyDEyhXE_T_3loZish-m13wU48gDeYPOmRM</string>
+	<string>AIzaSyBRXug_-e2GENXymkP7wd_LQkZ0dEmiP8o</string>
 	<key>GCM_SENDER_ID</key>
-	<string>533614866605</string>
+	<string>861115253936</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.company.mingle-admin</string>
+	<string>com.teamingle.mingle</string>
 	<key>PROJECT_ID</key>
-	<string>mingle-admin</string>
+	<string>mingle-new</string>
 	<key>STORAGE_BUCKET</key>
-	<string>mingle-admin.appspot.com</string>
+	<string>mingle-new.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:533614866605:ios:ff1ec06630a4648086d624</string>
+	<string>1:861115253936:ios:851b606a7d0b75f19aa775</string>
 </dict>
 </plist>
