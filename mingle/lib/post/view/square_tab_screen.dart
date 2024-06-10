@@ -22,8 +22,19 @@ class SquareTabScreen extends ConsumerWidget {
     return TabScreen(
       boardType: 'TOTAL',
       title: '광장',
-      tabs: const ["홍콩", "중국", "싱가폴"],
+      tabs: const ["전체", "홍콩", "중국", "싱가폴"],
       tabContents: [
+        GeneralPostPreviewCard(
+          boardType: "광장",
+          controller: controller,
+          // postList: dummyPostList,
+          data: ref.watch(worldwideAllPostProvider),
+          notifierProvider: ref.watch(worldwideAllPostProvider.notifier),
+          allNotifierProvider: ref.watch(worldwideAllPostProvider.notifier),
+          postDetailProvider: worldwideAllPostProviderDetailProvider,
+          // postFuture: paginatePost("MINGLE", ref),
+          cardType: CardType.square,
+        ),
         GeneralPostPreviewCard(
           boardType: "광장",
           controller: controller,

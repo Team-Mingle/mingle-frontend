@@ -202,7 +202,7 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   await Firebase.initializeApp(
-    name: "mingle",
+    name: "mingle-admin",
     options: DefaultFirebaseOptions.currentPlatform,
   );
   initializeNotification();

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:mingle/backoffice/model/module_review_request_model.dart';
 import 'package:mingle/backoffice/model/temp_signup_request_model.dart';
+import 'package:mingle/backoffice/view/freshman_module_review_detail_screen.dart';
+import 'package:mingle/backoffice/view/freshman_module_review_requests_screen.dart';
 import 'package:mingle/backoffice/view/freshman_signup_request_detail_screen.dart';
 import 'package:mingle/common/const/colors.dart';
 
 class SignupRequestPreviewCard extends StatelessWidget {
   final int currentIndex;
-  final List<TempSignupRequestModel> members;
+  final List<dynamic> members;
   final Function removeFromList;
   const SignupRequestPreviewCard(
       {super.key,
@@ -18,10 +21,15 @@ class SignupRequestPreviewCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (_) => FreshmanSignupRequestDetailScreen(
-              members: members,
-              currentIndex: currentIndex,
-              removeFromList: removeFromList),
+          builder: (_) => members is List<TempSignupRequestModel>
+              ? FreshmanSignupRequestDetailScreen(
+                  members: members as List<TempSignupRequestModel>,
+                  currentIndex: currentIndex,
+                  removeFromList: removeFromList)
+              : FreshmanModuleReviewDetailScreen(
+                  members: members as List<ModuleReviewRequestModel>,
+                  currentIndex: currentIndex,
+                  removeFromList: removeFromList),
         ),
       ),
       child: Container(
@@ -32,7 +40,7 @@ class SignupRequestPreviewCard extends StatelessWidget {
             bottom: BorderSide(color: GRAYSCALE_GRAY_03),
           ),
         ),
-        child: Text("${members[currentIndex].nickname}님의 회원가입 요청입니다."),
+        child: Text("${members[currentIndex].memberId}님의 회원가입 요청입니다."),
       ),
     );
   }

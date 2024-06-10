@@ -2,20 +2,16 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
-	<key>FirebaseAppDelegateProxyEnabled</key>
-	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>밍글</string>
+	<string>밍글-admin</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.teamingle.mingle</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -28,16 +24,20 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>&quot;밍글&quot;이 사진 또는 동영상을 촬영하여 게시물에 등록하는 기능 사용을 위해 카레라 사용을 허용합니다. </string>
+	<string>"밍글"이 사진 또는 동영상을 촬영하여 게시물에 등록하는 기능 사용을 위해 카레라 사용을 허용합니다. </string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app does not require access to the microphone.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>"밍글"이 사진을 갤러리에 저장하는 기능 사용을 위해 사진 라이브러리에 접근하도록 허용합니다. </string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>&quot;밍글&quot;이 사진 또는 동영상을 게시물에 등록하는 기능 사용을 위해 사진 라이브러리에 접근하도록 허용합니다. </string>
-    <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>&quot;밍글&quot;이 사진을 갤러리에 저장하는 기능 사용을 위해 사진 라이브러리에 접근하도록 허용합니다. </string>
+	<string>"밍글"이 사진 또는 동영상을 게시물에 등록하는 기능 사용을 위해 사진 라이브러리에 접근하도록 허용합니다. </string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

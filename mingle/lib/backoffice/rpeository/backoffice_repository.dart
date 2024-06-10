@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mingle/backoffice/model/module_review_request_list_model.dart';
 import 'package:mingle/backoffice/model/temp_signup_request_list_model.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
@@ -36,6 +37,21 @@ abstract class BackofficeRepository {
   @GET('/temp-sign-up-apply-list')
   @Headers({'accessToken': 'true'})
   Future<TempSignupRequestListModel> getTempSignupRequestList();
+
+  @POST('/reject-freshman-coupon')
+  @Headers({'accessToken': 'true'})
+  Future<void> rejectModuleReviewRequest(
+      {@Query("memberId") required int memberId,
+      @Body() required RejectReasonDto rejectReasonDto});
+
+  @POST('/authenticate-freshman-coupon')
+  @Headers({'accessToken': 'true'})
+  Future<void> authenticateModuleReviewRequest(
+      {@Query("memberId") required int memberId});
+
+  @GET('/freshman-coupon-apply-list')
+  @Headers({'accessToken': 'true'})
+  Future<ModuleReviewRequestListModel> getModuleReviewRequestList();
 
   @GET('/post/univ/{universityId}/all')
   @Headers({'accessToken': 'true'})

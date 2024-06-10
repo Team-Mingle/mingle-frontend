@@ -356,6 +356,8 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
       );
     }
 
+    print("post id is: ${widget.postId}");
+
     final post = ref.watch(widget.postDetailProvider!(widget.postId));
 
     if (post == null) {

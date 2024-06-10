@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mingle/backoffice/view/freshman_module_review_requests_screen.dart';
 import 'package:mingle/backoffice/view/freshman_signup_requests_screen.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
@@ -57,18 +58,21 @@ class _HomeRootTabState extends ConsumerState<HomeRootTab> {
     'assets/img/root_screen/ic_square_unselected.svg',
     'assets/img/root_screen/ic_lawn_unselected.svg',
     'assets/img/root_screen/ic_timetable_unselected.svg',
+    'assets/img/root_screen/ic_market_unselected.svg',
   ];
 
   final List<String> _selectedSvgImagePaths = [
     'assets/img/root_screen/ic_square_selected.svg',
     'assets/img/root_screen/ic_lawn_selected.svg',
     'assets/img/root_screen/ic_timetable_selected.svg',
+    'assets/img/root_screen/ic_market_selected.svg',
   ];
 
   final List<String> _labels = [
     '광장',
     '잔디밭',
     '회원가입',
+    '강의평가',
   ];
   final List<CustomScrollController> _controllers = [
     CustomScrollController(),
@@ -124,6 +128,8 @@ class _HomeRootTabState extends ConsumerState<HomeRootTab> {
         );
       case 2:
         return const FreshmanSignupRequestScreen();
+      case 3:
+        return const FreshmanModuleReviewRequestsScreen();
       // case 4:
       //   return MarketTabScreen(
       //     controller: _controllers[3],
@@ -131,6 +137,7 @@ class _HomeRootTabState extends ConsumerState<HomeRootTab> {
       //       _onItemTapped(index);
       //     },
       //   );
+
       default:
         return HomeTabScreen(
           controller: _controllers[0],

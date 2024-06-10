@@ -41,6 +41,7 @@ class _LawnTabScreenState extends ConsumerState<LawnTabScreen> {
         boardType: "UNIV",
         title: '잔디밭',
         tabs: const [
+          "전체",
           "HKU",
           "HKUST",
           "CUHK",
@@ -70,7 +71,7 @@ class _LawnTabScreenState extends ConsumerState<LawnTabScreen> {
           "CUPL"
         ],
         tabContents: List.generate(
-            27,
+            28,
             (index) => GeneralPostPreviewCard(
                   controller: widget.controller,
                   boardType: "잔디밭",

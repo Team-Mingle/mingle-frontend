@@ -42,11 +42,16 @@ StateNotifierProvider<BackofficePostStateNotifier, CursorPaginationBase>
   });
 }
 
+final worldwideAllPostProvider = countryAllPostProvider("ALL");
+
 final hongkongAllPostProvider = countryAllPostProvider("HONGKONG");
 
 final chinaAllPostProvider = countryAllPostProvider("CHINA");
 
 final singaporeAllPostProvider = countryAllPostProvider("SINGAPORE");
+
+final worldwideAllPostProviderDetailProvider =
+    countryAllPostProviderDetailProvider("ALL");
 
 final hongkongAllPostProviderDetailProvider =
     countryAllPostProviderDetailProvider("HONGKONG");
@@ -58,16 +63,18 @@ final singaporeAllPostProviderDetailProvider =
     countryAllPostProviderDetailProvider("SINGAPORE");
 
 final universityAllPostProviderList =
-    List.generate(27, (index) => universityAllPostProvider(index + 1));
+    List.generate(28, (index) => universityAllPostProvider(index));
 
 final universityAllPostDetailProviderList =
-    List.generate(27, (index) => universityAllPostDetailProvider(index + 1));
+    List.generate(28, (index) => universityAllPostDetailProvider(index));
 
 ProviderFamily<PostModel?, int> countryAllPostProviderDetailProvider(
     String countryId) {
   return Provider.family<PostModel?, int>((ref, id) {
     CursorPaginationBase state = ref.watch(countryAllPostProvider(countryId));
     switch (countryId) {
+      case "ALL":
+        state = ref.watch(worldwideAllPostProvider);
       case "HONGKONG":
         state = ref.watch(hongkongAllPostProvider);
       case "CHINA":
@@ -87,7 +94,7 @@ ProviderFamily<PostModel?, int> countryAllPostProviderDetailProvider(
 
 ProviderFamily<PostModel?, int> universityAllPostDetailProvider(int univId) {
   return Provider.family<PostModel?, int>((ref, id) {
-    final state = ref.watch(universityAllPostProviderList[univId - 1]);
+    final state = ref.watch(universityAllPostProviderList[univId]);
 
     if (state is! CursorPagination) {
       return null;
