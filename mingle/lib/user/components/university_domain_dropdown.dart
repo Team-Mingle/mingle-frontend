@@ -56,6 +56,13 @@ class _DropdownListState extends ConsumerState<UniversityDomainDropdownList> {
     final items =
         widget.isConvertEmail ? domains : ref.watch(selectedUnivDomainProvider);
 
+    if (widget.isConvertEmail && items.isNotEmpty) {
+      Future.delayed(
+          Duration.zero,
+          () => ref
+              .read(selectedEmailExtensionProvider.notifier)
+              .update((state) => items[0]));
+    }
     return items.length == 1
         ? Container(
             height: 44,

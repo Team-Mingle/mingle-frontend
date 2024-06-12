@@ -49,6 +49,7 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("isconvertemail: ${widget.isConvertEmail}");
     final dio = ref.watch(dioProvider);
     void validateForm() async {
       final email = {
@@ -73,7 +74,8 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
           );
           if (sendCodeResp.statusCode == 200) {
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => const EnterVerificationNumberScreen(
+                builder: (_) => EnterVerificationNumberScreen(
+                      isConvertEmail: widget.isConvertEmail,
                       isPasswordReset: true,
                     )));
           } else {
@@ -106,7 +108,9 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
               isLoading = false;
             });
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => const EnterVerificationNumberScreen()));
+                builder: (_) => EnterVerificationNumberScreen(
+                      isConvertEmail: widget.isConvertEmail,
+                    )));
           } else {
             String? error;
             switch (resp.data['code']) {
@@ -355,10 +359,10 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
               //   )
               // :
               NextButton(
-                nextScreen: EnterVerificationNumberScreen(
-                  isConvertEmail: widget.isConvertEmail,
-                  isPasswordReset: widget.isPasswordReset,
-                ),
+                // nextScreen: EnterVerificationNumberScreen(
+                //   isConvertEmail: widget.isConvertEmail,
+                //   isPasswordReset: widget.isPasswordReset,
+                // ),
                 buttonName: "인증번호 받기",
                 buttonIcon: const ImageIcon(
                   AssetImage("assets/img/signup_screen/email_icon.png"),

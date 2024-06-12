@@ -92,6 +92,7 @@ class _EnterVerificationNumberScreenState
 
   @override
   Widget build(BuildContext context) {
+    print("convert email?: ${widget.isConvertEmail}");
     // CountdownTimer countdownTimer =
     //     CountdownTimer(setCountdownComplete: setCountdownComplete);
     final dio = ref.watch(dioProvider);
@@ -105,6 +106,10 @@ class _EnterVerificationNumberScreenState
         setState(() {
           isLoading = false;
         });
+        fToast.showToast(
+            child: const ToastMessage(message: "이메일 전환이 완료되었습니다!"),
+            toastDuration: const Duration(seconds: 2),
+            gravity: ToastGravity.CENTER);
         await Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => HomeRootTab()),
         );
