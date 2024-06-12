@@ -274,78 +274,79 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
               const SizedBox(
                 height: 24.0,
               ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _isFreshieExpanded = !_isFreshieExpanded;
-                  });
-                },
-                child: Container(
-                  padding: EdgeInsets.only(
-                      left: 16.0,
-                      right: 16.0,
-                      top: 12.0,
-                      bottom: _isFreshieExpanded ? 20.0 : 12.0),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: GRAYSCALE_GRAY_02),
-                      borderRadius: BorderRadius.circular(8.0)),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          const Text(
-                            "아직 학교 이메일이 없으신가요?",
-                            style: TextStyle(
-                                fontSize: 12.0, fontWeight: FontWeight.w500),
-                          ),
-                          const Spacer(),
-                          SvgPicture.asset(_isFreshieExpanded
-                              ? "assets/img/module_review_screen/up_tick_icon.svg"
-                              : "assets/img/module_review_screen/down_tick_icon.svg")
-                        ],
-                      ),
-                      ExpandedSection(
-                        expand: _isFreshieExpanded,
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "아직 학교 이메일을 발급받지 못한 예비 합격생일 경우, Offer Letter 인증을 통해서 신입생 계정을 만들 수 있어요.\n\n임시 계정으로 회원가입 한 유저는 학교 이메일을 발급받은 후 \"마이페이지” > “신입생 계정에서 정규 계정으로 전환하기” 에서 재학생 인증을 다시 진행해야 돼요.\n\n개강 후에도 정규 계정으로 전환되지 않은 유저는 밍글 이용에제재가 있을 수 있는 점 확인 부탁드려요.",
-                                style: TextStyle(
-                                    fontSize: 12.0,
-                                    color: GRAYSCALE_GRAY_04_5,
-                                    letterSpacing: -0.06),
-                              ),
-                              const SizedBox(
-                                height: 17.0,
-                              ),
-                              Align(
-                                alignment: Alignment.center,
-                                child: GestureDetector(
-                                  onTap: () => Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (_) =>
-                                              const EnterOfferIdScreen())),
-                                  child: const Text(
-                                    "Offer Letter 인증하고 신입생 계정 만들기",
-                                    style: TextStyle(
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.w500,
-                                        color: PRIMARY_COLOR_ORANGE_01),
-                                  ),
+              if (!widget.isConvertEmail)
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _isFreshieExpanded = !_isFreshieExpanded;
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.only(
+                        left: 16.0,
+                        right: 16.0,
+                        top: 12.0,
+                        bottom: _isFreshieExpanded ? 20.0 : 12.0),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: GRAYSCALE_GRAY_02),
+                        borderRadius: BorderRadius.circular(8.0)),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            const Text(
+                              "아직 학교 이메일이 없으신가요?",
+                              style: TextStyle(
+                                  fontSize: 12.0, fontWeight: FontWeight.w500),
+                            ),
+                            const Spacer(),
+                            SvgPicture.asset(_isFreshieExpanded
+                                ? "assets/img/module_review_screen/up_tick_icon.svg"
+                                : "assets/img/module_review_screen/down_tick_icon.svg")
+                          ],
+                        ),
+                        ExpandedSection(
+                          expand: _isFreshieExpanded,
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "아직 학교 이메일을 발급받지 못한 예비 합격생일 경우, Offer Letter 인증을 통해서 신입생 계정을 만들 수 있어요.\n\n임시 계정으로 회원가입 한 유저는 학교 이메일을 발급받은 후 \"마이페이지” > “신입생 계정에서 정규 계정으로 전환하기” 에서 재학생 인증을 다시 진행해야 돼요.\n\n개강 후에도 정규 계정으로 전환되지 않은 유저는 밍글 이용에제재가 있을 수 있는 점 확인 부탁드려요.",
+                                  style: TextStyle(
+                                      fontSize: 12.0,
+                                      color: GRAYSCALE_GRAY_04_5,
+                                      letterSpacing: -0.06),
                                 ),
-                              )
-                            ],
+                                const SizedBox(
+                                  height: 17.0,
+                                ),
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: GestureDetector(
+                                    onTap: () => Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                const EnterOfferIdScreen())),
+                                    child: const Text(
+                                      "Offer Letter 인증하고 신입생 계정 만들기",
+                                      style: TextStyle(
+                                          fontSize: 12.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: PRIMARY_COLOR_ORANGE_01),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
               Expanded(child: Container()),
               // widget.isConvertEmail
               // ? NextButton(
