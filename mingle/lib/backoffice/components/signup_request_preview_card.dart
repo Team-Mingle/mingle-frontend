@@ -18,10 +18,11 @@ class SignupRequestPreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isTempSignup = members is List<TempSignupRequestModel>;
     return GestureDetector(
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (_) => members is List<TempSignupRequestModel>
+          builder: (_) => isTempSignup
               ? FreshmanSignupRequestDetailScreen(
                   members: members as List<TempSignupRequestModel>,
                   currentIndex: currentIndex,
@@ -40,7 +41,8 @@ class SignupRequestPreviewCard extends StatelessWidget {
             bottom: BorderSide(color: GRAYSCALE_GRAY_03),
           ),
         ),
-        child: Text("${members[currentIndex].memberId}님의 회원가입 요청입니다."),
+        child: Text(
+            "${isTempSignup ? members[currentIndex].nickname : members[currentIndex].memberId}님의 회원가입 요청입니다."),
       ),
     );
   }
