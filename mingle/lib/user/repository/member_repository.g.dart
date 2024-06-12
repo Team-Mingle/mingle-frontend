@@ -28,6 +28,16 @@ Map<String, dynamic> _$ChangeNicknameDtoToJson(ChangeNicknameDto instance) =>
       'newNickname': instance.newNickname,
     };
 
+ConvertEmailDto _$ConvertEmailDtoFromJson(Map<String, dynamic> json) =>
+    ConvertEmailDto(
+      email: json['email'] as String,
+    );
+
+Map<String, dynamic> _$ConvertEmailDtoToJson(ConvertEmailDto instance) =>
+    <String, dynamic>{
+      'email': instance.email,
+    };
+
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
@@ -85,6 +95,32 @@ class _MemberRepository implements MemberRepository {
         .compose(
           _dio.options,
           '/nickname',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
+  Future<void> convertEmail({required ConvertEmailDto convertEmailDto}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(convertEmailDto.toJson());
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'PATCH',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/freshman-sign-up',
           queryParameters: queryParameters,
           data: _data,
         )

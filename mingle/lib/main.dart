@@ -14,6 +14,8 @@ import 'package:mingle/firebase_options.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.dart';
 import 'package:mingle/timetable/view/timetable_tab_screen.dart';
+import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
+import 'package:mingle/user/view/signup_screen/enter_email_screen.dart';
 import 'package:mingle/user/view/signup_screen/enter_free_domain_email_screen.dart';
 import 'package:mingle/user/view/signup_screen/enter_offer_id_screen.dart';
 import 'package:mingle/user/view/signup_screen/finish_temp_signup_screen.dart';

@@ -8,7 +8,7 @@ part of 'course_preview_model.dart';
 
 CoursePreviewModel _$CoursePreviewModelFromJson(Map<String, dynamic> json) =>
     CoursePreviewModel(
-      id: (json['id'] as num).toInt(),
+      id: json['id'] as int,
       courseCode: json['courseCode'] as String,
       semester: json['semester'] as String,
       professor: json['professor'] as String,
