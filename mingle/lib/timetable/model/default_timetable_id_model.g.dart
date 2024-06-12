@@ -9,7 +9,7 @@ part of 'default_timetable_id_model.dart';
 DefaultTimetableIdModel _$DefaultTimetableIdModelFromJson(
         Map<String, dynamic> json) =>
     DefaultTimetableIdModel(
-      defaultTimetableId: json['defaultTimetableId'] as int,
+      defaultTimetableId: (json['defaultTimetableId'] as num).toInt(),
     );
 
 Map<String, dynamic> _$DefaultTimetableIdModelToJson(

@@ -8,7 +8,7 @@ part of 'point_shop_repository.dart';
 
 CreateCouponDto _$CreateCouponDtoFromJson(Map<String, dynamic> json) =>
     CreateCouponDto(
-      couponProductId: json['couponProductId'] as int,
+      couponProductId: (json['couponProductId'] as num).toInt(),
     );
 
 Map<String, dynamic> _$CreateCouponDtoToJson(CreateCouponDto instance) =>

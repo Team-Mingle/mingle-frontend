@@ -13,6 +13,7 @@ TimetableModel _$TimetableModelFromJson(Map<String, dynamic> json) =>
       coursePreviewDtoList: (json['coursePreviewDtoList'] as List<dynamic>)
           .map((e) => CourseDetailModel.fromJson(e as Map<String, dynamic>))
           .toList(),
+      isFull: json['isFull'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$TimetableModelToJson(TimetableModel instance) =>
@@ -20,4 +21,5 @@ Map<String, dynamic> _$TimetableModelToJson(TimetableModel instance) =>
       'name': instance.name,
       'semester': instance.semester,
       'coursePreviewDtoList': instance.coursePreviewDtoList,
+      'isFull': instance.isFull,
     };

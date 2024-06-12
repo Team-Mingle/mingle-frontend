@@ -8,10 +8,10 @@ part of 'shop_coupon_model.dart';
 
 ShopCouponModel _$ShopCouponModelFromJson(Map<String, dynamic> json) =>
     ShopCouponModel(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       description: json['description'] as String,
-      cost: json['cost'] as int,
+      cost: (json['cost'] as num).toInt(),
     );
 
 Map<String, dynamic> _$ShopCouponModelToJson(ShopCouponModel instance) =>

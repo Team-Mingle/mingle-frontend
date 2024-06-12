@@ -9,7 +9,7 @@ part of 'add_timetable_response_model.dart';
 AddTimetableResponseModel _$AddTimetableResponseModelFromJson(
         Map<String, dynamic> json) =>
     AddTimetableResponseModel(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       semester: json['semester'] as String,
     );

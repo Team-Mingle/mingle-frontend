@@ -7,7 +7,7 @@ part of 'friend_model.dart';
 // **************************************************************************
 
 FriendModel _$FriendModelFromJson(Map<String, dynamic> json) => FriendModel(
-      friendId: json['friendId'] as int,
+      friendId: (json['friendId'] as num).toInt(),
       friendName: json['friendName'] as String,
     );
 
