@@ -14,6 +14,9 @@ import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/dio/dio.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
+import 'package:mingle/user/repository/member_repository.dart';
+import 'package:mingle/user/view/home_screen/home_root_tab.dart';
+import 'package:mingle/user/view/home_screen/home_tab_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:mingle/user/view/signup_screen/enter_password_screen.dart';
 import 'package:mingle/user/view/signup_screen/provider/email_extension_selected_provider.dart';
@@ -25,8 +28,9 @@ import 'package:mingle/user/view/signup_screen/provider/verification_number_ente
 
 class EnterVerificationNumberScreen extends ConsumerStatefulWidget {
   final bool isPasswordReset;
+  final bool isConvertEmail;
   const EnterVerificationNumberScreen(
-      {super.key, this.isPasswordReset = false});
+      {super.key, this.isPasswordReset = false, this.isConvertEmail = false});
 
   @override
   ConsumerState<EnterVerificationNumberScreen> createState() =>
@@ -88,9 +92,40 @@ class _EnterVerificationNumberScreenState
 
   @override
   Widget build(BuildContext context) {
+    print("convert email?: ${widget.isConvertEmail}");
     // CountdownTimer countdownTimer =
     //     CountdownTimer(setCountdownComplete: setCountdownComplete);
     final dio = ref.watch(dioProvider);
+    void convertEmail() async {
+      final email =
+          "${ref.read(selectedEmailProvider)}@${ref.read(selectedEmailExtensionProvider)}";
+      try {
+        await ref
+            .read(memberRepositoryProvider)
+            .convertEmail(convertEmailDto: ConvertEmailDto(email: email));
+        setState(() {
+          isLoading = false;
+        });
+        fToast.showToast(
+            child: const ToastMessage(message: "이메일 전환이 완료되었습니다!"),
+            toastDuration: const Duration(seconds: 2),
+            gravity: ToastGravity.CENTER);
+        await Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => HomeRootTab()),
+        );
+      } on DioException catch (e) {
+        setState(() {
+          isLoading = false;
+        });
+        fToast.showToast(
+            child: const ToastMessage(
+              message: generalErrorMsg,
+            ),
+            toastDuration: const Duration(seconds: 2),
+            gravity: ToastGravity.CENTER);
+      }
+    }
+
     void validateForm() async {
       final bool isTempSignUp = ref.read(selectedOfferIdProvider) != "" &&
           ref.read(uploadedIdentificationProvider) != null;
@@ -115,13 +150,20 @@ class _EnterVerificationNumberScreenState
         print(resp.data);
         if (resp.data['verified'] as bool) {
           print(resp.data);
-          setState(() {
-            isLoading = false;
-          });
-          await Navigator.of(context).push(MaterialPageRoute(
-              builder: (_) => EnterPasswordScreen(
-                    isPasswordReset: widget.isPasswordReset,
-                  )));
+          if (widget.isConvertEmail) {
+            convertEmail();
+          } else {
+            setState(() {
+              isLoading = false;
+            });
+            await Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => EnterPasswordScreen(
+                  isPasswordReset: widget.isPasswordReset,
+                ),
+              ),
+            );
+          }
         } else {
           String? error;
           switch (resp.data['code']) {
@@ -318,10 +360,13 @@ class _EnterVerificationNumberScreenState
                     child: Container(),
                   ),
                   NextButton(
-                    nextScreen: EnterPasswordScreen(
-                      isPasswordReset: widget.isPasswordReset,
-                    ),
-                    buttonName: "다음으로",
+                    nextScreen: widget.isConvertEmail
+                        ? HomeRootTab()
+                        : EnterPasswordScreen(
+                            isPasswordReset: widget.isPasswordReset,
+                          ),
+                    isReplacement: widget.isConvertEmail,
+                    buttonName: widget.isConvertEmail ? "완료하기" : "다음으로",
                     isSelectedProvider: [enteredVerificationNumberProvider],
                     validators: [validateForm],
                     isLoading: isLoading,

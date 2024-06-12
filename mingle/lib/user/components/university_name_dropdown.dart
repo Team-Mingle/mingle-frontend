@@ -91,7 +91,7 @@ class _DropdownListState extends ConsumerState<UniversityNameDropdownList> {
                           .firstWhere((element) =>
                               element.displayUniversityName == value)
                           .domain);
-                  if (ref.watch(selectedUnivDomainProvider).length == 1) {
+                  if (ref.watch(selectedUnivDomainProvider).isNotEmpty) {
                     ref.watch(selectedEmailExtensionProvider.notifier).update(
                         (state) => ref.read(selectedUnivDomainProvider)[0]);
                   }

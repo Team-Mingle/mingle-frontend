@@ -256,7 +256,7 @@ class _SecondHandPostDetailScreenState
     //   selectedOption = item.status;
     // });
 
-    return Scaffold(body: renderContent(item));
+    return Scaffold(backgroundColor: Colors.white, body: renderContent(item));
   }
 
   Widget renderContent(SecondHandMarketPostModel item) {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/user/provider/user_provider.dart';
 import 'package:mingle/user/repository/auth_repository.dart';
 import 'package:mingle/user/view/signup_screen/model/country_model.dart';
 import 'package:mingle/user/view/signup_screen/model/university_domain_model.dart';
@@ -13,9 +14,11 @@ import 'package:mingle/user/view/signup_screen/provider/selected_university_doma
 
 class UniversityDomainDropdownList extends ConsumerStatefulWidget {
   final double width;
+  final bool isConvertEmail;
   const UniversityDomainDropdownList({
     super.key,
     this.width = 170,
+    this.isConvertEmail = false,
   });
 
   @override
@@ -25,11 +28,41 @@ class UniversityDomainDropdownList extends ConsumerStatefulWidget {
 
 class _DropdownListState extends ConsumerState<UniversityDomainDropdownList> {
   String? selectedValue;
+  List<String> domains = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.isConvertEmail) {
+      initializeDomains();
+    }
+  }
+
+  void initializeDomains() async {
+    final currentUser = ref.read(currentUserProvider);
+    final emailDomains = (await ref
+            .read(authRepositoryProvider)
+            .getEmailDomains(countryName: currentUser!.country!))
+        .firstWhere(
+            (country) => country.displayUniversityName == currentUser.univName);
+    setState(() {
+      domains = emailDomains.domain;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final items = ref.watch(selectedUnivDomainProvider);
+    final items =
+        widget.isConvertEmail ? domains : ref.watch(selectedUnivDomainProvider);
 
+    if (widget.isConvertEmail && items.isNotEmpty) {
+      Future.delayed(
+          Duration.zero,
+          () => ref
+              .read(selectedEmailExtensionProvider.notifier)
+              .update((state) => items[0]));
+    }
     return items.length == 1
         ? Container(
             height: 44,
