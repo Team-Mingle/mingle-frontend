@@ -56,7 +56,7 @@ class _HomeRootTabState extends ConsumerState<HomeRootTab> {
     'assets/img/root_screen/ic_home_unselected.svg',
     'assets/img/root_screen/ic_square_unselected.svg',
     'assets/img/root_screen/ic_lawn_unselected.svg',
-    'assets/img/root_screen/ic_timetable_unselected.svg',
+    // 'assets/img/root_screen/ic_timetable_unselected.svg',
     'assets/img/root_screen/ic_market_unselected.svg',
   ];
 
@@ -64,7 +64,7 @@ class _HomeRootTabState extends ConsumerState<HomeRootTab> {
     'assets/img/root_screen/ic_home_selected.svg',
     'assets/img/root_screen/ic_square_selected.svg',
     'assets/img/root_screen/ic_lawn_selected.svg',
-    'assets/img/root_screen/ic_timetable_selected.svg',
+    // 'assets/img/root_screen/ic_timetable_selected.svg',
     'assets/img/root_screen/ic_market_selected.svg',
   ];
 
@@ -72,7 +72,7 @@ class _HomeRootTabState extends ConsumerState<HomeRootTab> {
     '홈',
     '광장',
     '잔디밭',
-    '시간표',
+    // '시간표',
     '장터',
   ];
   final List<CustomScrollController> _controllers = [
@@ -128,11 +128,11 @@ class _HomeRootTabState extends ConsumerState<HomeRootTab> {
             _onItemTapped(index);
           },
         );
+      // case 3:
+      //   return TimeTableHomeScreen(
+      //     bottomPaddingHeight: bottomPaddingHeight,
+      //   );
       case 3:
-        return TimeTableHomeScreen(
-          bottomPaddingHeight: bottomPaddingHeight,
-        );
-      case 4:
         return MarketTabScreen(
           controller: _controllers[3],
           changeTabIndex: (int index) {
