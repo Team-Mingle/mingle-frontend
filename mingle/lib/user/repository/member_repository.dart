@@ -37,6 +37,10 @@ abstract class MemberRepository {
   @Headers({'accessToken': 'true'})
   Future<void> changeNickname({@Body() required ChangeNicknameDto newNickname});
 
+  @PATCH('/freshman-sign-up')
+  @Headers({'accessToken': 'true'})
+  Future<void> convertEmail({@Body() required ConvertEmailDto convertEmailDto});
+
   @GET('/{boardType}/scraps')
   @Headers({'accessToken': 'true'})
   Future<CursorPagination<PostModel>> getScrappedPosts({
@@ -120,4 +124,13 @@ class ChangeNicknameDto {
   ChangeNicknameDto({required this.newNickname});
 
   Map<String, dynamic> toJson() => _$ChangeNicknameDtoToJson(this);
+}
+
+@JsonSerializable()
+class ConvertEmailDto {
+  final String email;
+
+  ConvertEmailDto({required this.email});
+
+  Map<String, dynamic> toJson() => _$ConvertEmailDtoToJson(this);
 }

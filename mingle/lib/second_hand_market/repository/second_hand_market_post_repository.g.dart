@@ -9,9 +9,9 @@ part of 'second_hand_market_post_repository.dart';
 AddSecondHandMarketCommentModel _$AddSecondHandMarketCommentModelFromJson(
         Map<String, dynamic> json) =>
     AddSecondHandMarketCommentModel(
-      itemId: json['itemId'] as int,
-      parentCommentId: json['parentCommentId'] as int?,
-      mentionId: json['mentionId'] as int?,
+      itemId: (json['itemId'] as num).toInt(),
+      parentCommentId: (json['parentCommentId'] as num?)?.toInt(),
+      mentionId: (json['mentionId'] as num?)?.toInt(),
       content: json['content'] as String,
       isAnonymous: json['isAnonymous'] as bool,
     );

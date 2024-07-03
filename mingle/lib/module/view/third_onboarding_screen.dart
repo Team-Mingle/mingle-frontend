@@ -35,11 +35,14 @@ class _ThirdOnboardingScreenState extends ConsumerState<ThirdOnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: DefaultPadding(
         child: Stack(
           children: [
-            Image.asset(
-                "assets/img/module_review_screen/third_onboarding_background.png"),
+            Center(
+              child: Image.asset(
+                  "assets/img/module_review_screen/third_onboarding_background.png"),
+            ),
             Column(
               children: [
                 const SizedBox(
@@ -103,7 +106,7 @@ class _ThirdOnboardingScreenState extends ConsumerState<ThirdOnboardingScreen> {
                   ),
                 ),
                 const SizedBox(
-                  height: 16.0,
+                  height: 40.0,
                 )
               ],
             ),

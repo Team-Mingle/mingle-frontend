@@ -7,7 +7,7 @@ part of 'timetable_repository.dart';
 // **************************************************************************
 
 AddClassDto _$AddClassDtoFromJson(Map<String, dynamic> json) => AddClassDto(
-      courseId: json['courseId'] as int,
+      courseId: (json['courseId'] as num).toInt(),
       overrideValidation: json['overrideValidation'] as bool? ?? false,
     );
 
@@ -31,8 +31,8 @@ Map<String, dynamic> _$ChangeTimetableNameDtoToJson(
 
 AddTimetableDto _$AddTimetableDtoFromJson(Map<String, dynamic> json) =>
     AddTimetableDto(
-      year: json['year'] as int,
-      semester: json['semester'] as int,
+      year: (json['year'] as num).toInt(),
+      semester: (json['semester'] as num).toInt(),
     );
 
 Map<String, dynamic> _$AddTimetableDtoToJson(AddTimetableDto instance) =>

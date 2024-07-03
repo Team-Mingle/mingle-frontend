@@ -30,10 +30,12 @@ class TimetableModel extends TimetableBase {
     for (CourseDetailModel courseDetailModel in coursePreviewDtoList) {
       for (CourseTimeModel courseTimeModel
           in courseDetailModel.courseTimeDtoList) {
+        print(courseTimeModel.startTime);
         startingHours.add(courseTimeModel.getStartingHour());
       }
     }
     startingHours.sort((a, b) => a.compareTo(b));
+    print(startingHours);
     return startingHours.isEmpty ? 10 : startingHours[0];
   }
 
@@ -57,7 +59,7 @@ class TimetableModel extends TimetableBase {
     }
     return isFull
         ? max(getCourseEndHour() - getCourseStartHour() + 1, 11)
-        : max(18 - getCourseStartHour() + 1, 9);
+        : max(min(18 - getCourseStartHour() + 1, 11), 9);
 
     // min()
   }

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -52,7 +54,7 @@ class CourseModel {
     var splitted = startTime.split(":");
     int hour = int.parse(splitted[0]);
     int minutes = int.parse(splitted[1]);
-    double offset = (hour - 1 + (minutes / 60)) * gridHeight;
+    double offset = (max(0, hour - 1) + (minutes / 60)) * gridHeight;
     return offset;
   }
 

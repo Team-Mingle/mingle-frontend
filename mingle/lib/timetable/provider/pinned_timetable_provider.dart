@@ -22,6 +22,7 @@ class PinnedTimetableStateNotifier extends StateNotifier<TimetableBase?> {
               timetableId: pinnedTimetableId!);
       state = pinnedTimetable;
     } on DioException catch (e) {
+      state = TimetableError();
       state = null;
     }
   }

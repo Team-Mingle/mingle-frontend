@@ -9,10 +9,10 @@ part of 'timetable_preview_model.dart';
 TimetablePreviewModel _$TimetablePreviewModelFromJson(
         Map<String, dynamic> json) =>
     TimetablePreviewModel(
-      timetableId: json['timetableId'] as int,
+      timetableId: (json['timetableId'] as num).toInt(),
       semester: json['semester'] as String,
       name: json['name'] as String,
-      orderNumber: json['orderNumber'] as int,
+      orderNumber: (json['orderNumber'] as num).toInt(),
       isPinned: json['isPinned'] as bool,
     );
 

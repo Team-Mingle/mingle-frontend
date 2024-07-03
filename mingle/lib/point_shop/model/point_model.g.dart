@@ -7,7 +7,7 @@ part of 'point_model.dart';
 // **************************************************************************
 
 PointModel _$PointModelFromJson(Map<String, dynamic> json) => PointModel(
-      remainPointAmount: json['remainPointAmount'] as int,
+      remainPointAmount: (json['remainPointAmount'] as num).toInt(),
     );
 
 Map<String, dynamic> _$PointModelToJson(PointModel instance) =>
