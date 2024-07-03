@@ -9,29 +9,32 @@ class UserModel {
   final String nickName;
   final String univName;
   final String? country;
+  final bool isCourseEvaluationAllowed;
 
-  UserModel({
-    required this.memberId,
-    required this.hashedEmail,
-    required this.nickName,
-    required this.univName,
-    required this.country,
-  });
+  UserModel(
+      {required this.memberId,
+      required this.hashedEmail,
+      required this.nickName,
+      required this.univName,
+      required this.country,
+      required this.isCourseEvaluationAllowed});
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
 
-  UserModel copyWith(
-      {int? memberId,
-      String? hashedEmail,
-      String? nickName,
-      String? univName}) {
+  UserModel copyWith({
+    int? memberId,
+    String? hashedEmail,
+    String? nickName,
+    String? univName,
+  }) {
     return UserModel(
         memberId: memberId ?? this.memberId,
         hashedEmail: hashedEmail ?? this.hashedEmail,
         nickName: nickName ?? this.nickName,
         univName: univName ?? this.univName,
-        country: country);
+        country: country,
+        isCourseEvaluationAllowed: isCourseEvaluationAllowed);
   }
 }
 
