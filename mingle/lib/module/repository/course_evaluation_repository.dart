@@ -30,6 +30,10 @@ abstract class CourseEvaluationRepository {
   Future<void> addCourseEvaluation(
       {@Body() required AddCourseEvaluationDto addCourseEvaluationDto});
 
+  @GET('/my')
+  @Headers({'accessToken': 'true'})
+  Future<CourseEvaluationResponseDto> getMyCourseEvaluations();
+
   // factory RestaurantRepository(Dio dio, {String baseUrl}) =
   //     _RestaurantRepository;
 

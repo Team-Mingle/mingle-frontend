@@ -23,7 +23,7 @@ class CourseEvaluationModel {
     List<String> splitted = semester.split("_");
     int firstOrSecond = splitted[0] == 'FIRST' ? 1 : 2;
     String year = splitted[2].substring(2);
-    String result = "$year년 ${firstOrSecond.toString()}학기 수강자";
+    String result = "$year년 ${firstOrSecond.toString()}학기";
     return result;
   }
 

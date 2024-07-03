@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/const/data.dart';
+import 'package:mingle/module/components/module_review_card.dart';
+import 'package:mingle/module/model/course_evaluation_model.dart';
+import 'package:mingle/module/repository/course_evaluation_repository.dart';
 import 'package:mingle/module/util/module_satisfaction_enum.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
-class MyModuleReviewsScreen extends StatelessWidget {
+class MyModuleReviewsScreen extends ConsumerWidget {
   const MyModuleReviewsScreen({super.key});
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     List<Widget> author = List.generate(
       4,
       (index) => GestureDetector(
@@ -151,7 +156,9 @@ class MyModuleReviewsScreen extends StatelessWidget {
     }
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         shape: const Border(
             bottom: BorderSide(color: GRAYSCALE_GRAY_01, width: 1)),
         backgroundColor: Colors.white,
@@ -197,10 +204,42 @@ class MyModuleReviewsScreen extends StatelessWidget {
                   color: GRAYSCALE_GRAY_04),
             ),
           ),
-          ...List.generate(
-              author.length,
-              (index) => reviewCard(reviews[index], author[index], likes[index],
-                  satisfactions[index]))
+          FutureBuilder(
+            future: ref
+                .watch(courseEvalutationRepositoryProvider)
+                .getMyCourseEvaluations(),
+            builder:
+                (context, AsyncSnapshot<CourseEvaluationResponseDto> snapshot) {
+              if (!snapshot.hasData) {
+                return const CircularProgressIndicator(
+                  color: PRIMARY_COLOR_ORANGE_01,
+                );
+              }
+              if (snapshot.hasError) {
+                return const Text(generalErrorMsg);
+              }
+              final data = snapshot.data!.courseEvaluationList;
+
+              return DefaultPadding(
+                child: Column(children: [
+                  ...List.generate(
+                      data.length,
+                      (index) => ModuleReviewCard(
+                            reivew: data[index].comment,
+                            semester: data[index].convertSemesterString(),
+                            likes: 0,
+                            satisfaction:
+                                data[index].convertRatingToSatisfaction(),
+                            isFromMypageScreen: true,
+                          ))
+                ]),
+              );
+            },
+          ),
+          // ...List.generate(
+          //     author.length,
+          //     (index) => reviewCard(reviews[index], author[index], likes[index],
+          //         satisfactions[index]))
         ],
       )),
     );

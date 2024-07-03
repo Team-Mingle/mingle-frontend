@@ -425,7 +425,7 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
                 moduleReviews.length,
                 (index) => ModuleReviewCard(
                     reivew: moduleReviews[index].comment,
-                    author: moduleReviews[index].convertSemesterString(),
+                    semester: moduleReviews[index].convertSemesterString(),
                     likes: 0, // TODO: change to likes
                     satisfaction:
                         moduleReviews[index].convertRatingToSatisfaction()))
