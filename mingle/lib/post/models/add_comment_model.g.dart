@@ -8,9 +8,9 @@ part of 'add_comment_model.dart';
 
 AddCommentModel _$AddCommentModelFromJson(Map<String, dynamic> json) =>
     AddCommentModel(
-      postId: json['postId'] as int,
-      parentCommentId: json['parentCommentId'] as int?,
-      mentionId: json['mentionId'] as int?,
+      postId: (json['postId'] as num).toInt(),
+      parentCommentId: (json['parentCommentId'] as num?)?.toInt(),
+      mentionId: (json['mentionId'] as num?)?.toInt(),
       content: json['content'] as String,
       isAnonymous: json['isAnonymous'] as bool,
     );

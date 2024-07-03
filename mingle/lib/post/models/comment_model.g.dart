@@ -7,10 +7,10 @@ part of 'comment_model.dart';
 // **************************************************************************
 
 CommentModel _$CommentModelFromJson(Map<String, dynamic> json) => CommentModel(
-      commentId: json['commentId'] as int,
+      commentId: (json['commentId'] as num).toInt(),
       nickname: json['nickname'] as String,
       content: json['content'] as String,
-      likeCount: json['likeCount'] as int,
+      likeCount: (json['likeCount'] as num).toInt(),
       createdAt: json['createdAt'] as String,
       coCommentsList: (json['coCommentsList'] as List<dynamic>?)
           ?.map((e) => CoCommentModel.fromJson(e as Map<String, dynamic>))
@@ -41,12 +41,12 @@ Map<String, dynamic> _$CommentModelToJson(CommentModel instance) =>
 
 CoCommentModel _$CoCommentModelFromJson(Map<String, dynamic> json) =>
     CoCommentModel(
-      commentId: json['commentId'] as int,
+      commentId: (json['commentId'] as num).toInt(),
       nickname: json['nickname'] as String,
       content: json['content'] as String,
-      likeCount: json['likeCount'] as int,
+      likeCount: (json['likeCount'] as num).toInt(),
       createdAt: json['createdAt'] as String,
-      parentCommentId: json['parentCommentId'] as int,
+      parentCommentId: (json['parentCommentId'] as num).toInt(),
       mention: json['mention'] as String,
       liked: json['liked'] as bool,
       myComment: json['myComment'] as bool,

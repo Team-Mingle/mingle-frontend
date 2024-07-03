@@ -9,14 +9,14 @@ part of 'second_hand_market_post_model.dart';
 SecondHandMarketPostModel _$SecondHandMarketPostModelFromJson(
         Map<String, dynamic> json) =>
     SecondHandMarketPostModel(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       title: json['title'] as String,
       content: json['content'] as String,
-      price: json['price'] as int,
+      price: (json['price'] as num).toInt(),
       nickname: json['nickname'] as String,
       createdAt: json['createdAt'] as String,
-      likeCount: json['likeCount'] as int,
-      commentCount: json['commentCount'] as int,
+      likeCount: (json['likeCount'] as num).toInt(),
+      commentCount: (json['commentCount'] as num).toInt(),
       status: json['status'] as String,
       imgThumbnailUrl: json['imgThumbnailUrl'] as String,
       location: json['location'] as String,

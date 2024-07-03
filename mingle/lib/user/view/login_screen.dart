@@ -98,6 +98,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           final String univName = resp.data['univName'];
           final String hashedEmail = resp.data['hashedEmail'];
           final String country = resp.data['country'];
+          final bool isCourseEvaluationAllowed =
+              // false;
+              resp.data['isCourseEvaluationAllowed'];
 
           final UserModel user = UserModel(
             memberId: memberId,
@@ -105,6 +108,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             nickName: nickName,
             univName: univName,
             country: country,
+            isCourseEvaluationAllowed: isCourseEvaluationAllowed,
           );
 
           final storage = ref.read(secureStorageProvider);
