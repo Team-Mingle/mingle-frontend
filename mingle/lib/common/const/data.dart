@@ -22,8 +22,8 @@ const TIMETABLE_BOTTOM_WIDGETS_HEIGHT = 126.0;
 
 const HISTORY_KEY = "_histories";
 
-const baseUrl = "api.prod.mingle.community";
-// const baseUrl = "api.develop.mingle.community";
+// const baseUrl = "api.prod.mingle.community";
+const baseUrl = "api.develop.mingle.community";
 //  "dev.api.mingle.community";
 
 const generalErrorMsg = "다시 시도해 주세요.";

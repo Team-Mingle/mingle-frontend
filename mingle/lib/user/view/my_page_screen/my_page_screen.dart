@@ -137,37 +137,41 @@ class MyPageScreen extends ConsumerWidget {
                               const SizedBox(
                                 height: 8.0,
                               ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "$nickName 님",
-                                    style: const TextStyle(
-                                      fontFamily: "Pretendard",
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xff000000),
-                                      height: 29 / 24,
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () => Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (_) =>
-                                                const ManageAccountScreen())),
-                                    child: const Text(
-                                      "계정관리",
-                                      style: TextStyle(
-                                        fontFamily: "Pretendard",
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                        color: Color(0xfffe6c60),
-                                        height: 14 / 12,
+                              Expanded(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        "$nickName 님",
+                                        style: const TextStyle(
+                                            fontFamily: "Pretendard",
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xff000000),
+                                            height: 29 / 24,
+                                            overflow: TextOverflow.ellipsis),
                                       ),
                                     ),
-                                  )
-                                ],
+                                    InkWell(
+                                      onTap: () => Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (_) =>
+                                                  const ManageAccountScreen())),
+                                      child: const Text(
+                                        "계정관리",
+                                        style: TextStyle(
+                                          fontFamily: "Pretendard",
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                          color: Color(0xfffe6c60),
+                                          height: 14 / 12,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               )
                             ]),
                       ),
@@ -230,35 +234,35 @@ class MyPageScreen extends ConsumerWidget {
                         screens: secondHandMarketScreens,
                       ),
                     ),
-                    // const SizedBox(
-                    //   height: 21.0,
-                    // ),
-                    // const Align(
-                    //   alignment: Alignment.centerLeft,
-                    //   child: Text(
-                    //     "강의평가",
-                    //     style: TextStyle(
-                    //         fontSize: 18.0, fontWeight: FontWeight.w500),
-                    //   ),
-                    // ),
-                    // const SizedBox(
-                    //   height: 16.0,
-                    // ),
-                    // Container(
-                    //   height: 120.0,
-                    //   // width: 335.0,
-                    //   decoration: BoxDecoration(
-                    //     color: Colors.white,
-                    //     border: Border.all(
-                    //       color: Colors.white,
-                    //     ),
-                    //     borderRadius: BorderRadius.circular(10.0),
-                    //   ),
-                    //   child: MyPageTile(
-                    //     titles: moduleReviewTitles,
-                    //     screens: moduleReviewScreens,
-                    //   ),
-                    // ),
+                    const SizedBox(
+                      height: 21.0,
+                    ),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "강의평가",
+                        style: TextStyle(
+                            fontSize: 18.0, fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 16.0,
+                    ),
+                    Container(
+                      height: 120.0,
+                      // width: 335.0,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(
+                          color: Colors.white,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: MyPageTile(
+                        titles: moduleReviewTitles,
+                        screens: moduleReviewScreens,
+                      ),
+                    ),
                     const SizedBox(
                       height: 21.0,
                     ),
