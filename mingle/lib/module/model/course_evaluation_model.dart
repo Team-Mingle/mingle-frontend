@@ -9,12 +9,16 @@ class CourseEvaluationModel {
   final String semester;
   final String comment;
   final String rating;
+  final int courseId;
+  final bool isMine;
 
   CourseEvaluationModel(
       {required this.courseEvaluationId,
       required this.semester,
       required this.comment,
-      required this.rating});
+      required this.rating,
+      required this.courseId,
+      required this.isMine});
 
   factory CourseEvaluationModel.fromJson(Map<String, dynamic> json) =>
       _$CourseEvaluationModelFromJson(json);
