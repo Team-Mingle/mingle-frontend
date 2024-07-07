@@ -9,7 +9,7 @@ part of 'course_evaluation_model.dart';
 CourseEvaluationModel _$CourseEvaluationModelFromJson(
         Map<String, dynamic> json) =>
     CourseEvaluationModel(
-      courseEvaluationId: json['courseEvaluationId'] as int,
+      courseEvaluationId: (json['courseEvaluationId'] as num).toInt(),
       semester: json['semester'] as String,
       comment: json['comment'] as String,
       rating: json['rating'] as String,
