@@ -117,9 +117,10 @@ class CourseModel {
 
       double height = calculateHeight(startTime, endTime, gridHeight);
       classes.add(
-        AnimatedPositioned(
-          curve: Curves.easeOut,
-          duration: const Duration(milliseconds: 400),
+        // Animated
+        Positioned(
+          // curve: Curves.easeOut,
+          // duration: const Duration(milliseconds: 400),
           top: topOffset,
           left: leftOffset,
           height: height,
