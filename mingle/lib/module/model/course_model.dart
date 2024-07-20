@@ -30,7 +30,7 @@ class CourseModel {
       required this.name,
       required this.courseCode,
       this.semester,
-      required this.professor,
+      this.professor = "-",
       this.subclass,
       required this.courseTimeDtoList,
       required this.courseType,

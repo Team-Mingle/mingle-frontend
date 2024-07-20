@@ -16,7 +16,7 @@ CourseDetailModel _$CourseDetailModelFromJson(Map<String, dynamic> json) =>
           .map((e) => CourseTimeModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       venue: json['venue'] as String?,
-      professor: json['professor'] as String,
+      professor: json['professor'] as String? ?? "-",
       subclass: json['subclass'] as String?,
       memo: json['memo'] as String?,
       prerequisite: json['prerequisite'] as String?,
