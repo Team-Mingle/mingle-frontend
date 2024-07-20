@@ -12,6 +12,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       nickName: json['nickName'] as String,
       univName: json['univName'] as String,
       country: json['country'] as String?,
+      isCourseEvaluationAllowed: json['isCourseEvaluationAllowed'] as bool,
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
@@ -20,4 +21,5 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'nickName': instance.nickName,
       'univName': instance.univName,
       'country': instance.country,
+      'isCourseEvaluationAllowed': instance.isCourseEvaluationAllowed,
     };

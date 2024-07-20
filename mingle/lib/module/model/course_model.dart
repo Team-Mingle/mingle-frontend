@@ -30,7 +30,7 @@ class CourseModel {
       required this.name,
       required this.courseCode,
       this.semester,
-      required this.professor,
+      this.professor = "-",
       this.subclass,
       required this.courseTimeDtoList,
       required this.courseType,
@@ -117,9 +117,10 @@ class CourseModel {
 
       double height = calculateHeight(startTime, endTime, gridHeight);
       classes.add(
-        AnimatedPositioned(
-          curve: Curves.easeOut,
-          duration: const Duration(milliseconds: 400),
+        // Animated
+        Positioned(
+          // curve: Curves.easeOut,
+          // duration: const Duration(milliseconds: 400),
           top: topOffset,
           left: leftOffset,
           height: height,

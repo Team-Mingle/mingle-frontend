@@ -13,6 +13,8 @@ CourseEvaluationModel _$CourseEvaluationModelFromJson(
       semester: json['semester'] as String,
       comment: json['comment'] as String,
       rating: json['rating'] as String,
+      courseId: (json['courseId'] as num).toInt(),
+      isMine: json['isMine'] as bool,
     );
 
 Map<String, dynamic> _$CourseEvaluationModelToJson(
@@ -22,4 +24,6 @@ Map<String, dynamic> _$CourseEvaluationModelToJson(
       'semester': instance.semester,
       'comment': instance.comment,
       'rating': instance.rating,
+      'courseId': instance.courseId,
+      'isMine': instance.isMine,
     };

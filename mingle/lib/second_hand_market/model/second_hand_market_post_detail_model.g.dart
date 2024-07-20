@@ -9,14 +9,14 @@ part of 'second_hand_market_post_detail_model.dart';
 SecondHandMarketPostDetailModel _$SecondHandMarketPostDetailModelFromJson(
         Map<String, dynamic> json) =>
     SecondHandMarketPostDetailModel(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       title: json['title'] as String,
       content: json['content'] as String,
-      price: json['price'] as int,
+      price: (json['price'] as num).toInt(),
       nickname: json['nickname'] as String,
       createdAt: json['createdAt'] as String,
-      likeCount: json['likeCount'] as int,
-      commentCount: json['commentCount'] as int,
+      likeCount: (json['likeCount'] as num).toInt(),
+      commentCount: (json['commentCount'] as num).toInt(),
       status: json['status'] as String,
       imgThumbnailUrl: json['imgThumbnailUrl'] as String,
       location: json['location'] as String,
@@ -26,7 +26,7 @@ SecondHandMarketPostDetailModel _$SecondHandMarketPostDetailModelFromJson(
       chatUrl: json['chatUrl'] as String,
       currency: json['currency'] as String,
       isLiked: json['isLiked'] as bool,
-      viewCount: json['viewCount'] as int,
+      viewCount: (json['viewCount'] as num).toInt(),
       isFileAttached: json['isFileAttached'] as bool,
       isAnonymous: json['isAnonymous'] as bool,
       isMyPost: json['isMyPost'] as bool,

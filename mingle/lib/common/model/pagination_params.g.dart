@@ -8,8 +8,8 @@ part of 'pagination_params.dart';
 
 PaginationParams _$PaginationParamsFromJson(Map<String, dynamic> json) =>
     PaginationParams(
-      page: json['page'] as int?,
-      size: json['size'] as int?,
+      page: (json['page'] as num?)?.toInt(),
+      size: (json['size'] as num?)?.toInt(),
       sort: (json['sort'] as Map<String, dynamic>?)?.map(
         (k, e) =>
             MapEntry(k, (e as List<dynamic>).map((e) => e as String).toList()),

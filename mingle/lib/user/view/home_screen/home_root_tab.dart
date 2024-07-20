@@ -79,7 +79,7 @@ class _HomeRootTabState extends ConsumerState<HomeRootTab> {
     CustomScrollController(),
     CustomScrollController(),
     CustomScrollController(),
-    //CustomScrollController(),
+    CustomScrollController(),
     CustomScrollController(),
   ];
 

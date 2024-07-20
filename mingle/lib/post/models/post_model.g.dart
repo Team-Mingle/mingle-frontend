@@ -7,7 +7,7 @@ part of 'post_model.dart';
 // **************************************************************************
 
 PostModel _$PostModelFromJson(Map<String, dynamic> json) => PostModel(
-      postId: json['postId'] as int,
+      postId: (json['postId'] as num).toInt(),
       title: json['title'] as String,
       content: json['content'] as String,
       nickname: json['nickname'] as String,
@@ -16,9 +16,9 @@ PostModel _$PostModelFromJson(Map<String, dynamic> json) => PostModel(
       categoryType: json['categoryType'] as String,
       memberRole: json['memberRole'] as String,
       status: json['status'] as String,
-      likeCount: json['likeCount'] as int,
-      commentCount: json['commentCount'] as int,
-      viewCount: json['viewCount'] as int,
+      likeCount: (json['likeCount'] as num).toInt(),
+      commentCount: (json['commentCount'] as num).toInt(),
+      viewCount: (json['viewCount'] as num).toInt(),
       fileAttached: json['fileAttached'] as bool,
       blinded: json['blinded'] as bool,
     );

@@ -137,37 +137,41 @@ class MyPageScreen extends ConsumerWidget {
                               const SizedBox(
                                 height: 8.0,
                               ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "$nickName 님",
-                                    style: const TextStyle(
-                                      fontFamily: "Pretendard",
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xff000000),
-                                      height: 29 / 24,
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () => Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (_) =>
-                                                const ManageAccountScreen())),
-                                    child: const Text(
-                                      "계정관리",
-                                      style: TextStyle(
-                                        fontFamily: "Pretendard",
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                        color: Color(0xfffe6c60),
-                                        height: 14 / 12,
+                              Expanded(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        "$nickName 님",
+                                        style: const TextStyle(
+                                            fontFamily: "Pretendard",
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xff000000),
+                                            height: 29 / 24,
+                                            overflow: TextOverflow.ellipsis),
                                       ),
                                     ),
-                                  )
-                                ],
+                                    InkWell(
+                                      onTap: () => Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (_) =>
+                                                  const ManageAccountScreen())),
+                                      child: const Text(
+                                        "계정관리",
+                                        style: TextStyle(
+                                          fontFamily: "Pretendard",
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                          color: Color(0xfffe6c60),
+                                          height: 14 / 12,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               )
                             ]),
                       ),

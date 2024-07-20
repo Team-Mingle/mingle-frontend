@@ -9,10 +9,10 @@ part of 'second_hand_market_post_comment_model.dart';
 SecondHandMarketPostCommentModel _$SecondHandMarketPostCommentModelFromJson(
         Map<String, dynamic> json) =>
     SecondHandMarketPostCommentModel(
-      commentId: json['commentId'] as int,
+      commentId: (json['commentId'] as num).toInt(),
       nickname: json['nickname'] as String,
       content: json['content'] as String,
-      likeCount: json['likeCount'] as int,
+      likeCount: (json['likeCount'] as num).toInt(),
       createdAt: json['createdAt'] as String,
       coCommentsList: (json['coCommentsList'] as List<dynamic>)
           .map((e) => SecondHandMarketPostCommentModel.fromJson(

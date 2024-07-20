@@ -9,12 +9,16 @@ class CourseEvaluationModel {
   final String semester;
   final String comment;
   final String rating;
+  final int courseId;
+  final bool isMine;
 
   CourseEvaluationModel(
       {required this.courseEvaluationId,
       required this.semester,
       required this.comment,
-      required this.rating});
+      required this.rating,
+      required this.courseId,
+      required this.isMine});
 
   factory CourseEvaluationModel.fromJson(Map<String, dynamic> json) =>
       _$CourseEvaluationModelFromJson(json);
@@ -23,7 +27,7 @@ class CourseEvaluationModel {
     List<String> splitted = semester.split("_");
     int firstOrSecond = splitted[0] == 'FIRST' ? 1 : 2;
     String year = splitted[2].substring(2);
-    String result = "$year년 ${firstOrSecond.toString()}학기 수강자";
+    String result = "$year년 ${firstOrSecond.toString()}학기";
     return result;
   }
 

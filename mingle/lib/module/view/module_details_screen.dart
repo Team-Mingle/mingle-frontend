@@ -28,13 +28,10 @@ import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
 class ModuleDetailsScreen extends ConsumerStatefulWidget {
   final int courseId;
-  final String moduleName;
-  final CourseDetailModel courseDetail;
+  final String? moduleName;
+  final CourseDetailModel? courseDetail;
   const ModuleDetailsScreen(
-      {super.key,
-      required this.courseId,
-      required this.moduleName,
-      required this.courseDetail});
+      {super.key, required this.courseId, this.moduleName, this.courseDetail});
 
   @override
   ConsumerState<ModuleDetailsScreen> createState() =>
@@ -100,6 +97,91 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return widget.courseDetail == null
+        ? renderWithoutCourseDetail()
+        : renderWithCourseDetail();
+    // return Scaffold(
+    //     backgroundColor: Colors.white,
+    //     appBar: AppBar(
+    //       surfaceTintColor: Colors.transparent,
+    //       shape: const Border(
+    //           bottom: BorderSide(color: GRAYSCALE_GRAY_01, width: 1)),
+    //       backgroundColor: Colors.white,
+    //       titleSpacing: 0.0,
+    //       elevation: 0,
+    //       leading: Padding(
+    //         padding: const EdgeInsets.only(left: 0.0),
+    //         child: IconButton(
+    //           padding: EdgeInsets.zero,
+    //           icon: const ImageIcon(
+    //             AssetImage(
+    //                 "assets/img/module_review_screen/back_tick_icon.png"),
+    //             color: GRAYSCALE_BLACK,
+    //           ),
+    //           color: GRAYSCALE_BLACK,
+    //           onPressed: () {
+    //             Navigator.pop(context);
+    //           },
+    //         ),
+    //       ),
+    //       title: const Text(
+    //         "강의개요",
+    //         style: TextStyle(
+    //             fontSize: 16.0,
+    //             letterSpacing: -0.02,
+    //             height: 1.5,
+    //             color: Colors.black),
+    //       ),
+    //     ),
+    //     body: SizedBox(
+    //       height: MediaQuery.of(context).size.height,
+    //       child: Stack(
+    //         children: [
+    //           renderContent(widget.courseDetail),
+
+    //           // FutureBuilder(
+    //           // future: ref
+    //           //     .watch(courseRepositoryProvider)
+    //           //     .getCourseDetails(courseId: widget.courseId),
+    //           // // postDetailFuture(postId),
+    //           // builder: (context, AsyncSnapshot<CourseDetailModel> snapshot) {
+    //           //     if (!snapshot.hasData) {
+    //           //       print(snapshot);
+    //           //       return const Center(
+    //           //         child: CircularProgressIndicator(
+    //           //           color: PRIMARY_COLOR_ORANGE_01,
+    //           //         ),
+    //           //       );
+    //           //     }
+    //           //     if (snapshot.hasError) {
+    //           //       return const Center(
+    //           //         child: Text("다시 시도 ㄱㄱ"),
+    //           //       );
+    //           //     }
+    //           //     CourseDetailModel course = snapshot.data!;
+
+    //           //     return Stack(
+    //           //       children: [
+    //           //         renderContent(course),
+    //           //       ],
+    //           //     );
+    //           //   },
+    //           // ),
+    //         ],
+    //       ),
+    //     ),
+    //     floatingActionButton: widget.courseDetail.courseType == "CRAWL"
+    //         ? ExpandableFab(
+    //             distance: 112,
+    //             navigateToAddModuleReview: navigateToAddModuleReview,
+    //             addModuleToTimetable: addModuleToTimetable,
+    //           )
+    //         : null
+    //     // renderContent(),
+    //     );
+  }
+
+  Widget renderWithCourseDetail() {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -137,14 +219,14 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
           height: MediaQuery.of(context).size.height,
           child: Stack(
             children: [
-              renderContent(widget.courseDetail),
+              renderContent(widget.courseDetail!),
 
               // FutureBuilder(
-              //   future: ref
-              //       .watch(courseRepositoryProvider)
-              //       .getCourseDetails(courseId: widget.courseId),
-              //   // postDetailFuture(postId),
-              //   builder: (context, AsyncSnapshot<CourseDetailModel> snapshot) {
+              // future: ref
+              //     .watch(courseRepositoryProvider)
+              //     .getCourseDetails(courseId: widget.courseId),
+              // // postDetailFuture(postId),
+              // builder: (context, AsyncSnapshot<CourseDetailModel> snapshot) {
               //     if (!snapshot.hasData) {
               //       print(snapshot);
               //       return const Center(
@@ -170,7 +252,7 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
             ],
           ),
         ),
-        floatingActionButton: widget.courseDetail.courseType == "CRAWL"
+        floatingActionButton: widget.courseDetail!.courseType == "CRAWL"
             ? ExpandableFab(
                 distance: 112,
                 navigateToAddModuleReview: navigateToAddModuleReview,
@@ -179,6 +261,84 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
             : null
         // renderContent(),
         );
+  }
+
+  Widget renderWithoutCourseDetail() {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
+        shape: const Border(
+            bottom: BorderSide(color: GRAYSCALE_GRAY_01, width: 1)),
+        backgroundColor: Colors.white,
+        titleSpacing: 0.0,
+        elevation: 0,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 0.0),
+          child: IconButton(
+            padding: EdgeInsets.zero,
+            icon: const ImageIcon(
+              AssetImage("assets/img/module_review_screen/back_tick_icon.png"),
+              color: GRAYSCALE_BLACK,
+            ),
+            color: GRAYSCALE_BLACK,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+        title: const Text(
+          "강의개요",
+          style: TextStyle(
+              fontSize: 16.0,
+              letterSpacing: -0.02,
+              height: 1.5,
+              color: Colors.black),
+        ),
+      ),
+      body: FutureBuilder(
+        future: ref
+            .watch(courseRepositoryProvider)
+            .getCourseDetails(courseId: widget.courseId),
+        // postDetailFuture(postId),
+        builder: (context, AsyncSnapshot<CourseDetailModel> snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: PRIMARY_COLOR_ORANGE_01,
+              ),
+            );
+          }
+
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text(generalErrorMsg),
+            );
+          }
+
+          CourseDetailModel courseDetail = snapshot.data!;
+          return Scaffold(
+              backgroundColor: Colors.white,
+              body: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: Stack(
+                  children: [
+                    renderContent(courseDetail),
+                  ],
+                ),
+              ),
+              floatingActionButton: courseDetail.courseType == "CRAWL"
+                  ? ExpandableFab(
+                      distance: 112,
+                      navigateToAddModuleReview: navigateToAddModuleReview,
+                      addModuleToTimetable: addModuleToTimetable,
+                    )
+                  : null
+              // renderContent(),
+              );
+        },
+      ),
+    );
   }
 
   Widget renderContent(CourseDetailModel courseDetailModel) {
@@ -308,7 +468,7 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
           const SizedBox(
             height: 42.0,
           ),
-          if (widget.courseDetail.courseType == "CRAWL")
+          if (courseDetailModel.courseType == "CRAWL")
             FutureBuilder(
               future: ref
                   .watch(courseEvalutationRepositoryProvider)
@@ -424,11 +584,14 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
             ...List.generate(
                 moduleReviews.length,
                 (index) => ModuleReviewCard(
-                    reivew: moduleReviews[index].comment,
-                    author: moduleReviews[index].convertSemesterString(),
-                    likes: 0, // TODO: change to likes
-                    satisfaction:
-                        moduleReviews[index].convertRatingToSatisfaction()))
+                      reivew: moduleReviews[index].comment,
+                      semester: moduleReviews[index].convertSemesterString(),
+                      likes: 0, // TODO: change to likes
+                      satisfaction:
+                          moduleReviews[index].convertRatingToSatisfaction(),
+                      isMine: moduleReviews[index].isMine,
+                      courseId: moduleReviews[index].courseId,
+                    ))
         ],
       ),
     );

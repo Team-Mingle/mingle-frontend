@@ -13,6 +13,7 @@ import 'package:mingle/timetable/model/timetable_model.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
+import 'package:mingle/user/provider/user_provider.dart';
 import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
 import 'package:mingle/timetable/view/self_add_timetable_screen.dart';
 import 'package:mingle/timetable/components/timetable_grid.dart';
@@ -104,6 +105,8 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
         getClasses();
       }
     });
+
+    final currentUser = ref.watch(currentUserProvider);
     double availableHeight = (MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
         kToolbarHeight);
@@ -186,7 +189,8 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
                     SizedBox(
                       // height: 300.0,
                       child: TimeTableGrid(
-                        isAdd: true,
+                        isFull: !currentUser!.isCourseEvaluationAllowed,
+                        isAdd: currentUser.isCourseEvaluationAllowed,
                         timetable: widget.timetable,
                         addedClasses: widget.addedClasses,
                         isAddHeight: timetableHeight,
@@ -195,11 +199,13 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
                   ],
                 ),
               ),
-              SearchCourseModalWidget(
-                topPadding: topPaddingHeight,
-                addClass: widget.addClass,
-                addClassesAtAddTimeTableScreen: addClassesAtAddTimeTableScreen,
-              )
+              if (currentUser.isCourseEvaluationAllowed)
+                SearchCourseModalWidget(
+                  topPadding: topPaddingHeight,
+                  addClass: widget.addClass,
+                  addClassesAtAddTimeTableScreen:
+                      addClassesAtAddTimeTableScreen,
+                )
             ],
           ),
         ),

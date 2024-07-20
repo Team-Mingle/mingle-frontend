@@ -9,7 +9,7 @@ part of 'university_domain_model.dart';
 UniversityDomainModel _$UniversityDomainModelFromJson(
         Map<String, dynamic> json) =>
     UniversityDomainModel(
-      universityId: json['universityId'] as int,
+      universityId: (json['universityId'] as num).toInt(),
       displayUniversityName: json['displayUniversityName'] as String,
       domain:
           (json['domain'] as List<dynamic>).map((e) => e as String).toList(),
