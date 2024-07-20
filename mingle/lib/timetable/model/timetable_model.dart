@@ -4,6 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:mingle/common/model/course_time_model.dart';
 import 'package:mingle/module/model/course_detail_model.dart';
 import 'package:mingle/module/model/course_model.dart';
+import 'package:mingle/timetable/model/timetable_course_model.dart';
 
 part 'timetable_model.g.dart';
 
@@ -13,7 +14,7 @@ abstract class TimetableBase {}
 class TimetableModel extends TimetableBase {
   String name;
   final String semester;
-  List<CourseDetailModel> coursePreviewDtoList;
+  List<TimetableCourseModel> coursePreviewDtoList;
   bool isFull;
 
   TimetableModel(

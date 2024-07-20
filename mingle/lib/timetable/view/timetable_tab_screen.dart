@@ -25,6 +25,7 @@ import 'package:mingle/timetable/components/timetable_screenshot_grid_v2.dart';
 import 'package:mingle/timetable/model/class_model.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/timetable/model/friend_model.dart';
+import 'package:mingle/timetable/model/timetable_course_model.dart';
 import 'package:mingle/timetable/model/timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_model.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
@@ -35,6 +36,7 @@ import 'package:mingle/timetable/repository/friend_repository.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 import 'package:mingle/timetable/view/add_timetable_screen.dart';
 import 'package:mingle/timetable/components/timetable_grid.dart';
+import 'package:mingle/timetable/view/edit_crawled_course_screen.dart';
 import 'package:mingle/timetable/view/edit_self_added_course_screen.dart';
 import 'package:mingle/timetable/view/friend_timetable_screen.dart';
 import 'package:mingle/timetable/view/timetable_list_screen.dart';
@@ -462,8 +464,33 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
                         Navigator.of(context).pop();
-                        // deleteClass(currentCourse);
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => EditCrawledCourseScreen(
+                              course: currentCourse as TimetableCourseModel,
+                              refreshClasses: getClasses,
+                            ),
+                          ),
+                        );
+                      },
+                      child: const SizedBox(
+                        width: double.infinity,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 14.0),
+                          child: Text(
+                            "강의 수정하기",
+                            style:
+                                TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                          ),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        Navigator.of(context).pop();
                         showDeleteCourseDialog(currentCourse);
+                        // deleteClass(currentCourse);
                       },
                       child: const SizedBox(
                         width: double.infinity,
@@ -619,7 +646,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
         showCourseDetailModal(courseModel);
       }
     }, ref, timetable.getGridTotalHeightDividerValue()));
-    timetable.coursePreviewDtoList.add(courseModel);
+    timetable.coursePreviewDtoList
+        .add(TimetableCourseModel.fromCourseDeatilModel(courseModel));
     setState(() {
       addedCourses = newCourses;
       // addedCourses.addAll(courseModel.generateClasses(() {

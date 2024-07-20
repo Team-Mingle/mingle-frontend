@@ -14,60 +14,41 @@ import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/module/repository/course_repository.dart';
 import 'package:mingle/timetable/components/add_course_time_dropdowns.dart';
 import 'package:mingle/timetable/model/class_model.dart';
+import 'package:mingle/timetable/model/timetable_course_model.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 
-class EditSelfAddedCourseScreen extends ConsumerStatefulWidget {
+class EditCrawledCourseScreen extends ConsumerStatefulWidget {
   final Function refreshClasses;
-  final CourseDetailModel course;
-  const EditSelfAddedCourseScreen({
+  final TimetableCourseModel course;
+  const EditCrawledCourseScreen({
     Key? key,
     required this.refreshClasses,
     required this.course,
   }) : super(key: key);
 
   @override
-  ConsumerState<EditSelfAddedCourseScreen> createState() =>
+  ConsumerState<EditCrawledCourseScreen> createState() =>
       _EditSelfAddedCourseScreenState();
 }
 
 class _EditSelfAddedCourseScreenState
-    extends ConsumerState<EditSelfAddedCourseScreen> {
+    extends ConsumerState<EditCrawledCourseScreen> {
   List<Widget> timeDropdownWidgets = [];
   String moduleName = "";
   List<String> days = [];
   List<String> startTimes = [];
   List<String> endTimes = [];
   String moduleCode = "";
-  String location = "";
+  String venue = "";
   String profName = "";
+  String subclass = "";
   late FToast fToast;
   bool isLoading = false;
 
   @override
   void initState() {
-    for (int i = 0; i < widget.course.courseTimeDtoList.length; i++) {
-      CourseTimeModel timeModel = widget.course.courseTimeDtoList[i];
-      String initialDay = "${convertDayToKorDay(timeModel.dayOfWeek!)}요일";
-      String initialStartTime =
-          CourseTimeModel.removeSecondsFromTime(timeModel.startTime!);
-      String initialEndTime =
-          CourseTimeModel.removeSecondsFromTime(timeModel.endTime!);
-      days.add(initialDay);
-      startTimes.add(initialStartTime);
-      endTimes.add(initialEndTime);
-      timeDropdownWidgets.add(AddTimeDropdownsWidget(
-        onDayChange: onDayChange,
-        onStartTimeChange: onStartTimeChange,
-        onEndTimeChange: onEndTimeChange,
-        index: i,
-        initialDay: initialDay,
-        initialStartTime: initialStartTime,
-        initialEndTime: initialEndTime,
-        delete: deleteTimeAtIndex,
-      ));
-    }
     fToast = FToast();
     fToast.init(context);
     moduleName = widget.course.name;
@@ -92,70 +73,12 @@ class _EditSelfAddedCourseScreenState
     setState(() {
       isLoading = true;
     });
-    // if (moduleName.isEmpty) {
-    //   fToast.showToast(
-    //       child: const ToastMessage(message: "강의명을 입렵해주세요"),
-    //       gravity: ToastGravity.CENTER,
-    //       toastDuration: const Duration(seconds: 2));
-    // } else if (moduleCode.isEmpty) {
-    //   fToast.showToast(
-    //       child: const ToastMessage(message: "과목 코드를 입렵해주세요"),
-    //       gravity: ToastGravity.CENTER,
-    //       toastDuration: const Duration(seconds: 2));
-    // } else if (location.isEmpty) {
-    //   fToast.showToast(
-    //       child: const ToastMessage(message: "강의 장소를 입렵해주세요"),
-    //       gravity: ToastGravity.CENTER,
-    //       toastDuration: const Duration(seconds: 2));
-    // } else if (profName.isEmpty) {
 
-    // }
-
-    if (timeDropdownWidgets.isEmpty ||
-        days[0].isEmpty ||
-        startTimes[0].isEmpty ||
-        endTimes[0].isEmpty) {
-      fToast.showToast(
-        child: const ToastMessage(message: "강의 시간을 입력해주세요"),
-        gravity: ToastGravity.CENTER,
-        toastDuration: const Duration(seconds: 2),
-      );
-      setState(() {
-        isLoading = false;
-      });
-      return;
-    }
-    for (int i = 0; i < timeDropdownWidgets.length; i++) {
-      if (startTimes[i].compareTo(endTimes[i]) >= 0) {
-        fToast.showToast(
-          child: const ToastMessage(message: "끝나는 시간이 시작 시간보다 빠를 수 없습니다"),
-          gravity: ToastGravity.CENTER,
-          toastDuration: const Duration(seconds: 2),
-        );
-        setState(() {
-          isLoading = false;
-        });
-        return;
-      }
-    }
     try {
-      CourseDetailModel result = await ref
-          .watch(courseRepositoryProvider)
-          .editCourse(
-              courseId: widget.course.id,
-              addPersonalCourseDto: AddPersonalCourseDto(
-                  overrideValidation: overrideValidation,
-                  name: moduleName,
-                  courseTimeDtoList: List.generate(
-                      days.length,
-                      (index) => CourseTimeModel(
-                          dayOfWeek: convertKorDayToEngDay(days[index]),
-                          startTime: startTimes[index],
-                          endTime: endTimes[index])),
-                  courseCode: moduleCode,
-                  venue: location,
-                  professor: profName,
-                  memo: ""));
+      await ref.watch(timetableRepositoryProvider).editTimetableCourse(
+          timetableCourseId: widget.course.courseTimetableId,
+          editTimetableCourseDto: EditTimetableCourseDto(
+              venue: venue, professor: profName, subclass: subclass));
       ref.read(pinnedTimetableProvider.notifier).fetchPinnedTimetable();
       await widget.refreshClasses();
       setState(() {
@@ -169,57 +92,14 @@ class _EditSelfAddedCourseScreenState
       setState(() {
         isLoading = false;
       });
-      if (e.response?.statusCode == 409 &&
-          e.response?.data['code'] == TIMETABLE_CONFLICT) {
-        showTimetableConflictDialog();
-      } else {
-        fToast.showToast(
-          child: ToastMessage(
-              message: e.response?.data['message'] ?? generalErrorMsg),
-          gravity: ToastGravity.CENTER,
-          toastDuration: const Duration(seconds: 2),
-        );
-      }
+
+      fToast.showToast(
+        child: ToastMessage(
+            message: e.response?.data['message'] ?? generalErrorMsg),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
     }
-  }
-
-  void addTimeDropdownWidget() {
-    if (timeDropdownWidgets.length < 5) {
-      // 최대 5번까지 추가
-      setState(() {
-        timeDropdownWidgets.add(AddTimeDropdownsWidget(
-          index: timeDropdownWidgets.length,
-          onDayChange: onDayChange,
-          onStartTimeChange: onStartTimeChange,
-          onEndTimeChange: onEndTimeChange,
-          delete: deleteTimeAtIndex,
-        ));
-        days.add("");
-        startTimes.add("");
-        endTimes.add("");
-      });
-    }
-  }
-
-  void onDayChange(value, index) {
-    setState(() {
-      days[index] = value;
-    });
-  }
-
-  void onStartTimeChange(value, index) {
-    setState(() {
-      startTimes[index] = value;
-    });
-  }
-
-  void onEndTimeChange(value, index) {
-    setState(() {
-      endTimes[index] = value;
-    });
-    print(days);
-    print(startTimes);
-    print(endTimes);
   }
 
   @override
@@ -293,7 +173,7 @@ class _EditSelfAddedCourseScreenState
                 const Row(
                   children: [
                     Text(
-                      '강의명*',
+                      '강의명',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 14.0,
@@ -309,7 +189,7 @@ class _EditSelfAddedCourseScreenState
                 ),
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: GRAYSCALE_GRAY_02,
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: TextFormField(
@@ -320,6 +200,7 @@ class _EditSelfAddedCourseScreenState
                       });
                     },
                     decoration: InputDecoration(
+                      enabled: false,
                       hintText: "강의명을 입력하세요",
                       hintStyle: const TextStyle(
                         color: GRAYSCALE_GRAY_03,
@@ -335,6 +216,7 @@ class _EditSelfAddedCourseScreenState
                         horizontal: 12.0,
                         vertical: 14.0,
                       ),
+                      disabledBorder: InputBorder.none,
                       enabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(color: GRAYSCALE_GRAY_02),
                         borderRadius: BorderRadius.circular(8.0),
@@ -344,92 +226,6 @@ class _EditSelfAddedCourseScreenState
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                     ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 24.0,
-                ),
-                const Row(
-                  children: [
-                    Text(
-                      '강의 시간*',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14.0,
-                        letterSpacing: -0.01,
-                        height: 1.4,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 4.0,
-                ),
-                const Row(
-                  children: [
-                    Text(
-                      '요일에 따라 강의 시간대가 다를 경우 시간대를 추가하세요.',
-                      style: TextStyle(
-                        color: GRAYSCALE_GRAY_03,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 8.0,
-                ),
-                ...List.generate(2 * timeDropdownWidgets.length - 1, (index) {
-                  if (index % 2 == 0) {
-                    return timeDropdownWidgets[index ~/ 2];
-                  } else {
-                    return const SizedBox(
-                      height: 20.0,
-                    );
-                  }
-                }),
-                // ...timeDropdownWidgets,
-                const SizedBox(
-                  height: 12.0,
-                ),
-                OutlinedButton(
-                  onPressed: () {
-                    addTimeDropdownWidget();
-                  },
-                  style: OutlinedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    minimumSize: const Size(double.infinity, 48),
-                    side: const BorderSide(
-                      width: 1,
-                      color: PRIMARY_COLOR_ORANGE_02,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Text(
-                        '추가하기',
-                        style: TextStyle(
-                          color: PRIMARY_COLOR_ORANGE_02,
-                          fontSize: 14.0,
-                          letterSpacing: -0.01,
-                          height: 1.4,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      SvgPicture.asset(
-                        'assets/img/common/ic_plus_orange.svg',
-                        width: 24,
-                        height: 24,
-                      ),
-                    ],
                   ),
                 ),
                 const SizedBox(
@@ -454,7 +250,7 @@ class _EditSelfAddedCourseScreenState
                 ),
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: GRAYSCALE_GRAY_02,
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: TextFormField(
@@ -465,6 +261,7 @@ class _EditSelfAddedCourseScreenState
                       });
                     },
                     decoration: InputDecoration(
+                      enabled: false,
                       hintText: "과목 코드를 입력하세요",
                       hintStyle: const TextStyle(
                         color: GRAYSCALE_GRAY_03,
@@ -480,6 +277,7 @@ class _EditSelfAddedCourseScreenState
                         horizontal: 12.0,
                         vertical: 14.0,
                       ),
+                      disabledBorder: InputBorder.none,
                       enabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(color: GRAYSCALE_GRAY_02),
                         borderRadius: BorderRadius.circular(8.0),
@@ -519,7 +317,7 @@ class _EditSelfAddedCourseScreenState
                   child: TextFormField(
                     onChanged: (value) {
                       setState(() {
-                        location = value;
+                        venue = value;
                       });
                     },
                     initialValue: widget.course.venue,
@@ -609,103 +407,68 @@ class _EditSelfAddedCourseScreenState
                     ),
                   ),
                 ),
+                const SizedBox(
+                  height: 24.0,
+                ),
+                const Row(
+                  children: [
+                    Text(
+                      '그룹',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14.0,
+                        letterSpacing: -0.01,
+                        height: 1.4,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 8.0,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: TextFormField(
+                    initialValue: subclass,
+                    onChanged: (value) {
+                      setState(() {
+                        subclass = value;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      hintText: "그룹을 입력하세요",
+                      hintStyle: const TextStyle(
+                        color: GRAYSCALE_GRAY_03,
+                        fontSize: 16.0,
+                        letterSpacing: -0.02,
+                        height: 1.5,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      labelStyle: const TextStyle(
+                        color: Colors.black,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                        vertical: 14.0,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: GRAYSCALE_GRAY_02),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: GRAYSCALE_GRAY_02),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  void showTimetableConflictDialog() {
-    showDialog(
-      context: context,
-      builder: (_) => Dialog(
-        insetPadding: EdgeInsets.zero,
-        surfaceTintColor: Colors.transparent,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8.0)),
-              // width: 343,
-              padding: const EdgeInsets.only(
-                  top: 32.0, left: 32.0, right: 32.0, bottom: 24.0),
-              child: Column(
-                children: [
-                  const Text(
-                    "강의를 시간표에 추가하시겠습니까?",
-                    style: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: -0.32),
-                  ),
-                  const SizedBox(
-                    height: 8.0,
-                  ),
-                  const Text(
-                    "시간이 겹치는 강의가 삭제됩니다.",
-                    style: TextStyle(letterSpacing: -0.14),
-                  ),
-                  const SizedBox(
-                    height: 16.0,
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          sendEditPersonalClassRequest(
-                              overrideValidation: true);
-                        },
-                        child: Container(
-                          height: 40.0,
-                          width: 120.0,
-                          decoration: BoxDecoration(
-                              color: GRAYSCALE_GRAY_01,
-                              borderRadius: BorderRadius.circular(8.0)),
-                          child: const Center(
-                            child: Text(
-                              "강의 추가하기",
-                              style: TextStyle(
-                                  color: GRAYSCALE_GRAY_04,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 8.0,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Container(
-                          height: 40.0,
-                          width: 120.0,
-                          decoration: BoxDecoration(
-                              color: PRIMARY_COLOR_ORANGE_02,
-                              borderRadius: BorderRadius.circular(8.0)),
-                          child: const Center(
-                            child: Text(
-                              "취소하기",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ],
         ),
       ),
     );

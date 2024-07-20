@@ -258,7 +258,7 @@ class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
                                       color: GRAYSCALE_GRAY_01,
                                       borderRadius: BorderRadius.circular(8.0)),
                                   child: const Text(
-                                    "강의평",
+                                    "강의상세/강의평",
                                     style: TextStyle(
                                         fontSize: 12.0,
                                         fontWeight: FontWeight.w500,
