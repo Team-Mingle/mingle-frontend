@@ -445,7 +445,25 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
                     const SizedBox(
                       width: 12.0,
                     ),
-                    Text(courseDetailModel.venue ?? "")
+                    Text(courseDetailModel.venue ?? "-")
+                  ],
+                ),
+                const SizedBox(
+                  height: 24.0,
+                ),
+                Row(
+                  children: [
+                    const SizedBox(
+                      width: 72.0,
+                      child: Text(
+                        "분반",
+                        style: TextStyle(color: GRAYSCALE_GRAY_03),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 12.0,
+                    ),
+                    Text(courseDetailModel.subclass ?? "-")
                   ],
                 ),
                 // ExpandedSection(
