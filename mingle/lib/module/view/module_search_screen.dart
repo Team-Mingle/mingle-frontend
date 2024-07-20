@@ -323,10 +323,11 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
               const SizedBox(
                 width: 4.0,
               ),
-              const Text(
+              Text(
+                course.getStartTimes(),
                 //TODO: change to actual timing
-                "화2/수2",
-                style: TextStyle(
+                // "화2/수2",
+                style: const TextStyle(
                     fontSize: 12.0,
                     letterSpacing: -0.005,
                     height: 1.3,

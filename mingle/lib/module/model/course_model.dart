@@ -200,6 +200,9 @@ class CourseModel {
   String getStartTimes() {
     List<String> result = [];
     for (CourseTimeModel time in courseTimeDtoList) {
+      if (time.dayOfWeek == null || time.startTime == null) {
+        continue;
+      }
       result.add(
           "${convertDayToKorDay(time.dayOfWeek!)} ${CourseTimeModel.removeSecondsFromTime(time.startTime!)}");
     }
