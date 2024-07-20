@@ -62,6 +62,12 @@ abstract class TimetableRepository {
       {@Path() required int timetableId,
       @Body() required ChangeTimetableNameDto changeTimetableNameDto});
 
+  @PATCH('/{timetableCourseId}')
+  @Headers({'accessToken': 'true'})
+  Future<void> editTimetableCourse(
+      {@Path() required int timetableCourseId,
+      @Body() required EditTimetableCourseDto editTimetableCourseDto});
+
   @GET('/{timetableId}')
   @Headers({'accessToken': 'true'})
   Future<TimetableModel> getTimetable({
@@ -137,6 +143,18 @@ class AddPersonalCourseDto {
       this.overrideValidation = false});
 
   Map<String, dynamic> toJson() => _$AddPersonalCourseDtoToJson(this);
+}
+
+@JsonSerializable()
+class EditTimetableCourseDto {
+  final String venue;
+  final String professor;
+  final String subclass;
+
+  EditTimetableCourseDto(
+      {required this.venue, required this.professor, required this.subclass});
+
+  Map<String, dynamic> toJson() => _$EditTimetableCourseDtoToJson(this);
 }
 
 

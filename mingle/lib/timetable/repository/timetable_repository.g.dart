@@ -67,6 +67,22 @@ Map<String, dynamic> _$AddPersonalCourseDtoToJson(
       'overrideValidation': instance.overrideValidation,
     };
 
+EditTimetableCourseDto _$EditTimetableCourseDtoFromJson(
+        Map<String, dynamic> json) =>
+    EditTimetableCourseDto(
+      venue: json['venue'] as String,
+      professor: json['professor'] as String,
+      subclass: json['subclass'] as String,
+    );
+
+Map<String, dynamic> _$EditTimetableCourseDtoToJson(
+        EditTimetableCourseDto instance) =>
+    <String, dynamic>{
+      'venue': instance.venue,
+      'professor': instance.professor,
+      'subclass': instance.subclass,
+    };
+
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
@@ -249,6 +265,35 @@ class _TimetableRepository implements TimetableRepository {
         .compose(
           _dio.options,
           '/${timetableId}/name',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
+  Future<void> editTimetableCourse({
+    required int timetableCourseId,
+    required EditTimetableCourseDto editTimetableCourseDto,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(editTimetableCourseDto.toJson());
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'PATCH',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/${timetableCourseId}',
           queryParameters: queryParameters,
           data: _data,
         )

@@ -430,30 +430,48 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
                     Expanded(child: Text(courseDetailModel.getStartTimes()))
                   ],
                 ),
-                ExpandedSection(
-                  expand: isExpanded,
-                  child: expandedModuleInformation(courseDetailModel),
-                ),
                 const SizedBox(
-                  height: 31.5,
+                  height: 24.0,
                 ),
-                GestureDetector(
-                  onTap: () => setState(() {
-                    isExpanded = !isExpanded;
-                  }),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        isExpanded ? "과목 정보 접기" : "과목 정보 더보기",
-                        style: const TextStyle(color: GRAYSCALE_GRAY_04),
+                Row(
+                  children: [
+                    const SizedBox(
+                      width: 72.0,
+                      child: Text(
+                        "장소",
+                        style: TextStyle(color: GRAYSCALE_GRAY_03),
                       ),
-                      SvgPicture.asset(isExpanded
-                          ? "assets/img/module_review_screen/up_tick_icon.svg"
-                          : "assets/img/module_review_screen/down_tick_icon.svg")
-                    ],
-                  ),
+                    ),
+                    const SizedBox(
+                      width: 12.0,
+                    ),
+                    Text(courseDetailModel.venue ?? "")
+                  ],
                 ),
+                // ExpandedSection(
+                //   expand: isExpanded,
+                //   child: expandedModuleInformation(courseDetailModel),
+                // ),
+                // const SizedBox(
+                //   height: 31.5,
+                // ),
+                // GestureDetector(
+                //   onTap: () => setState(() {
+                //     isExpanded = !isExpanded;
+                //   }),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     children: [
+                //       Text(
+                //         isExpanded ? "과목 정보 접기" : "과목 정보 더보기",
+                //         style: const TextStyle(color: GRAYSCALE_GRAY_04),
+                //       ),
+                //       SvgPicture.asset(isExpanded
+                //           ? "assets/img/module_review_screen/up_tick_icon.svg"
+                //           : "assets/img/module_review_screen/down_tick_icon.svg")
+                //     ],
+                //   ),
+                // ),
                 const SizedBox(
                   height: 15.5,
                 ),
