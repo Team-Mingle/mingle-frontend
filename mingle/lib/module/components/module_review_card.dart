@@ -11,7 +11,7 @@ class ModuleReviewCard extends StatefulWidget {
   final int likes;
   final bool isFromMypageScreen;
   final bool isMine;
-  final int courseId;
+  final int? courseId;
   const ModuleReviewCard({
     super.key,
     required this.reivew,
@@ -154,7 +154,7 @@ class _ModuleReviewCardState extends State<ModuleReviewCard> {
                 child: GestureDetector(
               onTap: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) =>
-                      ModuleDetailsScreen(courseId: widget.courseId))),
+                      ModuleDetailsScreen(courseId: widget.courseId!))),
               child: const Text("밍끼와 철학",
                   style: TextStyle(
                       color: GRAYSCALE_GRAY_04,

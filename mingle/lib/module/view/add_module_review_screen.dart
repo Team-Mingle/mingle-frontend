@@ -17,8 +17,15 @@ import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
 class AddModuleReviewScreen extends ConsumerStatefulWidget {
   final String? moduleName;
+  final bool isFromPointShopBottomSheet;
+  final Function? pointShopBottomSheetCallback;
   final int? moduleId;
-  const AddModuleReviewScreen({super.key, this.moduleName, this.moduleId});
+  const AddModuleReviewScreen(
+      {super.key,
+      this.moduleName,
+      this.moduleId,
+      this.isFromPointShopBottomSheet = false,
+      this.pointShopBottomSheetCallback});
 
   @override
   ConsumerState<AddModuleReviewScreen> createState() =>
@@ -87,10 +94,13 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
       final resp = await ref
           .watch(courseEvalutationRepositoryProvider)
           .addCourseEvaluation(addCourseEvaluationDto: addCourseEvaluationDto);
-      ref.watch(remainingPointsProvider.notifier).fetchRemainingPoints();
+      await ref.watch(remainingPointsProvider.notifier).fetchRemainingPoints();
       setState(() {
         isLoading = false;
       });
+      if (widget.isFromPointShopBottomSheet) {
+        widget.pointShopBottomSheetCallback!();
+      }
       fToast.showToast(
         child: const ToastMessage(message: "강의평을 등록하여 100p가 적립되었어요."),
         gravity: ToastGravity.CENTER,

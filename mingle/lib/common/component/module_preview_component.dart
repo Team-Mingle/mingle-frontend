@@ -127,6 +127,7 @@ class _ModulePreviewComponentState
     }
 
     final courseList = widget.data as CursorPagination;
+    final totalCount = courseList.totalCount!;
 
     if (widget.isFromTimetableAdd && courseList.data.isEmpty) {
       return Column(
@@ -224,8 +225,7 @@ class _ModulePreviewComponentState
                               ? Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 20.0, vertical: 16.0),
-                                  child: Text(
-                                      "일치하는 강의가 ${courseList.data.length}개 있습니다"),
+                                  child: Text("일치하는 강의가 $totalCount개 있습니다"),
                                 )
                               : widget.isFromTimetableAdd
                                   ? CoursePreviewCard(

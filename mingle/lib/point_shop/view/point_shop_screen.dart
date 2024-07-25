@@ -49,11 +49,17 @@ class _PointShopScreenState extends ConsumerState<PointShopScreen> {
 
   void purchaseCoupon(ShopCouponModel shopCouponModel) async {
     try {
-      ref.watch(pointShopRepositoryProvider).createCoupon(
+      await ref.watch(pointShopRepositoryProvider).createCoupon(
           createCouponDto:
               CreateCouponDto(couponProductId: shopCouponModel.id));
-      ref.read(remainingPointsProvider.notifier).fetchRemainingPoints();
-      ref.read(myCouponProvider.notifier).getCoupon();
+      await ref.read(remainingPointsProvider.notifier).fetchRemainingPoints();
+      await ref.read(myCouponProvider.notifier).getCoupon();
+      fetchPoints();
+      fToast.showToast(
+          child: ToastMessage(
+              message: "강의평가 ${shopCouponModel.getDuration()} 이용권이 구매되었습니다."),
+          gravity: ToastGravity.BOTTOM,
+          toastDuration: const Duration(seconds: 2));
     } on DioException catch (e) {
       print(e);
       fToast.showToast(
@@ -87,245 +93,266 @@ class _PointShopScreenState extends ConsumerState<PointShopScreen> {
           isScrollControlled: true,
           context: context,
           builder: (BuildContext context) {
-            bool isPurchasable = pointsOwned >= shopCouponModel.cost;
-            return Container(
-              height: 505.0,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(12),
+            return StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+              int currentPoints = pointsOwned;
+              bool isPurchasable = currentPoints >= shopCouponModel.cost;
+
+              void updatePoints() {
+                print("updating points");
+                setState(() {
+                  currentPoints = ref.read(remainingPointsProvider);
+                });
+                print("current points: $currentPoints");
+              }
+
+              return Container(
+                height: 505.0,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(12),
+                  ),
                 ),
-              ),
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 24.0,
-                  ),
-                  Row(
-                    children: [
-                      const Spacer(
-                        flex: 3,
-                      ),
-                      const Center(
-                        child: Text(
-                          "이용권 구매",
-                          style: TextStyle(fontSize: 16.0),
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 24.0,
+                    ),
+                    Row(
+                      children: [
+                        const Spacer(
+                          flex: 3,
                         ),
-                      ),
-                      const Spacer(
-                        flex: 2,
-                      ),
-                      GestureDetector(
-                        onTap: () => Navigator.of(context).pop(),
-                        child: SvgPicture.asset(
-                            "assets/img/module_review_screen/close_icon.svg"),
-                      ),
-                      const SizedBox(
-                        width: 24.0,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 32.0,
-                  ),
-                  Expanded(
-                    child: DefaultPadding(
-                      child: Column(
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: GRAYSCALE_GRAY_01_5),
-                              borderRadius: BorderRadius.circular(8.0),
-                              boxShadow: const [
-                                BoxShadow(
-                                    color: Color.fromRGBO(0, 0, 0, 0.2),
-                                    offset: Offset(-1, -2),
-                                    blurRadius: 10.0)
-                              ],
+                        const Center(
+                          child: Text(
+                            "이용권 구매",
+                            style: TextStyle(fontSize: 16.0),
+                          ),
+                        ),
+                        const Spacer(
+                          flex: 2,
+                        ),
+                        GestureDetector(
+                          onTap: () => Navigator.of(context).pop(),
+                          child: SvgPicture.asset(
+                              "assets/img/module_review_screen/close_icon.svg"),
+                        ),
+                        const SizedBox(
+                          width: 24.0,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 32.0,
+                    ),
+                    Expanded(
+                      child: DefaultPadding(
+                        child: Column(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(color: GRAYSCALE_GRAY_01_5),
+                                borderRadius: BorderRadius.circular(8.0),
+                                boxShadow: const [
+                                  BoxShadow(
+                                      color: Color.fromRGBO(0, 0, 0, 0.2),
+                                      offset: Offset(-1, -2),
+                                      blurRadius: 10.0)
+                                ],
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0, vertical: 24.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    shopCouponModel.name,
+                                    // "강의평가 $validity 이용권",
+                                    style: const TextStyle(
+                                        fontSize: 16.0,
+                                        letterSpacing: -0.02,
+                                        height: 1.5,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  const SizedBox(
+                                    height: 8.0,
+                                  ),
+                                  Text(
+                                    shopCouponModel.description,
+                                    // "$validity동안 모든 강의평가를 제한 없이 볼 수 있습니다.",
+                                    style: const TextStyle(
+                                        fontSize: 12.0,
+                                        letterSpacing: -0.005,
+                                        height: 1.3,
+                                        color: GRAYSCALE_GRAY_04),
+                                  ),
+                                  const SizedBox(
+                                    height: 8.0,
+                                  ),
+                                  Text(
+                                    "${shopCouponModel.cost}p",
+                                    style: const TextStyle(fontSize: 16.0),
+                                  )
+                                ],
+                              ),
                             ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16.0, vertical: 24.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            const SizedBox(
+                              height: 28.0,
+                            ),
+                            Row(
                               children: [
+                                const Text(
+                                  "보유 포인트",
+                                  style: TextStyle(fontSize: 16.0),
+                                ),
+                                const Spacer(),
                                 Text(
-                                  shopCouponModel.name,
-                                  // "강의평가 $validity 이용권",
+                                  "${currentPoints}p",
                                   style: const TextStyle(
                                       fontSize: 16.0,
                                       letterSpacing: -0.02,
                                       height: 1.5,
                                       fontWeight: FontWeight.w500),
-                                ),
-                                const SizedBox(
-                                  height: 8.0,
-                                ),
-                                Text(
-                                  shopCouponModel.description,
-                                  // "$validity동안 모든 강의평가를 제한 없이 볼 수 있습니다.",
-                                  style: const TextStyle(
-                                      fontSize: 12.0,
-                                      letterSpacing: -0.005,
-                                      height: 1.3,
-                                      color: GRAYSCALE_GRAY_04),
-                                ),
-                                const SizedBox(
-                                  height: 8.0,
-                                ),
-                                Text(
-                                  "${shopCouponModel.cost}p",
-                                  style: const TextStyle(fontSize: 16.0),
                                 )
                               ],
                             ),
-                          ),
-                          const SizedBox(
-                            height: 28.0,
-                          ),
-                          Row(
-                            children: [
-                              const Text(
-                                "보유 포인트",
-                                style: TextStyle(fontSize: 16.0),
-                              ),
-                              const Spacer(),
-                              Text(
-                                "${pointsOwned}p",
-                                style: const TextStyle(
-                                    fontSize: 16.0,
-                                    letterSpacing: -0.02,
-                                    height: 1.5,
-                                    fontWeight: FontWeight.w500),
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 16.0,
-                          ),
-                          Row(
-                            children: [
-                              const Text(
-                                "사용할 포인트",
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    letterSpacing: -0.02,
-                                    height: 1.5,
-                                    color: RED),
-                              ),
-                              const Spacer(),
-                              Text(
-                                "-${shopCouponModel.cost}p",
-                                style: const TextStyle(
-                                    fontSize: 16.0,
-                                    letterSpacing: -0.02,
-                                    height: 1.5,
-                                    fontWeight: FontWeight.w500,
-                                    color: RED),
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 12.0,
-                          ),
-                          const Divider(
-                            height: 24.0,
-                            color: GRAYSCALE_GRAY_02,
-                          ),
-                          Row(
-                            children: [
-                              const Text(
-                                "잔여 포인트",
-                                style: TextStyle(fontSize: 16.0),
-                              ),
-                              const Spacer(),
-                              Text(
-                                "${pointsOwned - shopCouponModel.cost}p",
-                                style: const TextStyle(
-                                    fontSize: 16.0,
-                                    letterSpacing: -0.02,
-                                    height: 1.5,
-                                    fontWeight: FontWeight.w500),
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 11.5,
-                          ),
-                          !isPurchasable
-                              ? Row(
-                                  children: [
-                                    const Text(
-                                      "포인트가 부족합니다.",
-                                    ),
-                                    const Spacer(),
-                                    GestureDetector(
-                                      onTap: () => Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (_) =>
-                                                  const AddModuleReviewScreen())),
-                                      child: const Text(
-                                        "강의평가 작성하기",
-                                        style: TextStyle(
-                                            fontSize: 12.0,
-                                            letterSpacing: -0.005,
-                                            height: 1.3,
-                                            fontWeight: FontWeight.w500,
-                                            color: PRIMARY_COLOR_ORANGE_01),
-                                      ),
-                                    )
-                                  ],
+                            const SizedBox(
+                              height: 16.0,
+                            ),
+                            Row(
+                              children: [
+                                const Text(
+                                  "사용할 포인트",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      letterSpacing: -0.02,
+                                      height: 1.5,
+                                      color: RED),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  "-${shopCouponModel.cost}p",
+                                  style: const TextStyle(
+                                      fontSize: 16.0,
+                                      letterSpacing: -0.02,
+                                      height: 1.5,
+                                      fontWeight: FontWeight.w500,
+                                      color: RED),
                                 )
-                              : Container(),
-                          const Spacer(),
-                          InkWell(
-                            onTap: () {
-                              purchaseCoupon(shopCouponModel);
-                              Navigator.of(context).pop();
-                            },
-                            child: Container(
-                              // width: 296,
-                              height: 48,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: isPurchasable
-                                          ? PRIMARY_COLOR_ORANGE_02
-                                          : GRAYSCALE_GRAY_02),
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  color: isPurchasable
-                                      ? PRIMARY_COLOR_ORANGE_02
-                                      : GRAYSCALE_GRAY_02),
-                              child: Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "구매하기",
-                                      style: TextStyle(
-                                          fontSize: 14.0,
-                                          letterSpacing: -0.01,
-                                          height: 1.4,
-                                          color: isPurchasable
-                                              ? Colors.white
-                                              : GRAYSCALE_GRAY_03,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                  ],
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 12.0,
+                            ),
+                            const Divider(
+                              height: 24.0,
+                              color: GRAYSCALE_GRAY_02,
+                            ),
+                            Row(
+                              children: [
+                                const Text(
+                                  "잔여 포인트",
+                                  style: TextStyle(fontSize: 16.0),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  "${currentPoints - shopCouponModel.cost}p",
+                                  style: const TextStyle(
+                                      fontSize: 16.0,
+                                      letterSpacing: -0.02,
+                                      height: 1.5,
+                                      fontWeight: FontWeight.w500),
+                                )
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 11.5,
+                            ),
+                            !isPurchasable
+                                ? Row(
+                                    children: [
+                                      const Text(
+                                        "포인트가 부족합니다.",
+                                      ),
+                                      const Spacer(),
+                                      GestureDetector(
+                                        onTap: () => Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (_) =>
+                                                AddModuleReviewScreen(
+                                              isFromPointShopBottomSheet: true,
+                                              pointShopBottomSheetCallback:
+                                                  updatePoints,
+                                            ),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          "강의평가 작성하기",
+                                          style: TextStyle(
+                                              fontSize: 12.0,
+                                              letterSpacing: -0.005,
+                                              height: 1.3,
+                                              fontWeight: FontWeight.w500,
+                                              color: PRIMARY_COLOR_ORANGE_01),
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                : Container(),
+                            const Spacer(),
+                            InkWell(
+                              onTap: isPurchasable
+                                  ? () {
+                                      purchaseCoupon(shopCouponModel);
+                                      Navigator.of(context).pop();
+                                    }
+                                  : () {},
+                              child: Container(
+                                // width: 296,
+                                height: 48,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: isPurchasable
+                                            ? PRIMARY_COLOR_ORANGE_02
+                                            : GRAYSCALE_GRAY_02),
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    color: isPurchasable
+                                        ? PRIMARY_COLOR_ORANGE_02
+                                        : GRAYSCALE_GRAY_02),
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "구매하기",
+                                        style: TextStyle(
+                                            fontSize: 14.0,
+                                            letterSpacing: -0.01,
+                                            height: 1.4,
+                                            color: isPurchasable
+                                                ? Colors.white
+                                                : GRAYSCALE_GRAY_03,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 16.0,
-                          ),
-                        ],
+                            const SizedBox(
+                              height: 16.0,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  )
-                ],
-              ),
-            );
+                    )
+                  ],
+                ),
+              );
+            });
           },
           backgroundColor: Colors.transparent,
         );

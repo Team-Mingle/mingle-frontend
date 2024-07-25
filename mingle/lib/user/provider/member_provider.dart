@@ -258,8 +258,10 @@ class MemberPostStateNotifier extends PostStateNotifier
       // 데이터를 추가로 더 가져오는 상황
       if (fetchMore) {
         final pState = state as CursorPagination;
-        state =
-            CursorPaginationFetchingMore(meta: pState.meta, data: pState.data);
+        state = CursorPaginationFetchingMore(
+            meta: pState.meta,
+            data: pState.data,
+            totalCount: pState.totalCount);
 
         paginationParams =
             paginationParams.copyWith(page: pState.meta!.page + 1);
@@ -270,8 +272,10 @@ class MemberPostStateNotifier extends PostStateNotifier
         // 기존 데이터를 보존한태로 Fetch (API요청)를 진행
         if (state is CursorPagination && !forceRefetch) {
           final pState = state as CursorPagination;
-          state =
-              CursorPaginationRefetching(meta: pState.meta, data: pState.data);
+          state = CursorPaginationRefetching(
+              meta: pState.meta,
+              data: pState.data,
+              totalCount: pState.totalCount);
         } else {
           print("force refetching");
           state = CursorPaginationLoading();
@@ -556,8 +560,10 @@ class MemberSecondHandPostStateNotifier extends SecondHandPostStateNotifier {
       // 데이터를 추가로 더 가져오는 상황
       if (fetchMore) {
         final pState = state as CursorPagination;
-        state =
-            CursorPaginationFetchingMore(meta: pState.meta, data: pState.data);
+        state = CursorPaginationFetchingMore(
+            meta: pState.meta,
+            data: pState.data,
+            totalCount: pState.totalCount);
 
         paginationParams =
             paginationParams.copyWith(page: pState.meta!.page + 1);
@@ -568,8 +574,10 @@ class MemberSecondHandPostStateNotifier extends SecondHandPostStateNotifier {
         // 기존 데이터를 보존한태로 Fetch (API요청)를 진행
         if (state is CursorPagination && !forceRefetch) {
           final pState = state as CursorPagination;
-          state =
-              CursorPaginationRefetching(meta: pState.meta, data: pState.data);
+          state = CursorPaginationRefetching(
+              meta: pState.meta,
+              data: pState.data,
+              totalCount: pState.totalCount);
         } else {
           print("force refetching");
           state = CursorPaginationLoading();

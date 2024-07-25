@@ -9,7 +9,8 @@ class CourseEvaluationModel {
   final String semester;
   final String comment;
   final String rating;
-  final int courseId;
+  final String courseCode;
+  final int? courseId;
   final bool isMine;
 
   CourseEvaluationModel(
@@ -18,6 +19,7 @@ class CourseEvaluationModel {
       required this.comment,
       required this.rating,
       required this.courseId,
+      required this.courseCode,
       required this.isMine});
 
   factory CourseEvaluationModel.fromJson(Map<String, dynamic> json) =>

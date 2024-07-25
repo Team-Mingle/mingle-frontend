@@ -17,6 +17,10 @@ class ShopCouponModel {
 
   factory ShopCouponModel.fromJson(Map<String, dynamic> json) =>
       _$ShopCouponModelFromJson(json);
+
+  String getDuration() {
+    return name.split(" ")[2];
+  }
 }
 
 // "id": 0,

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -20,7 +21,7 @@ class CourseModel {
   final String courseCode;
   final String? semester;
   final String professor;
-  final String? subclass;
+  final String subclass;
   final List<CourseTimeModel> courseTimeDtoList;
   final String? rgb;
   String? courseType;
@@ -31,7 +32,7 @@ class CourseModel {
       required this.courseCode,
       this.semester,
       this.professor = "-",
-      this.subclass,
+      this.subclass = "-",
       required this.courseTimeDtoList,
       required this.courseType,
       this.rgb});
@@ -138,22 +139,22 @@ class CourseModel {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          name,
+                        AutoSizeText(
+                          courseCode,
                           style: const TextStyle(
-                              fontSize: 12.0,
+                              fontSize: 10.0,
                               fontWeight: FontWeight.w600,
                               overflow: TextOverflow.ellipsis),
-                          maxLines: 1,
+                          maxLines: 2,
                         ),
                         const SizedBox(
                           height: 4.0,
                         ),
                         Text(
-                          courseCode,
+                          name,
                           style: const TextStyle(
                               fontSize: 12.0, overflow: TextOverflow.ellipsis),
-                          maxLines: 2,
+                          maxLines: 1,
                         )
                       ],
                     ),

@@ -12,7 +12,7 @@ CourseModel _$CourseModelFromJson(Map<String, dynamic> json) => CourseModel(
       courseCode: json['courseCode'] as String,
       semester: json['semester'] as String?,
       professor: json['professor'] as String? ?? "-",
-      subclass: json['subclass'] as String?,
+      subclass: json['subclass'] as String? ?? "-",
       courseTimeDtoList: (json['courseTimeDtoList'] as List<dynamic>)
           .map((e) => CourseTimeModel.fromJson(e as Map<String, dynamic>))
           .toList(),

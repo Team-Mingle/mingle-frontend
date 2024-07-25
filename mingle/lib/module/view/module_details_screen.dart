@@ -43,6 +43,7 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
   bool isExpanded = false;
   CouponModel? myCoupon;
   late FToast fToast;
+  Future<CourseEvaluationResponseDto>? courseEvaluationFuture;
 
   @override
   void initState() {
@@ -51,6 +52,15 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
     fToast = FToast();
     fToast.init(navigatorKey.currentContext!);
     getCoupon();
+    getCourseEvaluationFuture();
+  }
+
+  void getCourseEvaluationFuture() {
+    setState(() {
+      courseEvaluationFuture = ref
+          .read(courseEvalutationRepositoryProvider)
+          .getCourseEvaluations(courseId: widget.courseId);
+    });
   }
 
   void getCoupon() async {
@@ -507,12 +517,14 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
           ),
           if (courseDetailModel.courseType == "CRAWL")
             FutureBuilder(
-              future: ref
-                  .watch(courseEvalutationRepositoryProvider)
-                  .getCourseEvaluations(courseId: widget.courseId),
+              future: courseEvaluationFuture,
+              // ref
+              //     .watch(courseEvalutationRepositoryProvider)
+              //     .getCourseEvaluations(courseId: widget.courseId),
               // postDetailFuture(postId),
               builder: (context,
                   AsyncSnapshot<CourseEvaluationResponseDto> snapshot) {
+                print("snapshot data: ${snapshot.data}");
                 if (!snapshot.hasData) {
                   return const Center(
                     child: CircularProgressIndicator(
@@ -525,6 +537,7 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
                     child: Text("강의평가 불러오기에 실패했습니다."),
                   );
                 }
+
                 List<CourseEvaluationModel> moduleReviews =
                     snapshot.data!.courseEvaluationList;
 

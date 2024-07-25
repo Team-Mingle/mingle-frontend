@@ -32,7 +32,11 @@ class TimetableModel extends TimetableBase {
       for (CourseTimeModel courseTimeModel
           in courseDetailModel.courseTimeDtoList) {
         print(courseTimeModel.startTime);
-        startingHours.add(courseTimeModel.getStartingHour());
+        if (courseTimeModel.dayOfWeek != null &&
+            courseTimeModel.startTime != null &&
+            courseTimeModel.endTime != null) {
+          startingHours.add(courseTimeModel.getStartingHour());
+        }
       }
     }
     startingHours.sort((a, b) => a.compareTo(b));
@@ -45,7 +49,11 @@ class TimetableModel extends TimetableBase {
     for (CourseDetailModel courseDetailModel in coursePreviewDtoList) {
       for (CourseTimeModel courseTimeModel
           in courseDetailModel.courseTimeDtoList) {
-        finishingHours.add(courseTimeModel.getFinishingHour());
+        if (courseTimeModel.dayOfWeek != null &&
+            courseTimeModel.startTime != null &&
+            courseTimeModel.endTime != null) {
+          finishingHours.add(courseTimeModel.getFinishingHour());
+        }
       }
     }
     finishingHours.sort((a, b) => a.compareTo(b));
