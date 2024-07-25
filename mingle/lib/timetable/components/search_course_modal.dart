@@ -4,12 +4,14 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mingle/common/component/module_preview_component.dart';
 import 'package:mingle/common/component/search_history_service.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/module/model/course_detail_model.dart';
 import 'package:mingle/module/model/course_model.dart';
+import 'package:mingle/module/provider/module_provider.dart';
 import 'package:mingle/module/repository/course_repository.dart';
 import 'package:mingle/timetable/components/course_preview_card.dart';
 import 'package:mingle/timetable/view/self_add_timetable_screen.dart';
@@ -35,6 +37,8 @@ class _SearchCourseModalWidgetState
   final TextEditingController _searchController = TextEditingController();
   List<String>? previousSearch;
   Future<CursorPagination<CourseDetailModel>>? searchFuture;
+  StateNotifierProvider<ModuleStateNotifier, CursorPaginationBase>?
+      searchModuleProvier;
   late FToast fToast;
   bool isSearching = false;
 
@@ -55,17 +59,32 @@ class _SearchCourseModalWidgetState
     });
   }
 
-  void showAddCourseSuccessToast() {
-    fToast.showToast(
-        child: const ToastMessage(message: "강의가 추가되었습니다"),
-        toastDuration: const Duration(seconds: 2),
-        gravity: ToastGravity.CENTER);
-  }
-
   void setIsSearching(bool value) {
     setState(() {
       isSearching = value;
     });
+  }
+
+  void setSearch() {
+    setState(
+      () {
+        searchFuture = ref
+            .watch(courseRepositoryProvider)
+            .search(keyword: _searchController.text);
+
+        searchModuleProvier =
+            StateNotifierProvider<ModuleStateNotifier, CursorPaginationBase>(
+                (ref) {
+          final repository = ref.watch(courseRepositoryProvider);
+
+          final notifier = ModuleStateNotifier(
+              moduleRepository: repository, keyword: _searchController.text);
+
+          return notifier;
+        });
+        isSearching = false;
+      },
+    );
   }
 
   @override
@@ -121,12 +140,7 @@ class _SearchCourseModalWidgetState
                             service.addHistory(_searchController.text);
                           });
                           // FocusScope.of(context).unfocus();
-                          setState(() {
-                            searchFuture = ref
-                                .watch(courseRepositoryProvider)
-                                .search(keyword: _searchController.text);
-                            isSearching = false;
-                          });
+                          setSearch();
                         },
                         controller: _searchController,
                         textAlignVertical: TextAlignVertical.top,
@@ -231,120 +245,135 @@ class _SearchCourseModalWidgetState
                                         previousSearch![index - 1], index - 1),
                               ),
                       )
-                    : FutureBuilder(
-                        future: searchFuture,
-                        builder: (context,
-                            AsyncSnapshot<CursorPagination<CourseDetailModel>>
-                                snapshot) {
-                          print("hasData: ${snapshot.hasData}");
-                          if (!snapshot.hasData ||
-                              snapshot.connectionState !=
-                                  ConnectionState.done) {
-                            return const Padding(
-                              padding: EdgeInsets.only(top: 30.0),
-                              child: Center(
-                                  child: CircularProgressIndicator(
-                                color: PRIMARY_COLOR_ORANGE_01,
-                              )),
-                            );
-                          }
-                          CursorPagination<CourseDetailModel> courseList =
-                              snapshot.data!;
-                          List<CourseDetailModel> courses = courseList.data;
-                          return courses.isEmpty
-                              ? Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const SizedBox(
-                                      height: 48.0,
-                                    ),
-                                    const Text(
-                                      "일치하는 강의가 없습니다.",
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          letterSpacing: -0.02,
-                                          height: 1.5,
-                                          color: GRAYSCALE_GRAY_04),
-                                    ),
-                                    const SizedBox(
-                                      height: 17.0,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context).pop();
-                                        Navigator.of(context).push(MaterialPageRoute(
-                                            builder: (_) => AddDirectTimeTableScreen(
-                                                addClass: widget.addClass,
-                                                addClassesAtAddTimeTableScreen:
-                                                    widget
-                                                        .addClassesAtAddTimeTableScreen)));
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const Text(
-                                            "직접 추가하기",
-                                            style: TextStyle(
-                                                fontSize: 12.0,
-                                                fontWeight: FontWeight.w500,
-                                                color: PRIMARY_COLOR_ORANGE_01),
-                                          ),
-                                          SvgPicture.asset(
-                                              "assets/img/timetable_screen/right_tick_icon.svg")
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                )
-                              : Expanded(
-                                  // height: 283,
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                        children: List.generate(
-                                            courses.length + 1, (index) {
-                                      // if (index == 0) {
-                                      //   return Container(
-                                      //     padding: const EdgeInsets.symmetric(
-                                      //         horizontal: 20.0, vertical: 16.0),
-                                      //     child: Text("일치하는 강의가 ${courses.length}개 있습니다"),
-                                      //   );
-                                      // } else {
-                                      //   return coursePreviewCard(courses[index - 1]);
-                                      // }
-                                      return Column(
-                                        children: [
-                                          index == 0
-                                              ? Container(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 20.0,
-                                                      vertical: 16.0),
-                                                  child: Text(
-                                                      "일치하는 강의가 ${courses.length}개 있습니다"),
-                                                )
-                                              : CoursePreviewCard(
-                                                  showAddCourseSuccessToast:
-                                                      showAddCourseSuccessToast,
-                                                  addClass: widget.addClass,
-                                                  addClassesAtAddTimeTableScreen:
-                                                      widget
-                                                          .addClassesAtAddTimeTableScreen,
-                                                  course: courses[index - 1],
-                                                  setIsSearching:
-                                                      setIsSearching,
-                                                ),
-                                          const Divider(
-                                            height: 1.0,
-                                            color: GRAYSCALE_GRAY_01_5,
-                                          )
-                                        ],
-                                      );
-                                    })),
-                                  ),
-                                );
-                        }),
+                    : Expanded(
+                        child: ModulePreviewComponent(
+                          isFromTimetableAdd: true,
+                          data: ref.watch(searchModuleProvier!),
+                          setIsSearching: setIsSearching,
+                          addClass: widget.addClass,
+                          showAddCourseSuccessToast: showAddCourseSuccessToast,
+                          addClassesAtAddTimeTableScreen:
+                              widget.addClassesAtAddTimeTableScreen,
+                          notifierProvider:
+                              ref.watch(searchModuleProvier!.notifier),
+                        ),
+                      )
+
+                // FutureBuilder(
+                //     future: searchFuture,
+                //     builder: (context,
+                //         AsyncSnapshot<CursorPagination<CourseDetailModel>>
+                //             snapshot) {
+                //       print("hasData: ${snapshot.hasData}");
+                //       if (!snapshot.hasData ||
+                //           snapshot.connectionState !=
+                //               ConnectionState.done) {
+                //         return const Padding(
+                //           padding: EdgeInsets.only(top: 30.0),
+                //           child: Center(
+                //               child: CircularProgressIndicator(
+                //             color: PRIMARY_COLOR_ORANGE_01,
+                //           )),
+                //         );
+                //       }
+                //       CursorPagination<CourseDetailModel> courseList =
+                //           snapshot.data!;
+                //       List<CourseDetailModel> courses = courseList.data;
+                //       return courses.isEmpty
+                //           ? Column(
+                //               mainAxisAlignment: MainAxisAlignment.center,
+                //               children: [
+                //                 const SizedBox(
+                //                   height: 48.0,
+                //                 ),
+                //                 const Text(
+                //                   "일치하는 강의가 없습니다.",
+                //                   style: TextStyle(
+                //                       fontSize: 16.0,
+                //                       letterSpacing: -0.02,
+                //                       height: 1.5,
+                //                       color: GRAYSCALE_GRAY_04),
+                //                 ),
+                //                 const SizedBox(
+                //                   height: 17.0,
+                //                 ),
+                //                 GestureDetector(
+                //                   onTap: () {
+                //                     Navigator.of(context).pop();
+                //                     Navigator.of(context).push(MaterialPageRoute(
+                //                         builder: (_) => AddDirectTimeTableScreen(
+                //                             addClass: widget.addClass,
+                //                             addClassesAtAddTimeTableScreen:
+                //                                 widget
+                //                                     .addClassesAtAddTimeTableScreen)));
+                //                   },
+                //                   child: Row(
+                //                     mainAxisAlignment:
+                //                         MainAxisAlignment.center,
+                //                     mainAxisSize: MainAxisSize.min,
+                //                     children: [
+                //                       const Text(
+                //                         "직접 추가하기",
+                //                         style: TextStyle(
+                //                             fontSize: 12.0,
+                //                             fontWeight: FontWeight.w500,
+                //                             color: PRIMARY_COLOR_ORANGE_01),
+                //                       ),
+                //                       SvgPicture.asset(
+                //                           "assets/img/timetable_screen/right_tick_icon.svg")
+                //                     ],
+                //                   ),
+                //                 )
+                //               ],
+                //             )
+                //           :
+                //           Expanded(
+                //               // height: 283,
+                //               child: SingleChildScrollView(
+                //                 child: Column(
+                //                     children: List.generate(
+                //                         courses.length + 1, (index) {
+                //                   // if (index == 0) {
+                //                   //   return Container(
+                //                   //     padding: const EdgeInsets.symmetric(
+                //                   //         horizontal: 20.0, vertical: 16.0),
+                //                   //     child: Text("일치하는 강의가 ${courses.length}개 있습니다"),
+                //                   //   );
+                //                   // } else {
+                //                   //   return coursePreviewCard(courses[index - 1]);
+                //                   // }
+                //                   return Column(
+                //                     children: [
+                //                       index == 0
+                //                           ? Container(
+                //                               padding: const EdgeInsets
+                //                                   .symmetric(
+                //                                   horizontal: 20.0,
+                //                                   vertical: 16.0),
+                //                               child: Text(
+                //                                   "일치하는 강의가 ${courses.length}개 있습니다"),
+                //                             )
+                //                           : CoursePreviewCard(
+                //                               showAddCourseSuccessToast:
+                //                                   showAddCourseSuccessToast,
+                //                               addClass: widget.addClass,
+                //                               addClassesAtAddTimeTableScreen:
+                //                                   widget
+                //                                       .addClassesAtAddTimeTableScreen,
+                //                               course: courses[index - 1],
+                //                               setIsSearching:
+                //                                   setIsSearching,
+                //                             ),
+                //                       const Divider(
+                //                         height: 1.0,
+                //                         color: GRAYSCALE_GRAY_01_5,
+                //                       )
+                //                     ],
+                //                   );
+                //                 })),
+                //               ),
+                //             );
+                //     }),
               ],
             ),
           ),
@@ -364,11 +393,7 @@ class _SearchCourseModalWidgetState
           service.addHistory(_searchController.text);
         });
 
-        setState(() {
-          searchFuture = ref
-              .watch(courseRepositoryProvider)
-              .search(keyword: _searchController.text);
-        });
+        setSearch();
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
@@ -402,4 +427,11 @@ class _SearchCourseModalWidgetState
     );
   }
   //
+
+  void showAddCourseSuccessToast() {
+    fToast.showToast(
+        child: const ToastMessage(message: "강의가 추가되었습니다"),
+        toastDuration: const Duration(seconds: 2),
+        gravity: ToastGravity.CENTER);
+  }
 }

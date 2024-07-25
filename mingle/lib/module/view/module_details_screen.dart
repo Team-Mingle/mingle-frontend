@@ -861,21 +861,23 @@ class _ExpandableFabState extends State<ExpandableFab>
   }
 
   Widget _buildTapToCloseFab() {
-    return SizedBox(
+    return Container(
+      color: Colors.white,
       width: 56,
       height: 56,
       child: Center(
         child: Material(
+          surfaceTintColor: Colors.white,
           shape: const CircleBorder(),
           clipBehavior: Clip.antiAlias,
           elevation: 1,
           child: InkWell(
             onTap: _toggle,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
+            child: const Padding(
+              padding: EdgeInsets.all(16),
               child: Icon(
                 Icons.close,
-                color: Theme.of(context).primaryColor,
+                color: Colors.black,
               ),
             ),
           ),

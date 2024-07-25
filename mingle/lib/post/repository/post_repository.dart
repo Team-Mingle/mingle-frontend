@@ -66,8 +66,10 @@ abstract class PostRepository {
 
   @GET('/search')
   @Headers({'accessToken': 'true'})
-  Future<CursorPagination<PostModel>> search(
-      {@Query("keyword") required String keyword});
+  Future<CursorPagination<PostModel>> search({
+    @Query("keyword") required String keyword,
+    @Queries() PaginationParams? paginationParams = const PaginationParams(),
+  });
 
   @DELETE('/delete/{postId}')
   @Headers({'accessToken': 'true'})

@@ -28,8 +28,10 @@ abstract class CourseRepository {
 
   @GET('/search')
   @Headers({'accessToken': 'true'})
-  Future<CursorPagination<CourseDetailModel>> search(
-      {@Query("keyword") required String keyword});
+  Future<CursorPagination<CourseDetailModel>> search({
+    @Query("keyword") required String keyword,
+    @Queries() PaginationParams? paginationParams = const PaginationParams(),
+  });
 
   @GET('/{courseId}')
   @Headers({'accessToken': 'true'})

@@ -70,7 +70,7 @@ class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
       widget.addClassesAtAddTimeTableScreen(
           courseToBeAdded, overrideValidation);
       ref.read(pinnedTimetableProvider.notifier).fetchPinnedTimetable();
-      widget.showAddCourseSuccessToast();
+      // widget.showAddCourseSuccessToast();
       setState(() {
         isLoading = false;
       });

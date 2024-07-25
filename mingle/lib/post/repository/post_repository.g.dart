@@ -229,9 +229,14 @@ class _PostRepository implements PostRepository {
   }
 
   @override
-  Future<CursorPagination<PostModel>> search({required String keyword}) async {
+  Future<CursorPagination<PostModel>> search({
+    required String keyword,
+    PaginationParams? paginationParams = const PaginationParams(),
+  }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'keyword': keyword};
+    queryParameters.addAll(paginationParams?.toJson() ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
