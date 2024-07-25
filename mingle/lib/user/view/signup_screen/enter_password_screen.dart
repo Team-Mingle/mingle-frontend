@@ -10,6 +10,7 @@ import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/dio/dio.dart';
+import 'package:mingle/main.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/user/view/my_page_screen/password_change_success_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
@@ -39,7 +40,7 @@ class _EnterPasswordScreenState extends ConsumerState<EnterPasswordScreen> {
     // TODO: implement initState
     super.initState();
     fToast = FToast();
-    fToast.init(context);
+    fToast.init(navigatorKey.currentContext!);
   }
 
   void setErrorMsg(String msg) {

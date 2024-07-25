@@ -9,6 +9,7 @@ import 'package:mingle/common/const/data.dart';
 import 'package:mingle/common/const/error_codes.dart';
 import 'package:mingle/common/const/utils.dart';
 import 'package:mingle/common/model/course_time_model.dart';
+import 'package:mingle/main.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/module/model/course_detail_model.dart';
 import 'package:mingle/module/model/course_model.dart';
@@ -59,7 +60,7 @@ class _AddDirectTimeTableScreenState
     startTimes.add("");
     endTimes.add("");
     fToast = FToast();
-    fToast.init(context);
+    fToast.init(navigatorKey.currentContext!);
     super.initState();
   }
 

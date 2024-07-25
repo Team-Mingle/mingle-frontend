@@ -13,6 +13,7 @@ import 'package:mingle/common/component/showup_animation.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/dio/dio.dart';
+import 'package:mingle/main.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/user/repository/member_repository.dart';
 import 'package:mingle/user/view/home_screen/home_root_tab.dart';
@@ -49,7 +50,7 @@ class _EnterVerificationNumberScreenState
   @override
   void initState() {
     fToast = FToast();
-    fToast.init(context);
+    fToast.init(navigatorKey.currentContext!);
     countdownTimer = CountdownTimer(setCountdownComplete: setCountdownComplete);
     super.initState();
   }

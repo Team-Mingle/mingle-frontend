@@ -9,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/main.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/second_hand_market/provider/second_hand_market_post_provider.dart';
 import 'package:mingle/second_hand_market/repository/second_hand_market_post_repository.dart';
@@ -39,7 +40,7 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
   void initState() {
     super.initState();
     fToast = FToast();
-    fToast.init(context);
+    fToast.init(navigatorKey.currentContext!);
   }
 
   // bool canSubmit() {

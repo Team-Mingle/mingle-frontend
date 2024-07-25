@@ -13,6 +13,7 @@ import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/common/view/splash_screen.dart';
 import 'package:mingle/dio/dio.dart';
+import 'package:mingle/main.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/secure_storage/secure_storage.dart';
 import 'package:mingle/user/view/login_screen.dart';
@@ -44,7 +45,7 @@ class _SelectNicknameScreenState extends ConsumerState<SelectNicknameScreen> {
   void initState() {
     super.initState();
     fToast = FToast();
-    fToast.init(context);
+    fToast.init(navigatorKey.currentContext!);
   }
 
   void validateForm() async {

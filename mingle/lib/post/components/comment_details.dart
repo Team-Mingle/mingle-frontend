@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/component/like_animation.dart';
 import 'package:mingle/common/component/report_modal.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/main.dart';
 import 'package:mingle/post/components/indicator_widget.dart';
 import 'package:mingle/post/models/comment_model.dart';
 import 'package:mingle/post/models/post_model.dart';
@@ -41,7 +42,7 @@ class _CommentDetailsState extends ConsumerState<CommentDetails> {
     // TODO: implement initState
     super.initState();
     fToast = FToast();
-    fToast.init(context);
+    fToast.init(navigatorKey.currentContext!);
   }
 
   @override

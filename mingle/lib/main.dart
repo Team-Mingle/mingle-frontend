@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/view/splash_screen.dart';
 import 'package:mingle/firebase_notification.dart';
@@ -25,6 +26,7 @@ import 'package:mingle/user/view/signup_screen/enter_offer_id_screen.dart';
 import 'package:mingle/user/view/signup_screen/finish_temp_signup_screen.dart';
 import 'package:mingle/user/view/signup_screen/service_agreement_screen.dart';
 import 'package:mingle/user/view/signup_screen/upload_identification_screen.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -244,41 +246,44 @@ class _AppState extends ConsumerState<_App> {
 
   @override
   Widget build(BuildContext context) {
-    return ProviderScope(
-      child: MaterialApp(
-        navigatorKey: navigatorKey,
-        theme: ThemeData(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          fontFamily: 'Pretendard',
-          disabledColor: GRAYSCALE_GRAY_02,
-          bottomSheetTheme:
-              const BottomSheetThemeData(backgroundColor: Colors.transparent),
-          textSelectionTheme: const TextSelectionThemeData(
-            cursorColor: GRAYSCALE_GRAY_04,
-            selectionColor: SECONDARY_COLOR_ORANGE_03,
-            selectionHandleColor: PRIMARY_COLOR_ORANGE_01,
+    return OverlaySupport.global(
+      child: ProviderScope(
+        child: MaterialApp(
+          builder: FToastBuilder(),
+          navigatorKey: navigatorKey,
+          theme: ThemeData(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            fontFamily: 'Pretendard',
+            disabledColor: GRAYSCALE_GRAY_02,
+            bottomSheetTheme:
+                const BottomSheetThemeData(backgroundColor: Colors.transparent),
+            textSelectionTheme: const TextSelectionThemeData(
+              cursorColor: GRAYSCALE_GRAY_04,
+              selectionColor: SECONDARY_COLOR_ORANGE_03,
+              selectionHandleColor: PRIMARY_COLOR_ORANGE_01,
+            ),
+            cupertinoOverrideTheme: const CupertinoThemeData(
+              primaryColor: PRIMARY_COLOR_ORANGE_01,
+            ),
           ),
-          cupertinoOverrideTheme: const CupertinoThemeData(
-            primaryColor: PRIMARY_COLOR_ORANGE_01,
-          ),
+          navigatorObservers: [
+            FirebaseAnalyticsObserver(analytics: analytics),
+          ],
+          debugShowCheckedModeBanner: false,
+          home:
+              // const ModuleReviewMainScreen()
+              const SplashScreen(),
+          // HomeRootTab(),
+          //  const EnterOfferIdScreen()
+          // const FinishTempSinupScreen(),
+          // const FirstOnboardingScreen()
+          // const PointShopScreen()
+          //     const FriendTimetableScreen(
+          //   friendId: 1,
+          // ),
+          // const ServiceAgreementScreen(),
         ),
-        navigatorObservers: [
-          FirebaseAnalyticsObserver(analytics: analytics),
-        ],
-        debugShowCheckedModeBanner: false,
-        home:
-            // const ModuleReviewMainScreen()
-            const SplashScreen(),
-        // HomeRootTab(),
-        //  const EnterOfferIdScreen()
-        // const FinishTempSinupScreen(),
-        // const FirstOnboardingScreen()
-        // const PointShopScreen()
-        //     const FriendTimetableScreen(
-        //   friendId: 1,
-        // ),
-        // const ServiceAgreementScreen(),
       ),
     );
   }

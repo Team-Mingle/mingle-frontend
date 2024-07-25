@@ -9,13 +9,12 @@ import 'package:mingle/common/component/expanded_section.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/common/const/error_codes.dart';
+import 'package:mingle/main.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/module/model/course_detail_model.dart';
-import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/timetable/model/add_course_response_model.dart';
 import 'package:mingle/timetable/model/timetable_model.dart';
-import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
@@ -49,7 +48,7 @@ class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
     // TODO: implement initState
     super.initState();
     fToast = FToast();
-    fToast.init(context);
+    fToast.init(navigatorKey.currentContext!);
   }
 
   void addClass({bool overrideValidation = false}) async {
@@ -70,7 +69,7 @@ class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
       widget.addClassesAtAddTimeTableScreen(
           courseToBeAdded, overrideValidation);
       ref.read(pinnedTimetableProvider.notifier).fetchPinnedTimetable();
-      // widget.showAddCourseSuccessToast();
+      widget.showAddCourseSuccessToast();
       setState(() {
         isLoading = false;
       });

@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/main.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/user/repository/member_repository.dart';
 import 'package:mingle/user/view/app_start_screen.dart';
@@ -30,7 +31,7 @@ class _QuitEnterCredentialScreenState
     // TODO: implement initState
     super.initState();
     fToast = FToast();
-    fToast.init(context);
+    fToast.init(navigatorKey.currentContext!);
   }
 
   void submitWithdrawal() async {

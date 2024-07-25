@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/main.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/user/provider/user_provider.dart';
 import 'package:mingle/user/repository/member_repository.dart';
@@ -26,7 +27,7 @@ class _ChangeNicknameScreenState extends ConsumerState<ChangeNicknameScreen> {
   void initState() {
     super.initState();
     fToast = FToast();
-    fToast.init(context);
+    fToast.init(navigatorKey.currentContext!);
   }
 
   void submitNickname() async {

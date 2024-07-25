@@ -8,6 +8,7 @@ import 'package:mingle/common/component/module_preview_component.dart';
 import 'package:mingle/common/component/search_history_service.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
+import 'package:mingle/main.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/module/model/course_detail_model.dart';
 import 'package:mingle/module/model/course_model.dart';
@@ -48,7 +49,7 @@ class _SearchCourseModalWidgetState
     super.initState();
     getSearchHistories();
     fToast = FToast();
-    fToast.init(context);
+    fToast.init(navigatorKey.currentContext!);
   }
 
   void getSearchHistories() async {

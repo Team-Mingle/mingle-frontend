@@ -12,6 +12,7 @@ import 'package:mingle/common/component/report_modal.dart';
 import 'package:mingle/common/component/reported_component.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/view/image_detail_screen.dart';
+import 'package:mingle/main.dart';
 import 'package:mingle/post/components/comment_card.dart';
 import 'package:mingle/post/components/indicator_widget.dart';
 import 'package:mingle/post/components/like_and_comment_numbers_card.dart';
@@ -108,7 +109,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
   void initState() {
     super.initState();
     fToast = FToast();
-    fToast.init(context);
+    fToast.init(navigatorKey.currentContext!);
     if (widget.notifierProvider != null) {
       widget.notifierProvider!.getDetail(postId: widget.postId);
     } else {

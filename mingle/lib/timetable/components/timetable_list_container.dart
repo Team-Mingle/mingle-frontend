@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
+import 'package:mingle/main.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/timetable/model/timetable_preview_model.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
@@ -38,7 +39,7 @@ class _TimetableListWidgetState extends ConsumerState<TimetableListWidget> {
     // TODO: implement initState
     super.initState();
     fToast = FToast();
-    fToast.init(context);
+    fToast.init(navigatorKey.currentContext!);
   }
 
   void MoreButtonModal() {

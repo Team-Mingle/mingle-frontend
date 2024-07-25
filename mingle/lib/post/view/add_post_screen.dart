@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/dio/dio.dart';
+import 'package:mingle/main.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/post/models/add_post_model.dart';
 import 'package:mingle/post/models/category_model.dart';
@@ -42,7 +43,7 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
   void initState() {
     super.initState();
     fToast = FToast();
-    fToast.init(context);
+    fToast.init(navigatorKey.currentContext!);
   }
 
   void handleSubmit(WidgetRef ref) async {

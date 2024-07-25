@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/component/reported_component.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/model/cursor_pagination_model.dart';
+import 'package:mingle/main.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/module/model/course_detail_model.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
@@ -68,7 +69,7 @@ class _ModulePreviewComponentState
     super.initState();
     scrollController.addListener(scrollListener);
     fToast = FToast();
-    fToast.init(context);
+    fToast.init(navigatorKey.currentContext!);
     // scrollController.addListener(() {
     //   setState(() {});
     // });

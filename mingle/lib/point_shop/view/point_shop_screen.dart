@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/component/expanded_section.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
+import 'package:mingle/main.dart';
 import 'package:mingle/module/components/my_points_card.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
@@ -37,7 +38,7 @@ class _PointShopScreenState extends ConsumerState<PointShopScreen> {
     fetchPoints();
     fetchShopCouponList();
     fToast = FToast();
-    fToast.init(context);
+    fToast.init(navigatorKey.currentContext!);
   }
 
   void fetchPoints() {

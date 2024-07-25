@@ -13,6 +13,7 @@ import 'package:mingle/common/component/showup_animation.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/dio/dio.dart';
+import 'package:mingle/main.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/user/components/university_domain_dropdown.dart';
 import 'package:mingle/user/repository/member_repository.dart';
@@ -44,7 +45,7 @@ class _EnterEmailScreenState extends ConsumerState<EnterEmailScreen> {
   void initState() {
     super.initState();
     fToast = FToast();
-    fToast.init(context);
+    fToast.init(navigatorKey.currentContext!);
   }
 
   @override

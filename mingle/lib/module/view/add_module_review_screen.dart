@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/main.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/module/model/course_detail_model.dart';
 import 'package:mingle/module/repository/course_evaluation_repository.dart';
@@ -41,7 +42,7 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
   @override
   void initState() {
     fToast = FToast();
-    fToast.init(context);
+    fToast.init(navigatorKey.currentContext!);
     moduleName = widget.moduleName;
     moduleId = widget.moduleId;
     super.initState();
