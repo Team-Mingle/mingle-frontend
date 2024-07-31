@@ -53,8 +53,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     }
     try {
       final resp = await dio.get('https://$baseUrl/auth/verify-login-status',
-          // options: Options(headers: {'Authorization': 'Bearer $accessToken'}));
-          options: Options(headers: {'Authorization': 'Bearer mingle-user'}));
+          options: Options(headers: {'Authorization': 'Bearer $accessToken'}));
+      // options: Options(headers: {'Authorization': 'Bearer mingle-user'}));
       print(resp);
 
       ref

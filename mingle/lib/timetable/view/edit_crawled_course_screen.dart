@@ -55,7 +55,7 @@ class _EditSelfAddedCourseScreenState
     moduleName = widget.course.name;
     moduleCode = widget.course.courseCode;
     // location = widget.course.venue;
-    profName = widget.course.professor;
+    profName = widget.course.professor!;
 
     super.initState();
   }

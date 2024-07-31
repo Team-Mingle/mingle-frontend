@@ -224,6 +224,7 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
                 data: ref.watch(searchModuleProvier!),
                 notifierProvider: ref.watch(searchModuleProvier!.notifier),
                 isAdd: widget.isAdd,
+                isFromCourseEvaluation: true,
                 setModule: widget.setModule,
               )
 
@@ -335,31 +336,31 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
           const SizedBox(
             height: 4.0,
           ),
-          Row(
-            children: [
-              Text(
-                course.professor,
-                style: const TextStyle(
-                    fontSize: 12.0,
-                    letterSpacing: -0.005,
-                    height: 1.3,
-                    color: GRAYSCALE_GRAY_04),
-              ),
-              const SizedBox(
-                width: 4.0,
-              ),
-              Text(
-                course.getStartTimes(),
-                //TODO: change to actual timing
-                // "화2/수2",
-                style: const TextStyle(
-                    fontSize: 12.0,
-                    letterSpacing: -0.005,
-                    height: 1.3,
-                    color: GRAYSCALE_GRAY_04),
-              )
-            ],
-          )
+          // Row(
+          //   children: [
+          //     Text(
+          //       course.professor!,
+          //       style: const TextStyle(
+          //           fontSize: 12.0,
+          //           letterSpacing: -0.005,
+          //           height: 1.3,
+          //           color: GRAYSCALE_GRAY_04),
+          //     ),
+          //     const SizedBox(
+          //       width: 4.0,
+          //     ),
+          //     Text(
+          //       course.getStartTimes(),
+          //       //TODO: change to actual timing
+          //       // "화2/수2",
+          //       style: const TextStyle(
+          //           fontSize: 12.0,
+          //           letterSpacing: -0.005,
+          //           height: 1.3,
+          //           color: GRAYSCALE_GRAY_04),
+          //     )
+          //   ],
+          // )
         ]),
       ),
     );

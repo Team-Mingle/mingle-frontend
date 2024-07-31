@@ -256,7 +256,7 @@ class _AppState extends ConsumerState<_App> {
           onAndroid: () => appcastUpgrader,
           oniOS: () => appcastUpgrader,
         ),
-        minAppVersion: "4.2.0",
+        minAppVersion: "4.0.1",
         // debugDisplayAlways: true,
         debugLogging: true);
     // upgrader.

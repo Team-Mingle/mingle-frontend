@@ -402,7 +402,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                       height: 4.0,
                     ),
                     Text(
-                      currentCourse.subclass,
+                      currentCourse.subclass!,
                       style: const TextStyle(
                           fontSize: 16.0,
                           fontWeight: FontWeight.w500,

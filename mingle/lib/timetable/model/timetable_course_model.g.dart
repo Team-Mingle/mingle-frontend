@@ -16,8 +16,8 @@ TimetableCourseModel _$TimetableCourseModelFromJson(
       semester: json['semester'] as String?,
       professor: json['professor'] as String? ?? "-",
       subclass: json['subclass'] as String? ?? "-",
-      courseTimeDtoList: (json['courseTimeDtoList'] as List<dynamic>)
-          .map((e) => CourseTimeModel.fromJson(e as Map<String, dynamic>))
+      courseTimeDtoList: (json['courseTimeDtoList'] as List<dynamic>?)
+          ?.map((e) => CourseTimeModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       rgb: json['rgb'] as String?,
       courseType: json['courseType'] as String?,

@@ -48,8 +48,8 @@ class _EditSelfAddedCourseScreenState
 
   @override
   void initState() {
-    for (int i = 0; i < widget.course.courseTimeDtoList.length; i++) {
-      CourseTimeModel timeModel = widget.course.courseTimeDtoList[i];
+    for (int i = 0; i < widget.course.courseTimeDtoList!.length; i++) {
+      CourseTimeModel timeModel = widget.course.courseTimeDtoList![i];
       String initialDay = "${convertDayToKorDay(timeModel.dayOfWeek!)}요일";
       String initialStartTime =
           CourseTimeModel.removeSecondsFromTime(timeModel.startTime!);
@@ -74,7 +74,7 @@ class _EditSelfAddedCourseScreenState
     moduleName = widget.course.name;
     moduleCode = widget.course.courseCode;
     // location = widget.course.venue;
-    profName = widget.course.professor;
+    profName = widget.course.professor!;
 
     super.initState();
   }

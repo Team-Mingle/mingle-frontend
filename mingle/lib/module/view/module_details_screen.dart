@@ -31,8 +31,13 @@ class ModuleDetailsScreen extends ConsumerStatefulWidget {
   final int courseId;
   final String? moduleName;
   final CourseDetailModel? courseDetail;
+  final bool isFromCourseEvaluation;
   const ModuleDetailsScreen(
-      {super.key, required this.courseId, this.moduleName, this.courseDetail});
+      {super.key,
+      required this.courseId,
+      this.moduleName,
+      this.courseDetail,
+      this.isFromCourseEvaluation = false});
 
   @override
   ConsumerState<ModuleDetailsScreen> createState() =>
@@ -407,76 +412,78 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
                 const SizedBox(
                   height: 24.0,
                 ),
-                Row(
-                  children: [
-                    const SizedBox(
-                      width: 72.0,
-                      child: Text(
-                        "교수명",
-                        style: TextStyle(color: GRAYSCALE_GRAY_03),
+                if (!widget.isFromCourseEvaluation) ...[
+                  Row(
+                    children: [
+                      const SizedBox(
+                        width: 72.0,
+                        child: Text(
+                          "교수명",
+                          style: TextStyle(color: GRAYSCALE_GRAY_03),
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      width: 12.0,
-                    ),
-                    Expanded(child: Text(courseDetailModel.professor))
-                  ],
-                ),
-                const SizedBox(
-                  height: 24.0,
-                ),
-                Row(
-                  children: [
-                    const SizedBox(
-                      width: 72.0,
-                      child: Text(
-                        "강의시간",
-                        style: TextStyle(color: GRAYSCALE_GRAY_03),
+                      const SizedBox(
+                        width: 12.0,
                       ),
-                    ),
-                    const SizedBox(
-                      width: 12.0,
-                    ),
-                    //TODO: change to actual time
-                    Expanded(child: Text(courseDetailModel.getStartTimes()))
-                  ],
-                ),
-                const SizedBox(
-                  height: 24.0,
-                ),
-                Row(
-                  children: [
-                    const SizedBox(
-                      width: 72.0,
-                      child: Text(
-                        "장소",
-                        style: TextStyle(color: GRAYSCALE_GRAY_03),
+                      Expanded(child: Text(courseDetailModel.professor!))
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 24.0,
+                  ),
+                  Row(
+                    children: [
+                      const SizedBox(
+                        width: 72.0,
+                        child: Text(
+                          "강의시간",
+                          style: TextStyle(color: GRAYSCALE_GRAY_03),
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      width: 12.0,
-                    ),
-                    Text(courseDetailModel.venue ?? "-")
-                  ],
-                ),
-                const SizedBox(
-                  height: 24.0,
-                ),
-                Row(
-                  children: [
-                    const SizedBox(
-                      width: 72.0,
-                      child: Text(
-                        "분반",
-                        style: TextStyle(color: GRAYSCALE_GRAY_03),
+                      const SizedBox(
+                        width: 12.0,
                       ),
-                    ),
-                    const SizedBox(
-                      width: 12.0,
-                    ),
-                    Text(courseDetailModel.subclass ?? "-")
-                  ],
-                ),
+                      //TODO: change to actual time
+                      Expanded(child: Text(courseDetailModel.getStartTimes()))
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 24.0,
+                  ),
+                  Row(
+                    children: [
+                      const SizedBox(
+                        width: 72.0,
+                        child: Text(
+                          "장소",
+                          style: TextStyle(color: GRAYSCALE_GRAY_03),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 12.0,
+                      ),
+                      Text(courseDetailModel.venue ?? "-")
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 24.0,
+                  ),
+                  Row(
+                    children: [
+                      const SizedBox(
+                        width: 72.0,
+                        child: Text(
+                          "분반",
+                          style: TextStyle(color: GRAYSCALE_GRAY_03),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 12.0,
+                      ),
+                      Text(courseDetailModel.subclass ?? "-")
+                    ],
+                  ),
+                ],
                 // ExpandedSection(
                 //   expand: isExpanded,
                 //   child: expandedModuleInformation(courseDetailModel),
