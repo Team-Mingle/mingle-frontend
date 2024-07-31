@@ -249,13 +249,15 @@ class _AppState extends ConsumerState<_App> {
   Widget build(BuildContext context) {
     final appcastUpgrader = UpgraderAppcastStore(
         appcastURL:
-            "https://github.com/Team-Mingle/mingle-frontend/blob/timetable-ui/mingle/lib/appcast.xml");
+            "https://raw.githubusercontent.com/Team-Mingle/mingle-frontend/timetable-ui/mingle/lib/appcast.xml");
     final upgrader = Upgrader(
-      storeController: UpgraderStoreController(
-        onAndroid: () => appcastUpgrader,
-        oniOS: () => appcastUpgrader,
-      ),
-    );
+        storeController: UpgraderStoreController(
+          onAndroid: () => appcastUpgrader,
+          oniOS: () => appcastUpgrader,
+        ),
+        minAppVersion: "5.0.0",
+        debugLogging: true);
+    // upgrader.
     // final upgrader = Upgrader(
     //     minAppVersion: "5.0.0", debugLogging: true, debugDisplayAlways: true);
     return OverlaySupport.global(
