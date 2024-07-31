@@ -1,0 +1,49 @@
+<!-- <?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+    <channel>
+        <title>밍글</title>
+        <item>
+            <title>Version 5.0.0</title>
+            <description>버그 수정 및 안정성 향상</description>
+            <pubDate>Sun, 30 Dec 2018 12:00:00 +0000</pubDate>
+            <enclosure url="https://apps.apple.com/kr/app/%EB%B0%8D%EA%B8%80-%EB%82%B4-%EC%9C%A0%ED%95%99%EC%83%9D%ED%99%9C%EC%9D%98-%EC%A2%85%EC%B0%A9%EC%A7%80/id1659655435?l=en-GB" sparkle:version="5.0.0" sparkle:os="ios" />
+            <sparkle:minimumSystemVersion>10.13.0</sparkle:minimumSystemVersion>
+        </item>
+    </channel>
+</rss> -->
+
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:myapp="https://myproductpage.com/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel>
+        <item>
+            <title>Version 4.2.0</title>
+            <link>https://myproductwebsite.com</link>
+            <enclosure url="https://apps.apple.com/kr/app/%EB%B0%8D%EA%B8%80-%EB%82%B4-%EC%9C%A0%ED%95%99%EC%83%9D%ED%99%9C%EC%9D%98-%EC%A2%85%EC%B0%A9%EC%A7%80/id1659655435?l=en-GB" sparkle:version="5.0.0" sparkle:os="ios" />
+            <sparkle:version>4.2.0</sparkle:version>
+            <!-- <sparkle:minimumAutoupdateVersion>4.2.0</sparkle:minimumAutoupdateVersion> -->
+        </item>
+        <!-- If the user skipped 2.0 or 2.1, alerts for 2.2 will not be skipped due to sparkle:ignoreSkippedUpgradesBelowVersion requirement -->
+        <item>
+            <title>Version 4.3.0</title>
+            <link>https://myproductwebsite.com</link>
+            <enclosure url="https://apps.apple.com/kr/app/%EB%B0%8D%EA%B8%80-%EB%82%B4-%EC%9C%A0%ED%95%99%EC%83%9D%ED%99%9C%EC%9D%98-%EC%A2%85%EC%B0%A9%EC%A7%80/id1659655435?l=en-GB" sparkle:version="5.0.0" sparkle:os="ios" />
+            <sparkle:version>4.3.0</sparkle:version>
+            <!-- <sparkle:minimumAutoupdateVersion>4.2.0</sparkle:minimumAutoupdateVersion> -->
+        </item>
+        <item>
+            <title>Version 4.4.0</title>
+            <link>https://myproductwebsite.com</link>
+            <enclosure url="https://apps.apple.com/kr/app/%EB%B0%8D%EA%B8%80-%EB%82%B4-%EC%9C%A0%ED%95%99%EC%83%9D%ED%99%9C%EC%9D%98-%EC%A2%85%EC%B0%A9%EC%A7%80/id1659655435?l=en-GB" sparkle:version="5.0.0" sparkle:os="ios" />
+            <sparkle:version>4.4.0</sparkle:version>
+            <!-- <sparkle:minimumAutoupdateVersion>4.2.0</sparkle:minimumAutoupdateVersion> -->
+        </item>
+        <!-- Skipping this upgrade will also skip alerts for 2.1 above because it has the same sparkle:minimumAutoupdateVersion -->
+        <item>
+            <title>Version 4.5.0</title>
+            <link>https://myproductwebsite.com</link>
+            <enclosure url="https://apps.apple.com/kr/app/%EB%B0%8D%EA%B8%80-%EB%82%B4-%EC%9C%A0%ED%95%99%EC%83%9D%ED%99%9C%EC%9D%98-%EC%A2%85%EC%B0%A9%EC%A7%80/id1659655435?l=en-GB" sparkle:version="5.0.0" sparkle:os="ios" />
+            <sparkle:version>4.5.0</sparkle:version>
+            <!-- <sparkle:minimumAutoupdateVersion>4.2.0</sparkle:minimumAutoupdateVersion> -->
+        </item>
+    </channel>
+</rss>
