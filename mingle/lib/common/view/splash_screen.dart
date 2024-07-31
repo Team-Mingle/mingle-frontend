@@ -12,13 +12,13 @@ import 'package:mingle/main.dart';
 import 'package:mingle/module/view/first_onboarding_screen.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/secure_storage/secure_storage.dart';
+import 'package:mingle/upgrader/lib/upgrader.dart';
 import 'package:mingle/user/model/user_model.dart';
 import 'package:mingle/user/provider/user_provider.dart';
 import 'package:mingle/user/view/app_start_screen.dart';
 import 'package:mingle/user/view/home_screen/home_root_tab.dart';
 import 'package:mingle/user/view/login_screen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:upgrader/upgrader.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   final Upgrader upgrader;

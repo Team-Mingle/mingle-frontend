@@ -19,6 +19,7 @@ import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.dart';
 import 'package:mingle/timetable/view/friend_timetable_screen.dart';
 import 'package:mingle/timetable/view/timetable_tab_screen.dart';
+import 'package:mingle/upgrader/lib/upgrader.dart';
 import 'package:mingle/user/provider/user_provider.dart';
 import 'package:mingle/user/view/home_screen/home_root_tab.dart';
 import 'package:mingle/user/view/signup_screen/enter_free_domain_email_screen.dart';
@@ -27,7 +28,6 @@ import 'package:mingle/user/view/signup_screen/finish_temp_signup_screen.dart';
 import 'package:mingle/user/view/signup_screen/service_agreement_screen.dart';
 import 'package:mingle/user/view/signup_screen/upload_identification_screen.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:upgrader/upgrader.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -251,12 +251,13 @@ class _AppState extends ConsumerState<_App> {
         appcastURL:
             "https://raw.githubusercontent.com/Team-Mingle/mingle-frontend/timetable-ui/mingle/lib/appcast.xml");
     final upgrader = Upgrader(
+        messages: MyUpgraderMessages(),
         storeController: UpgraderStoreController(
           onAndroid: () => appcastUpgrader,
           oniOS: () => appcastUpgrader,
         ),
-        minAppVersion: "5.0.0",
-        debugDisplayAlways: true,
+        minAppVersion: "4.2.0",
+        // debugDisplayAlways: true,
         debugLogging: true);
     // upgrader.
     // final upgrader = Upgrader(
@@ -307,4 +308,18 @@ class _AppState extends ConsumerState<_App> {
       ),
     );
   }
+}
+
+class MyUpgraderMessages extends UpgraderMessages {
+  @override
+  String get body => '새 업데이트가 출시되었습니다!';
+
+  @override
+  String get buttonTitleUpdate => '업데이트';
+
+  @override
+  String get title => '';
+
+  @override
+  String get prompt => '';
 }

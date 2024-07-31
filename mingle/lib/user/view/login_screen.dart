@@ -14,6 +14,7 @@ import 'package:mingle/dio/dio.dart';
 import 'package:mingle/post/repository/post_repository.dart';
 import 'package:mingle/second_hand_market/repository/second_hand_market_post_repository.dart';
 import 'package:mingle/secure_storage/secure_storage.dart';
+import 'package:mingle/upgrader/lib/upgrader.dart';
 import 'package:mingle/user/model/user_model.dart';
 import 'package:mingle/user/provider/is_fresh_login_provider.dart';
 import 'package:mingle/user/provider/user_provider.dart';
@@ -23,7 +24,6 @@ import 'package:mingle/user/view/home_screen/home_tab_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:mingle/user/view/signup_screen/select_country_screen.dart';
 import 'package:mingle/user/view/signup_screen/select_school_screen.dart';
-import 'package:upgrader/upgrader.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   final bool isFromSplash;
