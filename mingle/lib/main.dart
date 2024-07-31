@@ -256,6 +256,7 @@ class _AppState extends ConsumerState<_App> {
           oniOS: () => appcastUpgrader,
         ),
         minAppVersion: "5.0.0",
+        debugDisplayAlways: true,
         debugLogging: true);
     // upgrader.
     // final upgrader = Upgrader(
