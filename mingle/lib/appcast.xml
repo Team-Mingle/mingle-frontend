@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!-- <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
     <channel>
         <title>밍글</title>
@@ -7,6 +7,19 @@
             <description>버그 수정 및 안정성 향상</description>
             <pubDate>Sun, 30 Dec 2018 12:00:00 +0000</pubDate>
             <enclosure url="https://apps.apple.com/kr/app/%EB%B0%8D%EA%B8%80-%EB%82%B4-%EC%9C%A0%ED%95%99%EC%83%9D%ED%99%9C%EC%9D%98-%EC%A2%85%EC%B0%A9%EC%A7%80/id1659655435?l=en-GB" sparkle:version="1.15.0" sparkle:os="ios" />
+        </item>
+    </channel>
+</rss> -->
+
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+    <channel>
+        <title>Debt Now App - Appcast</title>
+        <item>
+            <title>Version 1.15.0</title>
+            <description>Minor updates and improvements.</description>
+            <pubDate>Sun, 30 Dec 2018 12:00:00 +0000</pubDate>
+            <enclosure url="https://play.google.com/store/apps/details?id=com.moonwink.treasury" sparkle:version="1.15.0" sparkle:os="android" />
         </item>
     </channel>
 </rss>
