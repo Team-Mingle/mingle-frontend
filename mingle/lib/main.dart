@@ -27,6 +27,7 @@ import 'package:mingle/user/view/signup_screen/finish_temp_signup_screen.dart';
 import 'package:mingle/user/view/signup_screen/service_agreement_screen.dart';
 import 'package:mingle/user/view/signup_screen/upload_identification_screen.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:upgrader/upgrader.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -246,6 +247,8 @@ class _AppState extends ConsumerState<_App> {
 
   @override
   Widget build(BuildContext context) {
+    final upgrader = Upgrader(
+        minAppVersion: "5.0.0", debugLogging: true, debugDisplayAlways: true);
     return OverlaySupport.global(
       child: ProviderScope(
         child: MaterialApp(
@@ -273,7 +276,12 @@ class _AppState extends ConsumerState<_App> {
           debugShowCheckedModeBanner: false,
           home:
               // const ModuleReviewMainScreen()
-              const SplashScreen(),
+              UpgradeAlert(
+            upgrader: upgrader,
+            child: SplashScreen(
+              upgrader: upgrader,
+            ),
+          ),
           // HomeRootTab(),
           //  const EnterOfferIdScreen()
           // const FinishTempSinupScreen(),

@@ -18,9 +18,11 @@ import 'package:mingle/user/view/app_start_screen.dart';
 import 'package:mingle/user/view/home_screen/home_root_tab.dart';
 import 'package:mingle/user/view/login_screen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:upgrader/upgrader.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
-  const SplashScreen({super.key});
+  final Upgrader upgrader;
+  const SplashScreen({super.key, required this.upgrader});
 
   @override
   ConsumerState<SplashScreen> createState() => _SplashScreenState();
@@ -41,6 +43,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     print(accessToken);
     await Future.delayed(const Duration(seconds: 2));
     final Dio dio = ref.read(dioProvider);
+    if (widget.upgrader.belowMinAppVersion()) {
+      print("belowMinAppVersion");
+      return;
+    }
     if (accessToken == null) {
       _navigateToAppStartScreen();
       return;

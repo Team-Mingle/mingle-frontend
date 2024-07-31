@@ -25,7 +25,6 @@ class ModuleSearchScreen extends ConsumerStatefulWidget {
 class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
   List<String>? previousSearch;
   final TextEditingController _searchController = TextEditingController();
-  Future<CursorPagination<CourseDetailModel>>? searchFuture;
   StateNotifierProvider<ModuleStateNotifier, CursorPaginationBase>?
       searchModuleProvier;
   @override
@@ -46,17 +45,15 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
   void setSearch() {
     setState(
       () {
-        searchFuture = ref
-            .watch(courseRepositoryProvider)
-            .search(keyword: _searchController.text);
-
         searchModuleProvier =
             StateNotifierProvider<ModuleStateNotifier, CursorPaginationBase>(
                 (ref) {
           final repository = ref.watch(courseRepositoryProvider);
 
           final notifier = ModuleStateNotifier(
-              moduleRepository: repository, keyword: _searchController.text);
+              moduleRepository: repository,
+              keyword: _searchController.text,
+              isFromCourseEvaluation: true);
 
           return notifier;
         });
@@ -137,7 +134,7 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
             ),
           ),
         ),
-        body: searchFuture == null
+        body: searchModuleProvier == null
             ? Column(
                 children: previousSearch == null || previousSearch!.isEmpty
                     ? [

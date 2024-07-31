@@ -295,7 +295,7 @@ class _ModulePreviewComponentState
                 width: 4.0,
               ),
               Text(
-                course.getStartTimes(),
+                course.getCourseTimes(),
                 //TODO: change to actual timing
                 // "화2/수2",
                 style: const TextStyle(

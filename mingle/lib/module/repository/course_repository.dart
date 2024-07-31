@@ -30,6 +30,15 @@ abstract class CourseRepository {
   @Headers({'accessToken': 'true'})
   Future<CursorPagination<CourseDetailModel>> search({
     @Query("keyword") required String keyword,
+    @Query("year") required int year,
+    @Query("semester") required int semester,
+    @Queries() PaginationParams? paginationParams = const PaginationParams(),
+  });
+
+  @GET('/course-evaluation/search')
+  @Headers({'accessToken': 'true'})
+  Future<CursorPagination<CourseDetailModel>> searchFromCourseEvaluation({
+    @Query("keyword") required String keyword,
     @Queries() PaginationParams? paginationParams = const PaginationParams(),
   });
 

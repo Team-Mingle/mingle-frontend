@@ -150,12 +150,18 @@ class CourseModel {
                         const SizedBox(
                           height: 4.0,
                         ),
-                        Text(
-                          name,
+                        AutoSizeText(
+                          subclass,
                           style: const TextStyle(
                               fontSize: 12.0, overflow: TextOverflow.ellipsis),
                           maxLines: 1,
                         )
+                        // Text(
+                        //   name,
+                        // style: const TextStyle(
+                        //     fontSize: 12.0, overflow: TextOverflow.ellipsis),
+                        //   maxLines: 1,
+                        // )
                       ],
                     ),
                   ],
@@ -206,6 +212,20 @@ class CourseModel {
       }
       result.add(
           "${convertDayToKorDay(time.dayOfWeek!)} ${CourseTimeModel.removeSecondsFromTime(time.startTime!)}");
+    }
+    return result.join("/");
+  }
+
+  String getCourseTimes() {
+    List<String> result = [];
+    for (CourseTimeModel time in courseTimeDtoList) {
+      if (time.dayOfWeek == null ||
+          time.startTime == null ||
+          time.endTime == null) {
+        continue;
+      }
+      result.add(
+          "${convertDayToKorDay(time.dayOfWeek!)} ${CourseTimeModel.removeSecondsFromTime(time.startTime!)}~${CourseTimeModel.removeSecondsFromTime(time.endTime!)}");
     }
     return result.join("/");
   }

@@ -640,7 +640,7 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
                       satisfaction:
                           moduleReviews[index].convertRatingToSatisfaction(),
                       isMine: moduleReviews[index].isMine,
-                      courseId: moduleReviews[index].courseId,
+                      courseCode: moduleReviews[index].courseCode,
                     ))
         ],
       ),

@@ -23,6 +23,7 @@ import 'package:mingle/user/view/home_screen/home_tab_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 import 'package:mingle/user/view/signup_screen/select_country_screen.dart';
 import 'package:mingle/user/view/signup_screen/select_school_screen.dart';
+import 'package:upgrader/upgrader.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   final bool isFromSplash;
@@ -307,7 +308,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               ),
                               NextButton(
                                 isLoading: isLoading,
-                                nextScreen: const SplashScreen(),
+                                nextScreen: SplashScreen(
+                                  upgrader: Upgrader(),
+                                ),
                                 buttonName: "로그인",
                                 checkSelected:
                                     emailController.text.isNotEmpty &&

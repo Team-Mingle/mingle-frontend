@@ -11,7 +11,7 @@ class ModuleReviewCard extends StatefulWidget {
   final int likes;
   final bool isFromMypageScreen;
   final bool isMine;
-  final int? courseId;
+  final String courseCode;
   const ModuleReviewCard({
     super.key,
     required this.reivew,
@@ -19,7 +19,7 @@ class ModuleReviewCard extends StatefulWidget {
     required this.likes,
     required this.satisfaction,
     required this.isMine,
-    required this.courseId,
+    required this.courseCode,
     this.isFromMypageScreen = false,
   });
 
@@ -150,17 +150,18 @@ class _ModuleReviewCardState extends State<ModuleReviewCard> {
         text: TextSpan(
           children: [
             TextSpan(text: "${widget.semester} "),
-            WidgetSpan(
-                child: GestureDetector(
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) =>
-                      ModuleDetailsScreen(courseId: widget.courseId!))),
-              child: const Text("밍끼와 철학",
-                  style: TextStyle(
-                      color: GRAYSCALE_GRAY_04,
-                      fontWeight: FontWeight.w500,
-                      decoration: TextDecoration.underline)),
-            )),
+            TextSpan(text: widget.courseCode),
+            // WidgetSpan(
+            //     child: GestureDetector(
+            //   onTap: () => Navigator.of(context).push(MaterialPageRoute(
+            //       builder: (_) =>
+            //           ModuleDetailsScreen(courseId: widget.courseId!))),
+            //   child: const Text("밍끼와 철학",
+            //       style: TextStyle(
+            //           color: GRAYSCALE_GRAY_04,
+            //           fontWeight: FontWeight.w500,
+            //           decoration: TextDecoration.underline)),
+            // )),
             // const TextSpan(
             //     text: "밍끼와 철학",
             //     style: TextStyle(

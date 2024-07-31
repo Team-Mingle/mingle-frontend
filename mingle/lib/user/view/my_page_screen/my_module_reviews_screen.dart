@@ -93,7 +93,7 @@ class MyModuleReviewsScreen extends ConsumerWidget {
                       satisfaction: data[index].convertRatingToSatisfaction(),
                       isFromMypageScreen: true,
                       isMine: data[index].isMine,
-                      courseId: data[index].courseId,
+                      courseCode: data[index].courseCode,
                     ),
                   )
                 ]),

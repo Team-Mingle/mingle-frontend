@@ -21,6 +21,48 @@ class _CourseRepository implements CourseRepository {
   @override
   Future<CursorPagination<CourseDetailModel>> search({
     required String keyword,
+    required int year,
+    required int semester,
+    PaginationParams? paginationParams = const PaginationParams(),
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'keyword': keyword,
+      r'year': year,
+      r'semester': semester,
+    };
+    queryParameters.addAll(paginationParams?.toJson() ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{r'accessToken': 'true'};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<CursorPagination<CourseDetailModel>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/search',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = CursorPagination<CourseDetailModel>.fromJson(
+      _result.data!,
+      (json) => CourseDetailModel.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
+  Future<CursorPagination<CourseDetailModel>> searchFromCourseEvaluation({
+    required String keyword,
     PaginationParams? paginationParams = const PaginationParams(),
   }) async {
     const _extra = <String, dynamic>{};
@@ -38,7 +80,7 @@ class _CourseRepository implements CourseRepository {
     )
             .compose(
               _dio.options,
-              '/search',
+              '/course-evaluation/search',
               queryParameters: queryParameters,
               data: _data,
             )
