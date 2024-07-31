@@ -55,7 +55,7 @@ class _EditSelfAddedCourseScreenState
     moduleName = widget.course.name;
     moduleCode = widget.course.courseCode;
     // location = widget.course.venue;
-    profName = widget.course.professor;
+    profName = widget.course.professor!;
 
     super.initState();
   }
@@ -414,7 +414,7 @@ class _EditSelfAddedCourseScreenState
                 const Row(
                   children: [
                     Text(
-                      '그룹',
+                      '분반',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 14.0,
@@ -441,7 +441,7 @@ class _EditSelfAddedCourseScreenState
                       });
                     },
                     decoration: InputDecoration(
-                      hintText: "그룹을 입력하세요",
+                      hintText: "분반을 입력하세요",
                       hintStyle: const TextStyle(
                         color: GRAYSCALE_GRAY_03,
                         fontSize: 16.0,

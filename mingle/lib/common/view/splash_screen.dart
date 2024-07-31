@@ -12,6 +12,7 @@ import 'package:mingle/main.dart';
 import 'package:mingle/module/view/first_onboarding_screen.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/secure_storage/secure_storage.dart';
+import 'package:mingle/upgrader/lib/upgrader.dart';
 import 'package:mingle/user/model/user_model.dart';
 import 'package:mingle/user/provider/user_provider.dart';
 import 'package:mingle/user/view/app_start_screen.dart';
@@ -20,7 +21,8 @@ import 'package:mingle/user/view/login_screen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
-  const SplashScreen({super.key});
+  final Upgrader upgrader;
+  const SplashScreen({super.key, required this.upgrader});
 
   @override
   ConsumerState<SplashScreen> createState() => _SplashScreenState();
@@ -41,6 +43,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     print(accessToken);
     await Future.delayed(const Duration(seconds: 2));
     final Dio dio = ref.read(dioProvider);
+    if (widget.upgrader.belowMinAppVersion()) {
+      print("belowMinAppVersion");
+      return;
+    }
     if (accessToken == null) {
       _navigateToAppStartScreen();
       return;

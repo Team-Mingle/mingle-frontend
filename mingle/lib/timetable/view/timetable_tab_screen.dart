@@ -402,7 +402,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                       height: 4.0,
                     ),
                     Text(
-                      currentCourse.subclass,
+                      currentCourse.subclass!,
                       style: const TextStyle(
                           fontSize: 16.0,
                           fontWeight: FontWeight.w500,
@@ -412,7 +412,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                       height: 4.0,
                     ),
                     Text(
-                      "${currentCourse.professor} ${currentCourse.getStartTimes()}",
+                      "${currentCourse.professor} ${currentCourse.getCourseTimes()}",
                       style: const TextStyle(
                           color: GRAYSCALE_GRAY_04, letterSpacing: -0.14),
                     ),
@@ -565,7 +565,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                   height: 4.0,
                 ),
                 Text(
-                  "${currentCourse.professor} ${currentCourse.getStartTimes()}",
+                  "${currentCourse.professor} ${currentCourse.getCourseTimes()}",
                   style: const TextStyle(
                       color: GRAYSCALE_GRAY_04, letterSpacing: -0.14),
                 ),

@@ -10,7 +10,6 @@ class CourseEvaluationModel {
   final String comment;
   final String rating;
   final String courseCode;
-  final int? courseId;
   final bool isMine;
 
   CourseEvaluationModel(
@@ -18,7 +17,6 @@ class CourseEvaluationModel {
       required this.semester,
       required this.comment,
       required this.rating,
-      required this.courseId,
       required this.courseCode,
       required this.isMine});
 

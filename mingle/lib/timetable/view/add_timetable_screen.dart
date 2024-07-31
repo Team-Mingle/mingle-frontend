@@ -9,6 +9,7 @@ import 'package:mingle/module/view/add_module_review_screen.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/timetable/components/search_course_modal.dart';
 import 'package:mingle/timetable/model/class_model.dart';
+import 'package:mingle/timetable/model/timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_model.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
@@ -203,6 +204,9 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
                 SearchCourseModalWidget(
                   topPadding: topPaddingHeight,
                   addClass: widget.addClass,
+                  year: TimetableListModel.getYear(widget.timetable.semester),
+                  semester:
+                      TimetableListModel.getSemester(widget.timetable.semester),
                   addClassesAtAddTimeTableScreen:
                       addClassesAtAddTimeTableScreen,
                 )

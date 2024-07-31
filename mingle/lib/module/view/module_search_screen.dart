@@ -25,7 +25,6 @@ class ModuleSearchScreen extends ConsumerStatefulWidget {
 class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
   List<String>? previousSearch;
   final TextEditingController _searchController = TextEditingController();
-  Future<CursorPagination<CourseDetailModel>>? searchFuture;
   StateNotifierProvider<ModuleStateNotifier, CursorPaginationBase>?
       searchModuleProvier;
   @override
@@ -46,17 +45,15 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
   void setSearch() {
     setState(
       () {
-        searchFuture = ref
-            .watch(courseRepositoryProvider)
-            .search(keyword: _searchController.text);
-
         searchModuleProvier =
             StateNotifierProvider<ModuleStateNotifier, CursorPaginationBase>(
                 (ref) {
           final repository = ref.watch(courseRepositoryProvider);
 
           final notifier = ModuleStateNotifier(
-              moduleRepository: repository, keyword: _searchController.text);
+              moduleRepository: repository,
+              keyword: _searchController.text,
+              isFromCourseEvaluation: true);
 
           return notifier;
         });
@@ -137,7 +134,7 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
             ),
           ),
         ),
-        body: searchFuture == null
+        body: searchModuleProvier == null
             ? Column(
                 children: previousSearch == null || previousSearch!.isEmpty
                     ? [
@@ -227,6 +224,7 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
                 data: ref.watch(searchModuleProvier!),
                 notifierProvider: ref.watch(searchModuleProvier!.notifier),
                 isAdd: widget.isAdd,
+                isFromCourseEvaluation: true,
                 setModule: widget.setModule,
               )
 
@@ -338,31 +336,31 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
           const SizedBox(
             height: 4.0,
           ),
-          Row(
-            children: [
-              Text(
-                course.professor,
-                style: const TextStyle(
-                    fontSize: 12.0,
-                    letterSpacing: -0.005,
-                    height: 1.3,
-                    color: GRAYSCALE_GRAY_04),
-              ),
-              const SizedBox(
-                width: 4.0,
-              ),
-              Text(
-                course.getStartTimes(),
-                //TODO: change to actual timing
-                // "화2/수2",
-                style: const TextStyle(
-                    fontSize: 12.0,
-                    letterSpacing: -0.005,
-                    height: 1.3,
-                    color: GRAYSCALE_GRAY_04),
-              )
-            ],
-          )
+          // Row(
+          //   children: [
+          //     Text(
+          //       course.professor!,
+          //       style: const TextStyle(
+          //           fontSize: 12.0,
+          //           letterSpacing: -0.005,
+          //           height: 1.3,
+          //           color: GRAYSCALE_GRAY_04),
+          //     ),
+          //     const SizedBox(
+          //       width: 4.0,
+          //     ),
+          //     Text(
+          //       course.getStartTimes(),
+          //       //TODO: change to actual timing
+          //       // "화2/수2",
+          //       style: const TextStyle(
+          //           fontSize: 12.0,
+          //           letterSpacing: -0.005,
+          //           height: 1.3,
+          //           color: GRAYSCALE_GRAY_04),
+          //     )
+          //   ],
+          // )
         ]),
       ),
     );

@@ -173,10 +173,14 @@ class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
                     const SizedBox(
                       height: 4.0,
                     ),
+                    Text(widget.course.subclass!),
+                    const SizedBox(
+                      height: 4.0,
+                    ),
                     Row(
                       children: [
                         Text(
-                          widget.course.professor,
+                          widget.course.professor!,
                           style: const TextStyle(
                               fontSize: 12.0,
                               letterSpacing: -0.005,

@@ -19,6 +19,7 @@ import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/second_hand_market/view/second_hand_post_detail_screen.dart';
 import 'package:mingle/timetable/view/friend_timetable_screen.dart';
 import 'package:mingle/timetable/view/timetable_tab_screen.dart';
+import 'package:mingle/upgrader/lib/upgrader.dart';
 import 'package:mingle/user/provider/user_provider.dart';
 import 'package:mingle/user/view/home_screen/home_root_tab.dart';
 import 'package:mingle/user/view/signup_screen/enter_free_domain_email_screen.dart';
@@ -246,6 +247,21 @@ class _AppState extends ConsumerState<_App> {
 
   @override
   Widget build(BuildContext context) {
+    final appcastUpgrader = UpgraderAppcastStore(
+        appcastURL:
+            "https://raw.githubusercontent.com/Team-Mingle/mingle-frontend/timetable-ui/mingle/lib/appcast.xml");
+    final upgrader = Upgrader(
+        messages: MyUpgraderMessages(),
+        storeController: UpgraderStoreController(
+          onAndroid: () => appcastUpgrader,
+          oniOS: () => appcastUpgrader,
+        ),
+        minAppVersion: "4.0.1",
+        // debugDisplayAlways: true,
+        debugLogging: true);
+    // upgrader.
+    // final upgrader = Upgrader(
+    //     minAppVersion: "5.0.0", debugLogging: true, debugDisplayAlways: true);
     return OverlaySupport.global(
       child: ProviderScope(
         child: MaterialApp(
@@ -273,7 +289,12 @@ class _AppState extends ConsumerState<_App> {
           debugShowCheckedModeBanner: false,
           home:
               // const ModuleReviewMainScreen()
-              const SplashScreen(),
+              UpgradeAlert(
+            upgrader: upgrader,
+            child: SplashScreen(
+              upgrader: upgrader,
+            ),
+          ),
           // HomeRootTab(),
           //  const EnterOfferIdScreen()
           // const FinishTempSinupScreen(),
@@ -287,4 +308,18 @@ class _AppState extends ConsumerState<_App> {
       ),
     );
   }
+}
+
+class MyUpgraderMessages extends UpgraderMessages {
+  @override
+  String get body => '새 업데이트가 출시되었습니다!';
+
+  @override
+  String get buttonTitleUpdate => '업데이트';
+
+  @override
+  String get title => '';
+
+  @override
+  String get prompt => '';
 }

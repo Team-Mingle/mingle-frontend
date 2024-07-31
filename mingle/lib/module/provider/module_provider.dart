@@ -14,7 +14,16 @@ import 'package:collection/collection.dart';
 class ModuleStateNotifier extends StateNotifier<CursorPaginationBase> {
   final CourseRepository moduleRepository;
   final String keyword;
-  ModuleStateNotifier({required this.moduleRepository, required this.keyword})
+  final bool isFromCourseEvaluation; // 강의평가 홈에서 들어올 시 true
+  final int?
+      year; // isFromCourseEvaluation이 false면(시간표 추가 모달에서 들어올 시) 무조건 non-null
+  final int? semester; // 위와 동일
+  ModuleStateNotifier(
+      {required this.moduleRepository,
+      required this.keyword,
+      required this.isFromCourseEvaluation,
+      this.year,
+      this.semester})
       : super(CursorPaginationLoading()) {
     paginate();
   }
@@ -93,8 +102,18 @@ class ModuleStateNotifier extends StateNotifier<CursorPaginationBase> {
           state = CursorPaginationLoading();
         }
       }
-      final CursorPagination<CourseDetailModel> resp = await moduleRepository
-          .search(keyword: keyword, paginationParams: paginationParams);
+
+      final CursorPagination<CourseDetailModel> resp;
+      if (isFromCourseEvaluation) {
+        resp = await moduleRepository.searchFromCourseEvaluation(
+            keyword: keyword, paginationParams: paginationParams);
+      } else {
+        resp = await moduleRepository.search(
+            keyword: keyword,
+            year: year!,
+            semester: semester!,
+            paginationParams: paginationParams);
+      }
 
       if (state is CursorPaginationFetchingMore) {
         final pState = state as CursorPaginationFetchingMore;

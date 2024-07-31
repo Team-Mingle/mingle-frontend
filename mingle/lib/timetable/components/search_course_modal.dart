@@ -21,11 +21,15 @@ import 'package:mingle/user/view/my_page_screen/my_page_screen.dart';
 class SearchCourseModalWidget extends ConsumerStatefulWidget {
   final Function addClass;
   final Function addClassesAtAddTimeTableScreen;
+  final int year;
+  final int semester;
   final double topPadding;
   const SearchCourseModalWidget(
       {super.key,
       required this.addClass,
       required this.addClassesAtAddTimeTableScreen,
+      required this.year,
+      required this.semester,
       required this.topPadding});
 
   @override
@@ -37,7 +41,6 @@ class _SearchCourseModalWidgetState
     extends ConsumerState<SearchCourseModalWidget> {
   final TextEditingController _searchController = TextEditingController();
   List<String>? previousSearch;
-  Future<CursorPagination<CourseDetailModel>>? searchFuture;
   StateNotifierProvider<ModuleStateNotifier, CursorPaginationBase>?
       searchModuleProvier;
   late FToast fToast;
@@ -69,17 +72,18 @@ class _SearchCourseModalWidgetState
   void setSearch() {
     setState(
       () {
-        searchFuture = ref
-            .watch(courseRepositoryProvider)
-            .search(keyword: _searchController.text);
-
         searchModuleProvier =
             StateNotifierProvider<ModuleStateNotifier, CursorPaginationBase>(
                 (ref) {
           final repository = ref.watch(courseRepositoryProvider);
 
           final notifier = ModuleStateNotifier(
-              moduleRepository: repository, keyword: _searchController.text);
+            moduleRepository: repository,
+            keyword: _searchController.text,
+            year: widget.year,
+            semester: widget.semester,
+            isFromCourseEvaluation: false,
+          );
 
           return notifier;
         });
@@ -190,7 +194,7 @@ class _SearchCourseModalWidgetState
                 //     fontWeight: FontWeight.w400,
                 //   ),
                 // ),
-                searchFuture == null
+                searchModuleProvier == null
                     ? Column(
                         children: previousSearch == null ||
                                 previousSearch!.isEmpty

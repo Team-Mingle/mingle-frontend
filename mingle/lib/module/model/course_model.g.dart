@@ -13,8 +13,8 @@ CourseModel _$CourseModelFromJson(Map<String, dynamic> json) => CourseModel(
       semester: json['semester'] as String?,
       professor: json['professor'] as String? ?? "-",
       subclass: json['subclass'] as String? ?? "-",
-      courseTimeDtoList: (json['courseTimeDtoList'] as List<dynamic>)
-          .map((e) => CourseTimeModel.fromJson(e as Map<String, dynamic>))
+      courseTimeDtoList: (json['courseTimeDtoList'] as List<dynamic>?)
+          ?.map((e) => CourseTimeModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       courseType: json['courseType'] as String?,
       rgb: json['rgb'] as String?,

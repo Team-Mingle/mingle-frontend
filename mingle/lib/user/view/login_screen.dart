@@ -14,6 +14,7 @@ import 'package:mingle/dio/dio.dart';
 import 'package:mingle/post/repository/post_repository.dart';
 import 'package:mingle/second_hand_market/repository/second_hand_market_post_repository.dart';
 import 'package:mingle/secure_storage/secure_storage.dart';
+import 'package:mingle/upgrader/lib/upgrader.dart';
 import 'package:mingle/user/model/user_model.dart';
 import 'package:mingle/user/provider/is_fresh_login_provider.dart';
 import 'package:mingle/user/provider/user_provider.dart';
@@ -307,7 +308,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               ),
                               NextButton(
                                 isLoading: isLoading,
-                                nextScreen: const SplashScreen(),
+                                nextScreen: SplashScreen(
+                                  upgrader: Upgrader(),
+                                ),
                                 buttonName: "로그인",
                                 checkSelected:
                                     emailController.text.isNotEmpty &&

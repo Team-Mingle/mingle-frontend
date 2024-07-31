@@ -37,6 +37,7 @@ class ModulePreviewComponent extends ConsumerStatefulWidget {
   final dynamic notifierProvider;
   final Function? setModule;
   final bool? isAdd;
+  final bool isFromCourseEvaluation;
   ModulePreviewComponent({
     super.key,
     // required this.postList,
@@ -48,6 +49,7 @@ class ModulePreviewComponent extends ConsumerStatefulWidget {
     this.addClassesAtAddTimeTableScreen,
     this.showAddCourseSuccessToast,
     this.isFromTimetableAdd = false,
+    this.isFromCourseEvaluation = false,
     this.isAdd,
     this.setModule,
     // required this.postFuture,
@@ -265,9 +267,11 @@ class _ModulePreviewComponentState
               builder: (_) => ModuleDetailsScreen(
                     courseId: course.id,
                     moduleName: course.name,
+                    isFromCourseEvaluation: widget.isFromCourseEvaluation,
                     courseDetail: course,
                   ))),
       child: Container(
+        width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
@@ -281,31 +285,31 @@ class _ModulePreviewComponentState
           const SizedBox(
             height: 4.0,
           ),
-          Row(
-            children: [
-              Text(
-                course.professor,
-                style: const TextStyle(
-                    fontSize: 12.0,
-                    letterSpacing: -0.005,
-                    height: 1.3,
-                    color: GRAYSCALE_GRAY_04),
-              ),
-              const SizedBox(
-                width: 4.0,
-              ),
-              Text(
-                course.getStartTimes(),
-                //TODO: change to actual timing
-                // "화2/수2",
-                style: const TextStyle(
-                    fontSize: 12.0,
-                    letterSpacing: -0.005,
-                    height: 1.3,
-                    color: GRAYSCALE_GRAY_04),
-              )
-            ],
-          )
+          // Row(
+          //   children: [
+          //     Text(
+          //       course.professor!,
+          //       style: const TextStyle(
+          //           fontSize: 12.0,
+          //           letterSpacing: -0.005,
+          //           height: 1.3,
+          //           color: GRAYSCALE_GRAY_04),
+          //     ),
+          //     const SizedBox(
+          //       width: 4.0,
+          //     ),
+          //     Text(
+          //       course.getCourseTimes(),
+          //       //TODO: change to actual timing
+          //       // "화2/수2",
+          //       style: const TextStyle(
+          //           fontSize: 12.0,
+          //           letterSpacing: -0.005,
+          //           height: 1.3,
+          //           color: GRAYSCALE_GRAY_04),
+          //     )
+          //   ],
+          // )
         ]),
       ),
     );

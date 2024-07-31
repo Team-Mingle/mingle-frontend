@@ -20,9 +20,9 @@ class CourseModel {
   final String name;
   final String courseCode;
   final String? semester;
-  final String professor;
-  final String subclass;
-  final List<CourseTimeModel> courseTimeDtoList;
+  final String? professor;
+  final String? subclass;
+  final List<CourseTimeModel>? courseTimeDtoList;
   final String? rgb;
   String? courseType;
 
@@ -79,10 +79,10 @@ class CourseModel {
       double screenShotHeight = 0.0,
       double screenShotWidth = 0.0}) {
     List<Widget> classes = [];
-    for (int i = 0; i < courseTimeDtoList.length; i++) {
-      if (courseTimeDtoList[i].dayOfWeek == null ||
-          courseTimeDtoList[i].startTime == null ||
-          courseTimeDtoList[i].endTime == null) {
+    for (int i = 0; i < courseTimeDtoList!.length; i++) {
+      if (courseTimeDtoList![i].dayOfWeek == null ||
+          courseTimeDtoList![i].startTime == null ||
+          courseTimeDtoList![i].endTime == null) {
         continue;
       }
       double gridTotalWidth =
@@ -110,11 +110,11 @@ class CourseModel {
           ((gridTotalHeight - timetableGridTopSquareHeight) ~/
                   gridTotalHeightDividerValue)
               .toDouble();
-      String startTime = courseTimeDtoList[i].startTime!;
-      String endTime = courseTimeDtoList[i].endTime!;
+      String startTime = courseTimeDtoList![i].startTime!;
+      String endTime = courseTimeDtoList![i].endTime!;
       double topOffset = convertStartTimeToOffset(startTime, gridHeight);
       double leftOffset =
-          convertDayToInt(courseTimeDtoList[i].dayOfWeek!) * gridWidth;
+          convertDayToInt(courseTimeDtoList![i].dayOfWeek!) * gridWidth;
 
       double height = calculateHeight(startTime, endTime, gridHeight);
       classes.add(
@@ -150,12 +150,18 @@ class CourseModel {
                         const SizedBox(
                           height: 4.0,
                         ),
-                        Text(
-                          name,
+                        AutoSizeText(
+                          subclass!,
                           style: const TextStyle(
                               fontSize: 12.0, overflow: TextOverflow.ellipsis),
                           maxLines: 1,
                         )
+                        // Text(
+                        //   name,
+                        // style: const TextStyle(
+                        //     fontSize: 12.0, overflow: TextOverflow.ellipsis),
+                        //   maxLines: 1,
+                        // )
                       ],
                     ),
                   ],
@@ -200,12 +206,26 @@ class CourseModel {
 
   String getStartTimes() {
     List<String> result = [];
-    for (CourseTimeModel time in courseTimeDtoList) {
+    for (CourseTimeModel time in courseTimeDtoList!) {
       if (time.dayOfWeek == null || time.startTime == null) {
         continue;
       }
       result.add(
           "${convertDayToKorDay(time.dayOfWeek!)} ${CourseTimeModel.removeSecondsFromTime(time.startTime!)}");
+    }
+    return result.join("/");
+  }
+
+  String getCourseTimes() {
+    List<String> result = [];
+    for (CourseTimeModel time in courseTimeDtoList!) {
+      if (time.dayOfWeek == null ||
+          time.startTime == null ||
+          time.endTime == null) {
+        continue;
+      }
+      result.add(
+          "${convertDayToKorDay(time.dayOfWeek!)} ${CourseTimeModel.removeSecondsFromTime(time.startTime!)}~${CourseTimeModel.removeSecondsFromTime(time.endTime!)}");
     }
     return result.join("/");
   }

@@ -30,7 +30,7 @@ class TimetableModel extends TimetableBase {
     List<int> startingHours = [];
     for (CourseDetailModel courseDetailModel in coursePreviewDtoList) {
       for (CourseTimeModel courseTimeModel
-          in courseDetailModel.courseTimeDtoList) {
+          in courseDetailModel.courseTimeDtoList!) {
         print(courseTimeModel.startTime);
         if (courseTimeModel.dayOfWeek != null &&
             courseTimeModel.startTime != null &&
@@ -48,7 +48,7 @@ class TimetableModel extends TimetableBase {
     List<int> finishingHours = [];
     for (CourseDetailModel courseDetailModel in coursePreviewDtoList) {
       for (CourseTimeModel courseTimeModel
-          in courseDetailModel.courseTimeDtoList) {
+          in courseDetailModel.courseTimeDtoList!) {
         if (courseTimeModel.dayOfWeek != null &&
             courseTimeModel.startTime != null &&
             courseTimeModel.endTime != null) {
