@@ -178,6 +178,9 @@ class _TimetableListWidgetState extends ConsumerState<TimetableListWidget> {
         ref
             .read(pinnedTimetableIdProvider.notifier)
             .updatePinnedTimetableId(widget.timetablePreviewModel.timetableId);
+        // This line is required to reset number of days to 7 so that new timetable can be rendered correctly.
+        ref.read(numberOfDaysProvider.notifier).update((state) => 7);
+
         Navigator.of(context).pop();
       },
       child: Column(
