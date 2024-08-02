@@ -12,7 +12,7 @@ import 'package:mingle/main.dart';
 import 'package:mingle/module/view/first_onboarding_screen.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/secure_storage/secure_storage.dart';
-import 'package:mingle/upgrader/lib/upgrader.dart';
+import 'package:mingle/upgrader_source/upgrader.dart';
 import 'package:mingle/user/model/user_model.dart';
 import 'package:mingle/user/provider/user_provider.dart';
 import 'package:mingle/user/view/app_start_screen.dart';
