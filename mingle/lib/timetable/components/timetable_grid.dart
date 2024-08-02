@@ -74,7 +74,8 @@ class _TimeTableGridState extends ConsumerState<TimeTableGrid> {
     double gridTotalWidth = ref.read(timetableGridWidthProvider);
     double gridTotalHeight = ref.read(timetableGridHeightProvider);
 
-    int numberOfDays = ref.read(numberOfDaysProvider);
+    // int numberOfDays = ref.read(numberOfDaysProvider);
+    int numberOfDays = widget.timetable.getNumberOfDays();
     print("numberOfDays: $numberOfDays");
 
     if (widget.isFull) {
@@ -135,7 +136,8 @@ class _TimeTableGridState extends ConsumerState<TimeTableGrid> {
     // ref.read(timetableGridHeightDividerValueProvider);
     double gridTotalWidth = ref.read(timetableGridWidthProvider);
     double gridTotalHeight = ref.read(timetableGridHeightProvider);
-    int numberOfDays = ref.read(numberOfDaysProvider);
+    // int numberOfDays = ref.read(numberOfDaysProvider);
+    int numberOfDays = widget.timetable.getNumberOfDays();
     if (widget.isFull) {
       gridTotalHeight += 100;
     }
