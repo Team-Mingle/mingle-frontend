@@ -131,6 +131,7 @@ class AddPersonalCourseDto {
   final String venue;
   final String professor;
   final String memo;
+  final String subclass;
   final bool overrideValidation;
 
   AddPersonalCourseDto(
@@ -139,6 +140,7 @@ class AddPersonalCourseDto {
       required this.courseCode,
       required this.venue,
       required this.professor,
+      required this.subclass,
       required this.memo,
       this.overrideValidation = false});
 

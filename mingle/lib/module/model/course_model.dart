@@ -7,6 +7,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/common/const/utils.dart';
 import 'package:mingle/common/model/course_time_model.dart';
+import 'package:mingle/timetable/provider/number_of_days_provider.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
 import 'package:mingle/timetable/provider/timetable_grid_height_divider_value_provider.dart';
 import 'package:mingle/timetable/provider/timetable_grid_height_provider.dart';
@@ -77,7 +78,8 @@ class CourseModel {
       {bool isFull = false,
       bool isScreenshot = false,
       double screenShotHeight = 0.0,
-      double screenShotWidth = 0.0}) {
+      double screenShotWidth = 0.0,
+      int screenshotNumberOfDays = 0}) {
     List<Widget> classes = [];
     for (int i = 0; i < courseTimeDtoList!.length; i++) {
       if (courseTimeDtoList![i].dayOfWeek == null ||
@@ -103,9 +105,16 @@ class CourseModel {
       // 20 is actual height, 2 is top and bottom paddings
       const double timetableGridTopSquareWidth = 22.0;
 
+      final int numberOfDays = isScreenshot
+          ? screenshotNumberOfDays
+          : ref.read(numberOfDaysProvider);
+
+      print("number of days in generateClasses: $numberOfDays");
+
       // 22 is actual width, 2 is left and right paddings
       final double gridWidth =
-          ((gridTotalWidth - timetableGridTopSquareWidth) ~/ 7).toDouble();
+          ((gridTotalWidth - timetableGridTopSquareWidth) ~/ numberOfDays)
+              .toDouble();
       final double gridHeight =
           ((gridTotalHeight - timetableGridTopSquareHeight) ~/
                   gridTotalHeightDividerValue)

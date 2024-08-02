@@ -72,6 +72,26 @@ class TimetableModel extends TimetableBase {
 
     // min()
   }
+
+  int getNumberOfDays() {
+    int ans = 5;
+    for (CourseDetailModel courseDetailModel in coursePreviewDtoList) {
+      for (CourseTimeModel courseTimeModel
+          in courseDetailModel.courseTimeDtoList!) {
+        if (courseTimeModel.dayOfWeek != null &&
+            courseTimeModel.startTime != null &&
+            courseTimeModel.endTime != null) {
+          if (courseTimeModel.dayOfWeek == "SATURDAY") {
+            ans = max(ans, 6);
+          } else if (courseTimeModel.dayOfWeek == "SUNDAY") {
+            ans = max(ans, 7);
+          }
+        }
+      }
+    }
+    print("inside getNumberOfDays: $ans");
+    return ans;
+  }
 }
 
 class TimetableLoading extends TimetableBase {}

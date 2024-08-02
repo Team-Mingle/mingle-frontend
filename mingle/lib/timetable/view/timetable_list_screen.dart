@@ -13,6 +13,7 @@ import 'package:mingle/timetable/components/timetable_list_container.dart';
 import 'package:mingle/timetable/model/add_timetable_response_model.dart';
 import 'package:mingle/timetable/model/timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_preview_model.dart';
+import 'package:mingle/timetable/provider/number_of_days_provider.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 import 'package:mingle/timetable/view/self_add_timetable_screen.dart';
@@ -125,6 +126,7 @@ class _MyTimeTableListScreenState extends ConsumerState<TimeTableListScreen> {
 
   void pinTimetable(List<TimetablePreviewModel> timetableList,
       TimetablePreviewModel timetableToBePinned) {
+    // ref.read(numberOfDaysProvider.notifier).update((state) => timetableToBePinned.)
     setState(() {
       timetableList.firstWhere((timetable) => timetable.isPinned).isPinned =
           false;

@@ -444,7 +444,7 @@ class _ModuleDetailsScreenState extends ConsumerState<ModuleDetailsScreen> {
                         width: 12.0,
                       ),
                       //TODO: change to actual time
-                      Expanded(child: Text(courseDetailModel.getStartTimes()))
+                      Expanded(child: Text(courseDetailModel.getCourseTimes()))
                     ],
                   ),
                   const SizedBox(

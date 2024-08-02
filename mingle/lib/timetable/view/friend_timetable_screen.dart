@@ -387,23 +387,23 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (_) => AddModuleReviewScreen(
-                                  moduleId: currentCourse.id,
-                                  moduleName: currentCourse.name,
-                                )),
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 14.0),
-                        child: Text(
-                          "강의평 작성하기",
-                          style:
-                              TextStyle(fontSize: 16.0, letterSpacing: -0.32),
-                        ),
-                      ),
-                    ),
+                    // GestureDetector(
+                    //   onTap: () => Navigator.of(context).push(
+                    //     MaterialPageRoute(
+                    //         builder: (_) => AddModuleReviewScreen(
+                    //               moduleId: currentCourse.id,
+                    //               moduleName: currentCourse.name,
+                    //             )),
+                    //   ),
+                    //   child: const Padding(
+                    //     padding: EdgeInsets.symmetric(vertical: 14.0),
+                    //     child: Text(
+                    //       "강의평 작성하기",
+                    //       style:
+                    //           TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

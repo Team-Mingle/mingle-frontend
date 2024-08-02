@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:math';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,7 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:mingle/common/component/expanded_section.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
+import 'package:mingle/common/model/course_time_model.dart';
 import 'package:mingle/main.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/module/model/course_detail_model.dart';
@@ -29,6 +32,7 @@ import 'package:mingle/timetable/model/friend_model.dart';
 import 'package:mingle/timetable/model/timetable_course_model.dart';
 import 'package:mingle/timetable/model/timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_model.dart';
+import 'package:mingle/timetable/provider/number_of_days_provider.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
@@ -96,6 +100,12 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     // await ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetable();
     // await ref.read(pinnedTimetableProvider.notifier).fetchPinnedTimetable();
     TimetableBase? currentTimetable = ref.read(pinnedTimetableProvider);
+    ref.read(numberOfDaysProvider.notifier).update((state) {
+      if (currentTimetable is TimetableModel) {
+        return min(state, currentTimetable.getNumberOfDays());
+      }
+      return state;
+    });
     setState(() {
       timetable = currentTimetable;
     });
@@ -256,7 +266,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                 GestureDetector(
                   onTap: () {
                     Navigator.of(context).pop();
-                    deleteTimetable(ref.read(pinnedTimetableIdProvider)!);
+                    showDeleteTimetableDialog();
+                    // deleteTimetable(ref.read(pinnedTimetableIdProvider)!);
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 14.0),
@@ -643,24 +654,58 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
 
   void addClass(CourseDetailModel courseModel, bool overrideValidation) async {
     TimetableModel timetable = this.timetable as TimetableModel;
-    if (overrideValidation) {
-      await ref.read(pinnedTimetableProvider.notifier).fetchPinnedTimetable();
-      print("overriding here");
-      getClasses();
-      return;
-    }
-    List<Widget> newCourses = [...addedCourses];
-    newCourses.addAll(courseModel.generateClasses(() {
-      if (courseModel.courseType == "PERSONAL") {
-        showSelfAddedCourseDetailModal(courseModel);
-      } else {
-        showCourseDetailModal(courseModel);
-      }
-    }, ref, timetable.getGridTotalHeightDividerValue()));
-    timetable.coursePreviewDtoList
+    TimetableModel newTimetable = timetable;
+
+    newTimetable.coursePreviewDtoList
         .add(TimetableCourseModel.fromCourseDeatilModel(courseModel));
+    // if (overrideValidation) {
+    //   await ref.read(pinnedTimetableProvider.notifier).fetchPinnedTimetable();
+    //   print("overriding here");
+    //   getClasses();
+    //   return;
+    // }
+    // int updatedNumberOfDays = 5;
+    // if (courseModel.courseTimeDtoList != null) {
+    //   for (CourseTimeModel courseTimeModel in courseModel.courseTimeDtoList!) {
+    //     if (courseTimeModel.dayOfWeek != null &&
+    //         courseTimeModel.startTime != null &&
+    //         courseTimeModel.endTime != null) {
+    //       if (courseTimeModel.dayOfWeek == "SATURDAY") {
+    //         updatedNumberOfDays = max(updatedNumberOfDays, 6);
+    //       } else if (courseTimeModel.dayOfWeek == "SUNDAY") {
+    //         updatedNumberOfDays = max(updatedNumberOfDays, 7);
+    //       }
+    //     }
+    //   }
+
+    ref
+        .read(numberOfDaysProvider.notifier)
+        .update((state) => max(state, timetable.getNumberOfDays()));
+    List<Widget> newAddedCourses = [];
+    // List<Widget> newCourses = [...addedCourses];
+    // newCourses.addAll(courseModel.generateClasses(() {
+    //   if (courseModel.courseType == "PERSONAL") {
+    //     showSelfAddedCourseDetailModal(courseModel);
+    //   } else {
+    //     showCourseDetailModal(courseModel);
+    //   }
+    // }, ref, timetable.getGridTotalHeightDividerValue()));
+    for (int i = 0; i < timetable.coursePreviewDtoList.length; i++) {
+      CourseDetailModel detailModel = timetable.coursePreviewDtoList[i];
+      // if (detailModel.id != courseModel.id) {
+      newAddedCourses.addAll(detailModel.generateClasses(() {
+        if (detailModel.courseType == "PERSONAL") {
+          showSelfAddedCourseDetailModal(detailModel);
+        } else {
+          showCourseDetailModal(detailModel);
+        }
+      }, ref, timetable.getGridTotalHeightDividerValue()));
+      // }
+    }
+
     setState(() {
-      addedCourses = newCourses;
+      addedCourses = newAddedCourses;
+      timetable = newTimetable;
       // addedCourses.addAll(courseModel.generateClasses(() {
       //   print("tapped");
       //   showCourseDetailModal(courseModel);
@@ -675,6 +720,9 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
       TimetableModel newTimetable = timetable;
       newTimetable.coursePreviewDtoList
           .removeWhere((element) => element.id == courseModel.id);
+      ref
+          .read(numberOfDaysProvider.notifier)
+          .update((state) => min(state, timetable.getNumberOfDays()));
       for (int i = 0; i < timetable.coursePreviewDtoList.length; i++) {
         CourseDetailModel detailModel = timetable.coursePreviewDtoList[i];
         // if (detailModel.id != courseModel.id) {
@@ -1872,6 +1920,99 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                         onTap: () {
                           Navigator.of(context).pop();
                           deleteClass(currentCourse);
+                        },
+                        child: Container(
+                          height: 40.0,
+                          width: 120.0,
+                          decoration: BoxDecoration(
+                              color: GRAYSCALE_GRAY_01,
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: const Center(
+                            child: Text(
+                              "삭제하기",
+                              style: TextStyle(
+                                  color: GRAYSCALE_GRAY_04,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 8.0,
+                      ),
+                      GestureDetector(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: Container(
+                          height: 40.0,
+                          width: 120.0,
+                          decoration: BoxDecoration(
+                              color: PRIMARY_COLOR_ORANGE_02,
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: const Center(
+                            child: Text(
+                              "취소하기",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void showDeleteTimetableDialog() {
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        insetPadding: EdgeInsets.zero,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0)),
+              // width: 343,
+              padding: const EdgeInsets.only(
+                  top: 32.0, left: 32.0, right: 32.0, bottom: 24.0),
+              child: Column(
+                children: [
+                  const Text(
+                    "시간표를 삭제하시겠습니까?",
+                    style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: -0.32),
+                  ),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                  const Text(
+                    "이 작업은 되돌릴 수 없습니다.",
+                    style: TextStyle(
+                        color: GRAYSCALE_GRAY_04, letterSpacing: -0.14),
+                  ),
+                  const SizedBox(
+                    height: 16.0,
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          deleteTimetable(ref.read(pinnedTimetableIdProvider)!);
+                          Navigator.of(context).pop();
                         },
                         child: Container(
                           height: 40.0,

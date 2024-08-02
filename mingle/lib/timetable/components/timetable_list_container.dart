@@ -7,8 +7,11 @@ import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/main.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
+import 'package:mingle/timetable/model/timetable_model.dart';
 import 'package:mingle/timetable/model/timetable_preview_model.dart';
+import 'package:mingle/timetable/provider/number_of_days_provider.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_id_provider.dart';
+import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
 
 class TimetableListWidget extends ConsumerStatefulWidget {
@@ -149,7 +152,12 @@ class _TimetableListWidgetState extends ConsumerState<TimetableListWidget> {
       await ref
           .read(timetableRepositoryProvider)
           .pinTimetable(timetableId: widget.timetablePreviewModel.timetableId);
-      ref.read(pinnedTimetableIdProvider.notifier).fetchPinnedTimetableId();
+      await ref
+          .read(pinnedTimetableIdProvider.notifier)
+          .fetchPinnedTimetableId();
+      ref.read(numberOfDaysProvider.notifier).update((state) =>
+          (ref.read(pinnedTimetableProvider) as TimetableModel)
+              .getNumberOfDays());
     } on DioException catch (e) {
       fToast.showToast(
         child: const ToastMessage(message: generalErrorMsg),
@@ -170,6 +178,9 @@ class _TimetableListWidgetState extends ConsumerState<TimetableListWidget> {
         ref
             .read(pinnedTimetableIdProvider.notifier)
             .updatePinnedTimetableId(widget.timetablePreviewModel.timetableId);
+        // This line is required to reset number of days to 7 so that new timetable can be rendered correctly.
+        ref.read(numberOfDaysProvider.notifier).update((state) => 7);
+
         Navigator.of(context).pop();
       },
       child: Column(

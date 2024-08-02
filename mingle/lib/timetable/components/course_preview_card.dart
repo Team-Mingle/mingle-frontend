@@ -192,7 +192,7 @@ class _CoursePreviewCardState extends ConsumerState<CoursePreviewCard> {
                         ),
                         Expanded(
                           child: Text(
-                            widget.course.getStartTimes(),
+                            widget.course.getCourseTimes(),
                             style: const TextStyle(
                                 fontSize: 12.0,
                                 letterSpacing: -0.005,

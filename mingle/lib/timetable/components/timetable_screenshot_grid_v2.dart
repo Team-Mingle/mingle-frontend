@@ -8,6 +8,7 @@ import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/module/model/course_detail_model.dart';
 import 'package:mingle/timetable/model/timetable_model.dart';
+import 'package:mingle/timetable/provider/number_of_days_provider.dart';
 import 'package:mingle/timetable/provider/timetable_grid_height_divider_value_provider.dart';
 import 'package:mingle/timetable/provider/timetable_grid_height_provider.dart';
 import 'package:mingle/timetable/provider/timetable_grid_width_provider.dart';
@@ -17,11 +18,12 @@ class TimeTableScreenshotGrid extends ConsumerStatefulWidget {
   final double height;
   final double width;
 
-  const TimeTableScreenshotGrid(
-      {super.key,
-      required this.timetable,
-      required this.height,
-      required this.width});
+  const TimeTableScreenshotGrid({
+    super.key,
+    required this.timetable,
+    required this.height,
+    required this.width,
+  });
 
   @override
   ConsumerState<TimeTableScreenshotGrid> createState() => _TimeTableGridState();
@@ -69,12 +71,15 @@ class _TimeTableGridState extends ConsumerState<TimeTableScreenshotGrid> {
     // ref.read(timetableGridHeightDividerValueProvider);
     double gridTotalWidth = widget.width;
     double gridTotalHeight = widget.height;
+    int numberOfDays = widget.timetable.getNumberOfDays();
     const double timetableGridTopSquareHeight = 22.0;
     // 20 is actual height, 2 is top and bottom paddings
     const double timetableGridTopSquareWidth = 22.0;
+
     // 22 is actual width, 2 is left and right paddings
     final double gridWidth =
-        ((gridTotalWidth - timetableGridTopSquareWidth) ~/ 7).toDouble();
+        ((gridTotalWidth - timetableGridTopSquareWidth) ~/ numberOfDays)
+            .toDouble();
     final double gridHeight =
         ((gridTotalHeight - timetableGridTopSquareHeight) ~/
                 gridHeightDividerValue)
@@ -88,7 +93,8 @@ class _TimeTableGridState extends ConsumerState<TimeTableScreenshotGrid> {
           widget.timetable.getGridTotalHeightDividerValue(isScreenshot: true),
           isScreenshot: true,
           screenShotHeight: widget.height,
-          screenShotWidth: widget.width));
+          screenShotWidth: widget.width,
+          screenshotNumberOfDays: numberOfDays));
     }
     setState(() {
       addedClasses = coursesToBeAdded;
@@ -127,17 +133,19 @@ class _TimeTableGridState extends ConsumerState<TimeTableScreenshotGrid> {
 
     const double timetableGridTopSquareHeight = 20.0;
     const double timetableGridTopSquareWidth = 22.0;
+    int numberOfDays = widget.timetable.getNumberOfDays();
     final double gridWidth =
-        ((gridTotalWidth - timetableGridTopSquareWidth) ~/ 7).toDouble();
+        ((gridTotalWidth - timetableGridTopSquareWidth) ~/ numberOfDays)
+            .toDouble();
     final double gridHeight =
         ((gridTotalHeight - timetableGridTopSquareHeight) ~/
                 gridHeightDividerValue)
             .toDouble();
 
-    gridTotalWidth = gridWidth * 7;
+    gridTotalWidth = gridWidth * numberOfDays;
     gridTotalHeight = gridHeight * gridHeightDividerValue + 2;
 
-    List<List<Widget>> timetable = List.generate(7, (col) {
+    List<List<Widget>> timetable = List.generate(numberOfDays, (col) {
       return List.generate(
         24,
         (row) => AnimatedSize(
@@ -200,7 +208,7 @@ class _TimeTableGridState extends ConsumerState<TimeTableScreenshotGrid> {
     // });
 
     List<Widget> d = List.generate(
-        7,
+        numberOfDays,
         (index) => Container(
               color: Colors.white,
               child: Center(

@@ -41,6 +41,7 @@ class _AddDirectTimeTableScreenState
   List<String> endTimes = [];
   String moduleCode = "";
   String location = "";
+  String subclass = "";
   String profName = "";
   late FToast fToast;
   bool isLoading = false;
@@ -160,6 +161,7 @@ class _AddDirectTimeTableScreenState
                           endTime: endTimes[index])),
                   courseCode: moduleCode,
                   venue: location,
+                  subclass: subclass,
                   professor: profName,
                   memo: ""));
       result.courseType = "PERSONAL";
@@ -560,6 +562,66 @@ class _AddDirectTimeTableScreenState
                       },
                       decoration: InputDecoration(
                         hintText: "강의 장소를 입력하세요",
+                        hintStyle: const TextStyle(
+                          color: GRAYSCALE_GRAY_03,
+                          fontSize: 16.0,
+                          letterSpacing: -0.02,
+                          height: 1.5,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        labelStyle: const TextStyle(
+                          color: Colors.black,
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12.0,
+                          vertical: 14.0,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: GRAYSCALE_GRAY_02),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: GRAYSCALE_GRAY_02),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 24.0,
+                  ),
+                  const Row(
+                    children: [
+                      Text(
+                        '분반',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14.0,
+                          letterSpacing: -0.01,
+                          height: 1.4,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          subclass = value;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        hintText: "분반을 입력하세요",
                         hintStyle: const TextStyle(
                           color: GRAYSCALE_GRAY_03,
                           fontSize: 16.0,
