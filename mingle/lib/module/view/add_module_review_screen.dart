@@ -35,6 +35,7 @@ class AddModuleReviewScreen extends ConsumerStatefulWidget {
 class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
   int? selecetedSatisfactionIndex;
   String moduleReview = "";
+  String profName = "";
   var selectedSemesterIndex;
   List<String> semesters = ["23년도 2학기", "23년도 1학기", "22년도 2학기"];
   List<String> satisfactions = ["추천해요", "보통이에요", "비추천해요"];
@@ -62,6 +63,10 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
     });
   }
 
+  String parseModuleReview() {
+    return "교수명: $profName\n$moduleReview";
+  }
+
   void addModuleReview() async {
     try {
       String? message;
@@ -73,6 +78,8 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
         message = "강의 추천 여부를 선택해 주세요.";
       } else if (moduleReview.length < 15) {
         message = "강의평은 15자 이상 작성해 주세요.";
+      } else if (profName.isEmpty) {
+        message = "교수명을 입력해주세요.";
       }
       if (message != null) {
         fToast.showToast(
@@ -89,7 +96,7 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
           courseId: moduleId!,
           year: year!,
           semester: semester!,
-          comment: moduleReview,
+          comment: parseModuleReview(),
           rating: engSatisfactions[selecetedSatisfactionIndex!]);
       final resp = await ref
           .watch(courseEvalutationRepositoryProvider)
@@ -394,6 +401,66 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
                                 width: 24.0,
                               )
                             ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 24.0,
+                    ),
+                    const Row(
+                      children: [
+                        Text(
+                          '교수명',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14.0,
+                            letterSpacing: -0.01,
+                            height: 1.4,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 8.0,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            profName = value;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          hintText: "교수명을 입력하세요",
+                          hintStyle: const TextStyle(
+                            color: GRAYSCALE_GRAY_03,
+                            fontSize: 16.0,
+                            letterSpacing: -0.02,
+                            height: 1.5,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          labelStyle: const TextStyle(
+                            color: Colors.black,
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12.0,
+                            vertical: 14.0,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: GRAYSCALE_GRAY_02),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: GRAYSCALE_GRAY_02),
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
                         ),
                       ),

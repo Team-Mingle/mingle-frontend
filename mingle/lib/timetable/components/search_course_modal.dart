@@ -70,6 +70,7 @@ class _SearchCourseModalWidgetState
   }
 
   void setSearch() {
+    FocusScope.of(context).unfocus();
     setState(
       () {
         searchModuleProvier =

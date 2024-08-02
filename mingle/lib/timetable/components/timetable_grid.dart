@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mingle/common/const/colors.dart';
 import 'package:mingle/common/const/data.dart';
 import 'package:mingle/timetable/model/timetable_model.dart';
+import 'package:mingle/timetable/provider/number_of_days_provider.dart';
 import 'package:mingle/timetable/provider/timetable_grid_height_divider_value_provider.dart';
 import 'package:mingle/timetable/provider/timetable_grid_height_provider.dart';
 import 'package:mingle/timetable/provider/timetable_grid_width_provider.dart';
@@ -72,6 +73,10 @@ class _TimeTableGridState extends ConsumerState<TimeTableGrid> {
     // ref.read(timetableGridHeightDividerValueProvider);
     double gridTotalWidth = ref.read(timetableGridWidthProvider);
     double gridTotalHeight = ref.read(timetableGridHeightProvider);
+
+    int numberOfDays = ref.read(numberOfDaysProvider);
+    print("numberOfDays: $numberOfDays");
+
     if (widget.isFull) {
       gridTotalHeight += 100;
     }
@@ -80,7 +85,8 @@ class _TimeTableGridState extends ConsumerState<TimeTableGrid> {
     const double timetableGridTopSquareWidth = 22.0;
     // 22 is actual width, 2 is left and right paddings
     final double gridWidth =
-        ((gridTotalWidth - timetableGridTopSquareWidth) ~/ 7).toDouble();
+        ((gridTotalWidth - timetableGridTopSquareWidth) ~/ numberOfDays)
+            .toDouble();
     final double gridHeight =
         ((gridTotalHeight - timetableGridTopSquareHeight) ~/
                 gridHeightDividerValue)
@@ -117,6 +123,11 @@ class _TimeTableGridState extends ConsumerState<TimeTableGrid> {
         setState(() {});
       }
     });
+    ref.listen(numberOfDaysProvider, (prev, next) {
+      if (prev != next) {
+        setState(() {});
+      }
+    });
     // print(widget.gridTotalWidth);
     // print((widget.gridTotalWidth - 22) / 7);
     int gridHeightDividerValue =
@@ -124,6 +135,7 @@ class _TimeTableGridState extends ConsumerState<TimeTableGrid> {
     // ref.read(timetableGridHeightDividerValueProvider);
     double gridTotalWidth = ref.read(timetableGridWidthProvider);
     double gridTotalHeight = ref.read(timetableGridHeightProvider);
+    int numberOfDays = ref.read(numberOfDaysProvider);
     if (widget.isFull) {
       gridTotalHeight += 100;
     }
@@ -131,13 +143,14 @@ class _TimeTableGridState extends ConsumerState<TimeTableGrid> {
     const double timetableGridTopSquareHeight = 20.0;
     const double timetableGridTopSquareWidth = 22.0;
     final double gridWidth =
-        ((gridTotalWidth - timetableGridTopSquareWidth) ~/ 7).toDouble();
+        ((gridTotalWidth - timetableGridTopSquareWidth) ~/ numberOfDays)
+            .toDouble();
     final double gridHeight =
         ((gridTotalHeight - timetableGridTopSquareHeight) ~/
                 gridHeightDividerValue)
             .toDouble();
 
-    gridTotalWidth = gridWidth * 7;
+    gridTotalWidth = gridWidth * numberOfDays;
     gridTotalHeight = gridHeight * gridHeightDividerValue + 2;
     // print("gridHeight: $gridHeight");
     // print("totalHeight: $gridTotalHeight");
@@ -152,32 +165,34 @@ class _TimeTableGridState extends ConsumerState<TimeTableGrid> {
     // _tableScroller.animateTo(0,
     //     duration: const Duration(milliseconds: 400), curve: Curves.easeIn);
 
-    List<List<Widget>> timetable = List.generate(7, (col) {
+    List<List<Widget>> timetable = List.generate(numberOfDays, (col) {
       return List.generate(
         24,
-        (row) => AnimatedSize(
-          curve: Curves.easeOut,
-          duration: const Duration(milliseconds: 400),
-          child: Container(
-            // color: Colors.white,
-            height: gridHeight,
-            width: gridWidth,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border(
-                // bottom: BorderSide(color: GRAYSCALE_GRAY_02),
-                top: row == 0
-                    ? BorderSide.none
-                    : const BorderSide(color: GRAYSCALE_GRAY_01),
-                right: col == 6
-                    ? BorderSide.none
-                    : const BorderSide(color: GRAYSCALE_GRAY_01),
-                // right: BorderSide(color: GRAYSCALE_GRAY_02, width: 0.0)
-              ),
+        (row) =>
+            // AnimatedSize(
+            //   curve: Curves.easeOut,
+            //   duration: const Duration(milliseconds: 400),
+            //   child:
+            Container(
+          // color: Colors.white,
+          height: gridHeight,
+          width: gridWidth,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border(
+              // bottom: BorderSide(color: GRAYSCALE_GRAY_02),
+              top: row == 0
+                  ? BorderSide.none
+                  : const BorderSide(color: GRAYSCALE_GRAY_01),
+              right: col == 6
+                  ? BorderSide.none
+                  : const BorderSide(color: GRAYSCALE_GRAY_01),
+              // right: BorderSide(color: GRAYSCALE_GRAY_02, width: 0.0)
             ),
-            // child: Text("$row $col"),
           ),
+          // child: Text("$row $col"),
         ),
+        // ),
       );
     });
 
@@ -215,7 +230,7 @@ class _TimeTableGridState extends ConsumerState<TimeTableGrid> {
     // });
 
     List<Widget> d = List.generate(
-        7,
+        numberOfDays,
         (index) => Container(
               color: Colors.white,
               child: Center(
@@ -367,28 +382,30 @@ class _TimeTableGridState extends ConsumerState<TimeTableGrid> {
                           controller: _timeScroller,
                           child: Column(
                             children: List.generate(t.length, (index) {
-                              return AnimatedSize(
-                                curve: Curves.easeOut,
-                                duration: const Duration(milliseconds: 400),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      top: index == 0
-                                          ? BorderSide.none
-                                          : const BorderSide(
-                                              color: GRAYSCALE_GRAY_01),
-                                      // top: BorderSide(color: GRAYSCALE_GRAY_02),
-                                      // left: BorderSide(color: GRAYSCALE_GRAY_02),
-                                      // bottom: BorderSide(color: GRAYSCALE_GRAY_02, width: 0.0),
-                                    ),
-                                  ),
-                                  height: gridHeight,
-                                  width: timetableGridTopSquareWidth,
-                                  child: Center(
-                                    child: t[index],
+                              return
+                                  // AnimatedSize(
+                                  //   curve: Curves.easeOut,
+                                  //   duration: const Duration(milliseconds: 400),
+                                  //   child:
+                                  Container(
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    top: index == 0
+                                        ? BorderSide.none
+                                        : const BorderSide(
+                                            color: GRAYSCALE_GRAY_01),
+                                    // top: BorderSide(color: GRAYSCALE_GRAY_02),
+                                    // left: BorderSide(color: GRAYSCALE_GRAY_02),
+                                    // bottom: BorderSide(color: GRAYSCALE_GRAY_02, width: 0.0),
                                   ),
                                 ),
+                                height: gridHeight,
+                                width: timetableGridTopSquareWidth,
+                                child: Center(
+                                  child: t[index],
+                                ),
                               );
+                              // );
                             }),
                           ),
                         ),

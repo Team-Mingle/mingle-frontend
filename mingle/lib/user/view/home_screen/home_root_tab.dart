@@ -6,6 +6,7 @@ import 'package:mingle/common/const/data.dart';
 import 'package:mingle/module/view/module_review_main_screen.dart';
 import 'package:mingle/post/view/post_detail_screen.dart';
 import 'package:mingle/timetable/model/timetable_model.dart';
+import 'package:mingle/timetable/provider/number_of_days_provider.dart';
 import 'package:mingle/timetable/provider/pinned_timetable_provider.dart';
 import 'package:mingle/timetable/provider/timetable_grid_height_divider_value_provider.dart';
 import 'package:mingle/timetable/provider/timetable_grid_height_provider.dart';
@@ -180,6 +181,18 @@ class _HomeRootTabState extends ConsumerState<HomeRootTab> {
       ref
           .read(timetableGridHeightProvider.notifier)
           .update((state) => availableHeight);
+    });
+    Future.delayed(Duration.zero, () async {
+      await ref.read(pinnedTimetableProvider.notifier).fetchPinnedTimetable();
+      final timetable = ref.read(pinnedTimetableProvider);
+
+      if (timetable is TimetableModel) {
+        print("no of days: ${(timetable).getNumberOfDays()}");
+
+        ref
+            .read(numberOfDaysProvider.notifier)
+            .update((state) => timetable.getNumberOfDays());
+      }
     });
     // Future.delayed(Duration.zero, () {
     //   ref.read(pinnedTimetableProvider.notifier).fetchPinnedTimetable();

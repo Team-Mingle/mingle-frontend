@@ -43,6 +43,7 @@ class _ModuleSearchScreenState extends ConsumerState<ModuleSearchScreen> {
   }
 
   void setSearch() {
+    FocusScope.of(context).unfocus();
     setState(
       () {
         searchModuleProvier =

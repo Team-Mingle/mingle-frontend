@@ -204,9 +204,9 @@ class _ModulePreviewComponentState
                 )
               : SliverList(
                   delegate: SliverChildBuilderDelegate(
-                    childCount: courseList.data.length + 1,
+                    childCount: courseList.data.length + 2,
                     (context, index) {
-                      if (index == courseList.data.length) {
+                      if (index == courseList.data.length + 1) {
                         return Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 16.0, vertical: 8.0),
@@ -258,6 +258,7 @@ class _ModulePreviewComponentState
 
   Widget coursePreviewCard(CourseDetailModel course) {
     return GestureDetector(
+      behavior: HitTestBehavior.translucent,
       onTap: widget.isAdd!
           ? () {
               widget.setModule!(course.name, course.id);
