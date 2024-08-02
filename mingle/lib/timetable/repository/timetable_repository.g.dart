@@ -51,6 +51,7 @@ AddPersonalCourseDto _$AddPersonalCourseDtoFromJson(
       courseCode: json['courseCode'] as String,
       venue: json['venue'] as String,
       professor: json['professor'] as String,
+      subclass: json['subclass'] as String,
       memo: json['memo'] as String,
       overrideValidation: json['overrideValidation'] as bool? ?? false,
     );
@@ -64,6 +65,7 @@ Map<String, dynamic> _$AddPersonalCourseDtoToJson(
       'venue': instance.venue,
       'professor': instance.professor,
       'memo': instance.memo,
+      'subclass': instance.subclass,
       'overrideValidation': instance.overrideValidation,
     };
 

@@ -161,6 +161,7 @@ class _AddDirectTimeTableScreenState
                           endTime: endTimes[index])),
                   courseCode: moduleCode,
                   venue: location,
+                  subclass: subclass,
                   professor: profName,
                   memo: ""));
       result.courseType = "PERSONAL";
