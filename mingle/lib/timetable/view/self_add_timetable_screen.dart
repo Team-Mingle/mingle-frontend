@@ -118,6 +118,17 @@ class _AddDirectTimeTableScreenState
     setState(() {
       isLoading = true;
     });
+    if (moduleCode.trim().isEmpty) {
+      fToast.showToast(
+        child: const ToastMessage(message: "과목 코드를 입력해주세요"),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
+      setState(() {
+        isLoading = false;
+      });
+      return;
+    }
     if (timeDropdownWidgets.isEmpty ||
         days[0].isEmpty ||
         startTimes[0].isEmpty ||
@@ -475,7 +486,7 @@ class _AddDirectTimeTableScreenState
                   const Row(
                     children: [
                       Text(
-                        '과목 코드',
+                        '과목 코드*',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 14.0,

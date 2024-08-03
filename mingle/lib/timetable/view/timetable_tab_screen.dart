@@ -1490,16 +1490,19 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                 //     ((availableHeight - 22) ~/ 11).toDouble();
                 // final double gridTotalWidth = gridWidth * 7 + 24;
                 // final double gridTotalHeight = gridHeight * 11 + 22;
-                return IconButton(
-                  icon: Align(
-                    alignment: Alignment.center,
-                    child: SvgPicture.asset(
-                      'assets/img/common/ic_add.svg',
-                      width: 24,
-                      height: 24,
+                return GestureDetector(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: SvgPicture.asset(
+                        'assets/img/common/ic_add.svg',
+                        width: 24,
+                        height: 24,
+                      ),
                     ),
                   ),
-                  onPressed: () {
+                  onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -1512,16 +1515,42 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                   },
                 );
               }),
-            IconButton(
-                icon: Align(
-                  alignment: Alignment.center,
-                  child: SvgPicture.asset(
-                    'assets/img/timetable_screen/add_friend.svg',
-                    width: 24,
-                    height: 24,
+            GestureDetector(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: SvgPicture.asset(
+                      'assets/img/timetable_screen/share_icon.svg',
+                      width: 24,
+                      height: 24,
+                    ),
                   ),
                 ),
-                onPressed: () => shareOrRegisterModal()
+                onTap: () => firstShareCodeModal()
+
+                // showDialog(
+                //   context: context,
+                //   builder: (BuildContext context) {
+                //     return const AddFriendDialog();
+                //   },
+                // );
+
+                ),
+            GestureDetector(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: SvgPicture.asset(
+                      'assets/img/timetable_screen/add_friend.svg',
+                      width: 24,
+                      height: 24,
+                    ),
+                  ),
+                ),
+                onTap: () => firstRegisterCodeModal()
+                // shareOrRegisterModal()
 
                 // showDialog(
                 //   context: context,
@@ -1532,16 +1561,19 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
 
                 ),
             if (timetable != null && timetable is TimetableModel)
-              IconButton(
-                icon: Align(
-                  alignment: Alignment.center,
-                  child: SvgPicture.asset(
-                    'assets/img/common/ic_setting.svg',
-                    width: 24,
-                    height: 24,
+              GestureDetector(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: SvgPicture.asset(
+                      'assets/img/common/ic_setting.svg',
+                      width: 24,
+                      height: 24,
+                    ),
                   ),
                 ),
-                onPressed: () => showTimetableSettingModal(
+                onTap: () => showTimetableSettingModal(
                     screenHeight: MediaQuery.of(context).size.height,
                     screenWidth: MediaQuery.of(context).size.width),
               ),

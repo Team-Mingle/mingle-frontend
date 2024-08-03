@@ -1,9 +1,12 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
+
+import '../../dropdown_button2/dropdown_button2.dart';
 
 class AddTimeDropdownsWidget extends StatefulWidget {
   final Function onDayChange;
@@ -189,7 +192,6 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
   ];
 
   final List<String> items3 = [
-    '00:00',
     '00:10',
     '00:20',
     '00:30',
@@ -334,16 +336,22 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
     '23:30',
     '23:40',
     '23:50',
+    '23:59'
   ];
 
-  String? selectedItem1, selectedItem2, selectedItem3;
+  // index of 10:00 in items. So that 10:00 is centered in drdopdown.
+  final int initialItemIndex = 60;
+
+  ValueNotifier<String?> selectedItem1 = ValueNotifier(null),
+      selectedItem2 = ValueNotifier(null),
+      selectedItem3 = ValueNotifier(null);
 
   @override
   void initState() {
-    // TODO: implement initState
-    selectedItem1 = widget.initialDay;
-    selectedItem2 = widget.initialStartTime;
-    selectedItem3 = widget.initialEndTime;
+    selectedItem1.value = widget.initialDay;
+    selectedItem2.value = widget.initialStartTime;
+    selectedItem3.value = widget.initialEndTime;
+    super.initState();
   }
 
   @override
@@ -355,7 +363,7 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
             Expanded(
               child: Container(
                 // width: 160,
-                height: 48,
+                height: 50,
                 decoration: BoxDecoration(
                   border: Border.all(color: GRAYSCALE_GRAY_03),
                   borderRadius: BorderRadius.circular(8),
@@ -377,17 +385,17 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(8.0)),
                         ),
-                        value: selectedItem1,
+                        valueListenable: selectedItem1,
                         items: items1.map((String item) {
-                          return DropdownMenuItem<String>(
+                          return DropdownItem<String>(
                             value: item,
                             child: Text(
                               item,
                               style: TextStyle(
-                                color: selectedItem1 == item
+                                color: selectedItem1.value == item
                                     ? Colors.black
                                     : GRAYSCALE_GRAY_03,
-                                fontWeight: selectedItem1 == item
+                                fontWeight: selectedItem1.value == item
                                     ? FontWeight.w500
                                     : FontWeight.w400,
                               ),
@@ -397,7 +405,7 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                         onChanged: (value) {
                           widget.onDayChange(value, widget.index);
                           setState(() {
-                            selectedItem1 = value;
+                            selectedItem1.value = value;
                           });
                         },
                         iconStyleData: IconStyleData(
@@ -411,9 +419,6 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                           ),
                           openMenuIcon: null,
                           iconSize: 14,
-                        ),
-                        buttonStyleData: const ButtonStyleData(
-                          padding: EdgeInsets.only(right: 12),
                         ),
                       ),
                     ),
@@ -449,7 +454,7 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
             Expanded(
               child: Container(
                 // width: 160,
-                height: 48,
+                height: 50,
                 decoration: BoxDecoration(
                   border: Border.all(color: GRAYSCALE_GRAY_03),
                   borderRadius: BorderRadius.circular(8),
@@ -461,8 +466,10 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                       child: DropdownButton2<String>(
                         isExpanded: true,
                         underline: const SizedBox.shrink(),
+                        initialItemIndex: selectedItem3.value == null
+                            ? initialItemIndex
+                            : items3.indexOf(selectedItem3.value!),
                         hint: const Text('시작 시간'),
-
                         dropdownStyleData: DropdownStyleData(
                           // offset: const Offset(0, 9 * 48.0),
                           maxHeight: 250.0,
@@ -474,17 +481,23 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                         ),
                         // borderRadius: BorderRadius.circular(8.0),
                         // dropdownColor: Colors.white,
-                        value: selectedItem2,
-                        items: items2.map((String item) {
-                          return DropdownMenuItem<String>(
+                        valueListenable: selectedItem2,
+                        items: items2
+                            // .sublist(
+                            //     0,
+                            //     selectedItem3.value != null
+                            //         ? items2.indexOf(selectedItem3.value!)
+                            //         : items2.length)
+                            .map((String item) {
+                          return DropdownItem<String>(
                             value: item,
                             child: Text(
                               item,
                               style: TextStyle(
-                                color: selectedItem2 == item
+                                color: selectedItem2.value == item
                                     ? Colors.black
                                     : GRAYSCALE_GRAY_03,
-                                fontWeight: selectedItem2 == item
+                                fontWeight: selectedItem2.value == item
                                     ? FontWeight.w500
                                     : FontWeight.w400,
                               ),
@@ -494,7 +507,8 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                         onChanged: (value) {
                           widget.onStartTimeChange(value, widget.index);
                           setState(() {
-                            selectedItem2 = value;
+                            selectedItem2.value = value;
+                            selectedItem3.value = null;
                           });
                         },
 
@@ -510,9 +524,6 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                           openMenuIcon: null,
                           iconSize: 14,
                         ),
-                        buttonStyleData: const ButtonStyleData(
-                          padding: EdgeInsets.only(right: 12),
-                        ),
                       ),
                     ),
                   ],
@@ -523,7 +534,7 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
             Expanded(
               child: Container(
                 // width: 160,
-                height: 48,
+                height: 50,
                 decoration: BoxDecoration(
                   border: Border.all(color: GRAYSCALE_GRAY_03),
                   borderRadius: BorderRadius.circular(8),
@@ -535,6 +546,9 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                       child: DropdownButton2<String>(
                         isExpanded: true,
                         underline: const SizedBox.shrink(),
+                        initialItemIndex: selectedItem2.value == null
+                            ? initialItemIndex
+                            : null,
                         hint: const Text('끝나는 시간'),
                         dropdownStyleData: DropdownStyleData(
                           maxHeight: 250.0,
@@ -543,17 +557,21 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(8.0)),
                         ),
-                        value: selectedItem3,
-                        items: items3.map((String item) {
-                          return DropdownMenuItem<String>(
+                        valueListenable: selectedItem3,
+                        items: items3
+                            .sublist(selectedItem2.value == null
+                                ? 0
+                                : items3.indexOf(selectedItem2.value!) + 1)
+                            .map((String item) {
+                          return DropdownItem<String>(
                             value: item,
                             child: Text(
                               item,
                               style: TextStyle(
-                                color: selectedItem3 == item
+                                color: selectedItem3.value == item
                                     ? Colors.black
                                     : GRAYSCALE_GRAY_03,
-                                fontWeight: selectedItem3 == item
+                                fontWeight: selectedItem3.value == item
                                     ? FontWeight.w500
                                     : FontWeight.w400,
                               ),
@@ -563,7 +581,7 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                         onChanged: (value) {
                           widget.onEndTimeChange(value, widget.index);
                           setState(() {
-                            selectedItem3 = value;
+                            selectedItem3.value = value;
                           });
                         },
                         iconStyleData: IconStyleData(
@@ -577,9 +595,6 @@ class _AddTimeDropdownsWidgetState extends State<AddTimeDropdownsWidget> {
                           ),
                           openMenuIcon: null,
                           iconSize: 14,
-                        ),
-                        buttonStyleData: const ButtonStyleData(
-                          padding: EdgeInsets.only(right: 12),
                         ),
                       ),
                     ),

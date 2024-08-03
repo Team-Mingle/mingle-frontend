@@ -36,8 +36,19 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
   int? selecetedSatisfactionIndex;
   String moduleReview = "";
   String profName = "";
-  var selectedSemesterIndex;
-  List<String> semesters = ["23년도 2학기", "23년도 1학기", "22년도 2학기"];
+  int? selectedSemesterIndex;
+  List<String> semesters = [
+    "24년도 2학기",
+    "24년도 1학기",
+    "23년도 2학기",
+    "23년도 1학기",
+    "22년도 2학기",
+    "22년도 1학기",
+    "21년도 2학기",
+    "21년도 1학기",
+    "20년도 2학기",
+    "20년도 1학기"
+  ];
   List<String> satisfactions = ["추천해요", "보통이에요", "비추천해요"];
   List<String> engSatisfactions = ["RECOMMENDED", "NORMAL", "NOT_RECOMMENDED"];
   String? moduleName;
@@ -76,9 +87,9 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
         message = "수강시기를 선택해 주세요.";
       } else if (selecetedSatisfactionIndex == null) {
         message = "강의 추천 여부를 선택해 주세요.";
-      } else if (moduleReview.length < 15) {
+      } else if (moduleReview.trim().length < 15) {
         message = "강의평은 15자 이상 작성해 주세요.";
-      } else if (profName.isEmpty) {
+      } else if (profName.trim().isEmpty) {
         message = "교수명을 입력해주세요.";
       }
       if (message != null) {
@@ -240,8 +251,10 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
                                 moduleName == null
                                     ? "강의명을 검색하세요."
                                     : moduleName!,
-                                style: const TextStyle(
-                                    color: GRAYSCALE_GRAY_03,
+                                style: TextStyle(
+                                    color: moduleName == null
+                                        ? GRAYSCALE_GRAY_03
+                                        : Colors.black,
                                     fontSize: 16.0,
                                     letterSpacing: -0.02,
                                     height: 1.5,
@@ -282,7 +295,7 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
                         context: context,
                         builder: (BuildContext context) {
                           return Container(
-                            height: 248,
+                            // height: 248 * 2,
                             width: MediaQuery.of(context).size.width,
                             decoration: const BoxDecoration(
                               color: Colors.white,
@@ -293,78 +306,120 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
                             child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 20.0),
-                              child: Column(
-                                children: [
-                                  const SizedBox(
-                                    height: 32.0,
-                                  ),
-                                  ListTile(
-                                    title: Center(
-                                      child: Text(
-                                        semesters[0],
-                                        style: TextStyle(
-                                          fontWeight: selectedSemesterIndex == 0
-                                              ? FontWeight.bold
-                                              : FontWeight.normal,
-                                        ),
-                                      ),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    const SizedBox(
+                                      height: 32.0,
                                     ),
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                      setState(() {
-                                        selectedSemesterIndex = 0;
-                                        year = 2023;
-                                        semester = 2;
-                                      }); // 선택한 항목 설정
-                                    },
-                                  ),
-                                  const SizedBox(
-                                    height: 20.0,
-                                  ),
-                                  ListTile(
-                                    title: Center(
-                                      child: Text(
-                                        semesters[1],
-                                        style: TextStyle(
-                                          fontWeight: selectedSemesterIndex == 1
-                                              ? FontWeight.bold
-                                              : FontWeight.normal,
-                                        ),
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                      setState(() {
-                                        selectedSemesterIndex = 1;
-                                        year = 2023;
-                                        semester = 1;
-                                      }); // 선택한 항목 설정
-                                    },
-                                  ),
-                                  const SizedBox(
-                                    height: 20.0,
-                                  ),
-                                  ListTile(
-                                    title: Center(
-                                      child: Text(
-                                        semesters[2],
-                                        style: TextStyle(
-                                          fontWeight: selectedSemesterIndex == 2
-                                              ? FontWeight.bold
-                                              : FontWeight.normal,
-                                        ),
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                      setState(() {
-                                        selectedSemesterIndex = 2;
-                                        year = 2022;
-                                        semester = 2;
-                                      }); // 선택한 항목 설정
-                                    },
-                                  ),
-                                ],
+                                    ...List.generate(semesters.length * 2,
+                                        (index) {
+                                      return index % 2 != 0
+                                          ? const SizedBox(
+                                              height: 20.0,
+                                            )
+                                          : Column(
+                                              children: [
+                                                ListTile(
+                                                  title: Center(
+                                                    child: Text(
+                                                      semesters[index ~/ 2],
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            selectedSemesterIndex ==
+                                                                    index ~/ 2
+                                                                ? FontWeight
+                                                                    .bold
+                                                                : FontWeight
+                                                                    .normal,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  onTap: () {
+                                                    Navigator.pop(context);
+                                                    setState(() {
+                                                      selectedSemesterIndex =
+                                                          index ~/ 2;
+                                                      year = int.parse(
+                                                          semesters[index ~/ 2]
+                                                              .substring(0, 2));
+                                                      semester = int.parse(
+                                                          semesters[index ~/ 2]
+                                                              .substring(5, 6));
+                                                    }); // 선택한 항목 설정
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                    })
+                                    // ListTile(
+                                    //   title: Center(
+                                    //     child: Text(
+                                    //       semesters[0],
+                                    //       style: TextStyle(
+                                    //         fontWeight: selectedSemesterIndex == 0
+                                    //             ? FontWeight.bold
+                                    //             : FontWeight.normal,
+                                    //       ),
+                                    //     ),
+                                    //   ),
+                                    //   onTap: () {
+                                    //     Navigator.pop(context);
+                                    //     setState(() {
+                                    //       selectedSemesterIndex = 0;
+                                    //       year = 2023;
+                                    //       semester = 2;
+                                    //     }); // 선택한 항목 설정
+                                    //   },
+                                    // ),
+                                    // const SizedBox(
+                                    //   height: 20.0,
+                                    // ),
+                                    // ListTile(
+                                    //   title: Center(
+                                    //     child: Text(
+                                    //       semesters[1],
+                                    //       style: TextStyle(
+                                    //         fontWeight: selectedSemesterIndex == 1
+                                    //             ? FontWeight.bold
+                                    //             : FontWeight.normal,
+                                    //       ),
+                                    //     ),
+                                    //   ),
+                                    //   onTap: () {
+                                    //     Navigator.pop(context);
+                                    //     setState(() {
+                                    //       selectedSemesterIndex = 1;
+                                    //       year = 2023;
+                                    //       semester = 1;
+                                    //     }); // 선택한 항목 설정
+                                    //   },
+                                    // ),
+                                    // const SizedBox(
+                                    //   height: 20.0,
+                                    // ),
+                                    // ListTile(
+                                    //   title: Center(
+                                    //     child: Text(
+                                    //       semesters[2],
+                                    //       style: TextStyle(
+                                    //         fontWeight: selectedSemesterIndex == 2
+                                    //             ? FontWeight.bold
+                                    //             : FontWeight.normal,
+                                    //       ),
+                                    //     ),
+                                    //   ),
+                                    //   onTap: () {
+                                    //     Navigator.pop(context);
+                                    //     setState(() {
+                                    //       selectedSemesterIndex = 2;
+                                    //       year = 2022;
+                                    //       semester = 2;
+                                    //     }); // 선택한 항목 설정
+                                    //   },
+                                    // ),
+                                  ],
+                                ),
                               ),
                             ),
                           );
@@ -386,13 +441,15 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
                             children: [
                               Text(
                                 selectedSemesterIndex != null
-                                    ? semesters[selectedSemesterIndex]
+                                    ? semesters[selectedSemesterIndex!]
                                     : "수강 년도 및 학기",
-                                style: const TextStyle(
+                                style: TextStyle(
                                     fontSize: 16.0,
                                     letterSpacing: -0.02,
                                     height: 1.5,
-                                    color: GRAYSCALE_GRAY_03),
+                                    color: selectedSemesterIndex == null
+                                        ? GRAYSCALE_GRAY_03
+                                        : Colors.black),
                               ),
                               const Spacer(),
                               SvgPicture.asset(
@@ -411,7 +468,7 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
                     const Row(
                       children: [
                         Text(
-                          '교수명',
+                          '교수명*',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 14.0,

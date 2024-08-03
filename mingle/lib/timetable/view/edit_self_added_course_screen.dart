@@ -698,7 +698,7 @@ class _EditSelfAddedCourseScreenState
               child: Column(
                 children: [
                   const Text(
-                    "강의를 시간표에 추가하시겠습니까?",
+                    "강의를 수정하시겠습니까?",
                     style: TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.w500,
@@ -719,6 +719,7 @@ class _EditSelfAddedCourseScreenState
                     children: [
                       GestureDetector(
                         onTap: () {
+                          Navigator.of(context).pop();
                           sendEditPersonalClassRequest(
                               overrideValidation: true);
                         },
@@ -730,7 +731,7 @@ class _EditSelfAddedCourseScreenState
                               borderRadius: BorderRadius.circular(8.0)),
                           child: const Center(
                             child: Text(
-                              "강의 추가하기",
+                              "강의 수정하기",
                               style: TextStyle(
                                   color: GRAYSCALE_GRAY_04,
                                   fontWeight: FontWeight.w500),

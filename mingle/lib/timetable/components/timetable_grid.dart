@@ -169,7 +169,7 @@ class _TimeTableGridState extends ConsumerState<TimeTableGrid> {
 
     List<List<Widget>> timetable = List.generate(numberOfDays, (col) {
       return List.generate(
-        24,
+        23,
         (row) =>
             // AnimatedSize(
             //   curve: Curves.easeOut,
@@ -246,7 +246,7 @@ class _TimeTableGridState extends ConsumerState<TimeTableGrid> {
               )),
             ));
     List<Widget> t = List.generate(
-        24,
+        23,
         (index) => Container(
               color: Colors.white,
               child: Center(

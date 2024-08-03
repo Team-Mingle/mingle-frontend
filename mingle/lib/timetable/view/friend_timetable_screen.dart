@@ -14,6 +14,7 @@ import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/timetable/components/timetable_grid.dart';
 import 'package:mingle/timetable/model/timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_model.dart';
+import 'package:mingle/timetable/provider/number_of_days_provider.dart';
 import 'package:mingle/timetable/provider/timetable_grid_height_divider_value_provider.dart';
 import 'package:mingle/timetable/repository/friend_repository.dart';
 import 'package:mingle/timetable/repository/timetable_repository.dart';
@@ -103,8 +104,10 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
   }
 
   void generateClassWidgets(List<CourseDetailModel> courses) {
+    print("timetable semester: ${currentTimetable!.semester}");
     List<Widget> coursesToBeAdded = [];
     for (CourseDetailModel course in courses) {
+      print("courseName: ${course.name}");
       coursesToBeAdded.addAll(course.generateClasses(
           () => showCourseDetailModal(course),
           ref,
@@ -150,6 +153,12 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
   @override
   Widget build(BuildContext context) {
     ref.listen(timetableGridHeightDividerValueProvider, (prev, next) {
+      if (prev != next) {
+        generateClassWidgets(currentTimetable!.coursePreviewDtoList);
+      }
+    });
+
+    ref.listen(numberOfDaysProvider, (prev, next) {
       if (prev != next) {
         generateClassWidgets(currentTimetable!.coursePreviewDtoList);
       }
@@ -293,10 +302,14 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
       bool isSelected = currentTimetable == timetable;
       return GestureDetector(
         onTap: () {
-          generateClassWidgets(timetable.coursePreviewDtoList);
+          // Not required as there already is a lisenter in build method which calls generateClassWigets.
+          // generateClassWidgets(timetable.coursePreviewDtoList);
           setState(() {
             currentTimetable = timetable;
           });
+          ref
+              .read(numberOfDaysProvider.notifier)
+              .update((state) => timetable.getNumberOfDays());
         },
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),

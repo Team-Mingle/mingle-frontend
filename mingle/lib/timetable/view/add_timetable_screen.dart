@@ -4,11 +4,13 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/module/model/course_detail_model.dart';
 import 'package:mingle/module/model/course_model.dart';
 import 'package:mingle/module/view/add_module_review_screen.dart';
 import 'package:mingle/module/view/module_details_screen.dart';
 import 'package:mingle/timetable/components/search_course_modal.dart';
 import 'package:mingle/timetable/model/class_model.dart';
+import 'package:mingle/timetable/model/timetable_course_model.dart';
 import 'package:mingle/timetable/model/timetable_list_model.dart';
 import 'package:mingle/timetable/model/timetable_model.dart';
 import 'package:mingle/timetable/provider/number_of_days_provider.dart';
@@ -21,7 +23,7 @@ import 'package:mingle/timetable/view/self_add_timetable_screen.dart';
 import 'package:mingle/timetable/components/timetable_grid.dart';
 
 class AddTimeTableScreen extends ConsumerStatefulWidget {
-  final TimetableModel timetable;
+  TimetableModel timetable;
   final Function addClass;
   List<Widget> addedClasses;
 
@@ -69,7 +71,11 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
   // }
 
   void addClassesAtAddTimeTableScreen(
-      CourseModel courseModel, bool overrideValidation) async {
+      CourseDetailModel courseModel, bool overrideValidation) async {
+    TimetableModel newTimetable = widget.timetable;
+    newTimetable.coursePreviewDtoList
+        .add(TimetableCourseModel.fromCourseDeatilModel(courseModel));
+
     if (overrideValidation) {
       print("im overriden");
       await ref.read(pinnedTimetableProvider.notifier).fetchPinnedTimetable();
@@ -79,6 +85,7 @@ class _AddTimeTableScreenState extends ConsumerState<AddTimeTableScreen> {
     setState(() {
       widget.addedClasses.addAll(courseModel.generateClasses(
           () {}, ref, widget.timetable.getGridTotalHeightDividerValue()));
+      widget.timetable = newTimetable;
     });
   }
 
