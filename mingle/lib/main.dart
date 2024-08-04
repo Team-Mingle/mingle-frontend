@@ -265,7 +265,7 @@ class _AppState extends ConsumerState<_App> {
         // Must change appcast file along with the minAppVersion.
         // There must be a version in appcast file that is higher or equal to the minAppVersion for the force update dialog to show up.
         // ALWAYS CHANGE MIN APP VERSION WITH APPCAST FILE. DO NOT MODIFY THIS VALUE ALONE.
-        minAppVersion: "4.1.6",
+        minAppVersion: "5.0.0",
         // debugDisplayAlways: true,
         debugLogging: true);
     // upgrader.
