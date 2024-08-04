@@ -36,6 +36,8 @@
             <sparkle:version>4.1.8</sparkle:version>
             <sparkle:minimumAutoupdateVersion>4.2.0</sparkle:minimumAutoupdateVersion>
         </item>
+    </channel>
+</rss>
         <!-- If the user skipped 2.0 or 2.1, alerts for 2.2 will not be skipped due to sparkle:ignoreSkippedUpgradesBelowVersion requirement -->
         <!-- <item>
             <title>Version 4.3.0</title>
