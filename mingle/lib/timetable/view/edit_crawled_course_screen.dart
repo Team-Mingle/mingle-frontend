@@ -54,6 +54,7 @@ class _EditSelfAddedCourseScreenState
     fToast.init(navigatorKey.currentContext!);
     moduleName = widget.course.name;
     moduleCode = widget.course.courseCode;
+    subclass = widget.course.subclass ?? "-";
     // location = widget.course.venue;
     profName = widget.course.professor!;
 

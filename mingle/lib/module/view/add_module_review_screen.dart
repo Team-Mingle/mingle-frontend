@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/const/data.dart';
 import 'package:mingle/main.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/module/model/course_detail_model.dart';
@@ -38,16 +39,16 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
   String profName = "";
   int? selectedSemesterIndex;
   List<String> semesters = [
-    "24년도 2학기",
-    "24년도 1학기",
-    "23년도 2학기",
-    "23년도 1학기",
-    "22년도 2학기",
-    "22년도 1학기",
-    "21년도 2학기",
-    "21년도 1학기",
-    "20년도 2학기",
-    "20년도 1학기"
+    "24/25년도 2학기",
+    "24/25년도 1학기",
+    "23/24년도 2학기",
+    "23/24년도 1학기",
+    "22/23년도 2학기",
+    "22/23년도 1학기",
+    "21/22년도 2학기",
+    "21/22년도 1학기",
+    "20/21년도 2학기",
+    "20/21년도 1학기"
   ];
   List<String> satisfactions = ["추천해요", "보통이에요", "비추천해요"];
   List<String> engSatisfactions = ["RECOMMENDED", "NORMAL", "NOT_RECOMMENDED"];
@@ -340,12 +341,13 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
                                                     setState(() {
                                                       selectedSemesterIndex =
                                                           index ~/ 2;
-                                                      year = int.parse(
-                                                          semesters[index ~/ 2]
+                                                      year = CURRENT_CENTURY +
+                                                          int.parse(semesters[
+                                                                  index ~/ 2]
                                                               .substring(0, 2));
                                                       semester = int.parse(
                                                           semesters[index ~/ 2]
-                                                              .substring(5, 6));
+                                                              .substring(8, 9));
                                                     }); // 선택한 항목 설정
                                                   },
                                                 ),

@@ -22,6 +22,8 @@ const TIMETABLE_BOTTOM_WIDGETS_HEIGHT = 126.0;
 
 const HISTORY_KEY = "_histories";
 
+const CURRENT_CENTURY = 2000;
+
 // const baseUrl = "api.prod.mingle.community";
 const baseUrl = "api.develop.mingle.community";
 //  "dev.api.mingle.community";

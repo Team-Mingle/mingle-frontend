@@ -102,7 +102,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     TimetableBase? currentTimetable = ref.read(pinnedTimetableProvider);
     ref.read(numberOfDaysProvider.notifier).update((state) {
       if (currentTimetable is TimetableModel) {
-        return min(state, currentTimetable.getNumberOfDays());
+        // return min(state, currentTimetable.getNumberOfDays());
+        return currentTimetable.getNumberOfDays();
       }
       return state;
     });
@@ -213,6 +214,12 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
       setState(() {
         isLoading = false;
       });
+
+      fToast.showToast(
+        child: const ToastMessage(message: "친구를 추가하여 30p가 적립되었어요."),
+        gravity: ToastGravity.CENTER,
+        toastDuration: const Duration(seconds: 2),
+      );
       Navigator.of(context).pop();
       Navigator.of(context).pop();
     } on DioException catch (e) {
@@ -680,7 +687,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
 
     ref
         .read(numberOfDaysProvider.notifier)
-        .update((state) => max(state, timetable.getNumberOfDays()));
+        // .update((state) => max(state, timetable.getNumberOfDays()));
+        .update((state) => timetable.getNumberOfDays());
     List<Widget> newAddedCourses = [];
     // List<Widget> newCourses = [...addedCourses];
     // newCourses.addAll(courseModel.generateClasses(() {
@@ -722,7 +730,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
           .removeWhere((element) => element.id == courseModel.id);
       ref
           .read(numberOfDaysProvider.notifier)
-          .update((state) => min(state, timetable.getNumberOfDays()));
+          // .update((state) => min(state, timetable.getNumberOfDays()));
+          .update((state) => timetable.getNumberOfDays());
       for (int i = 0; i < timetable.coursePreviewDtoList.length; i++) {
         CourseDetailModel detailModel = timetable.coursePreviewDtoList[i];
         // if (detailModel.id != courseModel.id) {
@@ -836,6 +845,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                         ),
                       )),
                   Column(
+                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const SizedBox(
@@ -872,31 +882,32 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 152.0,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                          firstShareCodeModal();
-                        },
-                        child: Container(
-                          height: 48.0,
-                          decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: PRIMARY_COLOR_ORANGE_02),
-                              borderRadius: BorderRadius.circular(8.0)),
-                          child: const Center(
-                            child: Text(
-                              "내 코드 공유할래요",
-                              style: TextStyle(color: PRIMARY_COLOR_ORANGE_02),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 8.0,
-                      ),
+                      // const SizedBox(
+                      //   height: 152.0,
+                      // ),
+                      const Spacer(),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     Navigator.of(context).pop();
+                      //     firstShareCodeModal();
+                      //   },
+                      //   child: Container(
+                      //     height: 48.0,
+                      //     decoration: BoxDecoration(
+                      //         border:
+                      //             Border.all(color: PRIMARY_COLOR_ORANGE_02),
+                      //         borderRadius: BorderRadius.circular(8.0)),
+                      //     child: const Center(
+                      //       child: Text(
+                      //         "내 코드 공유할래요",
+                      //         style: TextStyle(color: PRIMARY_COLOR_ORANGE_02),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      // const SizedBox(
+                      //   height: 8.0,
+                      // ),
                       GestureDetector(
                         onTap: () {
                           if (friendCode.isEmpty) {
@@ -931,6 +942,12 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
             ),
           );
         },
+      ).whenComplete(
+        () => setState(
+          () {
+            friendCode = "";
+          },
+        ),
       );
 
   Future<dynamic> secondRegisterCodeModal() async {
@@ -1017,45 +1034,32 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 152.0,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        if (friendDisplayName.isEmpty) {
-                          fToast.showToast(
-                            child: const ToastMessage(message: "이름을 입력해주세요."),
-                            gravity: ToastGravity.CENTER,
-                            toastDuration: const Duration(seconds: 2),
-                          );
-                          return;
-                        }
-                        fToast.showToast(
-                          child: const ToastMessage(
-                              message: "친구를 추가하여 30p가 적립되었어요."),
-                          gravity: ToastGravity.CENTER,
-                          toastDuration: const Duration(seconds: 2),
-                        );
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pop();
-                        firstShareCodeModal();
-                      },
-                      child: Container(
-                        height: 48.0,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
-                            borderRadius: BorderRadius.circular(8.0)),
-                        child: const Center(
-                          child: Text(
-                            "내 코드 공유할래요",
-                            style: TextStyle(color: PRIMARY_COLOR_ORANGE_02),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 8.0,
-                    ),
+                    const Spacer(),
+                    // const SizedBox(
+                    //   height: 152.0,
+                    // ),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     Navigator.of(context).pop();
+                    //     Navigator.of(context).pop();
+                    //     firstShareCodeModal();
+                    //   },
+                    //   child: Container(
+                    //     height: 48.0,
+                    //     decoration: BoxDecoration(
+                    //         border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
+                    //         borderRadius: BorderRadius.circular(8.0)),
+                    //     child: const Center(
+                    //       child: Text(
+                    //         "내 코드 공유할래요",
+                    //         style: TextStyle(color: PRIMARY_COLOR_ORANGE_02),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    // const SizedBox(
+                    //   height: 8.0,
+                    // ),
                     isLoading
                         ? const CircularProgressIndicator(
                             color: PRIMARY_COLOR_ORANGE_02,
@@ -1176,34 +1180,47 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 152.0,
-                        ),
+                        const Spacer(),
+                        // const SizedBox(
+                        //   height: 152.0,
+                        // ),
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     Navigator.of(context).pop();
+                        //     firstRegisterCodeModal();
+                        //   },
+                        //   child: Container(
+                        //     height: 48.0,
+                        //     decoration: BoxDecoration(
+                        //         border:
+                        //             Border.all(color: PRIMARY_COLOR_ORANGE_02),
+                        //         borderRadius: BorderRadius.circular(8.0)),
+                        //     child: const Center(
+                        //       child: Text(
+                        //         "다른 사용자 코드 등록할래요",
+                        //         style:
+                        //             TextStyle(color: PRIMARY_COLOR_ORANGE_02),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                        // const SizedBox(
+                        //   height: 8.0,
+                        // ),
                         GestureDetector(
                           onTap: () {
-                            Navigator.of(context).pop();
-                            firstRegisterCodeModal();
+                            if (myDisplayName.isEmpty) {
+                              fToast.showToast(
+                                child:
+                                    const ToastMessage(message: "이름을 입력해주세요."),
+                                gravity: ToastGravity.CENTER,
+                                toastDuration: const Duration(seconds: 2),
+                              );
+
+                              return;
+                            }
+                            secondShareCodeModal();
                           },
-                          child: Container(
-                            height: 48.0,
-                            decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: PRIMARY_COLOR_ORANGE_02),
-                                borderRadius: BorderRadius.circular(8.0)),
-                            child: const Center(
-                              child: Text(
-                                "다른 사용자 코드 등록할래요",
-                                style:
-                                    TextStyle(color: PRIMARY_COLOR_ORANGE_02),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 8.0,
-                        ),
-                        GestureDetector(
-                          onTap: () => secondShareCodeModal(),
                           child: Container(
                             height: 48.0,
                             decoration: BoxDecoration(
@@ -1327,31 +1344,32 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                       style: TextStyle(color: GRAYSCALE_GRAY_04),
                     ),
                   ),
-                  const SizedBox(
-                    height: 127.0,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
-                      firstRegisterCodeModal();
-                    },
-                    child: Container(
-                      height: 48.0,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
-                          borderRadius: BorderRadius.circular(8.0)),
-                      child: const Center(
-                        child: Text(
-                          "다른 사용자 코드 등록할래요",
-                          style: TextStyle(color: PRIMARY_COLOR_ORANGE_02),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8.0,
-                  ),
+                  const Spacer(),
+                  // const SizedBox(
+                  //   height: 127.0,
+                  // ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     Navigator.of(context).pop();
+                  //     Navigator.of(context).pop();
+                  //     firstRegisterCodeModal();
+                  //   },
+                  //   child: Container(
+                  //     height: 48.0,
+                  //     decoration: BoxDecoration(
+                  //         border: Border.all(color: PRIMARY_COLOR_ORANGE_02),
+                  //         borderRadius: BorderRadius.circular(8.0)),
+                  //     child: const Center(
+                  //       child: Text(
+                  //         "다른 사용자 코드 등록할래요",
+                  //         style: TextStyle(color: PRIMARY_COLOR_ORANGE_02),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // const SizedBox(
+                  //   height: 8.0,
+                  // ),
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).pop();

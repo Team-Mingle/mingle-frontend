@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -24,6 +26,13 @@ abstract class PointShopRepository {
   @POST('/create')
   @Headers({'accessToken': 'true'})
   Future<void> createCoupon({@Body() required CreateCouponDto createCouponDto});
+
+  @POST('/create/freshman')
+  @Headers({'accessToken': 'true'})
+  @MultiPart()
+  Future<void> freshmanReqestCoupon({
+    @Part(name: "multipartFile") required List<File> multipartFile,
+  });
 
   @GET('')
   @Headers({'accessToken': 'true'})

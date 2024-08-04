@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mingle/common/const/data.dart';
 import 'package:mingle/timetable/model/timetable_preview_model.dart';
 
 part 'timetable_list_model.g.dart';
@@ -15,8 +16,9 @@ class TimetableListModel {
   static String convertKeyToSemester(String key) {
     //key format: FIRST_SEMESTER_2019
     List<String> splitted = key.split('_');
+    int intYear = getYear(key) % CURRENT_CENTURY;
     String semester = "${getSemester(key)}학기";
-    String year = "${getYear(key)}년";
+    String year = "$intYear/${intYear + 1}년";
     return "$year $semester";
   }
 

@@ -1,13 +1,19 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/const/data.dart';
+import 'package:mingle/main.dart';
+import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/module/provider/freshman_identification_upload_provider.dart';
+import 'package:mingle/point_shop/repository/point_shop_repository.dart';
 import 'package:mingle/point_shop/view/freshman_verification_success_screen.dart';
 import 'package:mingle/user/view/signup_screen/default_padding.dart';
 
@@ -23,6 +29,49 @@ class _FreshmanUploadIdentificationScreenState
     extends ConsumerState<FreshmanUploadIdentificationScreen> {
   final ImagePicker imagePicker = ImagePicker();
   File? multipartFile;
+  late FToast fToast;
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fToast = FToast();
+    fToast.init(navigatorKey.currentContext!);
+  }
+
+  void submitIdentification() async {
+    if (ref.read(freshmanIdentificationUploadProvider) == null) {
+      fToast.showToast(
+          child: const ToastMessage(message: "합격증을 업로드해주세요"),
+          toastDuration: const Duration(seconds: 2),
+          gravity: ToastGravity.CENTER);
+    }
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      await ref.read(pointShopRepositoryProvider).freshmanReqestCoupon(
+          multipartFile: [ref.read(freshmanIdentificationUploadProvider)!]);
+      setState(() {
+        isLoading = false;
+      });
+      Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (_) => const FreshmanVerificationSuccessScreen()),
+      );
+    } on DioException catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      fToast.showToast(
+          child: ToastMessage(
+              message: e.response!.data["message"] ?? generalErrorMsg),
+          toastDuration: const Duration(seconds: 2),
+          gravity: ToastGravity.CENTER);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -145,7 +194,8 @@ class _FreshmanUploadIdentificationScreenState
               child: NextButton(
                 buttonName: "다음으로",
                 isSelectedProvider: [freshmanIdentificationUploadProvider],
-                nextScreen: const FreshmanVerificationSuccessScreen(),
+                validators: [submitIdentification],
+                // nextScreen: const FreshmanVerificationSuccessScreen(),
               ),
             ),
             const SizedBox(
