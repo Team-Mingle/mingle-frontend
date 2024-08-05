@@ -41,7 +41,7 @@ class _ThirdOnboardingScreenState extends ConsumerState<ThirdOnboardingScreen> {
           children: [
             Center(
               child: Image.asset(
-                  "assets/img/module_review_screen/third_onboarding_background.png"),
+                  "assets/img/timetable_screen/third_onboarding.png"),
             ),
             Column(
               children: [

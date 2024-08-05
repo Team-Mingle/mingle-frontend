@@ -52,7 +52,7 @@ class _SecondOnboardingScreenState extends State<SecondOnboardingScreen> {
           children: [
             Center(
               child: Image.asset(
-                  "assets/img/module_review_screen/second_onboarding_background.png"),
+                  "assets/img/timetable_screen/second_onboarding.png"),
             ),
             Column(
               children: [

@@ -52,7 +52,7 @@ class _FirstOnboardingScreenState extends State<FirstOnboardingScreen> {
           children: [
             Center(
               child: Image.asset(
-                  "assets/img/module_review_screen/first_onboarding_background.png"),
+                  "assets/img/timetable_screen/first_onboarding.png"),
             ),
             Column(
               children: [
