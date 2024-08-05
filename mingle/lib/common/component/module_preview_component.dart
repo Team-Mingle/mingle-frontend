@@ -43,7 +43,7 @@ class ModulePreviewComponent extends ConsumerStatefulWidget {
     // required this.postList,
     required this.data,
     this.notifierProvider,
-    this.emptyMessage = "아직 올라온 게시물이 없어요!",
+    this.emptyMessage = "일치하는 강의가 없어요!",
     this.setIsSearching,
     this.addClass,
     this.addClassesAtAddTimeTableScreen,

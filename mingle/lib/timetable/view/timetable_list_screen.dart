@@ -86,7 +86,7 @@ class _MyTimeTableListScreenState extends ConsumerState<TimeTableListScreen> {
   Future<void> addTimetable(String selectedSemester) async {
     try {
       final year = int.parse(selectedSemester.substring(0, 4));
-      final semester = int.parse(selectedSemester.substring(6, 7));
+      final semester = int.parse(selectedSemester.substring(11, 12));
 
       AddTimetableResponseModel addedTimetable = await ref
           .watch(timetableRepositoryProvider)

@@ -27,15 +27,15 @@ class AddNewTimetableWidget extends ConsumerStatefulWidget {
 
 class _AddNewTimetableWidgetState extends ConsumerState<AddNewTimetableWidget> {
   final List<String> semesters = [
-    '2024년 2학기',
-    '2024년 1학기',
+    '2024/2025년 2학기',
+    '2024/2025년 1학기',
     // '2022년 2학기',
     // '2022년 1학기',
     // '2020년 2학기',
     // '2020년 1학기',
   ];
 
-  String? selectedSemester = "2024년 2학기";
+  String? selectedSemester = "2024/2025년 2학기";
   // String timetableName = "";
   late FToast fToast;
 
