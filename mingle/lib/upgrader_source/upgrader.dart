@@ -283,7 +283,9 @@ class Upgrader with WidgetsBindingObserver {
   }
 
   bool blocked() {
-    return belowMinAppVersion() || versionInfo?.isCriticalUpdate == true;
+    return belowMinAppVersion() ||
+        versionInfo?.isCriticalUpdate == true ||
+        isMajorUpdate();
   }
 
   bool shouldDisplayUpgrade() {
@@ -337,6 +339,20 @@ class Upgrader with WidgetsBindingObserver {
       }
     }
     return rv;
+  }
+
+  bool isMajorUpdate() {
+    int installedVersion =
+        int.parse(state.packageInfo!.version.split('.').first);
+    int appStoreVersion =
+        int.parse(versionInfo!.appStoreVersion!.toString().split('.').first);
+    int installeSubVersion =
+        int.parse(state.packageInfo!.version.split('.')[2]);
+    int appStoreSubVersion =
+        int.parse(versionInfo!.appStoreVersion!.toString().split('.')[2]);
+    return installedVersion < appStoreVersion ||
+        (installedVersion == appStoreVersion &&
+            installeSubVersion < appStoreSubVersion);
   }
 
   bool isTooSoon() {
