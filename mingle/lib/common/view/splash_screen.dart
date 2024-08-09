@@ -105,6 +105,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 }
 
 bool isMajorVersionDifferent(String installedVersion, String storeVersion) {
-  return int.parse(installedVersion.split('.').first) <
-      int.parse(storeVersion.split('.').first);
+  int majorInstalledVersion = int.parse(installedVersion.split('.').first);
+  int majorStoreVersion = int.parse(storeVersion.split('.').first);
+  int subInstalledVersion = int.parse(installedVersion.split('.')[1]);
+  int subStoreVersion = int.parse(storeVersion.split('.')[1]);
+  return majorInstalledVersion < majorStoreVersion ||
+      (majorInstalledVersion == majorStoreVersion &&
+          subInstalledVersion < subStoreVersion);
 }
