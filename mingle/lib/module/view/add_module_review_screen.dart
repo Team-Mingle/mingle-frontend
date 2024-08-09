@@ -608,6 +608,7 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
                                 fontWeight: FontWeight.w600),
                           ),
                           maxLength: 500,
+                          maxLines: null,
                         ),
                       ),
                     ),
