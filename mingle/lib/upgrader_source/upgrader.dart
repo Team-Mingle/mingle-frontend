@@ -283,6 +283,8 @@ class Upgrader with WidgetsBindingObserver {
   }
 
   bool blocked() {
+    print("belowminappversion: ${belowMinAppVersion()}");
+    print("ismajorupdate: ${isMajorUpdate()}");
     return belowMinAppVersion() ||
         versionInfo?.isCriticalUpdate == true ||
         isMajorUpdate();
@@ -347,9 +349,13 @@ class Upgrader with WidgetsBindingObserver {
     int appStoreVersion =
         int.parse(versionInfo!.appStoreVersion!.toString().split('.').first);
     int installeSubVersion =
-        int.parse(state.packageInfo!.version.split('.')[2]);
+        int.parse(state.packageInfo!.version.split('.')[1]);
     int appStoreSubVersion =
-        int.parse(versionInfo!.appStoreVersion!.toString().split('.')[2]);
+        int.parse(versionInfo!.appStoreVersion!.toString().split('.')[1]);
+    print("installedVersion: $installedVersion");
+    print("appStoreVersion: $appStoreVersion");
+    print("installedSubVersion: $installeSubVersion");
+    print("storeSubVersion: $appStoreSubVersion");
     return installedVersion < appStoreVersion ||
         (installedVersion == appStoreVersion &&
             installeSubVersion < appStoreSubVersion);
