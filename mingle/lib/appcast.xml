@@ -5,7 +5,11 @@
             <title>Version 5.0.0</title>
             <enclosure url="https://play.google.com/store/apps/details?id=com.community.mingle&pcampaignid=web_share" sparkle:version="5.0.0" sparkle:os="android" />
             <sparkle:version>5.0.0</sparkle:version>
-            <sparkle:minimumAutoupdateVersion>5.0.0</sparkle:minimumAutoupdateVersion>
+        </item>
+        <item>
+            <title>Version 5.0.1</title>
+            <enclosure url="https://play.google.com/store/apps/details?id=com.community.mingle&pcampaignid=web_share" sparkle:version="5.0.0" sparkle:os="android" />
+            <sparkle:version>5.0.1</sparkle:version>
         </item>
     </channel>
 </rss>
