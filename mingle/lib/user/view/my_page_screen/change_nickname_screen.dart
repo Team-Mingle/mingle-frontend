@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mingle/common/component/next_button.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/const/data.dart';
 import 'package:mingle/main.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/user/provider/user_provider.dart';
@@ -47,8 +48,8 @@ class _ChangeNicknameScreenState extends ConsumerState<ChangeNicknameScreen> {
       print(e);
       print(e.response?.data['message']);
       fToast.showToast(
-        child:
-            ToastMessage(message: e.response?.data['message'] ?? "다시 시도해주세요"),
+        child: ToastMessage(
+            message: e.response?.data['message'] ?? generalErrorMsg),
         gravity: ToastGravity.CENTER,
         toastDuration: const Duration(seconds: 2),
       );

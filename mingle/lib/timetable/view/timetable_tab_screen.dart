@@ -196,6 +196,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     setState(() {
       isLoading = true;
     });
+    print(myDisplayName);
     if (myDisplayName.isEmpty) {
       fToast.showToast(
         child: const ToastMessage(message: "이름을 입력해주세요."),
@@ -1249,6 +1250,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   }
 
   Future<dynamic> secondShareCodeModal() async {
+    print(friendDisplayName);
     String code = (await ref.watch(friendRepositoryProvider).generateCode(
             GenerateCodeDto(friendDisplayName: friendDisplayName)))
         .code;

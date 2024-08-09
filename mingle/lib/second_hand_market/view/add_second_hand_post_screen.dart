@@ -9,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mingle/common/const/colors.dart';
+import 'package:mingle/common/const/data.dart';
 import 'package:mingle/main.dart';
 import 'package:mingle/module/components/toast_message_card.dart';
 import 'package:mingle/second_hand_market/provider/second_hand_market_post_provider.dart';
@@ -122,8 +123,8 @@ class _AddPostScreenState extends ConsumerState<AddSecondHandPostScreen> {
       print(e);
       // print(e.response?.statusCode);
       fToast.showToast(
-        child:
-            ToastMessage(message: e.response?.data['message'] ?? "다시 시도해주세요"),
+        child: ToastMessage(
+            message: e.response?.data['message'] ?? generalErrorMsg),
         gravity: ToastGravity.CENTER,
         toastDuration: const Duration(seconds: 2),
       );

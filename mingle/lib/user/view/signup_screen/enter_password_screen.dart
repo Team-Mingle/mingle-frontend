@@ -101,7 +101,7 @@ class _EnterPasswordScreenState extends ConsumerState<EnterPasswordScreen> {
     } on DioException catch (e) {
       print(e);
       fToast.showToast(
-        child: const ToastMessage(message: "다시 시도해주세요"),
+        child: const ToastMessage(message: generalErrorMsg),
         gravity: ToastGravity.CENTER,
         toastDuration: const Duration(seconds: 2),
       );

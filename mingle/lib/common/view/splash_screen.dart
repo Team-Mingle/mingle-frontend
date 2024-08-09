@@ -43,7 +43,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     print(accessToken);
     await Future.delayed(const Duration(seconds: 2));
     final Dio dio = ref.read(dioProvider);
-    if (widget.upgrader.belowMinAppVersion()) {
+    print(
+        "isMajorVersionDifferent: ${isMajorVersionDifferent(widget.upgrader.currentInstalledVersion!, widget.upgrader.currentAppStoreVersion!)}");
+    if (isMajorVersionDifferent(widget.upgrader.currentInstalledVersion!,
+        widget.upgrader.currentAppStoreVersion!)) {
       print("belowMinAppVersion");
       return;
     }
@@ -99,4 +102,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
           ]),
         ));
   }
+}
+
+bool isMajorVersionDifferent(String installedVersion, String storeVersion) {
+  return int.parse(installedVersion.split('.').first) <
+      int.parse(storeVersion.split('.').first);
 }

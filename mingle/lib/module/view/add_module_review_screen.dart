@@ -131,7 +131,8 @@ class _AddModuleReviewScreenState extends ConsumerState<AddModuleReviewScreen> {
         isLoading = false;
       });
       fToast.showToast(
-        child: ToastMessage(message: e.response?.data['message']),
+        child: ToastMessage(
+            message: e.response?.data['message'] ?? generalErrorMsg),
         gravity: ToastGravity.CENTER,
         toastDuration: const Duration(seconds: 2),
       );
