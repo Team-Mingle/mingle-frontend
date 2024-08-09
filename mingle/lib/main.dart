@@ -252,10 +252,10 @@ class _AppState extends ConsumerState<_App> {
   Widget build(BuildContext context) {
     final appcastUpgrader = UpgraderAppcastStore(
         appcastURL:
-            "https://raw.githubusercontent.com/Team-Mingle/mingle-frontend/Develop/mingle/lib/appcast.xml");
+            "https://raw.githubusercontent.com/Team-Mingle/mingle-frontend/appcast/mingle/lib/appcast.xml");
     final iosAppcastUpgrader = UpgraderAppcastStore(
         appcastURL:
-            "https://raw.githubusercontent.com/Team-Mingle/mingle-frontend/Develop/mingle/lib/appcast_ios.xml");
+            "https://raw.githubusercontent.com/Team-Mingle/mingle-frontend/appcast/mingle/lib/appcast_ios.xml");
     final upgrader = Upgrader(
         messages: MyUpgraderMessages(),
         storeController: UpgraderStoreController(
@@ -265,7 +265,7 @@ class _AppState extends ConsumerState<_App> {
         // Must change appcast file along with the minAppVersion.
         // There must be a version in appcast file that is higher or equal to the minAppVersion for the force update dialog to show up.
         // ALWAYS CHANGE MIN APP VERSION WITH APPCAST FILE. DO NOT MODIFY THIS VALUE ALONE.
-        minAppVersion: "5.0.0",
+        // minAppVersion: "5.0.0",
         // debugDisplayAlways: true,
         debugLogging: true);
     // upgrader.

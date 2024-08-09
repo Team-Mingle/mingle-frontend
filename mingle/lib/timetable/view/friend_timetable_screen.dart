@@ -104,7 +104,6 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
   }
 
   void generateClassWidgets(List<CourseDetailModel> courses) {
-    print("timetable semester: ${currentTimetable!.semester}");
     List<Widget> coursesToBeAdded = [];
     for (CourseDetailModel course in courses) {
       print("courseName: ${course.name}");

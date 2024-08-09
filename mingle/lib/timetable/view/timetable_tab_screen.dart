@@ -196,7 +196,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     setState(() {
       isLoading = true;
     });
-    if (friendDisplayName.isEmpty) {
+    if (myDisplayName.isEmpty) {
       fToast.showToast(
         child: const ToastMessage(message: "이름을 입력해주세요."),
         gravity: ToastGravity.CENTER,
@@ -1021,7 +1021,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                         child: TextFormField(
                           onChanged: (name) {
                             setState(() {
-                              friendDisplayName = name;
+                              myDisplayName = name;
                             });
                           },
                           initialValue: defaultName,
@@ -1095,7 +1095,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
     String defaultName =
         await ref.watch(friendRepositoryProvider).getDefaultName();
     setState(() {
-      myDisplayName = defaultName;
+      friendDisplayName = defaultName;
     });
     return showModalBottomSheet<String>(
       isScrollControlled: true,
@@ -1165,14 +1165,14 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                               maxLength: 10,
                               onChanged: (name) {
                                 setState(() {
-                                  myDisplayName = name;
+                                  friendDisplayName = name;
                                 });
                               },
                               initialValue: defaultName,
                               decoration: InputDecoration(
                                 counterText: "",
                                 border: InputBorder.none,
-                                suffix: Text("${myDisplayName.length}/10"),
+                                suffix: Text("${friendDisplayName.length}/10"),
                                 hintText: "이름 입력",
                                 hintStyle: const TextStyle(
                                     color: GRAYSCALE_GRAY_03, fontSize: 16.0),
@@ -1209,7 +1209,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                         // ),
                         GestureDetector(
                           onTap: () {
-                            if (myDisplayName.isEmpty) {
+                            if (friendDisplayName.isEmpty) {
                               fToast.showToast(
                                 child:
                                     const ToastMessage(message: "이름을 입력해주세요."),
@@ -1249,9 +1249,8 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   }
 
   Future<dynamic> secondShareCodeModal() async {
-    String code = (await ref
-            .watch(friendRepositoryProvider)
-            .generateCode(GenerateCodeDto(myDisplayName: myDisplayName)))
+    String code = (await ref.watch(friendRepositoryProvider).generateCode(
+            GenerateCodeDto(friendDisplayName: friendDisplayName)))
         .code;
     return showModalBottomSheet(
       backgroundColor: Colors.transparent,
