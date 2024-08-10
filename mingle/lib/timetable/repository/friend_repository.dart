@@ -84,9 +84,9 @@ class AddFriendDto {
 
 @JsonSerializable()
 class GenerateCodeDto {
-  String friendDisplayName;
+  String myDisplayName;
 
-  GenerateCodeDto({required this.friendDisplayName});
+  GenerateCodeDto({required this.myDisplayName});
 
   Map<String, dynamic> toJson() => _$GenerateCodeDtoToJson(this);
 }

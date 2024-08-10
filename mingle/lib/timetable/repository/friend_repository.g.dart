@@ -19,12 +19,12 @@ Map<String, dynamic> _$AddFriendDtoToJson(AddFriendDto instance) =>
 
 GenerateCodeDto _$GenerateCodeDtoFromJson(Map<String, dynamic> json) =>
     GenerateCodeDto(
-      friendDisplayName: json['friendDisplayName'] as String,
+      myDisplayName: json['myDisplayName'] as String,
     );
 
 Map<String, dynamic> _$GenerateCodeDtoToJson(GenerateCodeDto instance) =>
     <String, dynamic>{
-      'friendDisplayName': instance.friendDisplayName,
+      'myDisplayName': instance.myDisplayName,
     };
 
 ChangeFriendNameDto _$ChangeFriendNameDtoFromJson(Map<String, dynamic> json) =>

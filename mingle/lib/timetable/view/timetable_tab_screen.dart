@@ -1250,9 +1250,10 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
   }
 
   Future<dynamic> secondShareCodeModal() async {
-    print(friendDisplayName);
-    String code = (await ref.watch(friendRepositoryProvider).generateCode(
-            GenerateCodeDto(friendDisplayName: friendDisplayName)))
+    print("friendDisplayName: $friendDisplayName");
+    String code = (await ref
+            .watch(friendRepositoryProvider)
+            .generateCode(GenerateCodeDto(myDisplayName: friendDisplayName)))
         .code;
     return showModalBottomSheet(
       backgroundColor: Colors.transparent,
