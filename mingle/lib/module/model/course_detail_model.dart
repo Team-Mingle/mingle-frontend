@@ -6,7 +6,7 @@ part 'course_detail_model.g.dart';
 
 @JsonSerializable()
 class CourseDetailModel extends CourseModel {
-  final String? venue;
+  final String venue;
   final String? memo;
   final String? prerequisite;
 
@@ -16,7 +16,7 @@ class CourseDetailModel extends CourseModel {
       required super.courseCode,
       required super.semester,
       required super.courseTimeDtoList,
-      required this.venue,
+      this.venue = '-',
       required super.professor,
       required super.subclass,
       required this.memo,

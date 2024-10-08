@@ -23,7 +23,7 @@ TimetableCourseModel _$TimetableCourseModelFromJson(
       courseType: json['courseType'] as String?,
       prerequisite: json['prerequisite'] as String?,
       memo: json['memo'] as String?,
-      venue: json['venue'] as String?,
+      venue: json['venue'] as String? ?? '-',
     );
 
 Map<String, dynamic> _$TimetableCourseModelToJson(

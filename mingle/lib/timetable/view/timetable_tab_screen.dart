@@ -421,7 +421,7 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                       height: 4.0,
                     ),
                     Text(
-                      currentCourse.subclass!,
+                      currentCourse.subclass,
                       style: const TextStyle(
                           fontSize: 16.0,
                           fontWeight: FontWeight.w500,
@@ -432,6 +432,14 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
                     ),
                     Text(
                       "${currentCourse.professor} ${currentCourse.getCourseTimes()}",
+                      style: const TextStyle(
+                          color: GRAYSCALE_GRAY_04, letterSpacing: -0.14),
+                    ),
+                    const SizedBox(
+                      height: 4.0,
+                    ),
+                    Text(
+                      currentCourse.venue,
                       style: const TextStyle(
                           color: GRAYSCALE_GRAY_04, letterSpacing: -0.14),
                     ),
@@ -552,109 +560,126 @@ class _TimeTableHomeScreenState extends ConsumerState<TimeTableHomeScreen> {
       isScrollControlled: false,
       context: context,
       builder: (BuildContext context) {
-        return ClipRRect(
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(12.0), topRight: Radius.circular(12.0)),
-          child: Container(
-            height: 311.0,
-            color: Colors.white,
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  currentCourse.name,
-                  style: const TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: -0.32),
-                ),
-                const SizedBox(
-                  height: 4.0,
-                ),
-                Text(
-                  currentCourse.courseCode,
-                  style: const TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: -0.32),
-                ),
-                const SizedBox(
-                  height: 4.0,
-                ),
-                Text(
-                  "${currentCourse.professor} ${currentCourse.getCourseTimes()}",
-                  style: const TextStyle(
-                      color: GRAYSCALE_GRAY_04, letterSpacing: -0.14),
-                ),
-                const Divider(
-                  height: 32.0,
-                  color: GRAYSCALE_GRAY_01_5,
-                ),
-                GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => ModuleDetailsScreen(
-                              courseId: currentCourse.id,
-                              moduleName: currentCourse.name,
-                              courseDetail: currentCourse,
-                            )));
-                  },
-                  child: const SizedBox(
-                    width: double.infinity,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 14.0),
-                      child: Text(
-                        "강의 상세보기",
-                        style: TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(12.0),
+                  topRight: Radius.circular(12.0)),
+              child: Container(
+                // height: 311.0,
+                color: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0, vertical: 24.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      currentCourse.name,
+                      style: const TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: -0.32),
+                    ),
+                    const SizedBox(
+                      height: 4.0,
+                    ),
+                    Text(
+                      currentCourse.courseCode,
+                      style: const TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: -0.32),
+                    ),
+                    const SizedBox(
+                      height: 4.0,
+                    ),
+                    Text(
+                      "${currentCourse.professor} ${currentCourse.getCourseTimes()}",
+                      style: const TextStyle(
+                          color: GRAYSCALE_GRAY_04, letterSpacing: -0.14),
+                    ),
+                    const SizedBox(
+                      height: 4.0,
+                    ),
+                    Text(
+                      currentCourse.venue,
+                      style: const TextStyle(
+                          color: GRAYSCALE_GRAY_04, letterSpacing: -0.14),
+                    ),
+                    const Divider(
+                      height: 32.0,
+                      color: GRAYSCALE_GRAY_01_5,
+                    ),
+                    GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => ModuleDetailsScreen(
+                                  courseId: currentCourse.id,
+                                  moduleName: currentCourse.name,
+                                  courseDetail: currentCourse,
+                                )));
+                      },
+                      child: const SizedBox(
+                        width: double.infinity,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 14.0),
+                          child: Text(
+                            "강의 상세보기",
+                            style:
+                                TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => EditSelfAddedCourseScreen(
-                              course: currentCourse,
-                              refreshClasses: getClasses,
-                            )));
-                  },
-                  child: const SizedBox(
-                    width: double.infinity,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 14.0),
-                      child: Text(
-                        "강의 수정하기",
-                        style: TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                    GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => EditSelfAddedCourseScreen(
+                                  course: currentCourse,
+                                  refreshClasses: getClasses,
+                                )));
+                      },
+                      child: const SizedBox(
+                        width: double.infinity,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 14.0),
+                          child: Text(
+                            "강의 수정하기",
+                            style:
+                                TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    showDeleteCourseDialog(currentCourse);
-                  },
-                  child: const SizedBox(
-                    width: double.infinity,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 14.0),
-                      child: Text(
-                        "삭제하기",
-                        style: TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                    GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        showDeleteCourseDialog(currentCourse);
+                      },
+                      child: const SizedBox(
+                        width: double.infinity,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 14.0),
+                          child: Text(
+                            "삭제하기",
+                            style:
+                                TextStyle(fontSize: 16.0, letterSpacing: -0.32),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         );
       },
     );

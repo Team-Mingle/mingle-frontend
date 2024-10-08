@@ -301,8 +301,7 @@ class _FriendTimetableScreenState extends ConsumerState<FriendTimetableScreen> {
       bool isSelected = currentTimetable == timetable;
       return GestureDetector(
         onTap: () {
-          // Not required as there already is a lisenter in build method which calls generateClassWigets.
-          // generateClassWidgets(timetable.coursePreviewDtoList);
+          generateClassWidgets(timetable.coursePreviewDtoList);
           setState(() {
             currentTimetable = timetable;
           });

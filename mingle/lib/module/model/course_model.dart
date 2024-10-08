@@ -21,8 +21,8 @@ class CourseModel {
   final String name;
   final String courseCode;
   final String? semester;
-  final String? professor;
-  final String? subclass;
+  final String professor;
+  final String subclass;
   final List<CourseTimeModel>? courseTimeDtoList;
   final String? rgb;
   String? courseType;
@@ -160,7 +160,7 @@ class CourseModel {
                           height: 4.0,
                         ),
                         AutoSizeText(
-                          subclass!,
+                          subclass,
                           style: const TextStyle(
                               fontSize: 12.0, overflow: TextOverflow.ellipsis),
                           maxLines: 1,
